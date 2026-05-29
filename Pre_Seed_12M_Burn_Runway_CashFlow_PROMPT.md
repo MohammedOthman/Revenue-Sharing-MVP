@@ -1,5 +1,5 @@
 # Partner Revenue OS — Pre-Seed 12-Month Burn, Runway & Cash-Flow Model
-## Questionnaire-Driven AI Prompt (CFO / Board-Ready · No-Hallucination · KSA/GCC-Calibrated)
+## Questionnaire-Driven AI Prompt (CFO / Board-Ready · No-Hallucination · KSA/GCC-Calibrated · 13-Pillar)
 
 ---
 
@@ -8,40 +8,54 @@
 A self-contained, **questionnaire-driven** prompt you hand to a capable AI (with this repo) to build an
 **end-to-end 12-month pre-seed Burn, Runway & Cash-Flow analysis** for Partner Revenue OS, delivered as a
 **CFO / board-ready narrative**. The AI builds the model **only from your answers** to the questionnaire in
-Part 2 — it never invents your financial numbers.
+Part 2 — it never invents your financial numbers. It covers **13 model pillars** and a set of advanced,
+research-backed computations, calibrated to Saudi/GCC reality.
 
 ## How to use it
 
 1. Hand the AI this entire file (plus the repo).
 2. Answer the **Founder Questionnaire (Part 2)** — fill values inline, or let the AI walk you through it question by question.
-3. The AI builds the model from your answers, computing the advanced levers in **Part 4**.
+3. The AI builds the model from your answers, covering the **13 pillars (Part 4A)** and computing the **advanced levers (Part 4B)**.
 4. Anything you leave blank becomes a visible `🔴 [INPUT REQUIRED]` placeholder — the model runs symbolically around it.
-5. The **📊 reference ranges** beside questions are *cited external benchmarks for guidance only* — they are NOT written into your model unless you explicitly adopt them.
+5. The **📊 reference ranges** beside questions are *cited external benchmarks for guidance only* — NOT written into your model unless you explicitly adopt them.
 
 ## Non-negotiable rules (read first)
 
-- **NEVER invent or hallucinate a financial figure.** No value is entered into the model unless (a) you provided it, or (b) you explicitly adopted a cited reference. Otherwise → `🔴 [INPUT REQUIRED]`.
+- **NEVER invent or hallucinate a financial figure.** No value enters the model unless (a) you provided it, or (b) you explicitly adopted a cited reference. Otherwise → `🔴 [INPUT REQUIRED]`.
 - **Three input tiers, flag every number:** `🟢 FOUNDER INPUT` (your answer) · `📊 REFERENCE` (cited benchmark, guidance only) · `🔴 INPUT REQUIRED` (unanswered placeholder).
 - **Benchmark ≠ fact, and ≠ your number.** A cited range may inform your answer; it is never silently used as your value.
 - **Keep four things distinct:** bookings ≠ billings (invoiced) ≠ recognized revenue ≠ cash collected. **VAT is working capital, never revenue.**
 - **Currency: SAR.** USD-denominated costs convert at the USD/SAR peg (~3.75 — `🟢` confirm).
-- **Regulatory rates** in Part 3 are cited and dated, but **must be verified** before filing — model them, flag them "verify."
-- Maintain a single **Assumptions Register** listing every input, its tier, source (if adopted from reference), confidence, and whether it is a runway driver — so you can edit later.
+- **Regulatory rates** in Part 3 are cited and dated, but **must be verified** before filing — model them, flag "verify."
+- **Mandatory Assumptions Register:** ONE consolidated, editable table of every input — Item | Value/Range | Unit | Tier (🟢/📊/🔴) | Source (if adopted from 📊) | Confidence (H/M/L) | Driver? (Y/N) | Impact on burn/runway | Editable (Y).
+- **No false precision** — ranges where benchmarks are wide; sensible rounding; always show confidence.
 
 ---
 
 # PART 1 — INSTRUCTIONS TO THE AI
 
-You are a hybrid **startup CFO + pre-seed VC investment associate** fluent in **KSA/GCC B2B SaaS** finance, FP&A, fundraising, and Saudi tax/labor regulation.
+## Role
+You are a hybrid **startup CFO + pre-seed VC investment associate** with deep expertise in **Saudi Arabia / GCC B2B SaaS** finance, FP&A, fundraising, and KSA tax/labor regulation. You produce board-grade, defensible analyses and you are ruthlessly disciplined about never overstating certainty or inventing data.
 
-**Procedure:**
+## Objective
+Produce an **end-to-end 12-month pre-seed Burn, Runway & Cash-Flow analysis** for **Partner Revenue OS**, as a **CFO/board-ready narrative** (interpretation + summary tables, not a raw spreadsheet dump). The reader must finish knowing: how much cash burns and when, what proof each riyal buys, exactly when cash crosses the buffer and zero, how big the raise must be, which levers most move survival, and what to do month-by-month.
+
+## Analytical lenses to apply
+- **Venture / runway lens:** default-alive vs default-dependent, burn multiple, capital efficiency (ARR per SAR burned), CAC payback, runway-to-milestone vs runway-to-zero, milestone-based raise sizing, bridge/extension risk, use-of-funds tied to de-risking, "burn must buy proof."
+- **FP&A / budgeting lens:** driver-based bottom-up build, cost-behavior (fixed/variable/step), working-capital & VAT mechanics, deferred-revenue and AR/AP roll-forwards, 13-week near-term cash, scenario + sensitivity, and an "actuals-ready" structure that plugs into the monthly CFO review.
+
+## Business context
+Partner Revenue OS is a Saudi/GCC **B2B SaaS "Partner Revenue Control Layer"** — NOT a PRM, affiliate tool, or dashboard. It turns partner activity into attributable, governed, forecastable, finance-ready revenue. Core object = **Partner Revenue Claim**; North Star = **Controlled Partner Revenue**; buyer = Head of Partnerships (validated by CRO/CFO/CEO). MVP wedge = Claim Ledger + Attribution Integrity; overlay-first. The motion is **consultative, enterprise-heavy**: education → diagnostic workshop → paid pilot → implementation-heavy onboarding → activation → expansion, with **~60–180 day sales cycles**. Revenue = SaaS subscription (annual/semi-annual/quarterly/monthly mix) + implementation fees + paid pilots + services. The company is **pre-seed**: cash must be converted into the proof that unlocks the seed round.
+
+If available, READ THESE REPO FILES FIRST and reuse their formulas, cost taxonomy, KSA treatment, proof framework, phase architecture, and decision gates — but scope strictly to 12 months:
+`Partner_Revenue_OS_PDR.md`, `18M_Burn_Rate_QA_Model.md`, `Monthly_CFO_Review_Manual.md`, `GTM_Operating_Manual.md`, `Internal_Operating_Cadence_Manual.md`, `Large_Enterprise_Client_Onboarding_Manual.md`. Map the 12 months to the repo's phases: **Foundation (M1–3) → Pilot (M4–6) → Activation (M7–9) → Commercial Hardening (M10–12)**.
+
+## Procedure
 1. Present the **Part 2 questionnaire** to the founder (or use the answers already filled in).
 2. Build the model **bottom-up, driver-based, monthly (M1–M12)** using ONLY founder answers + any reference values they explicitly adopt.
-3. Compute every lever/pillar in **Part 4**. Where an input is missing, insert `🔴 [INPUT REQUIRED]` and continue symbolically — do not fabricate.
-4. Produce the **Part 5 output** (CFO/board narrative + dashboards), and pass the **Part 6 self-check**.
+3. Cover all **13 pillars (Part 4A)** and compute the **advanced levers (Part 4B)**. Where an input is missing, insert `🔴 [INPUT REQUIRED]` and continue symbolically — never fabricate.
+4. Produce the **Part 5 output** and pass the **Part 6 self-check**.
 5. Treat Part 3 (KSA reference) as cited guidance the founder confirms — never as invented company data.
-
-Apply both lenses throughout: **venture/runway** (default-alive, burn multiple, milestone-based raise sizing, capital efficiency) and **FP&A/budgeting** (driver-based build, cost-behavior, working capital, scenario + sensitivity, actuals-ready).
 
 ---
 
@@ -152,7 +166,7 @@ Also: **pilot price** + **pilot duration** + **pilot→paid conversion %** (📊
 
 # PART 3 — KSA/GCC REGULATORY REFERENCE (cited, dated — model these, flag "verify")
 
-These are external, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. They are facts to confirm, not invented company data. **Verify current rates before filing.**
+External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. Facts to confirm, not invented company data. **Verify current rates before filing.**
 
 | Item | Reference figure | As-of / source | Confidence |
 |---|---|---|---|
@@ -177,38 +191,47 @@ These are external, cited figures (as of 2025/2026) offered as guidance for Part
 
 ---
 
-# PART 4 — ADVANCED LEVERS THE MODEL MUST COMPUTE (the analytical engine)
+# PART 4 — MODEL PILLARS & ADVANCED COMPUTATIONS
 
-Build each of these from the founder's answers (never invented). Expose key drivers as editable levers and show their runway impact.
+## 4A — The 13 Pillars (cover ALL; expose each key driver as an editable lever and show how it moves runway)
 
-**Revenue & cash engine**
-1. **Ramped-Rep-Equivalent (RRE) capacity:** effective capacity = Σ(rep quota × ramp%(months since hire)); apply attrition + replacement lag. Pipeline creation is *gated* by ramped capacity; headcount ≠ capacity.
-2. **Pipeline waterfall with stage lags:** opps → stage-weighted conversion → bookings by close month → cash by DSO. Coverage and win-rate are inputs.
-3. **Per-deal cohort/vintage build:** subscription revenue starts at **go-live (= close + implementation duration)**, not signature; expansion locked to 0 until ~9–12mo post-go-live; founder-sold vs AE-sold cohorts can differ.
+1. **Revenue Engine (funnel-to-cash).** Build bottom-up through the enterprise funnel (targets → outreach → meetings → qualified opps → diagnostics → demos → paid pilots → closed-won → activated) — never "X customers/month." Levers: per-stage conversion, sales-cycle lag, pilot price/duration/conversion, founder/rep selling capacity (hard ceiling), time-to-first-value, implementation capacity.
+2. **Cash Timing & Working Capital (the #1 overlooked runway lever).** Billing-mix cash impact, DSO/collection lag, implementation-fee milestone collection, deferred-revenue build, VAT collected-vs-remitted timing, AP/vendor terms, commission timing. Show the cash-vs-revenue gap explicitly.
+3. **People & Payroll (usually 60–80% of pre-seed burn).** Gate-based hiring tied to triggers; **fully-loaded** cost (GOSI two-rate, EOSB accrual, medical, allowances, expat levy/dependent); founder salary + deferral; new-hire ramp; contractor vs FTE; severance/wind-down.
+4. **COGS, Gross Margin & Unit Economics.** Base cloud + per-customer variable (incl. growing evidence storage) + capped AI/API + support + per-customer implementation delivery cost. Compute contribution margin, blended vs new-cohort gross margin, implementation margin by cohort.
+5. **One-Time / Setup / Capex-like Costs.** Entity/CR/MISA, bank, bilingual legal, brand/website, security+pen-test, e-invoicing & accounting setup, equipment — separated from recurring so run-rate isn't distorted.
+6. **Tax, Regulatory & Compliance.** Treat VAT, GOSI, EOSB, Zakat/CIT, WHT, Nitaqat levies, ZATCA, MISA as explicit cash lines with correct timing (per Part 3) — not an afterthought.
+7. **Burn, Runway & Capital Efficiency.** Gross/net/net-cash burn; forward-3-mo net burn; runway each month; cash-out & buffer-breach months; default-alive/dependent; burn multiple; ARR per SAR burned; runway-to-milestone vs runway-to-zero.
+8. **Fundraising & Capital Structure.** Milestone-based raise sizing + buffer; tranche timing; use-of-funds; instrument/dilution; SAFE-stack; non-dilutive options; raise-slip stress.
+9. **Scenarios, Sensitivity & Triggers.** Base/Downside/Upside + survival + raise-slip; tornado; break-even; pre-committed if/then triggers (see Part 4B / Part 5).
+10. **Financial-Statement Integrity & Reconciliation.** bookings→billings→revenue→cash waterfall; ARR bridge; deferred-rev/AR/AP/VAT/EOSB roll-forwards; three-statement-lite (cash flow + accrual P&L + key BS items); ending cash reconciles; **classify every cost fixed / variable / step**.
+11. **Decision Gates & Management Levers.** Hiring/GTM/integration/fundraising gates; a **deferrability matrix** (protect / defer / cut-first); a cash-trigger freeze list.
+12. **Proof / Milestone Linkage (the spine).** Tie each phase's burn to the proof it buys (problem / buyer / product / WTP / activation / implementation / GTM / finance / investor) and to the pre-seed proof score (0–5). Every major cost answers "what proof does this buy?"
+13. **Churn, Retention & Concentration Risk.** Logo churn / pilot non-conversion, GRR/NRR, expansion paths, and customer-concentration fragility (one/two logos = most ARR).
+
+## 4B — Advanced computations the engine must perform (operationalizing the pillars; all from founder inputs, never invented)
+
+1. **Ramped-Rep-Equivalent (RRE):** effective capacity = Σ(rep quota × ramp%(months since hire)); apply attrition + replacement lag; pipeline creation is *gated* by ramped capacity (headcount ≠ capacity).
+2. **Pipeline waterfall with stage lags:** opps → stage-weighted conversion → bookings by close month → cash by DSO.
+3. **Per-deal cohort/vintage build:** subscription revenue starts at **go-live (= close + implementation duration)**, not signature; expansion locked to 0 until ~9–12mo post-go-live; founder-sold vs AE-sold cohorts may differ.
 4. **IFRS 15 / SOCPA multi-element rev-rec:** split each contract into POBs (subscription, *distinct vs non-distinct* implementation, pilot, services) by standalone-selling-price; recognize each appropriately.
-5. **Pilots as a separate stream:** pilot cash recognized over pilot period; only converted pilots feed ARR; track unconverted-pilot cash separately (≠ ARR/LTV).
+5. **Pilots as a separate stream:** pilot cash recognized over pilot period; only converted pilots feed ARR; unconverted-pilot cash tracked separately (≠ ARR/LTV).
 6. **bookings → billings → recognized revenue → cash** waterfall (4 distinct lines) + ARR bridge + **deferred-revenue waterfall**; flag the "false-runway" gap from annual prepay.
-
-**Cost & working capital**
-7. **Fully-loaded payroll schedule:** per employee — gross + GOSI (two-rate regime per Part 3) + EOSB monthly accrual + medical + allowances + (expat) levy/dependent; new-hire ramp; **EOSB is a non-cash accrual** (add-back in cash flow until paid).
+7. **Fully-loaded payroll schedule** per employee: gross + GOSI (two-rate per Part 3) + EOSB monthly accrual + medical + allowances + (expat) levy/dependent; ramp; **EOSB is a non-cash accrual** (add-back in cash flow until paid).
 8. **Working-capital lines:** DSO/AR roll-forward, AP, **VAT float** (collected vs remitted, input/reverse-charge), **WHT** on foreign vendors, **Zakat-on-net-assets** (even pre-revenue), revenue leakage.
-9. **One-time vs recurring** separated so run-rate isn't distorted.
-
-**Burn, runway & capital efficiency**
-10. Gross burn; net burn; **net cash burn** (incl. VAT/WHT/Zakat); monthly **direct-method cash flow**; near-term **13-week** weekly cash view (surface WPS Day-10 + VAT-remit crunches).
-11. Runway each month = cash ÷ forward-3-mo net burn; **cash-out month**; **buffer-breach month**.
-12. **Default-alive test (compounding):** project revenue forward at the modeled MoM growth; report default-alive/dead AND the **minimum MoM growth** needed to flip to alive on current cash.
-13. **Burn multiple** (rolling 3-mo net burn ÷ net new ARR) with thresholds (<1 amazing / 1–1.5 great / 1.5–2 good / >2 suspect / >3 bad; note pre-seed/GCC tolerance ~2.5–3.4×), AND as a **forward hiring gate** (each proposed hire must pass a marginal burn-multiple test).
-14. **Probabilistic runway (Monte-Carlo):** if L5 ranges given, resample key drivers (triangular Min/Mode/Max) → report P10/P50/P90 cash-out month; else state two-point (P10/P90) proxy.
-
-**Fundraising & governance**
-15. **Round-sizing:** raise = (milestone runway × avg burn) + (6-mo raise-process buffer × burn) + reserve; **next-raise trigger** at 9–12mo runway remaining (MENA process 6–9mo).
-16. **GCC valuation & dilution + SAFE-stack tracker:** model post-money SAFE conversion + cumulative dilution; flag founders <60% pre-Series-A.
-17. **Non-dilutive integration:** model Kafalah-backed debt as a liability w/ repayments; TAQADAM/NTDP grants as grant income; keep separate from equity. Don't imply SVC/Jada are direct.
-18. **Investor-diligence dashboard (RAG):** CAC payback (on gross profit), LTV:CAC, burn multiple, NRR/GRR, gross & implementation margin, revenue concentration — red/amber/green vs thresholds (red flags: CAC payback >18mo, LTV:CAC <3, burn >2×, NRR <100%, concentration >30%, linear revenue).
-19. **Decision-trigger dashboard (RAG):** live runway → pre-committed SAR cut levers per band; **treasury** (idle cash in Murabaha, bank diversification, never co-mingle VAT) with a small yield line.
-20. **Model governance (FAST):** inputs only in the Assumptions Register; **check-cells** (cash ties, BS balances, deferred-rev ties to liability, VAT reconciliation, EOSB roll-forward) that flag if broken; explicit sign conventions; version stamp.
-21. **Rolling + actuals-ready:** plan-vs-actual columns and a flux note for any >10% variance, so the model feeds the monthly CFO review and a monthly investor-update / board-pack output.
+9. **Burn & cash:** gross burn; net burn; net cash burn (incl. VAT/WHT/Zakat); monthly **direct-method cash flow**; near-term **13-week** weekly cash view (surface WPS Day-10 + VAT-remit crunches).
+10. **Runway & default-alive (compounding):** runway = cash ÷ forward-3-mo net burn; cash-out & buffer-breach months; project revenue forward at modeled MoM growth and report default-alive/dead AND the **minimum MoM growth** needed to flip to alive.
+11. **Burn multiple** (rolling 3-mo net burn ÷ net new ARR) with thresholds (<1 amazing / 1–1.5 great / 1.5–2 good / >2 suspect / >3 bad; note pre-seed/GCC tolerance ~2.5–3.4×), AND as a **forward hiring gate** (each proposed hire must pass a marginal burn-multiple test).
+12. **Probabilistic runway (Monte-Carlo):** if L5 ranges given, resample key drivers (triangular Min/Mode/Max) → P10/P50/P90 cash-out month; else two-point (P10/P90) proxy.
+13. **Round-sizing:** raise = (milestone runway × avg burn) + (6-mo raise-process buffer × burn) + reserve; **next-raise trigger** at 9–12mo runway remaining (MENA process 6–9mo).
+14. **GCC valuation & dilution + SAFE-stack tracker:** model post-money SAFE conversion + cumulative dilution; flag founders <60% pre-Series-A.
+15. **Non-dilutive integration:** Kafalah-backed debt as a liability w/ repayments; TAQADAM/NTDP grants as grant income; keep separate from equity; don't imply SVC/Jada are direct.
+16. **Investor-diligence dashboard (RAG):** CAC payback (gross profit), LTV:CAC, burn multiple, NRR/GRR, gross & implementation margin, revenue concentration — vs thresholds (red flags: CAC payback >18mo, LTV:CAC <3, burn >2×, NRR <100%, concentration >30%, linear revenue).
+17. **Decision-trigger dashboard (RAG):** live runway → pre-committed SAR cut levers per band (>9 green / 6–9 amber / <6 red); **treasury** (idle cash in Murabaha, bank diversification, never co-mingle VAT) with a small yield line.
+18. **Model governance (FAST):** inputs only in the Assumptions Register; **check-cells** (cash ties, BS balances, deferred-rev ties to liability, VAT reconciliation, EOSB roll-forward) that flag if broken; explicit sign conventions; version stamp.
+19. **Rolling + actuals-ready:** plan-vs-actual columns and a flux note for any >10% variance, feeding the monthly CFO review and a monthly investor-update / board-pack output.
+20. **Scenario & sensitivity:** Base/Downside/Upside + survival + raise-slip; tornado on top drivers; break-even (what ramp/ACV/collection reaches the seed milestone within runway).
+21. **Cost-behavior & deferrability:** classify every cost fixed/variable/step; maintain a protect/defer/cut-first matrix wired to the cash-trigger freeze list.
 
 ---
 
@@ -218,14 +241,14 @@ Build each of these from the founder's answers (never invented). Expose key driv
 2. **Founder inputs confirmed** — 🟢 values used + every 🔴 INPUT REQUIRED.
 3. **Assumptions Register** — every input: tier, source (if adopted from 📊), confidence, driver flag, runway impact.
 4. **Revenue engine** — funnel/RRE → bookings/billings/revenue/cash waterfall + ARR & deferred-revenue bridges.
-5. **Cost & headcount** — fully-loaded payroll; burn by function / behavior / phase; one-time vs recurring.
+5. **Cost & headcount** — fully-loaded payroll; burn by function / behavior (fixed/variable/step) / phase; one-time vs recurring.
 6. **Working capital & cash flow** — monthly direct cash flow + 13-week view + DSO/AR/AP/VAT/WHT/Zakat/EOSB roll-forwards.
 7. **Burn & runway** — monthly burn + runway; default-alive (compounding) + min-growth breakeven; buffer-breach & cash-out months.
 8. **Scenarios & sensitivity** — Base/Downside/Upside + survival + raise-slip; tornado + break-even; Monte-Carlo P10/P50/P90 (if ranges given).
 9. **Funding need & use of funds** — milestone-based raise sizing; GCC dilution + SAFE-stack; non-dilutive options; next-raise trigger month.
 10. **Unit economics & KPIs** — CAC, CAC payback (gross profit), burn multiple, gross/implementation margin, NRR/GRR — with pre-seed caveats; investor-diligence RAG dashboard.
-11. **Risks, red flags & decision gates** — concentration, DSO, pilot-conversion, services drag, Nitaqat/WPS, WHT/Zakat exposure; hiring/GTM/integration/fundraising gates + cash-trigger freeze list.
-12. **Recommendations & monthly action plan** — hire/delay/cut/protect; decisions by M3/M6/M12; weekly-watch vs monthly-watch metrics.
+11. **Risks, red flags & decision gates** — concentration, DSO, pilot-conversion, services drag, Nitaqat/WPS, WHT/Zakat exposure; hiring/GTM/integration/fundraising gates + deferrability matrix + cash-trigger freeze list.
+12. **Recommendations & monthly action plan** — hire/delay/cut/protect; decisions by M3/M6/M12; weekly-watch vs monthly-watch metrics; each phase's burn linked to the proof it buys.
 13. **Open questions & data gaps** — every 🔴 item ranked by impact on the conclusion + every "verify" regulatory item.
 
 ---
@@ -235,8 +258,9 @@ Build each of these from the founder's answers (never invented). Expose key driv
 - [ ] No invented numbers; every figure is 🟢 (founder) or 📊 (cited, explicitly adopted) or 🔴 (placeholder).
 - [ ] Starting cash & raise are founder inputs; blanks are 🔴, not guessed.
 - [ ] Assumptions Register lists EVERY input with tier, source, confidence, driver flag.
+- [ ] All 13 pillars covered; key drivers exposed as editable levers with runway impact shown.
 - [ ] Revenue built via RRE + pipeline lag + per-deal cohort with go-live lag; IFRS 15 POB split applied; pilots separated; bookings/billings/revenue/cash distinct; VAT never revenue.
-- [ ] Payroll fully loaded (GOSI two-rate, EOSB accrual, medical, levy/dependent, ramp); EOSB treated as non-cash accrual; one-time vs recurring separated.
+- [ ] Payroll fully loaded (GOSI two-rate, EOSB accrual, medical, levy/dependent, ramp); EOSB treated as non-cash accrual; costs classified fixed/variable/step; one-time vs recurring separated.
 - [ ] Working capital modeled (DSO, deferred rev, AP, VAT float, WHT, Zakat-on-net-assets); ending cash reconciles; FAST check-cells present.
 - [ ] Runway uses forward burn; default-alive computed as a compounding test with min-growth breakeven; cash-out & buffer-breach months identified; 13-week view includes WPS Day-10.
 - [ ] Burn multiple computed + used as a hiring gate; Monte-Carlo P10/P50/P90 if ranges given.
