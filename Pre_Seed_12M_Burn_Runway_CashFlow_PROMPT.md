@@ -45,7 +45,7 @@ Produce an **end-to-end 12-month pre-seed Burn, Runway & Cash-Flow analysis** fo
 - **FP&A / budgeting lens:** driver-based bottom-up build, cost-behavior (fixed/variable/step), working-capital & VAT mechanics, deferred-revenue and AR/AP roll-forwards, 13-week near-term cash, scenario + sensitivity, and an "actuals-ready" structure that plugs into the monthly CFO review.
 
 ## Business context
-Partner Revenue OS is a Saudi/GCC **B2B SaaS "Partner Revenue Control Layer"** — NOT a PRM, affiliate tool, or dashboard. It turns partner activity into attributable, governed, forecastable, finance-ready revenue. Core object = **Partner Revenue Claim**; North Star = **Controlled Partner Revenue**; buyer = Head of Partnerships (validated by CRO/CFO/CEO). MVP wedge = Claim Ledger + Attribution Integrity; overlay-first. The motion is **consultative, enterprise-heavy**: education → diagnostic workshop → paid pilot → implementation-heavy onboarding → activation → expansion, with **~60–180 day sales cycles**. Revenue = SaaS subscription (annual/semi-annual/quarterly/monthly mix) + implementation fees + paid pilots + services. The company is **pre-seed**: cash must be converted into the proof that unlocks the seed round.
+Partner Revenue OS is a Saudi/GCC **B2B SaaS "Partner Revenue Control Layer"** — NOT a PRM, affiliate tool, or dashboard. It turns partner activity into attributable, governed, forecastable, finance-ready revenue. Core object = **Partner Revenue Claim**; North Star = **Controlled Partner Revenue**; buyer = Head of Partnerships (validated by CRO/CFO/CEO). MVP wedge = Claim Ledger + Attribution Integrity; overlay-first. The motion is **consultative, enterprise-heavy**: education → diagnostic workshop → paid pilot → implementation-heavy onboarding → activation → expansion, with **long, multi-month sales cycles**. Revenue = SaaS subscription (annual/semi-annual/quarterly/monthly mix) + implementation fees + paid pilots + services. The company is **pre-seed**: cash must be converted into the proof that unlocks the seed round.
 
 If available, READ THESE REPO FILES FIRST and reuse their cost taxonomy, KSA treatment, proof framework, phase architecture, and decision gates (the core formulas are consolidated in Part 7A) — but scope strictly to 12 months:
 `Partner_Revenue_OS_PDR.md`, `Monthly_CFO_Review_Manual.md`, `GTM_Operating_Manual.md`, `Internal_Operating_Cadence_Manual.md`, `Large_Enterprise_Client_Onboarding_Manual.md`, plus the **Market Analysis — Growth Drivers & Market Forces** PDFs (Strategic Growth Thesis · 200 Driver Catalogue · 200 Market Forces Reference) for market sizing/context. Map the 12 months to the repo's phases: **Foundation (M1–3) → Pilot (M4–6) → Activation (M7–9) → Commercial Hardening (M10–12)**.
@@ -67,7 +67,7 @@ If available, READ THESE REPO FILES FIRST and reuse their cost taxonomy, KSA tre
 | # | Question | Your answer (🟢) | Reference (📊, guidance only) |
 |---|---|---|---|
 | A1 | Starting cash at M1 (SAR)? |  | — |
-| A2 | Pre-seed already raised/committed (SAR), instrument (SAFE/convertible/priced), cap/valuation? |  | 📊 GCC pre-seed pre-money ~$3–7M ≈ SAR 11–26M; post-money SAFE ~87% globally |
+| A2 | Pre-seed already raised/committed (SAR), instrument (SAFE/convertible/priced), cap/valuation? |  | Source round size/valuation from your term sheet or a current MAGNiTT/SVC KSA report — US/Carta benchmarks do not transfer to GCC |
 | A3 | Any further raise planned within the 12 months? Amount + target month? |  | — |
 | A4 | Minimum cash floor you will never breach (SAR)? |  | — |
 | A5 | Target cash buffer (months of forward net burn)? |  | 📊 3 aggressive / 4 normal / 6 conservative |
@@ -78,8 +78,8 @@ If available, READ THESE REPO FILES FIRST and reuse their cost taxonomy, KSA tre
 ## B. Founders & salary deferral
 | # | Question | Your answer (🟢) | Reference (📊) |
 |---|---|---|---|
-| B1 | # founders; per founder: market salary, **cash** salary M1–M12, deferral? |  | 📊 ~65–75% of market; total founder cash ≤10–15% of raise |
-| B2 | Founder/ESOP equity pool? |  | 📊 ~15% ESOP common at early stage (MENA) |
+| B1 | # founders; per founder: market salary, **cash** salary M1–M12, deferral? |  | Founder decision (typically a below-market cash salary at pre-seed) — set it yourself |
+| B2 | Founder/ESOP equity pool? |  | Founder decision — set your ESOP pool |
 
 ## C. Headcount & hiring plan (one row per role)
 | Role | Start month (🟢) | Saudi / Expat (🟢) | Gross monthly SAR (🟢) | FTE / Contractor (🟢) | Hiring trigger (🟢) |
@@ -90,16 +90,16 @@ Also answer:
 - **C-ramp:** monthly productivity ramp for each sales/CS hire? 📊 enterprise Q1 0% / Q2 25% / Q3 50% / Q4 100% (full productivity 6–9mo).
 - **C-attrition:** annual attrition + replacement-hire lag? 📊 20–25%/yr; ~2mo sourcing lag.
 - **C-Nitaqat:** planned # Saudi vs expat, and your CR economic-activity code? 📊 **verify your exact Saudization quota on the Qiwa platform** (sector-specific; do not hard-code 30%).
-- **C-salary refs (📊, KSA/Riyadh, guidance only):** Eng junior SAR 8–12k / mid 13–20k / senior 21–32k (AI/cloud +20–40%); CSM SAR 9–23k; AE SAR 12–20k base + ~1.5–2× OTE. Expats typically +25%.
+- **C-salary refs:** KSA startup salary data is sparse and inconsistent — do not rely on a planted figure. Source current Riyadh ranges from a recent salary survey (e.g., Cooper Fitch / Mercer / Robert Half) or your own offers; account for Saudi-vs-expat differences.
 
 ## D. Payroll-burden rates (confirm, or adopt the Part 3 reference)
 | # | Question | Your answer (🟢) | Reference (📊, see Part 3) |
 |---|---|---|---|
 | D1 | GOSI cohort per Saudi hire (existing vs new-regime) + employer rate used? |  | 📊 existing 11.75%; **new hires (post-3 Jul 2024) 12.25% FY25–26 → 13.75% by 2028**; expat 2% |
 | D2 | EOSB accrual base (basic only vs basic + fixed allowances)? |  | 📊 ≈4.17%/mo of last wage (yrs 1–5); legal base = "actual wage" incl. fixed allowances |
-| D3 | Medical insurance per employee/year (SAR)? |  | 📊 startup group plan ~SAR 3,000–5,000/employee/yr |
+| D3 | Medical insurance per employee/year (SAR)? |  | Get a CCHI-compliant group-plan quote (premium varies by plan/insurer/headcount) |
 | D4 | # expats + # dependents (work-permit levy + dependent fee)? |  | 📊 levy SAR 700/mo (expats ≤ Saudis) or 800 (expats > Saudis); dependent SAR 400/mo |
-| D5 | Comp structure (basic/housing/transport split)? |  | 📊 ~60% / 25% / 15% (housing+basic in GOSI base) |
+| D5 | Comp structure (basic/housing/transport split)? |  | Use your actual split; basic + housing form the GOSI contribution base |
 
 ## E. Pricing, packaging & ACV (one row per package)
 | Package | ARR/ACV SAR (🟢) | Implementation fee SAR (🟢) | Target mix % (🟢) |
@@ -108,11 +108,11 @@ Also answer:
 | Growth |  |  |  |
 | Enterprise |  |  |  |
 
-Also: **pilot price** + **pilot duration** + **pilot→paid conversion %** (📊 50–70%, bear 35% — unconverted pilot cash is NOT ARR); **annual-prepay discount** (📊 15–20%); discount policy.
+Also: **pilot price** + **pilot duration** + **pilot→paid conversion %** (no robust public benchmark exists — use your own estimate and treat it as a key sensitivity; unconverted pilot cash is NOT ARR); **annual-prepay discount** (your policy); discount policy.
 
 ## F. Revenue funnel & ramp (drives bookings → cash timing)
-- **F1** Funnel stages, per-stage conversion %, and avg days-in-stage? 📊 pipeline coverage 3–7×; B2B win rate ~19%.
-- **F2** Sales-cycle length (days)? 📊 60–180.
+- **F1** Funnel stages, per-stage conversion %, and avg days-in-stage? Set conversion, days-in-stage, and win rate from your own pipeline data (a common rule of thumb is several× pipeline coverage).
+- **F2** Sales-cycle length (days)? (the GTM/onboarding manuals describe a consultative, multi-month motion — set the actual length from your own deals)
 - **F3** Founder/rep selling capacity (qualified diagnostics or demos per month)? *(hard ceiling on ramp)*
 - **F4** Implementation duration / **go-live lag** (months from close)? *(subscription revenue recognition starts at go-live, not signature)*
 - **F5** Implementation capacity (max parallel onboardings)?
@@ -123,21 +123,21 @@ Also: **pilot price** + **pilot duration** + **pilot→paid conversion %** (📊
 - **G2** Payment terms / **DSO** by customer type (days)? 📊 GCC enterprise often net-60/90.
 - **G3** % of customers on annual prepay?
 - **G4** Implementation-fee collection milestones (% at signing / kickoff / go-live / acceptance)?
-- **G5** Revenue leakage / write-off assumption? 📊 1–2% of billed ARR (involuntary churn 5–9%/cycle).
+- **G5** Revenue leakage / write-off assumption? (set your own; payment-failure / involuntary churn is a known SaaS leakage source — size it from your billing data)
 
 ## H. COGS & infrastructure
-- **H1** Base cloud cost before customers (SAR/mo)? **H2** Per-customer variable (app/db/**evidence storage**/logs/notifications/security)? 📊 use the repo's per-customer SAR ranges.
+- **H1** Base cloud cost before customers (SAR/mo)? **H2** Per-customer variable (app/db/**evidence storage**/logs/notifications/security)? Estimate from your cloud architecture or a provider cost calculator.
 - **H3** AI/API monthly cap + per-customer usage? **H4** Support tooling? **H5** Per-customer implementation delivery cost (loaded CS hours × rate)?
 
 ## I. One-time / setup costs (front-loaded)
 | Item | SAR (🟢) | Month (🟢) | Reference (📊) |
 |---|---|---|---|
 | Entity / CR / bank |  |  | — |
-| MISA foreign-investment license (if foreign-owned) |  |  | 📊 Yr1 ~SAR 20–25k; Yr2+ annual service fee ~SAR 60k (**verify with MISA**) |
+| MISA foreign-investment license (if foreign-owned) |  |  | Get a current quote — published fees vary widely; **verify with MISA / a setup firm** |
 | Legal templates / bilingual contracts |  |  | — |
 | Brand / website |  |  | — |
 | Security baseline + pen-test |  |  | — |
-| ZATCA e-invoicing integration |  |  | 📊 one-time ~SAR 5–30k |
+| ZATCA e-invoicing integration |  |  | Get a quote from a ZATCA-accredited provider (varies by system) |
 | Accounting setup + equipment |  |  | — |
 
 ## J. Tax & regulatory (confirm treatment + timing — see Part 3)
@@ -148,19 +148,19 @@ Also: **pilot price** + **pilot duration** + **pilot→paid conversion %** (📊
 - **J5** Include the draft Income-Tax-Law scenario (services WHT 5%→10%) as a downside flag? 📊 not enacted as of mid-2026.
 
 ## K. Churn, retention & expansion
-- **K1** Logo churn / GRR? 📊 pre-seed 85–90%. **K2** NRR target + expansion start (months post-go-live)? 📊 NRR 95–105% at pre-seed; lock expansion to 0 until ~9–12mo post-go-live. **K3** Customer-concentration flag if any logo > 30% of ARR?
+- **K1** Logo churn / GRR (set conservatively — retention is unproven at pre-seed)? **K2** NRR target + expansion start? Lock expansion to zero until well after go-live (it is typically not realizable in the first several months). **K3** Customer-concentration flag if any single logo is a large share of ARR?
 
 ## L. Scenarios & sensitivity
 - **L1** Define Base / Downside / Upside deltas (ramp, ACV & mix, sales cycle, conversion, pilot→paid, collection/DSO, hiring pace, churn, gross margin).
 - **L2** Survival/floor scenario (founder-only, hiring frozen — minimum viable burn)?
-- **L3** Raise-slip stress (months)? 📊 MENA raise process 6–9 months.
+- **L3** Raise-slip stress (months)? (MENA raise processes are often longer than the US — model a realistic slip)
 - **L4** Your top 2–3 sensitivity drivers? **L5** (optional) Min/Mode/Max per key driver for a **probabilistic (Monte-Carlo) runway** view.
 
 ## M. Decision gates & triggers
-- **M1** Hiring triggers (pipeline/activation thresholds per role)? **M2** Cash-trigger RAG thresholds + pre-committed SAR cut levers? 📊 >9mo green / 6–9 amber / <6 red. **M3** Next-raise trigger month? 📊 start at 9–12mo runway remaining. **M4** Treasury policy (idle cash in Murabaha deposits? bank diversification)? 📊 ~4.5–5.5% SIBOR-linked; no FDIC-equivalent — diversify ≥2 banks; never co-mingle VAT cash.
+- **M1** Hiring triggers (pipeline/activation thresholds per role)? **M2** Cash-trigger RAG thresholds + pre-committed SAR cut levers? 📊 >9mo green / 6–9 amber / <6 red. **M3** Next-raise trigger month? 📊 start at 9–12mo runway remaining. **M4** Treasury policy (idle cash in a Murabaha deposit? bank diversification)? Idle cash can earn a SIBOR-linked profit rate (check the current rate with your bank); there is no FDIC-equivalent — diversify ≥2 banks; never co-mingle VAT cash.
 
 ## N. Fundraising & capital structure
-- **N1** Raise-size logic (milestone runway + buffer)? **N2** Expected valuation/dilution? 📊 GCC pre-seed 10–15% dilution. **N3** Existing SAFEs (amount/cap/discount) for a **cap-table/SAFE-stack tracker**? **N4** Non-dilutive applications — amounts only if confirmed, else `🔴` (📊 Kafalah = loan *guarantee*; SVC/Jada = fund-of-funds accessed *via* VCs; TAQADAM = non-dilutive grant ~$40–140k; NTDP grants; Islamic Murabaha/Musharaka). **N5** Use-of-funds priorities?
+- **N1** Raise-size logic (milestone runway + buffer)? **N2** Expected valuation/dilution? (set from your term sheet / recent MAGNiTT data — US/Carta dilution norms don't transfer to GCC). **N3** Existing SAFEs (amount/cap/discount) for a **cap-table/SAFE-stack tracker**? **N4** Non-dilutive applications — amounts only if confirmed, else `🔴` (📊 Kafalah = loan *guarantee*; SVC/Jada = fund-of-funds accessed *via* VCs; TAQADAM = non-dilutive grant ~$40–140k; NTDP grants; Islamic Murabaha/Musharaka). **N5** Use-of-funds priorities?
 
 ---
 
@@ -178,13 +178,13 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 | Nitaqat | Sector/size-based quota; **verify your activity code on Qiwa** | 2025 · HRSD/Qiwa | Med (sector-specific) |
 | Expat work-permit levy | SAR 700/mo (expats ≤ Saudis) or SAR 800/mo (expats > Saudis); ≥3-mo billing; first 90d exempt | 2025 · Soul of Saudi | High |
 | Dependent fee | SAR 400/mo per expat dependent | 2025 | High |
-| Medical insurance (CCHI) | ~SAR 3,000–5,000/employee/yr (startup group plan) | 2025 · CCHI | Med (plan-dependent) |
+| Medical insurance (CCHI) | Mandatory for all staff + dependents; premium varies — get a group-plan quote | 2025 · CCHI | Get quote |
 | WPS | Salaries via approved channels, upload by ~Day 10; penalties escalate → keep ≥1-mo payroll buffer | 2025 · Mudad/MHRSD | High |
 | Zakat | 2.5% of Zakat base; **Apr-2024 regs floor base at net assets → owed even pre-revenue**; file ≤120d after FY-end | Apr 2024 · PwC/EY/Dhruva | High |
 | CIT (foreign-owned) | 20% of net adjusted profit; losses carry forward | 2025 · PwC | High |
 | WHT | Royalties 15%; technical/consulting services 5%; management fees 20%; others 15%; due by 10th of next month; **foreign SaaS/AI often classed as royalty 15% (disputed)** | 2024–25 · PwC/DLA Piper | High (rates) / Med (SaaS class) |
 | ZATCA e-invoicing | Phase-2 Wave 24 (> SAR 375k) → integrate by ~30 Jun 2026 | 2025 · ZATCA/EY | High |
-| MISA license (if foreign-owned) | Yr1 ~SAR 20–25k; Yr2+ annual service fee ~SAR 60k | Mar 2025 · MISA Guide | Med (**verify**) |
+| MISA license (if foreign-owned) | Required for foreign ownership; fees vary widely by activity/size — get a current quote | Mar 2025 · MISA Guide | Verify |
 | RHQ 0% CIT/WHT (30y) | MNCs with ≥2 foreign markets only — **not** applicable to native pre-seed | 2024 · KPMG/EY | High |
 | Draft Income-Tax-Law | Proposes services WHT 5%→10% — **not enacted** (model as scenario flag); tax amnesty to 30 Jun 2026 | mid-2026 · EY/KPMG | High (status) |
 | FX | USD/SAR peg ~3.75 → USD cloud/AI/tooling stable in SAR | 2025 · SAMA | High |
@@ -213,7 +213,7 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 
 1. **Ramped-Rep-Equivalent (RRE):** effective capacity = Σ(rep quota × ramp%(months since hire)); apply attrition + replacement lag; pipeline creation is *gated* by ramped capacity (headcount ≠ capacity).
 2. **Pipeline waterfall with stage lags:** opps → stage-weighted conversion → bookings by close month → cash by DSO.
-3. **Per-deal cohort/vintage build:** subscription revenue starts at **go-live (= close + implementation duration)**, not signature; expansion locked to 0 until ~9–12mo post-go-live; founder-sold vs AE-sold cohorts may differ.
+3. **Per-deal cohort/vintage build:** subscription revenue starts at **go-live (= close + implementation duration)**, not signature; expansion locked to 0 until well after go-live; founder-sold vs AE-sold cohorts may differ.
 4. **IFRS 15 / SOCPA multi-element rev-rec:** split each contract into POBs (subscription, *distinct vs non-distinct* implementation, pilot, services) by standalone-selling-price; recognize each appropriately.
 5. **Pilots as a separate stream:** pilot cash recognized over pilot period; only converted pilots feed ARR; unconverted-pilot cash tracked separately (≠ ARR/LTV).
 6. **bookings → billings → recognized revenue → cash** waterfall (4 distinct lines) + ARR bridge + **deferred-revenue waterfall**; flag the "false-runway" gap from annual prepay.
@@ -221,12 +221,12 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 8. **Working-capital lines:** DSO/AR roll-forward, AP, **VAT float** (collected vs remitted, input/reverse-charge), **WHT** on foreign vendors, **Zakat-on-net-assets** (even pre-revenue), revenue leakage.
 9. **Burn & cash:** gross burn; net burn; net cash burn (incl. VAT/WHT/Zakat); monthly **direct-method cash flow**; near-term **13-week** weekly cash view (surface WPS Day-10 + VAT-remit crunches).
 10. **Runway & default-alive (compounding):** runway = cash ÷ forward-3-mo net burn; cash-out & buffer-breach months; project revenue forward at modeled MoM growth and report default-alive/dead AND the **minimum MoM growth** needed to flip to alive.
-11. **Burn multiple** (rolling 3-mo net burn ÷ net new ARR) with thresholds (<1 amazing / 1–1.5 great / 1.5–2 good / >2 suspect / >3 bad; note pre-seed/GCC tolerance ~2.5–3.4×), AND as a **forward hiring gate** (each proposed hire must pass a marginal burn-multiple test).
+11. **Burn multiple** (rolling 3-mo net burn ÷ net new ARR) with the canonical bands (<1 amazing / 1–1.5 great / 1.5–2 good / >2 suspect / >3 bad — Sacks; tolerance is higher and noisier at pre-seed), AND as a **forward hiring gate** (each proposed hire must pass a marginal burn-multiple test).
 12. **Probabilistic runway (Monte-Carlo):** if L5 ranges given, resample key drivers (triangular Min/Mode/Max) → P10/P50/P90 cash-out month; else two-point (P10/P90) proxy.
 13. **Round-sizing:** size the raise as the **greater of** (a) *deficit-coverage* = Funding Need in Part 7A `MAX(0, buffer − minimum ending cash)`, and (b) *milestone-based* = (milestone runway × avg burn) + (6-mo raise-process buffer × burn) + reserve; **next-raise trigger** at 9–12mo runway remaining (MENA process 6–9mo).
 14. **GCC valuation & dilution + SAFE-stack tracker:** model post-money SAFE conversion + cumulative dilution; flag founders <60% pre-Series-A.
 15. **Non-dilutive integration:** Kafalah-backed debt as a liability w/ repayments; TAQADAM/NTDP grants as grant income; keep separate from equity; don't imply SVC/Jada are direct.
-16. **Investor-diligence dashboard (RAG):** CAC payback (gross profit), LTV:CAC, burn multiple, NRR/GRR, gross & implementation margin, revenue concentration — vs **stage-adjusted** thresholds (red flags: CAC payback >18mo, LTV:CAC <3, burn multiple above stage norm — >2× general but ~2.5–3.4× tolerated at pre-seed — NRR <100%, concentration >30%, linear revenue).
+16. **Investor-diligence dashboard (RAG):** CAC payback (gross profit), LTV:CAC, burn multiple, NRR/GRR, gross & implementation margin, revenue concentration — vs **stage-adjusted** thresholds (red flags: CAC payback >18mo, LTV:CAC <3, burn multiple above stage norm (>2× is suspect at later stages; pre-seed tolerates higher), NRR <100%, single-customer concentration, linear revenue).
 17. **Decision-trigger dashboard (RAG):** live runway → pre-committed SAR cut levers per band (>9 green / 6–9 amber / <6 red); **treasury** (idle cash in Murabaha, bank diversification, never co-mingle VAT) with a small yield line.
 18. **Model governance (FAST):** inputs only in the Assumptions Register; **check-cells** (cash ties, BS balances, deferred-rev ties to liability, VAT reconciliation, EOSB roll-forward) that flag if broken; explicit sign conventions; version stamp.
 19. **Rolling + actuals-ready:** plan-vs-actual columns and a flux note for any >10% variance, feeding the monthly CFO review and a monthly investor-update / board-pack output.
