@@ -267,3 +267,112 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 - [ ] Funding need = milestone runway + buffer; next-raise trigger at 9–12mo; GCC dilution + SAFE-stack; non-dilutive mechanics correct (Kafalah=guarantee, SVC/Jada=FoF, TAQADAM=grant).
 - [ ] 3 scenarios + survival + raise-slip + sensitivity/tornado + break-even, internally consistent.
 - [ ] Scoped to 12 months; mapped to repo phases; KSA rates from Part 3 flagged "verify"; each phase's burn linked to pre-seed proof.
+
+---
+
+# PART 7 — FORMULAS, BUILD SCAFFOLD & OPERATING DISCIPLINE
+*(merged from the prior 18-month burn-rate model builder, scoped to 12 months — this prompt is now the single source of truth; no separate burn-rate doc remains)*
+
+## 7A — Core formulas (use these exact definitions)
+
+```text
+Gross Burn = Product/R&D + GTM + CS/Implementation + COGS + G&A/Compliance
+
+Net Burn  = Gross Burn − Customer Cash Receipts
+
+Net Cash Burn = Gross Burn + VAT Remitted + WHT/Tax/Zakat Paid
+              − Customer Cash Receipts (excl VAT) − VAT Collected
+              (track VAT, WHT and Zakat liabilities separately)
+
+Ending Cash = Opening Cash + Financing Inflow + Customer Cash Receipts + VAT Collected
+            − Gross Burn − VAT Remitted − WHT/Tax/Zakat Paid
+
+Forward 3-Month Avg Net Burn = Average(Net Burn M+1, M+2, M+3)
+Runway (months)              = Ending Cash ÷ Forward 3-Month Avg Net Burn
+
+Target Minimum Cash Buffer = Forward 3-Month Avg Net Burn × Buffer Months   (3 aggressive / 4 normal / 6 conservative)
+Funding Need               = MAX(0, Target Minimum Cash Buffer − Minimum Ending Cash)
+
+Burn Multiple = Net Burn ÷ Net New ARR        (use trailing-3-month / quarterly, not single months)
+
+CAC                               = Sales & Marketing Spend ÷ New Customers
+CAC per ARR                       = Sales & Marketing Spend ÷ New ARR
+Monthly Gross Profit per Customer = ARPA × Gross Margin ÷ 12
+CAC Payback (months)              = CAC ÷ Monthly Gross Profit per Customer
+
+Ending ARR = Beginning ARR + New ARR + Expansion ARR − Churned ARR − Contraction ARR
+
+Customer Cash Receipts = Annual Upfront + Monthly Subscription + Implementation Fee + Professional Services collections
+
+Deferred Revenue = Subscription Cash Collected − Subscription Revenue Recognized
+```
+
+## 7B — Build scaffold (tabs, if rendered to Excel/Google Sheets)
+`01_Control_Panel` (scenario switches, key assumptions, start date, currency) · `02_Assumptions` · `03_Product_Roadmap` · `04_Headcount` · `05_Payroll_Burden` (GOSI/EOSB/benefits/founder deferral) · `06_Cloud_AI_COGS` · `07_GTM_Burn` · `08_Implementation_CS` · `09_GA_Compliance` (legal/accounting/Saudi) · `10_Revenue_Cash` (ARR/MRR/bookings/receipts/deferred) · `11_VAT_WHT_Working_Capital` · `12_Burn_Model` (gross/net/ending cash/runway) · `13_SaaS_KPIs` · `14_Scenarios` · `15_Decision_Gates` · `16_Management_Summary`.
+
+## 7C — Phase-based burn architecture (12 months)
+| Phase | Months | Cost emphasis | Do NOT overspend on | Gate to pass before advancing |
+|---|---|---|---|---|
+| Foundation | M1–3 | R&D high; GTM low–med; G&A med; COGS/CS low | paid ads, PR, full sales team, full ERP, SOC 2, enterprise custom work | Founder can clearly state who buys, why, the urgent pain, a credible price, and what blocks purchase |
+| Pilot | M4–6 | R&D high; GTM med; CS med; G&A med | multi-country, big sales hiring, heavy custom integrations | ≥1 real pilot/paid customer, working claim workflow, buyers understand the problem, implementation playbook drafted |
+| Activation | M7–9 | CS high; R&D & GTM med–high; COGS med | multiple salespeople before proof | founder has closed/near-closed deals, pipeline > founder capacity, narrative repeatable, implementation not breaking |
+| Commercial Hardening | M10–12 | GTM high; CS high; R&D med; G&A med–high | unsupported vertical expansion, custom-heavy deals, AI without willingness-to-pay | by M12 know actual ACV, implementation hours/customer, early gross margin, activation rate, sales cycle, CAC trend, strongest segment |
+
+## 7D — Cost-behavior classification (classify every cost: fixed / variable / step)
+| Cost | Fixed | Variable | Step | Notes |
+|---|---|---|---|---|
+| Founder salary | Yes | No | No | Can be deferred |
+| Engineers | Yes | No | Step | Hired by roadmap |
+| Cloud base | Yes | No | No | Minimum platform cost |
+| Cloud usage | No | Yes | No | Scales with customers |
+| AI/API | No | Yes | No | Usage cap required |
+| Sales salaries | Yes | No | Step | Hire only after pipeline proof |
+| Commissions | No | Yes | No | Tie to cash collected |
+| Implementation labor | No | Yes | Step | Scales with customers |
+| CSM | No | No | Step | Hire by customer capacity |
+| Legal setup | One-time | No | No | Front-loaded |
+| Legal review | No | Yes | No | Scales with deals |
+| Accounting | Fixed | No | Step | More complex with revenue |
+| Events | No | Yes | No | Discretionary |
+| Office | Fixed | No | Step | Defer if possible |
+
+## 7E — Deferrability matrix (protect / defer / cut-first)
+| Cost | Protect | Defer | Cut first | Why |
+|---|---|---|---|---|
+| Core engineering (claim ledger) | Yes | No | No | Strategic IP |
+| Attribution workflow | Yes | No | No | Core value |
+| Audit log | Yes | No | No | Finance/legal trust |
+| Payout-preview basic logic | Yes | Maybe | No | CFO relevance |
+| Full ERP integration | No | Yes | Yes | Too early |
+| Advanced AI | No | Yes | Yes | Needs data first |
+| Large paid ads | No | Yes | Yes | Weak until message proven |
+| Big event sponsorship | No | Yes | Yes | High cost, uncertain ROI |
+| CS for first customers | Yes | No | No | Protect activation |
+| Implementation quality | Yes | No | No | Protect references |
+| Founder-led sales | Yes | No | No | Highest learning rate |
+| PR agency | No | Yes | Yes | Defer before proof |
+| Large office | No | Yes | Yes | Not core early |
+
+## 7F — Practical decision rules
+1. Don't scale GTM before activation proof. 2. Don't build integrations before repeatable, paid, ACV-tied demand. 3. Don't undercharge implementation (free implementation hides COGS). 4. Don't confuse ARR with cash (runway depends on collection timing). 5. Don't count VAT as revenue. 6. Don't hire sales before founder-led learning. 7. Don't overbuild AI before clean data. 8. Protect customer success (references, renewals, expansion). 9. Manage burn by gates, not emotion — every hire or major spend needs a measurable trigger.
+
+## 7G — Monthly CFO review questions (answer every month)
+1. What did we burn this month? 2. What did the burn produce? 3. Did we hit product milestones? 4. Did we create qualified pipeline? 5. Did pipeline convert? 6. Did customers pay cash? 7. Did customers activate? 8. Did implementation cost exceed plan? 9. Did COGS grow faster than revenue? 10. Did GTM spend improve efficiency? 11. Are we hiring ahead of proof? 12. Which costs should be cut or delayed? 13. What is current runway? 14. What is runway after committed hires? 15. What decision must be made before next month?
+
+## 7H — Pre-use audit checklist (before trusting the model)
+- [ ] All assumptions are editable (in the Assumptions Register)
+- [ ] Revenue and cash are separated; bookings ≠ billings ≠ revenue ≠ cash
+- [ ] VAT is not counted as revenue
+- [ ] Payroll burden (GOSI/EOSB/insurance/levies) is separate from gross salary
+- [ ] Founder salary deferral is explicit
+- [ ] Implementation cost is not hidden (sits in COGS, not CAC)
+- [ ] AI/API has a usage cap
+- [ ] Cloud cost has base and variable components
+- [ ] GTM spend has gates; sales hiring has pipeline triggers; CS hiring has capacity triggers
+- [ ] Integrations are deferred unless paid/repeatable
+- [ ] Monthly ending cash and runway are shown; ending cash reconciles
+- [ ] Funding need includes buffer; next-raise trigger set at 9–12 months
+- [ ] Scenario cases (Base/Downside/Upside + survival + raise-slip) are included
+- [ ] Deferrable costs are identified; cash-trigger freeze list exists
+- [ ] Monthly CFO questions (7G) are answered
+- [ ] No invented numbers — every figure is 🟢 / 📊 / 🔴
