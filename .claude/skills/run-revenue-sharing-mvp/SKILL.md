@@ -31,13 +31,40 @@ npm install        # installs Tailwind + plugins, the vendored fonts, and bundle
 ## Build
 
 Compiles `screens/` → `dist/` (per-page Tailwind CSS, vendored fonts/icons,
-localized images, generated `index.html`). Idempotent — wipes and rebuilds
-`dist/` each run; never touches `screens/`.
+generated `index.html`). For each `<img>` it wires in the real image recovered
+from `recovered/` when present (see below), else a local placeholder. Idempotent
+— wipes and rebuilds `dist/` each run; never touches `screens/`.
 
 ```bash
 cd prototype
 node build.mjs     # -> "Built 46 interactive screens + 5 design-only frames -> dist/"
 ```
+
+### Recovered images (avatars / logos / map)
+
+The screens reference avatars, logos, and a world map from
+`lh3.googleusercontent.com`, which is blocked offline — and the image bytes are
+**not** in the export except baked into each `screen.png` page render.
+`recover-images.mjs` crops those `<img>` regions straight out of `screen.png`
+(it reproduces Stitch's 1600-wide render, so each element's box maps to
+screenshot pixels) and keeps the ones that come back as a real image. The
+results live in `recovered/<screen>/<imgIndex>.png` and are **committed**, so a
+normal `node build.mjs` already includes them — you don't need to re-run this.
+
+Re-run only if `screens/` changes (needs a `dist/` first, for layout):
+
+```bash
+cd prototype
+node build.mjs && node recover-images.mjs && node build.mjs
+# -> "Recovered 22 real images, dropped 6 blank/misaligned -> recovered/"
+```
+
+22 of 28 image slots recover cleanly. The other 6 sit on screens the export
+down-scaled (`partner_profit_loss_*`, `partner_roi_analysis`,
+`partner_performance_scorecard`, and a 2nd/3rd avatar on two workspaces); their
+crops come back blank, so they fall back to the placeholder. The only way to get
+those 6 at full fidelity is the original source (unblock the host or supply the
+files) — they cannot be recovered from the screenshots.
 
 ## Run (agent path)
 
@@ -95,9 +122,15 @@ headless — it's for a human with a browser.
   tokens stay exact. Don't try to merge them into one config.
 - **Pages carry inline `<style>` blocks (icon FILL axis, etc.).** `build.mjs`
   only strips three head tags (the CDN `<script>`, the `tailwind-config`
-  `<script>`, and the Google-Fonts `<link>`s) and rewrites `lh3.googleusercontent`
-  image URLs → `/assets/placeholder.svg`. Everything else is left intact.
-- **`screens/` is the committed source of truth; `dist/` and `shots/` are
+  `<script>`, and the Google-Fonts `<link>`s) and rewrites each
+  `lh3.googleusercontent` image URL → its `recovered/` crop (or the placeholder).
+  Everything else is left intact.
+- **Real images are recovered from `screen.png`, not fetched.** Their host is
+  blocked and the bytes aren't in the export otherwise. `recover-images.mjs`
+  crops them out of the page renders; alignment relies on the screenshots being
+  Stitch's 1600-wide render (see that file's header). Don't repoint the `<img>`s
+  at the remote URLs — they 403 offline.
+- **`screens/` and `recovered/` are committed source; `dist/` and `shots/` are
   generated** (git-ignored). Edit screens or `build.mjs`, never `dist/`.
 - **Cross-screen links don't work.** The `global_navigation_journey_refinement`
   screen still has unresolved Stitch `{{DATA:SCREEN:SCREEN_NN}}` placeholders.

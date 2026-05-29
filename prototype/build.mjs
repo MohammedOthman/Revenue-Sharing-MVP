@@ -24,6 +24,7 @@ import containerQueries from '@tailwindcss/container-queries';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(HERE, 'screens');
 const OUT = path.join(HERE, 'dist');
+const RECOVERED = path.join(HERE, 'recovered'); // real images recovered from screen.png (see recover-images.mjs)
 const INPUT_CSS = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
 
 // .woff2 files copied out of node_modules into dist/assets/ (referenced by fonts.css)
@@ -57,12 +58,19 @@ async function compile(html, theme, darkMode) {
   return res.css;
 }
 
-function rewriteHead(html) {
+// Each <img> references the blocked lh3 host in DOM/source order. The k-th such
+// reference is swapped for the real image recovered from screen.png (recovered/<dir>/<k>.png,
+// produced by recover-images.mjs) when available, else a local placeholder.
+function rewriteHtml(html, recoveredKs) {
+  let k = -1;
   return html
     .replace(/<script src="https:\/\/cdn\.tailwindcss\.com[^"]*"><\/script>\s*/g, '')
     .replace(/<script id="tailwind-config">[\s\S]*?<\/script>\s*/g, '')
     .replace(/<link[^>]*fonts\.(googleapis|gstatic)\.com[^>]*>\s*/g, '')
-    .replace(/https:\/\/lh3\.googleusercontent\.com\/[^"')\s]+/g, '/assets/placeholder.svg')
+    .replace(/https:\/\/lh3\.googleusercontent\.com\/[^"')\s]+/g, () => {
+      k++;
+      return recoveredKs.has(k) ? `img-${k}.png` : '/assets/placeholder.svg';
+    })
     .replace(/<\/head>/i,
       '<link rel="stylesheet" href="/assets/fonts.css"/>\n<link rel="stylesheet" href="app.css"/>\n</head>');
 }
@@ -169,10 +177,20 @@ function buildIndex(manifest, built, pngOnly) {
     const { theme, darkMode } = extractTheme(html);
     const css = await compile(html, theme, darkMode);
     fs.writeFileSync(path.join(outDir, 'app.css'), css);
-    fs.writeFileSync(path.join(outDir, 'code.html'), rewriteHead(html));
+
+    // wire in any real images recovered from screen.png for this screen
+    const recDir = path.join(RECOVERED, dir);
+    const recoveredKs = new Set();
+    if (fs.existsSync(recDir)) {
+      for (const f of fs.readdirSync(recDir)) {
+        const m = f.match(/^(\d+)\.png$/);
+        if (m) { const k = +m[1]; recoveredKs.add(k); fs.copyFileSync(path.join(recDir, f), path.join(outDir, `img-${k}.png`)); }
+      }
+    }
+    fs.writeFileSync(path.join(outDir, 'code.html'), rewriteHtml(html, recoveredKs));
     manifest.push({ dir, title, hasCode: true });
     built++;
-    process.stdout.write(`  ✓ ${dir} (${(css.length / 1024).toFixed(0)}kB)\n`);
+    process.stdout.write(`  ✓ ${dir} (${(css.length / 1024).toFixed(0)}kB${recoveredKs.size ? `, ${recoveredKs.size} img` : ''})\n`);
   }
 
   fs.writeFileSync(path.join(OUT, 'index.html'), buildIndex(manifest, built, pngOnly));
