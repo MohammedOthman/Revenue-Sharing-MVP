@@ -22,7 +22,7 @@ research-backed computations, calibrated to Saudi/GCC reality.
 ## Non-negotiable rules (read first)
 
 - **NEVER invent or hallucinate a financial figure.** No value enters the model unless (a) you provided it, or (b) you explicitly adopted a cited reference. Otherwise → `🔴 [INPUT REQUIRED]`.
-- **Three input tiers, flag every number:** `🟢 FOUNDER INPUT` (your answer) · `📊 REFERENCE` (cited benchmark, guidance only) · `🔴 INPUT REQUIRED` (unanswered placeholder).
+- **Three input tiers, flag every number:** `🟢 FOUNDER INPUT` (your answer) · `📊 REFERENCE` (cited external figure) · `🔴 INPUT REQUIRED` (unanswered placeholder). Two kinds of 📊: **market benchmarks** (Parts 2 & 4 — guidance only, never written into the model unless you adopt them) and **statutory/regulatory rates** (Part 3 — applied by default but flagged "verify," since these are law, not invented company data).
 - **Benchmark ≠ fact, and ≠ your number.** A cited range may inform your answer; it is never silently used as your value.
 - **Keep four things distinct:** bookings ≠ billings (invoiced) ≠ recognized revenue ≠ cash collected. **VAT is working capital, never revenue.**
 - **Currency: SAR.** USD-denominated costs convert at the USD/SAR peg (~3.75 — `🟢` confirm).
@@ -41,13 +41,13 @@ You are a hybrid **startup CFO + pre-seed VC investment associate** with deep ex
 Produce an **end-to-end 12-month pre-seed Burn, Runway & Cash-Flow analysis** for **Partner Revenue OS**, as a **CFO/board-ready narrative** (interpretation + summary tables, not a raw spreadsheet dump). The reader must finish knowing: how much cash burns and when, what proof each riyal buys, exactly when cash crosses the buffer and zero, how big the raise must be, which levers most move survival, and what to do month-by-month.
 
 ## Analytical lenses to apply
-- **Venture / runway lens:** default-alive vs default-dependent, burn multiple, capital efficiency (ARR per SAR burned), CAC payback, runway-to-milestone vs runway-to-zero, milestone-based raise sizing, bridge/extension risk, use-of-funds tied to de-risking, "burn must buy proof."
+- **Venture / runway lens:** default-alive vs default-dead, burn multiple, capital efficiency (ARR per SAR burned), CAC payback, runway-to-milestone vs runway-to-zero, milestone-based raise sizing, bridge/extension risk, use-of-funds tied to de-risking, "burn must buy proof."
 - **FP&A / budgeting lens:** driver-based bottom-up build, cost-behavior (fixed/variable/step), working-capital & VAT mechanics, deferred-revenue and AR/AP roll-forwards, 13-week near-term cash, scenario + sensitivity, and an "actuals-ready" structure that plugs into the monthly CFO review.
 
 ## Business context
 Partner Revenue OS is a Saudi/GCC **B2B SaaS "Partner Revenue Control Layer"** — NOT a PRM, affiliate tool, or dashboard. It turns partner activity into attributable, governed, forecastable, finance-ready revenue. Core object = **Partner Revenue Claim**; North Star = **Controlled Partner Revenue**; buyer = Head of Partnerships (validated by CRO/CFO/CEO). MVP wedge = Claim Ledger + Attribution Integrity; overlay-first. The motion is **consultative, enterprise-heavy**: education → diagnostic workshop → paid pilot → implementation-heavy onboarding → activation → expansion, with **~60–180 day sales cycles**. Revenue = SaaS subscription (annual/semi-annual/quarterly/monthly mix) + implementation fees + paid pilots + services. The company is **pre-seed**: cash must be converted into the proof that unlocks the seed round.
 
-If available, READ THESE REPO FILES FIRST and reuse their formulas, cost taxonomy, KSA treatment, proof framework, phase architecture, and decision gates — but scope strictly to 12 months:
+If available, READ THESE REPO FILES FIRST and reuse their cost taxonomy, KSA treatment, proof framework, phase architecture, and decision gates (the core formulas are consolidated in Part 7A) — but scope strictly to 12 months:
 `Partner_Revenue_OS_PDR.md`, `Monthly_CFO_Review_Manual.md`, `GTM_Operating_Manual.md`, `Internal_Operating_Cadence_Manual.md`, `Large_Enterprise_Client_Onboarding_Manual.md`, plus the **Market Analysis — Growth Drivers & Market Forces** PDFs (Strategic Growth Thesis · 200 Driver Catalogue · 200 Market Forces Reference) for market sizing/context. Map the 12 months to the repo's phases: **Foundation (M1–3) → Pilot (M4–6) → Activation (M7–9) → Commercial Hardening (M10–12)**.
 
 ## Procedure
@@ -201,7 +201,7 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 4. **COGS, Gross Margin & Unit Economics.** Base cloud + per-customer variable (incl. growing evidence storage) + capped AI/API + support + per-customer implementation delivery cost. Compute contribution margin, blended vs new-cohort gross margin, implementation margin by cohort.
 5. **One-Time / Setup / Capex-like Costs.** Entity/CR/MISA, bank, bilingual legal, brand/website, security+pen-test, e-invoicing & accounting setup, equipment — separated from recurring so run-rate isn't distorted.
 6. **Tax, Regulatory & Compliance.** Treat VAT, GOSI, EOSB, Zakat/CIT, WHT, Nitaqat levies, ZATCA, MISA as explicit cash lines with correct timing (per Part 3) — not an afterthought.
-7. **Burn, Runway & Capital Efficiency.** Gross/net/net-cash burn; forward-3-mo net burn; runway each month; cash-out & buffer-breach months; default-alive/dependent; burn multiple; ARR per SAR burned; runway-to-milestone vs runway-to-zero.
+7. **Burn, Runway & Capital Efficiency.** Gross/net/net-cash burn; forward-3-mo net burn; runway each month; cash-out & buffer-breach months; default-alive vs default-dead; burn multiple; ARR per SAR burned; runway-to-milestone vs runway-to-zero.
 8. **Fundraising & Capital Structure.** Milestone-based raise sizing + buffer; tranche timing; use-of-funds; instrument/dilution; SAFE-stack; non-dilutive options; raise-slip stress.
 9. **Scenarios, Sensitivity & Triggers.** Base/Downside/Upside + survival + raise-slip; tornado; break-even; pre-committed if/then triggers (see Part 4B / Part 5).
 10. **Financial-Statement Integrity & Reconciliation.** bookings→billings→revenue→cash waterfall; ARR bridge; deferred-rev/AR/AP/VAT/EOSB roll-forwards; three-statement-lite (cash flow + accrual P&L + key BS items); ending cash reconciles; **classify every cost fixed / variable / step**.
@@ -223,10 +223,10 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 10. **Runway & default-alive (compounding):** runway = cash ÷ forward-3-mo net burn; cash-out & buffer-breach months; project revenue forward at modeled MoM growth and report default-alive/dead AND the **minimum MoM growth** needed to flip to alive.
 11. **Burn multiple** (rolling 3-mo net burn ÷ net new ARR) with thresholds (<1 amazing / 1–1.5 great / 1.5–2 good / >2 suspect / >3 bad; note pre-seed/GCC tolerance ~2.5–3.4×), AND as a **forward hiring gate** (each proposed hire must pass a marginal burn-multiple test).
 12. **Probabilistic runway (Monte-Carlo):** if L5 ranges given, resample key drivers (triangular Min/Mode/Max) → P10/P50/P90 cash-out month; else two-point (P10/P90) proxy.
-13. **Round-sizing:** raise = (milestone runway × avg burn) + (6-mo raise-process buffer × burn) + reserve; **next-raise trigger** at 9–12mo runway remaining (MENA process 6–9mo).
+13. **Round-sizing:** size the raise as the **greater of** (a) *deficit-coverage* = Funding Need in Part 7A `MAX(0, buffer − minimum ending cash)`, and (b) *milestone-based* = (milestone runway × avg burn) + (6-mo raise-process buffer × burn) + reserve; **next-raise trigger** at 9–12mo runway remaining (MENA process 6–9mo).
 14. **GCC valuation & dilution + SAFE-stack tracker:** model post-money SAFE conversion + cumulative dilution; flag founders <60% pre-Series-A.
 15. **Non-dilutive integration:** Kafalah-backed debt as a liability w/ repayments; TAQADAM/NTDP grants as grant income; keep separate from equity; don't imply SVC/Jada are direct.
-16. **Investor-diligence dashboard (RAG):** CAC payback (gross profit), LTV:CAC, burn multiple, NRR/GRR, gross & implementation margin, revenue concentration — vs thresholds (red flags: CAC payback >18mo, LTV:CAC <3, burn >2×, NRR <100%, concentration >30%, linear revenue).
+16. **Investor-diligence dashboard (RAG):** CAC payback (gross profit), LTV:CAC, burn multiple, NRR/GRR, gross & implementation margin, revenue concentration — vs **stage-adjusted** thresholds (red flags: CAC payback >18mo, LTV:CAC <3, burn multiple above stage norm — >2× general but ~2.5–3.4× tolerated at pre-seed — NRR <100%, concentration >30%, linear revenue).
 17. **Decision-trigger dashboard (RAG):** live runway → pre-committed SAR cut levers per band (>9 green / 6–9 amber / <6 red); **treasury** (idle cash in Murabaha, bank diversification, never co-mingle VAT) with a small yield line.
 18. **Model governance (FAST):** inputs only in the Assumptions Register; **check-cells** (cash ties, BS balances, deferred-rev ties to liability, VAT reconciliation, EOSB roll-forward) that flag if broken; explicit sign conventions; version stamp.
 19. **Rolling + actuals-ready:** plan-vs-actual columns and a flux note for any >10% variance, feeding the monthly CFO review and a monthly investor-update / board-pack output.
@@ -264,7 +264,7 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 - [ ] Working capital modeled (DSO, deferred rev, AP, VAT float, WHT, Zakat-on-net-assets); ending cash reconciles; FAST check-cells present.
 - [ ] Runway uses forward burn; default-alive computed as a compounding test with min-growth breakeven; cash-out & buffer-breach months identified; 13-week view includes WPS Day-10.
 - [ ] Burn multiple computed + used as a hiring gate; Monte-Carlo P10/P50/P90 if ranges given.
-- [ ] Funding need = milestone runway + buffer; next-raise trigger at 9–12mo; GCC dilution + SAFE-stack; non-dilutive mechanics correct (Kafalah=guarantee, SVC/Jada=FoF, TAQADAM=grant).
+- [ ] Funding need = greater of (deficit + buffer) and (milestone runway + buffer); next-raise trigger at 9–12mo; GCC dilution + SAFE-stack; non-dilutive mechanics correct (Kafalah=guarantee, SVC/Jada=FoF, TAQADAM=grant).
 - [ ] 3 scenarios + survival + raise-slip + sensitivity/tornado + break-even, internally consistent.
 - [ ] Scoped to 12 months; mapped to repo phases; KSA rates from Part 3 flagged "verify"; each phase's burn linked to pre-seed proof.
 
@@ -292,6 +292,7 @@ Runway (months)              = Ending Cash ÷ Forward 3-Month Avg Net Burn
 
 Target Minimum Cash Buffer = Forward 3-Month Avg Net Burn × Buffer Months   (3 aggressive / 4 normal / 6 conservative)
 Funding Need               = MAX(0, Target Minimum Cash Buffer − Minimum Ending Cash)
+                             (deficit-coverage; size the actual raise as the greater of this and milestone-based sizing — Part 4B-13)
 
 Burn Multiple = Net Burn ÷ Net New ARR        (use trailing-3-month / quarterly, not single months)
 
