@@ -25,6 +25,19 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(HERE, 'screens');
 const OUT = path.join(HERE, 'dist');
 const RECOVERED = path.join(HERE, 'recovered'); // real images recovered from screen.png (see recover-images.mjs)
+
+// Make the gallery a clickable flow: the screens' sidebar nav items are dead
+// (href="#"); map each nav label to a canonical destination screen so they work.
+const NAV = {
+  dashboard:     '/partner_revenue_command_center/code.html',
+  partners:      '/partner_registry/code.html',
+  claims:        '/enhanced_revenue_claim_portal_with_simulation/code.html',
+  approvals:     '/attribution_approval_workspace/code.html',
+  settings:      '/gcc_saudi_localization_settings_with_rationales/code.html',
+  documentation: '/developer_hub_api_management_with_rationales/code.html',
+  statements:    '/partner_portal_statement_view/code.html',
+  support:       '/index.html',
+};
 const INPUT_CSS = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
 
 // .woff2 files copied out of node_modules into dist/assets/ (referenced by fonts.css)
@@ -61,6 +74,11 @@ async function compile(html, theme, darkMode) {
 // Each <img> references the blocked lh3 host in DOM/source order. The k-th such
 // reference is swapped for the real image recovered from screen.png (recovered/<dir>/<k>.png,
 // produced by recover-images.mjs) when available, else a local placeholder.
+// Fixed circular "Overview" button so any screen can return to the index hub.
+// Compact FAB in the bottom-left corner (standard help-bubble pattern) so it
+// stays clear of primary action bars (bottom-right) and page content.
+const OVERVIEW_PILL = `<a href="/index.html" title="Overview — all screens" aria-label="Overview — all screens" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;background:#07006c;color:#fff;border-radius:50%;box-shadow:0 6px 18px rgba(7,0,108,.45);text-decoration:none"><span class="material-symbols-outlined" style="font-size:22px">grid_view</span></a>`;
+
 function rewriteHtml(html, recoveredKs) {
   let k = -1;
   return html
@@ -71,8 +89,15 @@ function rewriteHtml(html, recoveredKs) {
       k++;
       return recoveredKs.has(k) ? `img-${k}.png` : '/assets/placeholder.svg';
     })
+    // wire dead sidebar nav (icon + label anchors) to their canonical screens
+    .replace(/(<a\b[^>]*href=")#("[^>]*>\s*<span class="material-symbols-outlined[^"]*"[^>]*>[^<]+<\/span>\s*<span[^>]*>)([^<]+)(<\/span>\s*<\/a>)/g,
+      (full, pre, mid, label, post) => {
+        const dest = NAV[label.trim().toLowerCase()];
+        return dest ? pre + dest + mid + label + post : full;
+      })
     .replace(/<\/head>/i,
-      '<link rel="stylesheet" href="/assets/fonts.css"/>\n<link rel="stylesheet" href="app.css"/>\n</head>');
+      '<link rel="stylesheet" href="/assets/fonts.css"/>\n<link rel="stylesheet" href="app.css"/>\n</head>')
+    .replace(/<\/body>/i, OVERVIEW_PILL + '\n</body>');
 }
 
 function titleOf(html, dir) {

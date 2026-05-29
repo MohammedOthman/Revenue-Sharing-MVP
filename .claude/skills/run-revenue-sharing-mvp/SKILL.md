@@ -132,9 +132,13 @@ headless — it's for a human with a browser.
   at the remote URLs — they 403 offline.
 - **`screens/` and `recovered/` are committed source; `dist/` and `shots/` are
   generated** (git-ignored). Edit screens or `build.mjs`, never `dist/`.
-- **Cross-screen links don't work.** The `global_navigation_journey_refinement`
-  screen still has unresolved Stitch `{{DATA:SCREEN:SCREEN_NN}}` placeholders.
-  Navigate via the generated `index.html` instead.
+- **Navigation is wired in by the build.** The screens ship with dead links
+  (`href="#"`, unresolved `{{DATA:SCREEN:SCREEN_NN}}` placeholders). `build.mjs`
+  rewrites each sidebar nav item to a canonical destination screen via the `NAV`
+  map (Dashboard/Partners/Claims/Approvals/Settings/Documentation/Statements/Support),
+  and injects a fixed bottom-left "Overview" button back to `index.html`. To
+  re-point a section, edit `NAV` in `build.mjs` — only those exact labels are
+  rewritten; everything else stays inert.
 
 ## Troubleshooting
 
