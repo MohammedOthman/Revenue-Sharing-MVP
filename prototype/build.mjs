@@ -58,7 +58,9 @@ const SCREEN_MAP = {
 // (primary buttons / "View All" / table rows) to the relevant screen. Consumed
 // at runtime by deeplink.js. Only the named controls are wired.
 const C = p => `/${p}/code.html`;
+const CLAIM = C('enhanced_revenue_claim_portal_with_simulation'); // "New Claim" target, used widely
 const DEEPLINKS = {
+  // ---- Command Center & registry ----
   partner_revenue_command_center: {
     rowsByTable: [C('attribution_approval_workspace'), C('dispute_management_workspace')],
     viewAll:     [C('attribution_approval_workspace'), C('dispute_management_workspace')],
@@ -66,29 +68,277 @@ const DEEPLINKS = {
   },
   partner_registry: {
     rows: C('partner_profile_kyc_vault_with_rationales'),
-    buttons: [{ text: 'Add Partner', href: C('partner_onboarding_kyc_portal') }],
+    buttons: [{ text: 'Add Partner', href: C('partner_sourcing_intake') }],
   },
-  attribution_approval_workspace: {
+  partner_profile_kyc_vault_with_rationales: {
+    rows: C('agreement_rulebook_configuration'),
     buttons: [
-      { text: 'Open Dispute', href: C('dispute_management_workspace') },
-      { text: 'Accept Attribution', href: C('revenue_reconciliation_settlement_center') },
+      { text: 'Edit Profile', href: C('partner_onboarding_kyc_portal') },
+      { text: 'View Full Contract Archive', href: C('agreement_rulebook_configuration') },
+      { text: 'Request Audit', href: C('finance_evidence_pack') },
+    ],
+  },
+
+  // ---- Phase 1–5: strategy → segmentation → sourcing → qualification → approval ----
+  partner_strategy_program_thesis: {
+    buttons: [{ text: 'Submit for Approval', href: C('partner_segmentation_role_taxonomy') }],
+  },
+  partner_segmentation_role_taxonomy: {
+    buttons: [{ text: 'Add Role', href: C('partner_sourcing_intake') }],
+  },
+  partner_sourcing_intake: {
+    rows: C('partner_qualification_scorecard'),
+    buttons: [{ text: 'Inbound Applications', href: C('partner_qualification_scorecard') }],
+  },
+  partner_qualification_scorecard: {
+    buttons: [{ text: 'Approve for Onboarding', href: C('partner_approval_workflow') }],
+  },
+  partner_approval_workflow: {
+    buttons: [{ text: 'Approve & Create Record', href: C('agreement_rulebook_configuration') }],
+  },
+  partner_verification_portal_b2b_copy: {
+    buttons: [{ text: 'Save & Proceed', href: C('partner_onboarding_activation_hub_with_rationales') }],
+  },
+  partner_verification_dashboard_pending: {
+    buttons: [{ text: 'New Claim', href: CLAIM }],
+  },
+
+  // ---- Phase 6–8: agreement → integration → onboarding ----
+  agreement_rulebook_configuration: {
+    rows: C('multi_partner_split_configuration_with_rationales'),
+    buttons: [
+      { text: 'Publish Rulebook', href: C('integration_health_data_mapping_with_rationales') },
+      { text: 'New Agreement Type', href: C('commercial_rulebook_b2b_copy') },
+    ],
+  },
+  agreement_rulebook_with_rationales_1: {
+    rows: C('multi_partner_split_configuration_with_rationales'),
+    buttons: [{ text: 'Publish Rulebook', href: C('integration_health_data_mapping_with_rationales') }],
+  },
+  agreement_rulebook_with_rationales_2: {
+    rows: C('multi_partner_split_configuration_with_rationales'),
+    buttons: [{ text: 'Publish Rulebook', href: C('integration_health_data_mapping_with_rationales') }],
+  },
+  agreement_rulebook_multi_role_support: {
+    rows: C('multi_partner_split_configuration_with_rationales'),
+    buttons: [{ text: 'Publish Rulebook', href: C('integration_health_data_mapping_with_rationales') }],
+  },
+  commercial_rulebook_b2b_copy: {
+    rows: C('multi_partner_split_configuration_with_rationales'),
+    buttons: [
+      { text: 'Activate Commercial Terms', href: C('integration_health_data_mapping_with_rationales') },
+      { text: 'Simulate Payout Logic', href: C('incentive_simulation_rule_sandbox') },
+    ],
+  },
+  multi_partner_split_configuration_with_rationales: {
+    buttons: [
+      { text: 'Commit Split', href: C('attribution_approval_workspace') },
+      { text: 'Escalate to Dispute', href: C('dispute_management_workspace') },
+    ],
+  },
+  partner_tier_program_sandbox_with_rationales: {
+    rows: C('partner_registry'),
+    buttons: [
+      { text: 'Add Custom Tier', href: C('partner_segmentation_role_taxonomy') },
+      { text: 'Save Draft Ruleset', href: C('agreement_rulebook_configuration') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  integration_health_data_mapping_with_rationales: {
+    rows: C('crm_link_sync_monitor'),
+    viewAll: [C('crm_link_sync_monitor')],
+    buttons: [
+      { text: 'New Connection', href: C('crm_link_sync_monitor') },
+      { text: 'Manage All Schema Mappings', href: C('crm_link_sync_monitor') },
+    ],
+  },
+  partner_onboarding_kyc_portal: {
+    buttons: [{ text: 'Save & Continue', href: C('partner_onboarding_activation_hub_with_rationales') }],
+  },
+  partner_onboarding_with_rationales: {
+    buttons: [{ text: 'Save & Continue', href: C('partner_onboarding_activation_hub_with_rationales') }],
+  },
+  partner_onboarding_activation_hub_with_rationales: {
+    buttons: [{ text: 'New Claim', href: CLAIM }],
+  },
+
+  // ---- Phase 9–13: touchpoints → claim → preflight → attribution → multi-touch ----
+  ecosystem_touchpoint_ledger: {
+    rows: C('advanced_ecosystem_attribution_hub_with_rationales'),
+    buttons: [
+      { text: 'Import from CRM', href: CLAIM },
+      { text: 'Add Touchpoint', href: CLAIM },
     ],
   },
   enhanced_revenue_claim_portal_with_simulation: {
     buttons: [
-      { text: 'Submit to Ledger', href: C('attribution_approval_workspace') },
+      { text: 'Submit to Ledger', href: C('claim_preflight_exception_queue') },
       { text: 'New Claim', href: C('deal_registration_claim_capture') },
     ],
+  },
+  deal_registration_claim_capture: {
+    buttons: [{ text: 'Submit Claim', href: C('claim_preflight_exception_queue') }],
+  },
+  claim_submission_portal_b2b_copy: {
+    buttons: [{ text: 'Finalize Submission', href: C('claim_preflight_exception_queue') }],
+  },
+  claim_preflight_exception_queue: {
+    rows: C('attribution_approval_workspace'),
+    buttons: [{ text: 'Pass to Attribution', href: C('attribution_approval_workspace') }],
+  },
+  attribution_approval_workspace: {
+    buttons: [
+      { text: 'Open Dispute', href: C('dispute_management_workspace') },
+      { text: 'Accept Attribution', href: C('crm_link_sync_monitor') },
+    ],
+  },
+  advanced_ecosystem_attribution_hub_with_rationales: {
+    buttons: [
+      { text: 'Add Evidence', href: C('attribution_approval_workspace') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  ecosystem_attribution_b2b_copy: {
+    buttons: [
+      { text: 'Add Evidence', href: C('attribution_approval_workspace') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+
+  // ---- Phase 14–18: CRM link → revenue → payout → evidence → statement ----
+  crm_link_sync_monitor: {
+    rows: C('revenue_event_validation'),
+    buttons: [{ text: 'Configure Write-Back', href: C('revenue_event_validation') }],
+  },
+  revenue_event_validation: {
+    rows: C('payout_eligibility_workspace'),
+    buttons: [{ text: 'Validate Revenue Event', href: C('payout_eligibility_workspace') }],
+  },
+  payout_eligibility_workspace: {
+    rows: C('finance_evidence_pack'),
+    buttons: [{ text: 'Mark Eligible', href: C('finance_evidence_pack') }],
+  },
+  finance_evidence_pack: {
+    buttons: [{ text: 'Approve & Freeze Pack', href: C('partner_portal_statement_view') }],
+  },
+  partner_portal_statement_view: {
+    rows: C('attribution_approval_workspace'),
+    buttons: [{ text: 'Register New Deal', href: C('deal_registration_claim_capture') }],
+  },
+
+  // ---- Phase 19–20: disputes → settlement ----
+  dispute_management_workspace: {
+    buttons: [{ text: 'Accept Dispute & Adjust', href: C('resolution_ledger_with_financial_sync') }],
+  },
+  resolution_workspace_b2b_copy: {
+    buttons: [
+      { text: 'Approve Claim & Reconcile', href: C('revenue_reconciliation_settlement_center') },
+      { text: 'Deny Claim with Rationale', href: C('dispute_management_workspace') },
+    ],
+  },
+  resolution_ledger_with_financial_sync: {
+    buttons: [{ text: 'New Claim', href: CLAIM }],
   },
   revenue_reconciliation_settlement_center: {
     rows: C('advanced_settlement_recovery_hub_b2b_copy'),
     buttons: [{ text: 'Approve Batch', href: C('revenue_settlement_center_b2b_copy') }],
   },
-  dispute_management_workspace: {
-    buttons: [{ text: 'Accept Dispute & Adjust', href: C('resolution_ledger_with_financial_sync') }],
+  revenue_settlement_center_b2b_copy: {
+    rows: C('advanced_settlement_recovery_hub_b2b_copy'),
+    buttons: [
+      { text: 'Authorize Settlement', href: C('advanced_settlement_recovery_hub_b2b_copy') },
+      { text: 'Execute ERP Sync', href: C('integration_health_data_mapping_with_rationales') },
+    ],
   },
-  partner_onboarding_kyc_portal: {
-    buttons: [{ text: 'Save & Continue', href: C('partner_onboarding_activation_hub_with_rationales') }],
+  advanced_settlement_recovery_hub_b2b_copy: {
+    rows: C('dispute_management_workspace'),
+    buttons: [
+      { text: 'Execute Pending Batches', href: C('revenue_settlement_center_b2b_copy') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  shadow_revenue_detection_engine: {
+    rows: C('shadow_revenue_resolution_workspace_with_rationales'),
+    viewAll: [C('shadow_revenue_resolution_workspace_with_rationales')],
+    buttons: [{ text: 'Convert Claim', href: CLAIM }],
+  },
+  shadow_revenue_resolution_workspace_with_rationales: {
+    buttons: [
+      { text: 'Manual Credit Assignment', href: C('multi_partner_split_configuration_with_rationales') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+
+  // ---- Phase 21–22: performance → executive investment ----
+  partner_performance_scorecard_with_rationales: {
+    buttons: [
+      { text: 'Adjust Tier', href: C('partner_tier_program_sandbox_with_rationales') },
+      { text: 'Export Detailed ROI', href: C('partner_roi_analysis_b2b_copy') },
+    ],
+  },
+  partner_profit_loss_with_rationales: {
+    buttons: [{ text: 'Adjust Payout Rules', href: C('agreement_rulebook_configuration') }],
+  },
+  partner_profit_loss_analysis: {
+    buttons: [{ text: 'Adjust Payout Rules', href: C('agreement_rulebook_configuration') }],
+  },
+  partner_roi_analysis_b2b_copy: {
+    buttons: [{ text: 'Adjust Payout Rules', href: C('agreement_rulebook_configuration') }],
+  },
+  executive_dashboard_b2b_copy: {
+    rowsByTable: [C('attribution_approval_workspace'), C('dispute_management_workspace')],
+    viewAll:     [C('attribution_approval_workspace'), C('dispute_management_workspace')],
+    buttons: [{ text: 'Audit Claim', href: C('attribution_approval_workspace') }],
+  },
+  quarterly_executive_pack_cro_cfo: {
+    rows: C('partner_concentration_risk_map_with_rationales'),
+    viewAll: [C('partner_concentration_risk_map_with_rationales')], // only "View All Risks" matches
+    buttons: [{ text: 'Review Allocation Model', href: C('strategic_roi_investment_cockpit_with_rationales') }],
+  },
+  strategic_roi_investment_cockpit_with_rationales: {
+    rows: C('partner_performance_scorecard_with_rationales'),
+    buttons: [
+      { text: 'Approve Reallocation', href: C('quarterly_executive_pack_cro_cfo') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  strategic_incentive_strategy_cockpit_with_rationales: {
+    buttons: [
+      { text: 'Rule Deployment', href: C('agreement_rulebook_configuration') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  incentive_simulation_rule_sandbox: {
+    buttons: [{ text: 'Save Scenario', href: C('strategic_incentive_strategy_cockpit_with_rationales') }],
+  },
+  partner_concentration_risk_map_with_rationales: {
+    buttons: [
+      { text: 'View Pipeline Candidates', href: C('partner_registry') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+
+  // ---- Developer & governance (supporting) ----
+  developer_hub_api_management_with_rationales: {
+    rows: C('developer_api_gateway_with_rationales'),
+    buttons: [
+      { text: 'Explore Dev Portal', href: C('developer_api_gateway_with_rationales') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  gcc_saudi_localization_settings_with_rationales: {
+    buttons: [
+      { text: 'Save Configuration', href: C('global_entity_currency_governance_with_rationales') },
+      { text: 'New Claim', href: CLAIM },
+    ],
+  },
+  global_entity_currency_governance_with_rationales: {
+    rows: C('gcc_saudi_localization_settings_with_rationales'),
+    buttons: [
+      { text: 'Add Entity', href: C('gcc_saudi_localization_settings_with_rationales') },
+      { text: 'View Role Matrix', href: C('partner_approval_workflow') },
+      { text: 'New Claim', href: CLAIM },
+    ],
   },
 };
 const INPUT_CSS = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';

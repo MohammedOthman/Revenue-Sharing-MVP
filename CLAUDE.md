@@ -50,9 +50,12 @@ cd prototype && npm install && node build.mjs && node driver.mjs
   injects a bottom-left **"Overview"** button back to `index.html`. To re-point a
   section, edit `NAV` in `build.mjs`.
 - **Deep-links** (the `DEEPLINKS` map in `build.mjs` + `deeplink.js`) wire primary
-  buttons / "View All" / table rows on 7 key screens to follow the journey (e.g.
-  claim row → Attribution Workspace, Accept Attribution → Settlement, registry row →
-  Partner Profile). Matched by exact control text / DOM order. Edit `DEEPLINKS` to extend.
+  buttons / "View All" / table rows across **55 screens** to follow the workflow
+  (e.g. Submit Claim → Preflight → Attribution → CRM → Revenue → Payout → Evidence
+  → Statement; rows open the relevant detail/next screen). Matched by exact
+  icon-stripped control text / DOM order; only named controls are wired. Edit
+  `DEEPLINKS` to extend. Verified by the audit's functional deep-link check
+  (0 dead rules) + a 20-case click-through (all land correctly).
 
 ## End-to-End Workflow model (the 22 phases)
 - `Partner_Revenue_OS_End_to_End_Business_Workflow.pdf` (60pp) is the spec. Its
