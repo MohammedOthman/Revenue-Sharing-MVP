@@ -139,6 +139,13 @@ headless — it's for a human with a browser.
   and injects a fixed bottom-left "Overview" button back to `index.html`. To
   re-point a section, edit `NAV` in `build.mjs` — only those exact labels are
   rewritten; everything else stays inert.
+- **Deep-links follow the product journey.** `build.mjs` also injects, on 7 key
+  screens, a per-screen config (`DEEPLINKS`) + `deeplink.js` that wires primary
+  buttons / "View All" / table rows to the relevant screen at runtime (e.g. a
+  Command Center claim row → Attribution Workspace, "Accept Attribution" →
+  Settlement, registry row → Partner Profile). Matching is by exact control text
+  / DOM order, so only the named controls are wired. To add/adjust, edit
+  `DEEPLINKS` in `build.mjs`.
 
 ## Troubleshooting
 

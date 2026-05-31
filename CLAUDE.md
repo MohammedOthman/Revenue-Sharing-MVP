@@ -49,6 +49,10 @@ cd prototype && npm install && node build.mjs && node driver.mjs
   (Dashboard/Partners/Claims/Approvals/Settings/Documentation/Statements/Support) and
   injects a bottom-left **"Overview"** button back to `index.html`. To re-point a
   section, edit `NAV` in `build.mjs`.
+- **Deep-links** (the `DEEPLINKS` map in `build.mjs` + `deeplink.js`) wire primary
+  buttons / "View All" / table rows on 7 key screens to follow the journey (e.g.
+  claim row → Attribution Workspace, Accept Attribution → Settlement, registry row →
+  Partner Profile). Matched by exact control text / DOM order. Edit `DEEPLINKS` to extend.
 
 ## Status
 **Done**
@@ -56,6 +60,7 @@ cd prototype && npm install && node build.mjs && node driver.mjs
 - ✅ 22 of 28 image slots recovered from the screenshots and wired in (all avatars,
   3 logos, the world map).
 - ✅ Clickable navigation (sidebar links + Overview button), click-through verified.
+- ✅ Journey deep-links on 7 key screens (buttons / View All / rows), 14/14 click-throughs verified.
 - ✅ `/run-revenue-sharing-mvp` skill, verified end-to-end.
 
 **Open / next steps**
@@ -65,7 +70,7 @@ cd prototype && npm install && node build.mjs && node driver.mjs
   the dispute & resolution workspaces). They use placeholders. To reach true 100%:
   unblock `lh3.googleusercontent.com` in the env network policy (then fetch + verify),
   or add the source image files and re-run `node build.mjs`.
-- ◻ Optional: deepen the flow — deep-link key buttons / table rows (e.g. a claim row →
-  Attribution Workspace, "View All" → the relevant list).
+- ◻ Optional: extend deep-links to more screens (7 key screens done; add the
+  remaining workspaces/list rows by editing `DEEPLINKS` in `build.mjs`).
 - ◻ Optional: land/merge PR #3 (can subscribe to its CI/review events and autofix).
 - ◻ Larger: turn the static mockups into a real application (interactivity, state, data/backend).

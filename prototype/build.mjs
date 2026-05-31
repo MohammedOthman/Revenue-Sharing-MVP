@@ -38,6 +38,44 @@ const NAV = {
   statements:    '/partner_portal_statement_view/code.html',
   support:       '/index.html',
 };
+
+// Deep-links that play the product journey: per-screen, wire key controls
+// (primary buttons / "View All" / table rows) to the relevant screen. Consumed
+// at runtime by deeplink.js. Only the named controls are wired.
+const C = p => `/${p}/code.html`;
+const DEEPLINKS = {
+  partner_revenue_command_center: {
+    rowsByTable: [C('attribution_approval_workspace'), C('dispute_management_workspace')],
+    viewAll:     [C('attribution_approval_workspace'), C('dispute_management_workspace')],
+    buttons: [{ text: 'Review', href: C('attribution_approval_workspace') }],
+  },
+  partner_registry: {
+    rows: C('partner_profile_kyc_vault_with_rationales'),
+    buttons: [{ text: 'Add Partner', href: C('partner_onboarding_kyc_portal') }],
+  },
+  attribution_approval_workspace: {
+    buttons: [
+      { text: 'Open Dispute', href: C('dispute_management_workspace') },
+      { text: 'Accept Attribution', href: C('revenue_reconciliation_settlement_center') },
+    ],
+  },
+  enhanced_revenue_claim_portal_with_simulation: {
+    buttons: [
+      { text: 'Submit to Ledger', href: C('attribution_approval_workspace') },
+      { text: 'New Claim', href: C('deal_registration_claim_capture') },
+    ],
+  },
+  revenue_reconciliation_settlement_center: {
+    rows: C('advanced_settlement_recovery_hub_b2b_copy'),
+    buttons: [{ text: 'Approve Batch', href: C('revenue_settlement_center_b2b_copy') }],
+  },
+  dispute_management_workspace: {
+    buttons: [{ text: 'Accept Dispute & Adjust', href: C('resolution_ledger_with_financial_sync') }],
+  },
+  partner_onboarding_kyc_portal: {
+    buttons: [{ text: 'Save & Continue', href: C('partner_onboarding_activation_hub_with_rationales') }],
+  },
+};
 const INPUT_CSS = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
 
 // .woff2 files copied out of node_modules into dist/assets/ (referenced by fonts.css)
@@ -79,8 +117,12 @@ async function compile(html, theme, darkMode) {
 // stays clear of primary action bars (bottom-right) and page content.
 const OVERVIEW_PILL = `<a href="/index.html" title="Overview — all screens" aria-label="Overview — all screens" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;background:#07006c;color:#fff;border-radius:50%;box-shadow:0 6px 18px rgba(7,0,108,.45);text-decoration:none"><span class="material-symbols-outlined" style="font-size:22px">grid_view</span></a>`;
 
-function rewriteHtml(html, recoveredKs) {
+function rewriteHtml(html, recoveredKs, dir) {
   let k = -1;
+  const dl = DEEPLINKS[dir];
+  const dlScript = dl
+    ? `<script>window.__DL=${JSON.stringify(dl)}</script>\n<script src="/assets/deeplink.js"></script>`
+    : '';
   return html
     .replace(/<script src="https:\/\/cdn\.tailwindcss\.com[^"]*"><\/script>\s*/g, '')
     .replace(/<script id="tailwind-config">[\s\S]*?<\/script>\s*/g, '')
@@ -97,7 +139,7 @@ function rewriteHtml(html, recoveredKs) {
       })
     .replace(/<\/head>/i,
       '<link rel="stylesheet" href="/assets/fonts.css"/>\n<link rel="stylesheet" href="app.css"/>\n</head>')
-    .replace(/<\/body>/i, OVERVIEW_PILL + '\n</body>');
+    .replace(/<\/body>/i, OVERVIEW_PILL + '\n' + dlScript + '\n</body>');
 }
 
 function titleOf(html, dir) {
@@ -128,6 +170,7 @@ function writeAssets() {
   fs.mkdirSync(dir, { recursive: true });
   fs.copyFileSync(path.join(HERE, 'fonts.css'), path.join(dir, 'fonts.css'));
   fs.copyFileSync(path.join(HERE, 'placeholder.svg'), path.join(dir, 'placeholder.svg'));
+  fs.copyFileSync(path.join(HERE, 'deeplink.js'), path.join(dir, 'deeplink.js'));
   for (const [pkg, rel] of FONT_FILES) {
     const from = path.join(HERE, 'node_modules', pkg, rel);
     fs.copyFileSync(from, path.join(dir, path.basename(rel)));
@@ -212,7 +255,7 @@ function buildIndex(manifest, built, pngOnly) {
         if (m) { const k = +m[1]; recoveredKs.add(k); fs.copyFileSync(path.join(recDir, f), path.join(outDir, `img-${k}.png`)); }
       }
     }
-    fs.writeFileSync(path.join(outDir, 'code.html'), rewriteHtml(html, recoveredKs));
+    fs.writeFileSync(path.join(outDir, 'code.html'), rewriteHtml(html, recoveredKs, dir));
     manifest.push({ dir, title, hasCode: true });
     built++;
     process.stdout.write(`  ✓ ${dir} (${(css.length / 1024).toFixed(0)}kB${recoveredKs.size ? `, ${recoveredKs.size} img` : ''})\n`);
