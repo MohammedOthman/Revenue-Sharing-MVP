@@ -54,23 +54,36 @@ cd prototype && npm install && node build.mjs && node driver.mjs
   claim row → Attribution Workspace, Accept Attribution → Settlement, registry row →
   Partner Profile). Matched by exact control text / DOM order. Edit `DEEPLINKS` to extend.
 
+## End-to-End Workflow model (the 22 phases)
+- `Partner_Revenue_OS_End_to_End_Business_Workflow.pdf` (60pp) is the spec. Its
+  22 workflow phases (Parts A–G) are encoded in **`prototype/workflow.mjs`** (the
+  single source of truth: per-phase group / tier / role / purpose / canonical
+  screen, plus the operating cadence). Edit there to change the journey.
+- **`gap_analysis_workflow_pdf.md`** (in `screens/`) = the benchmark: 11 covered /
+  7 partial / 4 missing → which drove the 11 new screens.
+- **`gen-screens.mjs`** generates the 11 gap screens (full Stitch/MD3 style) into
+  `screens/`. **`nav-pages.mjs`** builds `journey.html` (22-phase map) +
+  `cadence.html` (operating cadence) and the per-phase Prev/Next bar. `build.mjs`
+  imports both. Full pipeline: `node gen-screens.mjs && node build.mjs`.
+
 ## Status
 **Done**
-- ✅ 46 screens run offline, fully styled, 0 console errors; navigable `index.html` hub.
-- ✅ 22 of 28 image slots recovered from the screenshots and wired in (all avatars,
-  3 logos, the world map).
-- ✅ Clickable navigation (sidebar links + Overview button), click-through verified.
-- ✅ Journey deep-links on 7 key screens (buttons / View All / rows), 14/14 click-throughs verified.
+- ✅ 57 interactive screens run offline, fully styled, 0 console errors; navigable
+  `index.html` hub + `journey.html` (22-phase map) + `cadence.html`.
+- ✅ Benchmarked vs the End-to-End Business Workflow PDF; built the 11 gap screens
+  so all 22 phases now have a canonical screen.
+- ✅ 22 of 28 image slots recovered from screenshots (all avatars, 3 logos, world map).
+- ✅ Clickable nav (sidebar + Overview), journey deep-links, per-phase Prev/Next.
 - ✅ `/run-revenue-sharing-mvp` skill, verified end-to-end.
 
 **Open / next steps**
-- ⏳ **6 images can't be recovered** — screens the export down-scaled
+- ⏳ **6 images can't be recovered** — down-scaled screens
   (`partner_profit_loss_analysis`, `partner_profit_loss_with_rationales`,
   `partner_roi_analysis`, `partner_performance_scorecard`, plus a 2nd/3rd avatar on
-  the dispute & resolution workspaces). They use placeholders. To reach true 100%:
-  unblock `lh3.googleusercontent.com` in the env network policy (then fetch + verify),
-  or add the source image files and re-run `node build.mjs`.
-- ◻ Optional: extend deep-links to more screens (7 key screens done; add the
-  remaining workspaces/list rows by editing `DEEPLINKS` in `build.mjs`).
+  the dispute & resolution workspaces). To reach true 100%: unblock
+  `lh3.googleusercontent.com`, or add the source image files; then `node build.mjs`.
+- ◻ The 11 new gap screens have no `screen.png` render (index shows a "new" thumb).
+  Optional: capture renders via `node driver.mjs <dir>` and save into `screens/<dir>/`.
+- ◻ Optional: deepen deep-links on the 7 partial-coverage phases.
 - ◻ Optional: land/merge PR #3 (can subscribe to its CI/review events and autofix).
 - ◻ Larger: turn the static mockups into a real application (interactivity, state, data/backend).
