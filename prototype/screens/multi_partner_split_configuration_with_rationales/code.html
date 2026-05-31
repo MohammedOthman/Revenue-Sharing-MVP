@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Multi-Partner Split Configuration</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "border-subtle": "#E2E8F0",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-container": "#7c839b",
+                    "on-secondary-fixed": "#002113",
+                    "primary-container": "#131b2e",
+                    "on-surface": "#0b1c30",
+                    "tertiary-fixed": "#e1e0ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "inverse-surface": "#213145",
+                    "surface-container-low": "#eff4ff",
+                    "status-red": "#EF4444",
+                    "secondary-container": "#6cf8bb",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "background": "#f8f9ff",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary-container": "#00714d",
+                    "inverse-primary": "#bec6e0",
+                    "surface-dim": "#cbdbf5",
+                    "outline": "#76777d",
+                    "on-tertiary-container": "#7073ff",
+                    "on-primary-fixed": "#131b2e",
+                    "surface-container": "#e5eeff",
+                    "primary": "#000000",
+                    "surface-variant": "#d3e4fe",
+                    "outline-variant": "#c6c6cd",
+                    "secondary-fixed-dim": "#4edea3",
+                    "tertiary": "#000000",
+                    "status-amber": "#F59E0B",
+                    "primary-fixed": "#dae2fd",
+                    "tertiary-container": "#07006c",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container-high": "#dce9ff",
+                    "secondary": "#006c49",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#07006c",
+                    "on-primary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-highest": "#d3e4fe",
+                    "primary-fixed-dim": "#bec6e0",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#565e74",
+                    "surface-base": "#F8FAFC"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "sidebar-width": "260px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Public Sans"],
+                    "headline-lg": ["Public Sans"],
+                    "body-sm": ["Inter"],
+                    "display-metrics": ["Public Sans"],
+                    "data-mono": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Public Sans"]
+            },
+            "fontSize": {
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                    "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "display-metrics": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "data-mono": ["13px", {"lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Range Slider Styling for Forensic Look */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 8px;
+            border-radius: 2px;
+            background: #131b2e; /* primary-container */
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 0 0 2px #ffffff;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #E2E8F0; /* border-subtle */
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface font-body-md text-body-md flex h-screen overflow-hidden antialiased">
+<!-- Shared Component: SideNavBar (JSON index 0) -->
+<nav class="hidden md:flex flex-col h-full py-gutter px-4 fixed left-0 top-0 h-full w-[260px] bg-surface-container-lowest border-r border-border-subtle z-40">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Revenue OS</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ledger Protocol v1.0</p>
+</div>
+</div>
+<ul class="flex flex-col gap-1 flex-1">
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors duration-200 ease-in-out font-headline-sm text-headline-sm font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<!-- Active (Semantic match for "Multi-Partner Split") -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-low transition-colors duration-200 ease-in-out font-headline-sm text-headline-sm font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined fill">handshake</span>
+                    Partners
+                </a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors duration-200 ease-in-out font-headline-sm text-headline-sm font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">request_quote</span>
+                    Claims
+                </a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors duration-200 ease-in-out font-headline-sm text-headline-sm font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+                    Approvals
+                </a>
+</li>
+</ul>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors duration-200 ease-in-out font-headline-sm text-headline-sm font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col h-full md:ml-[260px]">
+<!-- Shared Component: TopNavBar (JSON index 1) -->
+<header class="flex justify-between items-center h-16 px-gutter w-full docked full-width top-0 sticky z-50 bg-surface-container-lowest border-b border-border-subtle">
+<div class="flex items-center gap-4">
+<div class="md:hidden">
+<span class="material-symbols-outlined cursor-pointer active:opacity-70 text-on-surface-variant">menu</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm font-extrabold tracking-tight text-primary">Partner Revenue OS</h2>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer active:opacity-70">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer active:opacity-70">history_edu</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer active:opacity-70">account_circle</span>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-surface-base p-gutter md:p-margin-desktop">
+<!-- Grid Constraint -->
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+<!-- Context Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border-subtle pb-6">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="font-label-caps text-label-caps uppercase">Deals</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-label-caps text-label-caps uppercase text-primary">Reg-89422</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-1">Nexus Corp Enterprise Rollout</h1>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">business</span>
+                            Target Close: Q3 2024
+                        </p>
+</div>
+<div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-4 min-w-[200px]">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Total Deal Value (ARR)</p>
+<p class="font-display-metrics text-display-metrics text-primary">$1.2M</p>
+</div>
+</div>
+<!-- Main Work Area: 12-Column Grid -->
+<div class="grid grid-cols-12 gap-gutter lg:gap-6">
+<!-- Left Column: Configuration & Rationale (8 cols) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<!-- Split Configuration Card -->
+<section class="bg-surface-container-lowest border border-border-subtle rounded-xl p-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">pie_chart</span>
+                                Attribution Split Allocation
+                            </h3>
+<!-- Partner Identification -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="p-4 border border-border-subtle rounded-lg bg-surface-base">
+<div class="flex justify-between items-start mb-2">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps uppercase">Sourcing Partner</span>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface">AlphaTech Solutions</p>
+<p class="font-data-mono text-data-mono text-on-surface-variant mt-1">ID: PRT-901</p>
+</div>
+<div class="p-4 border border-border-subtle rounded-lg bg-surface-base">
+<div class="flex justify-between items-start mb-2">
+<span class="inline-flex items-center px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-caps text-label-caps uppercase">Influencing Partner</span>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface">CloudSync Inc.</p>
+<p class="font-data-mono text-data-mono text-on-surface-variant mt-1">ID: PRT-442</p>
+</div>
+</div>
+<!-- Slider Tool -->
+<div class="mb-8">
+<div class="flex justify-between items-end mb-4">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Adjust Ratio (Sourcing / Influencing)</label>
+<span class="font-data-mono text-data-mono text-primary font-bold" id="ratio-display">60 / 40</span>
+</div>
+<!-- Visual Bar representation -->
+<div class="relative w-full h-8 bg-surface-container-highest rounded overflow-hidden flex mb-2">
+<div class="h-full bg-primary-container transition-all duration-300" id="bar-sourcing" style="width: 60%;"></div>
+<div class="h-full bg-secondary-fixed-dim transition-all duration-300" id="bar-influencing" style="width: 40%;"></div>
+</div>
+<!-- Interactive Slider -->
+<div class="relative w-full pt-2">
+<input class="w-full" id="split-slider" max="100" min="0" oninput="updateSplit(this.value)" type="range" value="60"/>
+<div class="flex justify-between mt-2 font-data-mono text-data-mono text-on-surface-variant">
+<span>100/0</span>
+<span>50/50</span>
+<span>0/100</span>
+</div>
+</div>
+</div>
+<!-- Value Breakdown -->
+<div class="grid grid-cols-2 gap-4 border-t border-border-subtle pt-6">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">AlphaTech Allocation</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg text-primary" id="val-sourcing">$720,000</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant" id="pct-sourcing">(60%)</span>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">CloudSync Allocation</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg text-secondary" id="val-influencing">$480,000</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant" id="pct-influencing">(40%)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Rationale & Evidence Form -->
+<section class="bg-surface-container-lowest border border-border-subtle rounded-xl p-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">gavel</span>
+                                Rationale &amp; Evidence
+                            </h3>
+<div class="flex flex-col gap-5">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Split Justification Statement</label>
+<textarea class="w-full bg-surface-base border border-border-subtle rounded p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary h-24" placeholder="Detail the specific reasoning for diverging from the standard 50/50 split..."></textarea>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Supporting Documentation Link</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 border border-r-0 border-border-subtle bg-surface-container-low text-on-surface-variant rounded-l">
+<span class="material-symbols-outlined text-[18px]">link</span>
+</span>
+<input class="flex-1 bg-surface-base border border-border-subtle rounded-r p-2 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" type="text" value="https://crm.internal/deals/89422/comms-log"/>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Contribution Log (4 cols) -->
+<div class="col-span-12 lg:col-span-4">
+<section class="bg-surface-container-lowest border border-border-subtle rounded-xl h-full flex flex-col">
+<div class="p-4 border-b border-border-subtle flex justify-between items-center bg-surface-base rounded-t-xl">
+<h3 class="font-label-caps text-label-caps text-on-surface uppercase">Contribution Log</h3>
+<button class="text-primary hover:bg-surface-container-low p-1 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+<div class="p-4 flex-1 overflow-y-auto">
+<div class="relative border-l border-border-subtle ml-3 pl-5 space-y-6">
+<!-- Event 1 -->
+<div class="relative">
+<div class="absolute -left-[25px] bg-secondary-container w-3 h-3 rounded-full border-2 border-surface-container-lowest mt-1.5"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Today, 10:42 AM</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Technical Validation Completed</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">CloudSync Inc. led the architecture review board.</p>
+</div>
+<!-- Event 2 -->
+<div class="relative">
+<div class="absolute -left-[25px] bg-primary-container w-3 h-3 rounded-full border-2 border-surface-container-lowest mt-1.5"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Oct 12, 2023</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Executive Briefing Arranged</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">AlphaTech Solutions secured meeting with Nexus CIO.</p>
+</div>
+<!-- Event 3 -->
+<div class="relative">
+<div class="absolute -left-[25px] bg-surface-tint w-3 h-3 rounded-full border-2 border-surface-container-lowest mt-1.5"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Sep 28, 2023</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Joint Proof of Concept Started</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Both partners deployed initial sandboxes.</p>
+</div>
+<!-- Event 4 -->
+<div class="relative">
+<div class="absolute -left-[25px] bg-primary-container w-3 h-3 rounded-full border-2 border-surface-container-lowest mt-1.5"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Sep 01, 2023</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Lead Registered</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">AlphaTech Solutions initiated deal registration.</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-border-subtle bg-surface-base rounded-b-xl">
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                                    Log is immutable and system-generated.
+                                </p>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex flex-col sm:flex-row justify-end items-center gap-4 pt-6 mt-4 border-t border-border-subtle pb-10">
+<button class="w-full sm:w-auto px-6 py-2.5 rounded border border-border-subtle bg-surface-container-lowest text-on-surface hover:bg-surface-base font-body-md text-body-md font-medium transition-colors focus:ring-2 focus:ring-primary focus:outline-none">
+                        Escalate to Dispute
+                    </button>
+<button class="w-full sm:w-auto px-8 py-2.5 rounded bg-primary text-on-primary hover:opacity-90 font-body-md text-body-md font-medium transition-opacity flex items-center justify-center gap-2 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                        Commit Split
+                    </button>
+</div>
+</div>
+</main>
+</div>
+<script>
+        // Micro-interaction for slider
+        const totalValue = 1200000;
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        });
+
+        function updateSplit(val) {
+            const sourcingPct = parseInt(val);
+            const influencingPct = 100 - sourcingPct;
+            
+            // Update Visuals
+            document.getElementById('bar-sourcing').style.width = sourcingPct + '%';
+            document.getElementById('bar-influencing').style.width = influencingPct + '%';
+            
+            // Update Text
+            document.getElementById('ratio-display').innerText = `${sourcingPct} / ${influencingPct}`;
+            document.getElementById('pct-sourcing').innerText = `(${sourcingPct}%)`;
+            document.getElementById('pct-influencing').innerText = `(${influencingPct}%)`;
+            
+            // Update Values
+            document.getElementById('val-sourcing').innerText = formatter.format((totalValue * sourcingPct) / 100);
+            document.getElementById('val-influencing').innerText = formatter.format((totalValue * influencingPct) / 100);
+        }
+    </script>
+</body></html>

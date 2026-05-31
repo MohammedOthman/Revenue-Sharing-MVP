@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Strategic ROI &amp; Investment Cockpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#000000",
+                        "inverse-primary": "#bec6e0",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-tertiary-fixed-variant": "#2f2ebe",
+                        "primary-container": "#131b2e",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-container": "#07006c",
+                        "surface-variant": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "on-surface-variant": "#45464d",
+                        "status-amber": "#F59E0B",
+                        "on-tertiary-fixed": "#07006c",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#131b2e",
+                        "background": "#f8f9ff",
+                        "on-tertiary-container": "#7073ff",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#7c839b",
+                        "on-secondary-fixed": "#002113",
+                        "on-background": "#0b1c30",
+                        "surface-tint": "#565e74",
+                        "surface-base": "#F8FAFC",
+                        "surface-container-high": "#dce9ff",
+                        "inverse-surface": "#213145",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f8f9ff",
+                        "border-subtle": "#E2E8F0",
+                        "outline": "#76777d",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#6cf8bb",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-container": "#00714d",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container": "#e5eeff",
+                        "on-surface": "#0b1c30",
+                        "status-red": "#EF4444",
+                        "secondary": "#006c49",
+                        "tertiary-fixed-dim": "#c0c1ff",
+                        "surface": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d3e4fe",
+                        "tertiary-fixed": "#e1e0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "sidebar-width": "260px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "data-mono": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "label-caps": ["Inter"],
+                        "headline-md": ["Public Sans"],
+                        "display-metrics": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "data-mono": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-metrics": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+        body { background-color: #F8FAFC; }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface font-body-md antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex w-[260px] h-full fixed left-0 top-0 border-r border-border-subtle bg-surface-container-lowest flex-col py-gutter px-4 z-50">
+<div class="mb-8 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Revenue OS</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Ledger Protocol v1.0</p>
+</div>
+</div>
+<button class="w-full bg-primary text-white font-label-caps text-label-caps py-3 rounded mb-8 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+            New Claim
+        </button>
+<ul class="flex flex-col gap-1 flex-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="handshake">handshake</span>
+<span class="font-label-caps text-label-caps">Partners</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-primary font-semibold border-r-2 border-primary bg-surface-container-low transition-colors duration-150" href="#">
+<span class="material-symbols-outlined fill" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Claims</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="font-label-caps text-label-caps">Approvals</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto border-t border-border-subtle pt-4">
+<ul class="flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps">Documentation</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 md:ml-[260px]">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full h-16 px-margin-desktop bg-surface-bright border-b border-border-subtle sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="md:hidden material-symbols-outlined cursor-pointer text-primary" data-icon="menu">menu</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary">Partner Revenue OS</h2>
+</div>
+<div class="flex-1 max-w-md ml-8 hidden md:block">
+<div class="relative relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary" data-icon="search">search</span>
+<input class="w-full bg-surface-container-lowest border border-border-subtle rounded pl-10 pr-4 py-2 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Search partners, claims, metrics..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-auto">
+<button class="text-on-surface-variant hover:text-primary transition-all p-1 rounded hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all p-1 rounded hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all p-1 rounded hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-border-subtle overflow-hidden cursor-pointer ml-2">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgp3fyElCwCgU61W3nPu02kCgPixyknhfJe0hK4CzCQdwspGJMBiM_GWn1Kv7ChNhxg2df7ylOgNrAGDhwJ1eRd4vko3LYvyhn8t-Lr8m7801R1P7tHuL_mVRBnEYzXS0p9g6p9VmaQBHF1Bz8n1XVbLakfe3uhAdz_NIEvUC9PHGbb227SPf_Nqs3ZgGN6gdnucpNc6gVhHKWxDfW-d88RXT2O3tjqqwH4Paapc6nxffvmedJkO5xJmw3TEi5mMgCxYv7KY8I0A"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop max-w-[1600px] mx-auto w-full">
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Strategic ROI &amp; Investment Cockpit</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">Executive overview of capital allocation efficacy, market penetration gaps, and strategic re-investment directives for Q3.</p>
+</div>
+<!-- North Star Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-8">
+<div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Total Partner ROI</h3>
+<span class="material-symbols-outlined text-secondary" data-icon="trending_up">trending_up</span>
+</div>
+<div class="font-display-metrics text-display-metrics text-primary mb-2">3.4x</div>
+<p class="font-body-sm text-body-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span>
+                        +0.2x vs Previous Quarter
+                    </p>
+</div>
+<div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Active Strategic MDF</h3>
+<span class="material-symbols-outlined text-primary" data-icon="account_balance">account_balance</span>
+</div>
+<div class="font-display-metrics text-display-metrics text-primary mb-2">$14.2M</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Deployed across 42 Tier-1 Partners</p>
+</div>
+<div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Incentive Yield Rate</h3>
+<span class="material-symbols-outlined text-status-amber" data-icon="warning">warning</span>
+</div>
+<div class="font-display-metrics text-display-metrics text-primary mb-2">18.5%</div>
+<p class="font-body-sm text-body-sm text-status-red flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_downward">arrow_downward</span>
+                        -2.1% underperforming baseline
+                    </p>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Capital Allocation Strategy (Span 8) -->
+<div class="xl:col-span-8 bg-surface-container-lowest border border-border-subtle rounded-lg p-6 flex flex-col">
+<div class="mb-6 flex justify-between items-end">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Capital Allocation Strategy</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Evaluating partner ROI velocity against segmented investment channels.</p>
+</div>
+<button class="text-primary font-label-caps text-label-caps border border-border-subtle px-3 py-1.5 rounded hover:bg-surface-container transition-colors">Export Report</button>
+</div>
+<div class="flex-1 border border-border-subtle rounded overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-border-subtle">
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant w-1/3">Partner Segment</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">MDF Inv.</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">Support Inv.</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">Generated Rev</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">Net ROI</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-data-mono">
+<tr class="border-b border-border-subtle hover:bg-surface-container-lowest">
+<td class="py-3 px-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+                                        Global System Integrators
+                                    </td>
+<td class="py-3 px-4 text-right">$4.5M</td>
+<td class="py-3 px-4 text-right">$1.2M</td>
+<td class="py-3 px-4 text-right font-medium">$28.4M</td>
+<td class="py-3 px-4 text-right text-secondary">4.9x</td>
+</tr>
+<tr class="border-b border-border-subtle bg-surface-base hover:bg-surface-container-lowest">
+<td class="py-3 px-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-amber"></div>
+                                        Regional MSPs (NA)
+                                    </td>
+<td class="py-3 px-4 text-right">$2.8M</td>
+<td class="py-3 px-4 text-right">$0.8M</td>
+<td class="py-3 px-4 text-right font-medium">$9.1M</td>
+<td class="py-3 px-4 text-right text-status-amber">2.5x</td>
+</tr>
+<tr class="border-b border-border-subtle hover:bg-surface-container-lowest">
+<td class="py-3 px-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+                                        Cloud Alliances
+                                    </td>
+<td class="py-3 px-4 text-right">$5.1M</td>
+<td class="py-3 px-4 text-right">$2.0M</td>
+<td class="py-3 px-4 text-right font-medium">$31.5M</td>
+<td class="py-3 px-4 text-right text-secondary">4.4x</td>
+</tr>
+<tr class="border-b border-border-subtle bg-surface-base hover:bg-surface-container-lowest">
+<td class="py-3 px-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-red"></div>
+                                        Value Add Resellers (EMEA)
+                                    </td>
+<td class="py-3 px-4 text-right">$1.8M</td>
+<td class="py-3 px-4 text-right">$1.1M</td>
+<td class="py-3 px-4 text-right font-medium">$3.2M</td>
+<td class="py-3 px-4 text-right text-status-red">1.1x</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Investment Recommendations (Span 4) -->
+<div class="xl:col-span-4 bg-primary text-white rounded-lg p-6 flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-tertiary-container to-transparent opacity-50 blur-2xl"></div>
+<div class="mb-6 relative z-10">
+<h3 class="font-headline-sm text-headline-sm mb-1">Q3 Directives</h3>
+<p class="font-body-sm text-body-sm text-inverse-primary">Algorithmic recommendations for capital reallocation.</p>
+</div>
+<div class="flex-1 flex flex-col gap-4 relative z-10">
+<div class="bg-[#1a233a] border border-[#2a3655] rounded p-4">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-secondary/20 text-secondary-fixed border border-secondary/30 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Scale Investment</span>
+<span class="material-symbols-outlined text-secondary-fixed text-sm" data-icon="trending_up">trending_up</span>
+</div>
+<h4 class="font-body-md text-body-md font-semibold mb-1">Cloud Alliances MDF</h4>
+<p class="font-body-sm text-body-sm text-inverse-primary mb-3">High yield rate warrants +$1.5M reallocation from underperforming EMEA VARs.</p>
+<button class="w-full bg-white text-primary font-label-caps text-label-caps py-2 rounded hover:bg-surface-container transition-colors">Approve Reallocation</button>
+</div>
+<div class="bg-[#1a233a] border border-[#2a3655] rounded p-4">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-status-red/20 text-[#ffb4ab] border border-status-red/30 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Divest / Restructure</span>
+<span class="material-symbols-outlined text-[#ffb4ab] text-sm" data-icon="trending_down">trending_down</span>
+</div>
+<h4 class="font-body-md text-body-md font-semibold mb-1">EMEA VAR Support Tier</h4>
+<p class="font-body-sm text-body-sm text-inverse-primary mb-3">Support costs exceeding generated gross margin. Recommend tier downgrade.</p>
+<button class="w-full bg-transparent border border-[#3f465c] text-white font-label-caps text-label-caps py-2 rounded hover:bg-[#2a3655] transition-colors">Review Impact</button>
+</div>
+</div>
+</div>
+<!-- Market Coverage Gap (Span 6) -->
+<div class="xl:col-span-6 bg-surface-container-lowest border border-border-subtle rounded-lg p-6">
+<div class="mb-4">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Coverage Gap Analysis</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Identifying white-space territories relative to Total Addressable Market.</p>
+</div>
+<div class="h-64 bg-surface-base border border-border-subtle rounded flex items-center justify-center relative overflow-hidden" data-alt="A stylized, high-contrast digital map projection of global territories. The map is minimalist, utilizing a clean white and subtle grey palette for landmasses, set against a pristine #F8FAFC background. Specific regions like Western Europe and Southeast Asia are highlighted with sharp, glowing status-amber and primary blue strategic markers indicating data density. The aesthetic is forensic, corporate, and highly analytical, fitting an executive revenue dashboard.">
+<!-- Placeholder for map visualization -->
+<div class="text-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant mb-2" data-icon="map">map</span>
+<p class="font-label-caps text-label-caps text-outline">Interactive Map Visualization Component</p>
+</div>
+</div>
+<div class="mt-4 flex gap-4">
+<div class="flex-1 bg-surface-base p-3 rounded border border-border-subtle">
+<div class="font-label-caps text-label-caps text-status-amber mb-1">Critical Gap</div>
+<div class="font-data-mono text-data-mono font-bold text-primary">DACH Region - Financial Svcs</div>
+<div class="text-xs text-on-surface-variant mt-1">$45M TAM Uncovered</div>
+</div>
+<div class="flex-1 bg-surface-base p-3 rounded border border-border-subtle">
+<div class="font-label-caps text-label-caps text-secondary mb-1">Saturated</div>
+<div class="font-data-mono text-data-mono font-bold text-primary">NA - Healthcare Tech</div>
+<div class="text-xs text-on-surface-variant mt-1">94% Coverage Ratio</div>
+</div>
+</div>
+</div>
+<!-- Incentive Effectiveness (Span 6) -->
+<div class="xl:col-span-6 bg-surface-container-lowest border border-border-subtle rounded-lg p-6">
+<div class="mb-4">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Incentive Effectiveness</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Correlation between rebate tiers and partner performance velocity.</p>
+</div>
+<div class="space-y-6 mt-6">
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-2">
+<span class="text-primary">Tier 1 Volume Rebates</span>
+<span class="text-secondary">High Yield</span>
+</div>
+<div class="w-full bg-surface-base rounded-full h-2 border border-border-subtle">
+<div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-right">85% correlation to target attainment</p>
+</div>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-2">
+<span class="text-primary">Co-op Marketing Funds</span>
+<span class="text-status-amber">Moderate Yield</span>
+</div>
+<div class="w-full bg-surface-base rounded-full h-2 border border-border-subtle">
+<div class="bg-outline h-2 rounded-full" style="width: 45%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-right">45% correlation to target attainment</p>
+</div>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-2">
+<span class="text-primary">Certification SPIFFs</span>
+<span class="text-status-red">Low Yield</span>
+</div>
+<div class="w-full bg-surface-base rounded-full h-2 border border-border-subtle">
+<div class="bg-status-red h-2 rounded-full" style="width: 15%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-right">15% correlation to target attainment</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
