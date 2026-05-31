@@ -215,7 +215,7 @@ function buildIndex(manifest, built, pngOnly) {
 </style></head><body>
 <header><h1>Partner Revenue OS — Prototype Journey</h1>
 <p>Interactive walkthrough of the end-to-end product UI (MVP → V3), compiled to run fully offline. ${built} interactive screens${pngOnly ? ` + ${pngOnly} design-only frames` : ''}, grouped by the journey phases from the Technical Handoff &amp; PDR.</p>
-<span class="stat">${built} screens · click any card to open</span></header>
+<span class="stat">${built} screens · click any card to open</span>${headerLinks()}</header>
 <main>${sections}</main></body></html>`;
 }
 
