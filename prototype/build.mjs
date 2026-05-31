@@ -20,6 +20,7 @@ import postcss from 'postcss';
 import tailwindcss from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import containerQueries from '@tailwindcss/container-queries';
+import { phaseBar, headerLinks, buildJourney, buildCadence } from './nav-pages.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(HERE, 'screens');
@@ -139,7 +140,7 @@ function rewriteHtml(html, recoveredKs, dir) {
       })
     .replace(/<\/head>/i,
       '<link rel="stylesheet" href="/assets/fonts.css"/>\n<link rel="stylesheet" href="app.css"/>\n</head>')
-    .replace(/<\/body>/i, OVERVIEW_PILL + '\n' + dlScript + '\n</body>');
+    .replace(/<\/body>/i, OVERVIEW_PILL + '\n' + phaseBar(dir) + '\n' + dlScript + '\n</body>');
 }
 
 function titleOf(html, dir) {
@@ -183,8 +184,9 @@ function buildIndex(manifest, built, pngOnly) {
   const order = GROUPS.map(g => g[0]).concat('Other');
   const card = e => {
     const href = e.hasCode ? `${e.dir}/code.html` : `${e.dir}/screen.png`;
-    const badge = e.hasCode ? '' : '<span class="badge">design only</span>';
-    return `<a class="card" href="${href}"><div class="thumb"><img loading="lazy" src="${e.dir}/screen.png" alt=""/></div><div class="meta"><span class="t">${e.title}</span>${badge}</div></a>`;
+    const badge = e.hasCode ? (e.hasPng ? '' : '<span class="badge new">new</span>') : '<span class="badge">design only</span>';
+    const thumb = e.hasPng ? `<div class="thumb"><img loading="lazy" src="${e.dir}/screen.png" alt=""/></div>` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#eef3ff,#e5eeff)"><span class="material-symbols-outlined" style="font-size:40px;color:#9bb4e0">draft</span></div>`;
+    return `<a class="card" href="${href}">${thumb}<div class="meta"><span class="t">${e.title}</span>${badge}</div></a>`;
   };
   const sections = order.filter(g => byGroup[g]).map(g =>
     `<section><h2>${g} <span class="count">${byGroup[g].length}</span></h2><div class="grid">${byGroup[g].map(card).join('')}</div></section>`).join('\n');
@@ -256,11 +258,13 @@ function buildIndex(manifest, built, pngOnly) {
       }
     }
     fs.writeFileSync(path.join(outDir, 'code.html'), rewriteHtml(html, recoveredKs, dir));
-    manifest.push({ dir, title, hasCode: true });
+    manifest.push({ dir, title, hasCode: true, hasPng });
     built++;
     process.stdout.write(`  ✓ ${dir} (${(css.length / 1024).toFixed(0)}kB${recoveredKs.size ? `, ${recoveredKs.size} img` : ''})\n`);
   }
 
   fs.writeFileSync(path.join(OUT, 'index.html'), buildIndex(manifest, built, pngOnly));
+  buildJourney(OUT);
+  buildCadence(OUT);
   console.log(`\nBuilt ${built} interactive screens + ${pngOnly} design-only frames -> ${path.relative(HERE, OUT)}/`);
 })().catch(e => { console.error('BUILD FAILED:', e); process.exit(1); });

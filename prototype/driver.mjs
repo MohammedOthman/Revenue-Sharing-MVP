@@ -43,8 +43,10 @@ function serve() {
 (async () => {
   if (!fs.existsSync(DIST)) { console.error('No dist/ — run `node build.mjs` first.'); process.exit(1); }
   fs.mkdirSync(SHOTS, { recursive: true });
+  // 'index'/'journey'/'cadence' (or any *.html) are root pages; everything else is a screen dir.
+  const rootPage = t => t === 'index' || t === 'journey' || t === 'cadence' || t.endsWith('.html');
   const targets = (process.argv.slice(2).length ? process.argv.slice(2) : DEFAULT)
-    .map(t => t === 'index' ? { name: 'index', url: '/index.html' } : { name: t, url: `/${t}/code.html` });
+    .map(t => rootPage(t) ? { name: t.replace('.html', ''), url: `/${t.endsWith('.html') ? t : t + '.html'}` } : { name: t, url: `/${t}/code.html` });
 
   const server = await serve();
   const base = `http://127.0.0.1:${server.address().port}`;
