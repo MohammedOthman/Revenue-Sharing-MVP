@@ -62,14 +62,18 @@ cd prototype && npm install && node build.mjs && node driver.mjs
 - **`gap_analysis_workflow_pdf.md`** (in `screens/`) = the benchmark: 11 covered /
   7 partial / 4 missing → which drove the 11 new screens.
 - **`gen-screens.mjs`** generates the 11 gap screens (full Stitch/MD3 style) into
-  `screens/`. **`nav-pages.mjs`** builds `journey.html` (22-phase map) +
-  `cadence.html` (operating cadence) and the per-phase Prev/Next bar. `build.mjs`
-  imports both. Full pipeline: `node gen-screens.mjs && node build.mjs`.
+  `screens/`. **`gen-thumbs.mjs`** renders each new screen's `screen.png` thumbnail
+  (1600-wide, overlays hidden; only touches the 11 new dirs). **`nav-pages.mjs`**
+  builds `journey.html` (22-phase map) + `cadence.html` (operating cadence) and the
+  per-phase Prev/Next bar. `build.mjs` imports both.
+  Full pipeline: `node gen-screens.mjs && node build.mjs && node gen-thumbs.mjs && node build.mjs`.
 
 ## Status
 **Done**
 - ✅ 57 interactive screens run offline, fully styled, 0 console errors; navigable
-  `index.html` hub + `journey.html` (22-phase map) + `cadence.html`.
+  `index.html` hub + `journey.html` (22-phase map) + `cadence.html`. All 11 new
+  screens have rendered thumbnails. Full audit passes: 0 broken links / placeholders
+  / blocked hosts / render errors / dead deep-links across 60 pages.
 - ✅ Benchmarked vs the End-to-End Business Workflow PDF; built the 11 gap screens
   so all 22 phases now have a canonical screen.
 - ✅ 22 of 28 image slots recovered from screenshots (all avatars, 3 logos, world map).
@@ -82,8 +86,6 @@ cd prototype && npm install && node build.mjs && node driver.mjs
   `partner_roi_analysis`, `partner_performance_scorecard`, plus a 2nd/3rd avatar on
   the dispute & resolution workspaces). To reach true 100%: unblock
   `lh3.googleusercontent.com`, or add the source image files; then `node build.mjs`.
-- ◻ The 11 new gap screens have no `screen.png` render (index shows a "new" thumb).
-  Optional: capture renders via `node driver.mjs <dir>` and save into `screens/<dir>/`.
-- ◻ Optional: deepen deep-links on the 7 partial-coverage phases.
+- ◻ Optional: deepen deep-links on more existing screens (workspaces/list rows).
 - ◻ Optional: land/merge PR #3 (can subscribe to its CI/review events and autofix).
 - ◻ Larger: turn the static mockups into a real application (interactivity, state, data/backend).

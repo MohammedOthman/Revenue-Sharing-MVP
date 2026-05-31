@@ -21,6 +21,8 @@ import tailwindcss from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import containerQueries from '@tailwindcss/container-queries';
 import { phaseBar, headerLinks, buildJourney, buildCadence } from './nav-pages.mjs';
+import { PHASES } from './workflow.mjs';
+const NEW_DIRS = new Set(PHASES.filter(p => p.status === 'new').map(p => p.dir));
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(HERE, 'screens');
@@ -38,6 +40,18 @@ const NAV = {
   documentation: '/developer_hub_api_management_with_rationales/code.html',
   statements:    '/partner_portal_statement_view/code.html',
   support:       '/index.html',
+};
+
+// The global-navigation screen ships unresolved Stitch {{DATA:SCREEN:SCREEN_NN}}
+// placeholders; resolve each to its real screen (inferred from the nav label).
+// Any unknown id falls back to the index so no dead placeholder ever survives.
+const SCREEN_MAP = {
+  SCREEN_46: 'partner_revenue_command_center',                    // Command Center
+  SCREEN_43: 'advanced_ecosystem_attribution_hub_with_rationales',// Network
+  SCREEN_41: 'revenue_reconciliation_settlement_center',          // Settlements
+  SCREEN_24: 'enhanced_revenue_claim_portal_with_simulation',     // Claims
+  SCREEN_14: 'partner_registry',                                  // Partners
+  SCREEN_29: 'deal_registration_claim_capture',                   // Deals
 };
 
 // Deep-links that play the product journey: per-screen, wire key controls
@@ -132,6 +146,9 @@ function rewriteHtml(html, recoveredKs, dir) {
       k++;
       return recoveredKs.has(k) ? `img-${k}.png` : '/assets/placeholder.svg';
     })
+    // resolve unresolved Stitch screen placeholders to real screens
+    .replace(/\{\{DATA:SCREEN:(SCREEN_\d+)\}\}/g, (_m, id) =>
+      SCREEN_MAP[id] ? `/${SCREEN_MAP[id]}/code.html` : '/index.html')
     // wire dead sidebar nav (icon + label anchors) to their canonical screens
     .replace(/(<a\b[^>]*href=")#("[^>]*>\s*<span class="material-symbols-outlined[^"]*"[^>]*>[^<]+<\/span>\s*<span[^>]*>)([^<]+)(<\/span>\s*<\/a>)/g,
       (full, pre, mid, label, post) => {
@@ -184,7 +201,7 @@ function buildIndex(manifest, built, pngOnly) {
   const order = GROUPS.map(g => g[0]).concat('Other');
   const card = e => {
     const href = e.hasCode ? `${e.dir}/code.html` : `${e.dir}/screen.png`;
-    const badge = e.hasCode ? (e.hasPng ? '' : '<span class="badge new">new</span>') : '<span class="badge">design only</span>';
+    const badge = e.hasCode ? (NEW_DIRS.has(e.dir) ? '<span class="badge new">new</span>' : '') : '<span class="badge">design only</span>';
     const thumb = e.hasPng ? `<div class="thumb"><img loading="lazy" src="${e.dir}/screen.png" alt=""/></div>` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#eef3ff,#e5eeff)"><span class="material-symbols-outlined" style="font-size:40px;color:#9bb4e0">draft</span></div>`;
     return `<a class="card" href="${href}">${thumb}<div class="meta"><span class="t">${e.title}</span>${badge}</div></a>`;
   };
