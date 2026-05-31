@@ -21,6 +21,7 @@ This manual is deliberately layered so it doubles as a learning path and a build
 - **Part V — End-to-End Data-Flow Walkthroughs** (§17): the actual API/data flows, step by step.
 - **Part VI — Market Benchmark & Local B2B Behaviour** (§18): what KSA corporates run by segment, how they buy and integrate, and a benchmark of the adjacent tool categories the OS coexists with.
 - **Part VII — Overlooked Patterns & Levers, Phasing, Risks, Sources** (§19–§23).
+- **Appendix A — Saudi Local Product Landscape (Verified Catalogue)** (§A1–§A17): ~115 source-verified local products across every function (accounting, e-invoicing, ERP, POS, payments, wallets/e-money, spend, lending/BNPL, identity/KYB/AML, HR/payroll, credit data, banks, government rails), with a strict **Verified-vs-Excluded** split so nothing speculative is presented as fact.
 
 It does not restate the PDR. Where the PDR (Section 12) and the Workflow doc (Part B) already define an integration, this manual goes deeper: the Saudi-specific mechanics, the data-flow detail, and the levers those documents do not name.
 
@@ -356,7 +357,7 @@ This is the execution core of revenue-sharing. (Saudi rails detailed in §15; he
 - **SADAD** — national bill-payment (collections via biller reference); not for paying partners.
 - **IBAN** — Saudi IBAN is **24 chars**: `SA` + 2 check digits + **2-digit SAMA bank code** + 18-digit BBAN. **Validate every partner IBAN** (format + **MOD-97** + valid bank code) before payout to prevent failed/misrouted disbursements. BIC for Saudi banks commonly ends `…SARI`.
 
-**PSP split-payout capability (most critical for revenue-sharing):** see §10 table. **PayTabs, Tap, and Moyasar** have explicit split/marketplace/payout primitives and are the strongest local candidates; HyperPay has Alias Pay (partial); Geidea/Amazon Payment Services split-to-third-party is **[verify]**; Tamara/Tabby are BNPL **pay-in only** (merchant paid ~T+1).
+**PSP split-payout capability (most critical for revenue-sharing):** see §10 and the fuller §A5 table. **PayTabs (Split Payout + External Payout), Moyasar (Payouts), HyperPay (HyperSplits), Tap (destinations), and Telr (Split-in-Payment)** all have *documented* split/marketplace/payout-to-third-party primitives — these are the strongest local build candidates. **Geidea, Amazon Payment Services, Ottu, MoneyHash, noon, EdfaPay** split-to-third-party is **Unknown (not "No") — [verify]** with the vendor. Tamara/Tabby and all BNPL are **pay-in only** (merchant settled in full). A bank-direct alternative exists too: **ANB Connect** documents **bulk payments + SADAD** payout APIs (§A12).
 
 **WPS / Mudad — keep separate.** The Wage Protection System / Mudad governs **employer-to-employee wages**, not commercial B2B partner commissions. If partners are companies/contractors, route payouts through **sarie/PSP rails, not WPS**. Misclassifying partner payouts as wages would wrongly pull you into WPS.
 
@@ -607,6 +608,258 @@ These are the external sources behind the Saudi/integration specifics above. Gov
 - iPaaS comparison — https://www.unitedtechno.com/boomi-vs-mulesoft-vs-workato-integration/
 - Webhook reliability/idempotency/retries — https://www.digitalapplied.com/blog/webhook-reliability-idempotency-retries-engineering-reference-2026 ; https://hookdeck.com/blog/webhooks-at-scale
 - Unified APIs — https://www.merge.dev/blog/unified-api-examples ; https://www.apideck.com/blog/best-unified-api-platforms-for-developers-and-saas-teams
+
+---
+
+# APPENDIX A — SAUDI LOCAL PRODUCT LANDSCAPE (VERIFIED CATALOGUE)
+
+**Why this appendix exists (plain):** §7–§12 list the integration *categories* and the global anchors. This appendix goes ~10x deeper on the *local Saudi products* a partner-revenue/payout platform will actually meet in the field — across accounting, e-invoicing, ERP, POS, payments, wallets/e-money, spend, lending/BNPL, identity/KYB/AML, HR/payroll, credit data, banks, and government rails.
+
+**Verification rule applied (no hallucination):** a product appears in a "Verified" table only if it was confirmed against a real source during research. A capability is stated as **Yes** only where documented; otherwise **Unknown** (never assumed). Candidate names that could not be confirmed are listed, by name, in **§A16 (Excluded)** rather than blended in. Two structural caveats hold throughout:
+1. **Government identity/labour data is gated.** Nafath, Yakeen, Tahaqaq, Muqeem, Qiwa, GOSI, Mudad are restricted to licensed/regulated entities; a private SaaS reaches them via a licensed aggregator (Mozn/Uqudo/Elm) or a SAMA licence — not open self-signup. Open, self-service gov APIs are essentially **Wathq** (free CR tier), **National Address/SPL**, **ZATCA sandbox**, and **Etimad**.
+2. **SAMA's official "permitted fintechs" and "licensed finance/PSP" index pages, and ZATCA's solution-provider directory, block automated fetch (HTTP 403).** Existence/role of each entity below was confirmed via vendor docs, regulator news, and reputable press — but before relying on a *current licence status*, a human should reconcile against SAMA's and ZATCA's live lists (URLs in §A17).
+
+Catalogue date: 2026-05. Counts: ~115 verified entries across §A1–§A14.
+
+## A1. Local cloud accounting & invoicing SaaS
+| Product | What it is (segment) | Integration / capability | Source |
+|---|---|---|---|
+| **Qoyod** | KSA cloud accounting + invoicing + POS/inventory (SMB) | **Public API** (apidoc.qoyod.com, API-KEY header, ~19 resources, Tech-Partner program); ZATCA Phase-2 (auto-sign + Fatoora submit) | qoyod.com ; apidoc.qoyod.com |
+| **Wafeq** | KSA/UAE cloud accounting + e-invoicing (SMB/mid) | **Public API** (developer.wafeq.com, API-Key+OAuth2; journal-backed invoices/bills/contacts/COA/payments); ZATCA Phase-2 | wafeq.com ; developer.wafeq.com |
+| **Daftra** | Cloud ERP/accounting/invoicing/inventory (SMB) | **Public API** (developers.daftra.com app/dev portal); ZATCA Phase-2 | daftra.com ; docs.daftra.com |
+| **Mezan** | KSA-built cloud accounting (SMB) | **Public API** (mezan.sa/docs, premium tier); first-party ZATCA Phase-2 | mezan.sa |
+| **Qeemah** | KSA cloud accounting + e-invoicing/payroll/inventory (SMB) | API unknown; ZATCA Phase-2 (UBL 2.1, crypto stamp, Fatoora) | qeemahcloud.com |
+| **QuickDice ERP** | KSA ERP w/ finance/VAT/e-invoicing (SMB/mid) | API unknown; ZATCA Phase 1 & 2 | quickdiceerp.com |
+| **SMACC** | KSA accounting + POS (since 1986) (SMB/mid) | API unknown; appears in ZATCA POS/accounting vendor list | smacc.com |
+| **Edara (getedara)** | Cloud accounting/ERP w/ commerce connectors (SMB) | API unknown; ZATCA-aware | getedara.com |
+| **Akaunting** | Open-source accounting w/ dedicated **ZATCA-SA app** (SMB) | Open-source **REST API** + app SDK; ZATCA Phase-2 app | akaunting.com/apps/zatca-sa |
+| **TallyPrime** | Widely-used accounting/ERP (SMB/mid; trading) | ODBC/HTTP-XML/TDL integration (on-prem, export-oriented); vendor states ZATCA-accredited | tallysolutions.com |
+| **Zoho Books (KSA edition)** | Cloud accounting (SMB) | **Public REST API** + webhooks; ZATCA Phase-2 (direct Fatoora) | zoho.com/sa/books |
+
+**Plain rationale:** these are the *read* sources that prove partner-attributed revenue is real for SMB/mid customers. Best read targets (live API docs): Qoyod, Wafeq, Daftra, Mezan, Zoho Books, Akaunting.
+
+## A2. ZATCA e-invoicing middleware / EGS providers
+| Product | What it is | Integration / capability | Source |
+|---|---|---|---|
+| **InvoiceQ** | ZATCA compliance layer over ERP/POS (mid/ent) | **API** (REST+SOAP); Phase 1 & 2 | invoiceq.com |
+| **ClearTax (KSA)** | E-invoicing EGS + ZATCA API (SMB→ent) | **API** (docs.cleartax.in e-invoicing-ksa) | cleartax.com/sa |
+| **Complyance** | Global e-invoicing API incl. ZATCA (mid/ent) | **API** (REST/JSON; EGS onboarding) | complyance.io |
+| **Accqrate** | ZATCA e-invoicing + ERP plug-ins (SAP/D365/Oracle) (mid/ent) | **API**/plugin; Phase 1 & 2; 5000+ KSA businesses | accqrate-erp.com |
+| **Flick Network** | E-invoicing middleware ERP↔ZATCA (mid/ent) | API-oriented (docs not confirmed); acts as EGS | flick.network |
+| **Fatora (fatora.io)** | KSA invoicing platform w/ ZATCA (SMB/mid) | **API** for custom/enterprise; Phase-2 from dashboard | fatora.io |
+| **FatooraOnline / FatooraPlus** | ZATCA Phase-2 e-invoicing + revenue automation (mid/ent) | API unknown; Phase 2 | fatooraonline.com ; fatooraplus.com |
+| **Pagero (TR ONESOURCE)** | Global e-invoicing network, ZATCA KSA (enterprise) | **API** (Pagero/ONESOURCE) | thomsonreuters.com |
+| **Taxilla** | E-invoicing compliance platform, KSA (mid/ent) | API unknown; Phase-2 EGS | taxilla.com |
+
+**Plain rationale & lever (reaffirmed):** a KSA enterprise often already routes invoices through one of these. Integrate the **middleware once** as a normalised invoice/clearance read source instead of N ERPs — and it gives you the cleared-XML evidence (§13) directly.
+
+## A3. ERP — local/regional & KSA-localised global
+| Product | What it is (segment) | Integration / capability | Source |
+|---|---|---|---|
+| **SowaanERP** | ERPNext-based ERP for KSA (mid) | **REST API** (Frappe); ZATCA e-invoicing | sowaanerp.sa |
+| **Oracle NetSuite** (localised by **Azdan** et al.) | Cloud ERP (mid/ent) | **SuiteTalk REST/SOAP** + SuiteQL; Saudi E-Invoicing SuiteApp | azdan.com ; oracle.com |
+| **SAP S/4HANA & Business One** (partners e.g. **Seidor**) | Enterprise ERP (large/gov) | OData/REST + BAPI/RFC/IDoc; SAP Doc & Reporting Compliance for ZATCA; **via SI/middleware** | seidor.com |
+| **Microsoft Dynamics 365 (F&O + Business Central)** | ERP (mid/ent) | OData/REST (+ BC webhooks); MS Electronic Invoicing for ZATCA | learn.microsoft.com |
+| **Odoo / ERPNext (KSA localisations)** | Open-source ERP (SMB/mid) | Odoo XML-RPC/JSON-RPC; ERPNext REST; `l10n_sa` / saudi-phase-2 modules | odoo.com ; github.com/ERPGulf |
+
+(Global ERP mechanics & ease ratings are in §8.2; this row set confirms the KSA-localised delivery partners.)
+
+## A4. POS / retail / F&B systems
+| Product | What it is | Integration / capability | Source |
+|---|---|---|---|
+| **Foodics** | Restaurant/F&B RMS+POS (22k+ outlets); **Foodics Pay** acceptance | **API** (OAuth2, marketplace, console.foodics.com); ZATCA Phase-2; SAMA fintech licence. NB: "split pay" = diner bill-splitting, **not** third-party payout | foodics.com |
+| **Rewaa** | Retail POS + inventory (7k+ retailers) | **REST API** (doc.api.rewaatech.com, bidirectional); ZATCA-ready | rewaatech.com |
+| **Marn (مرن)** | Cloud iPad POS, restaurant/retail (since 2014) | Public API unconfirmed (Postman workspace exists); KSA POS | marn.com |
+| **Tijarah360** | ZATCA-compliant smart POS (retail) | API unknown; QR + XML e-invoicing | tijarah360.com |
+| **Loyverse** | Free cloud/mobile POS used in KSA (Arabic, ZATCA receipts) | Public API (global) | loyverse.com |
+
+**Plain rationale:** where partner revenue is point-of-sale (retail/F&B), POS GMV + settlement is a revenue-event source. Best read targets: Foodics, Rewaa.
+
+## A5. Payment gateways / PSPs / orchestration — split/payout is the decisive column
+| Product | KSA status | **Split / payout to 3rd party** | API | Source |
+|---|---|---|---|---|
+| **PayTabs** | Saudi-built, SAMA-licensed | **Yes — documented**: *Split Payout* (one txn → many beneficiaries) + *External Payout* (disburse to third parties) | Yes (REST) | docs.paytabs.com |
+| **Moyasar** | KSA, SAMA-supervised | **Yes — documented**: *Payouts* API pays vendors/gig workers + splits revenue | Yes (REST+webhooks) | moyasar.com/payouts |
+| **HyperPay** | KSA PSP (since 2014) | **Yes — documented**: *HyperSplits* split-payment/payout across recipients (marketplaces) | Yes (unified API) | hyperpay.com |
+| **Tap Payments** | GCC/KSA, SAMA-licensed | **Yes — documented**: `destinations` split on Charges API + Marketplace API payouts | Yes | developers.tap.company |
+| **Telr** | UAE+KSA (telr.com/sa-en) | **Yes — documented**: *Split in Payment* (primary + sub-accounts; flat/%/remaining) | Yes | docs.telr.com |
+| **Geidea** | KSA; first non-bank SAMA acquiring licence | **Unknown** — no split/marketplace-payout API found in public docs | Yes (REST) | docs.geidea.net |
+| **Amazon Payment Services** (ex-PayFort) | KSA (since 2020); mada | **Unknown** — installments yes; no documented marketplace split | Yes | paymentservices.amazon.com |
+| **Checkout.com** | KSA processing cert (2023) | **Yes (global product)**: payouts + marketplace splits/escrow — *KSA-specific [verify]* | Yes | checkout.com |
+| **Ottu** | KSA/MENA orchestration | **Unknown** — routing/tokenization; split not documented | Yes | ottu.com |
+| **MoneyHash** | MEA orchestration "super-API"; KSA via partners | **Unknown** — has a payout platform; dedicated split API not documented | Yes | moneyhash.io |
+| **noon Payments** | KSA gateway (mada, recurring) | **Unknown** | Yes | noonpayments.com |
+| **Paylink (paylink.sa)** | Saudi payment facilitator | **Unknown** — APIs cover merchants/invoices/**balances & settlements** | Yes (developer.paylink.sa) | paylink.sa |
+| **Paymob** | Egypt-origin; KSA ops (paymob.sa) | **Partial — documented**: mass payouts/disbursement to suppliers/employees; marketplace split unknown | Yes | developers.paymob.com |
+| **EdfaPay** | KSA SoftPOS; **SAMA technical licence** | **Unknown** — white-label acceptance | Yes | edfapay (zawya) |
+
+**Plain rationale (core to revenue-sharing):** the build candidates for *collect → split → disburse-to-partner-IBAN* are, in confidence order: **PayTabs, Moyasar, HyperPay, Tap, Telr** (all documented). **Do not assume** split/payout for Geidea, Amazon Payment Services, Ottu, MoneyHash, noon, EdfaPay — these are *Unknown*, pending vendor confirmation, not "No".
+
+## A6. Wallets, e-money & digital banks
+| Product | What it is | KSA licence | Note for payouts | Source |
+|---|---|---|---|---|
+| **STC Pay → STC Bank** | Wallet → digital bank | Early SAMA e-wallet; STC **Bank** go-live Jan 2025 | Merchant/payroll mentioned; no documented 3rd-party-payout API | stcbank.com.sa |
+| **urpay** (by neoleap) | Digital wallet (6.5M+ users) | neoleap SAMA-licensed (2021) | Wallet; payout API unknown | neoleap.com.sa |
+| **neoleap** | Al Rajhi fintech subsidiary; merchant/SME, WaaS | SAMA-licensed (2021) | Powers Pemo KSA cards; business portal; full API [verify] | business.neoleap.com.sa |
+| **Barq** | Digital wallet, intl transfer, Visa cards | SAMA e-wallet licence (Jan 2024) | Payout API unknown | barq (fintechfutures) |
+| **Tweeq** | E-wallet super-app (individuals+SMEs) | SAMA e-money licence (Dec 2022) | Payout API unknown | tweeq (EPI) |
+| **Hala (ex-Halalah)** | SME neobank: POS + account + card (also "Cashier" POS, MSME embedded finance) | **SAMA EMI licence** | Disbursement/payout API unknown | hala.com |
+| **BayanPay** | Wallet + gateway aggregator | **SAMA licence** | **Partial**: "BayanPay Business" *accepts, processes and disburses* B2B/B2C/B2G | bayanpay (pymnts) |
+| **D360 Bank** | Shariah digital bank (PIF) | SAMA digital-bank licence; live Dec 2024 | Inbound payouts via TerraPay (3rd-party rail), own payout API unknown | spa.gov.sa |
+| **Enjaz (Bank Albilad)** | Remittance brand (card/app/POS) | Part of SAMA-licensed bank | Consumer remittance, not B2B partner payout | enjaz.com |
+| **mada Pay / Apple Pay (KSA)** | NFC consumer wallets | National scheme / issuing banks | Pay-in only; **not** a payout rail | mada.com.sa |
+
+## A7. Spend management / corporate cards / BaaS / acquiring infra
+| Product | What it is | KSA note | Source |
+|---|---|---|---|
+| **SiFi** | SME spend mgmt + corporate (Mastercard) cards | Affiliate holds **SAMA EMI licence**; 3,500+ orgs | sifi.app |
+| **Moola** | Corporate cards (mada+Visa) + expense + ZATCA e-invoice tracking | KSA finance platform | moola.sa |
+| **Pemo** | Corporate/virtual cards + spend mgmt | UAE-origin; **launched KSA Apr 2025 via neoleap** | pemo.io |
+| **Pluto (PlutoCard)** | Corporate cards + spend mgmt (MENA) | Serves KSA; SAMA status [verify] | getpluto.com |
+| **DarbPay** | Corporate expense + fleet/fuel cards | KSA spend/fleet | darbpay.com |
+| **Lean Technologies** | Open-banking **Data + Payments** (AIS, PIS, A2A payouts) | **First SAMA open-banking/Major Payment Institution licence (Mar 2026)** | leantech.me |
+| **Nearpay** | SoftPOS / Tap-on-Phone infra-as-a-service | SAMA/Saudi-Payments specs, Visa-certified, PCI-DSS | nearpay.io |
+| **Jeel (Riyad Bank)** | BaaS: Cards-as-a-Service, Wallet-as-a-Service (Mambu/Mastercard) | Bank-owned; SAMA cloud rules | mambu.com |
+
+**Plain rationale:** SiFi/Moola/Pemo/Pluto/DarbPay are where a buyer's *spend* data lives (cost-to-serve / Partner P&L inputs). **Lean** doubles as the AIS-reconciliation + A2A-payout rail (§15).
+
+## A8. Lending, BNPL & SME / embedded finance
+*(Relevant when the platform advances partner cash, embeds working capital, or partners with financiers. All BNPL below pay the **merchant in full** and collect from the consumer → pay-in only, not a partner-payout rail.)*
+
+| Product | Category | KSA licence | API/embedded | Source |
+|---|---|---|---|---|
+| **Tabby** | BNPL (KSA's first fintech unicorn; HQ Riyadh) | SAMA BNPL | **Yes** (docs.tabby.ai) | docs.tabby.ai |
+| **Tamara** | BNPL → broader consumer finance (KSA leader) | SAMA BNPL + consumer-finance licence (2025) | **Yes** (merchant SDK/API) | tamara.co |
+| **MIS Pay** | BNPL (subsidiary of Tadawul-listed MIS) | SAMA BNPL permit | Unknown | mis.com.sa |
+| **Madfu** | BNPL (Riyadh) | SAMA BNPL permit | Unknown | EPI |
+| **Spotii** | BNPL (Zip-owned) | SAMA BNPL permit | Unknown — *verify current operation* | EPI |
+| **Jeel Pay** | "Study-Now-Pay-Later" (education) | SAMA BNPL | Unknown | arabnews |
+| **Lendo** | SME invoice/receivables finance, debt crowdfunding | SAMA-licensed | Unknown | lendo.sa |
+| **Tameed (Ta3meed)** | **Purchase-Order financing** crowd-lending | SAMA licence (2023) | Unknown | ta3meed.com |
+| **Manafa** | Debt crowdfunding + supply-chain finance for SMEs | SAMA-licensed | Unknown | sama news-801 |
+| **Raqamyah** | SME debt crowdfunding | SAMA-licensed | Unknown | raqamyah.com |
+| **Funding Souq** | SME debt crowdfunding + invoice finance | SAMA licence (2024) | Unknown | fundingsouq.com |
+| **Forus** | Debt/equity crowdfunding (largest by investors) | Licensed | Unknown | lenderkit (Forus) |
+| **Erad** | **Revenue-based working-capital** for online SMEs; embeds finance at point of sale | Deploys via CMA-licensed funds | **Yes** (embedded POS finance) | erad.co |
+| **Quara Finance** | Consumer + SME finance, leasing | SAMA finance licence | Unknown | quarafinance.com |
+| **Nayifat** | Listed NBFI; personal+SME finance, Islamic cards | SAMA-licensed | Unknown | argaam (Nayifat) |
+| **Emkan** | Fully-digital consumer finance (Al Rajhi arm) | SAMA-licensed | Unknown | emkanfinance.com.sa |
+| **Tamam** | Digital consumer micro-financing (Zain arm) | SAMA micro-finance licence | Unknown | zain.com/tamam |
+| **Sulfah** | Fast personal micro-finance | SAMA-licensed | Unknown | arabnews (Sulfah) |
+| **Hakbah** | Automated savings groups (Jam'iya/ROSCA) | SAMA-permitted | Unknown | menabytes |
+| **Abyan Capital** | Robo-advisor; **Abyan Business** = treasury/yield on idle corporate cash | **CMA-licensed** | Unknown | business.abyancapital.sa |
+| **HALA** | MSME embedded finance/lending (also e-money + POS) | EMI; lending licence [verify] | **Yes** (embedded) | hala.com |
+
+**Plain rationale & lever:** the categories closest to a B2B revenue-sharing platform are **PO/invoice finance** (Lendo, Tameed, Manafa, Funding Souq) and **revenue-based/embedded working capital** (Erad, HALA) — natural "advance a partner against their pending share" partners. **Tabby/Tamara/Erad/HALA** are the ones with documented embeddable APIs.
+
+## A9. Identity / KYB / AML / RegTech
+| Product | What it is | Access model | Source |
+|---|---|---|---|
+| **Mozn — FOCAL** | KSA-built FRAML (AML monitoring, sanctions/PEP, KYC, **KYB**), Arabic name-matching, Yakeen integration, local hosting, SAMA-aligned, 1,300+ watchlists | API-first; enterprise contract | getfocal.ai ; mozn.ai |
+| **Uqudo** | eKYC: doc + NFC + biometric liveness + AML; Saudi `SAU_ID`/`SAU_DL` | API/SDK; B2B | uqudo.com |
+| **IDMerit (IDMkyX)** | KYC/AML/KYB with KSA offering | API; B2B | idmerit.com/saudi-arabia |
+| **Sumsub** | Global KYC/**KYB/UBO**/AML; KSA SAMA/CMA guidance; AML via ComplyAdvantage (2026) | API/SDK; B2B | sumsub.com |
+| **ComplyAdvantage** | AML/sanctions/PEP/adverse-media data ("Mesh") | API; B2B | complyadvantage (sumsub) |
+| **Nafath** | National SSO/digital identity (SDAIA+MOI), biometric, 530+ services | **Gated** — approved providers (via Elm/TCC) | my.gov.sa ; iam.gov.sa |
+| **Yakeen** | Elm/NIC ID & business-registration verification | **Gated** — licensed entities (SAMA rulebook) | elm.sa ; rulebook.sama.gov.sa |
+| **Tahaqaq** | Elm/SAMA service linking mobile number ↔ national ID (anti-fraud KYC step) | **Gated** — SAMA-regulated FIs | getfocal.ai |
+| **Wathq** | MCI business-data: CR, owners/managers, capital, activities, Qawaem financials, address | **Public API** (free basic + paid) | developer.wathq.sa |
+| **Elm** | PIF gov-tech operator of Yakeen/Tahaqaq (350+ products) | B2B/gov | elm.sa |
+| **Thiqah** | Gov-platforms operator (Etimad, Saber…); acquired by Elm 2025 | B2B/gov | thiqah.sa |
+| **emdha** | First CST-licensed Certificate Authority (e-signature) | Trust-service; B2B | emdha.sa |
+| **Signit** | DGA-licensed trust-service / e-signature provider | Trust-service; B2B | signit.sa |
+
+**Plain rationale:** for partner KYB the realistic stack is **Wathq** (entity/owners — the one open API) + a **commercial screening vendor** (Mozn FOCAL for local hosting/SAMA fit; Sumsub for UBO depth), with **Nafath** for signatory identity *via a licensed aggregator*.
+
+## A10. HR / payroll / WPS (cost-to-serve & employer-status context)
+| Product | What it is | Note | Source |
+|---|---|---|---|
+| **Mudad** | MHRSD payroll/WPS platform (banks+GOSI) | Partnership-gated; certified integrators | hrsd.gov.sa |
+| **GOSI** | Social-insurance contributions | Via accredited HR platforms; e-cert verify | gosi.gov.sa |
+| **Qiwa** | Labor platform (contracts, Saudization/Nitaqat) | Partnership/accredited integrators | qiwa.sa |
+| **Jisr** | KSA HR + payroll (GOSI/Mudad/Muqeem/WPS) | SaaS; integrates gov systems | jisr.net |
+| **Palm HR** | HR + payroll (KSA/GCC SMEs) | SaaS | palmhr.net |
+| **ZenHR** | MENA HRMS; GOSI/Mudad/Muqeem; Hijri | SaaS | zenhr.com |
+| **Bayzat** | HR/payroll/benefits, KSA offering | SaaS | bayzat.com/ksa |
+| **Qsalary** | Earned-wage-access / salary e-wallet | EWA fintech; WPS-aligned | qsalary (press) |
+
+**Plain rationale:** mostly *optional context* (partner-as-employer standing; partner cost data). Keep partner commissions **off** Mudad/WPS (§15) — that rail is for wages.
+
+## A11. Credit bureaus, business-data & LEI
+| Product | What it is | Access | Source |
+|---|---|---|---|
+| **SIMAH (Saudi Credit Bureau)** | Oldest SAMA-licensed bureau; commercial credit reports (SIMAT); runs the LEI unit | Member/licensed | simah.com |
+| **Bayan Credit Bureau** | SAMA-supervised bureau focused on **commercial-establishment** credit | Member/licensed | bayancb.com |
+| **MOARIF (by SIMAH)** | GLEIF-accredited KSA **LEI** issuer; SAMA mandates LEIs for supervised FIs | Registration/portal | lei.simah.com |
+
+**Plain rationale:** credit-bureau + **LEI** data strengthen partner-entity risk scoring and unique-entity resolution beyond what Wathq alone gives.
+
+## A12. Banks with developer / open-banking APIs
+*(New, decision-relevant finding: several KSA banks expose self-service developer portals — production access still needs SAMA TPP/open-banking licensing or an aggregator.)*
+
+| Bank | Developer/open API | Notably useful for payouts? | Source |
+|---|---|---|---|
+| **Al Rajhi Bank** | **Yes** — Open Banking portal (FAPI, AIS, sandbox) | AIS (verification/reconciliation) | developer.alrajhibank.com.sa |
+| **Riyad Bank** | **Yes** — Open Banking + **Riyad Access** corporate API sandbox | Corporate payments via Riyad Access | riyadbank.com/open-banking |
+| **Arab National Bank (ANB)** | **Yes** — **ANB Connect** (Single/**Bulk Payments**, **SADAD/MOI**, statements, FX) + sandbox | **Strongest documented payout API set** | developer.anb.com.sa |
+| **Alinma Bank** | **Yes** — alinma API Portal (accounts/payments/txns; sandbox) | Payments | alinma.com |
+| **Bank Albilad** | **Yes** — API portal (AIS; mTLS) | AIS | developer.bankalbilad.com |
+| **Saudi Investment Bank (SAIB)** | **Yes** — portal (AIS/PIS, sandbox, marketplace) | PIS payouts | developer.saib.com.sa |
+| **Saudi Awwal Bank (SAB)** | **Yes** — Open Banking via shared portal infra | AIS | sab.com |
+| **SNB / AlAhli** | Open banking exists; **no public self-service portal** | Via licensed TPP | alahli.com |
+| **BSF** | BaaS strategy (TCS BaNCS); **no public portal** | Partnership / via Tarabut | bsf.sa |
+| **GIB — meem** | Open-banking interface; only **Bahrain** dev docs found, KSA portal [verify] | Partnership | gib.com |
+
+**Digital-only banks (SAMA-licensed; no public dev portals found):** **STC Bank**, **D360 Bank**, **Saudi Digital Bank**, **EZ Bank** (pre-launch, 2025).
+
+**Plain rationale & lever:** **ANB Connect** (bulk payments + SADAD) and Riyad Access are direct *corporate-payout* channels worth evaluating alongside PSP split rails — a bank-direct payout path you didn't have in the global catalogue.
+
+## A13. National payment rails & government B2B platforms (with APIs)
+| Entity | What it is | API access | Source |
+|---|---|---|---|
+| **SAMA / Saudi Open Banking Program + Lab** | Regulator; FAPI AIS/PIS/CAF standards; test/certify Lab | Standards + Lab (not a direct API provider) | openbanking.sa ; sama.gov.sa |
+| **Saudi Payments** | Operator of mada, SADAD, sarie, Esal | Banks integrate; no public dev portal | saudipayments.com |
+| **sarie** | National **instant payments** + RTGS (ISO 20022) | Via banks' corporate APIs (e.g., ANB Connect) | sarie.sa |
+| **mada** | National debit/POS network | Via acquirers/PSPs | mada.com.sa |
+| **SADAD** | National bill presentment/payment | Via banks | sama.gov.sa |
+| **ZATCA (Fatoora)** | E-invoicing Phase-2 | **Public sandbox** (sandbox.zatca.gov.sa) + production onboarding | zatca.gov.sa |
+| **Wathq** | Business/CR data | **Public API** (free tier + paid) | developer.wathq.sa |
+| **Etimad** | Gov procurement/tenders/financial services | **Public developer portal** (apiportal.etimad.sa) | apiportal.etimad.sa |
+| **National Address / SPL** | Address validation/geocode | **Public API** (free + paid) | api.address.gov.sa |
+| **Qiwa / Mudad / GOSI / Muqeem** | Labor / payroll / social-insurance / residency | Partnership/accredited only | qiwa.sa ; gosi.gov.sa |
+| **Fasah / Saber (SASO)** | Customs single-window / product conformity | B2G/accredited integration | fasah.sa ; saudipedia (Saber) |
+| **Nafath** | National SSO/identity | Gov-approved providers only | iam.gov.sa |
+| **Tameeni (Rasan) / Najm** | Insurance aggregator / motor-claims | Partnership API | tameeni.com ; najm.sa |
+| **Saudi Business Center / Maroof / Absher Business / Monsha'at / Tawuniya** | Business lifecycle / e-store verify / employer portal / SME authority / insurer | **Service portals — not public APIs** (CR data comes via Wathq) | business.sa ; my.gov |
+
+## A14. e-Signature / trust-service providers (agreement execution)
+- **emdha** — first CST-licensed Certificate Authority for e-signature (emdha.sa).
+- **Signit** — DGA-licensed trust-service provider (signit.sa).
+- (Global CLM/e-sign — DocuSign, Adobe Acrobat Sign, PandaDoc — in §11.) **Plain rationale:** a locally-recognised e-signature on the partner agreement strengthens the legal basis of every downstream commission rule.
+
+## A15. Mapping the catalogue to the OS — what to integrate first, per function (plain)
+- **Prove revenue (read):** SMB → Wafeq/Qoyod/Zoho Books; mid → NetSuite/D365/Odoo; enterprise → SAP/Oracle via SI or a **ZATCA middleware** (InvoiceQ/ClearTax/Complyance/Accqrate) as a single normalised source.
+- **Legal invoice/evidence:** ZATCA sandbox → production (store cleared XML).
+- **Verify partner (KYB):** Wathq (open) + Mozn FOCAL or Sumsub (screening) + Nafath via aggregator.
+- **Reconcile bank / verify IBAN:** Lean/Tarabut AIS, or a bank open-banking portal (Al Rajhi/Riyad/ANB).
+- **Pay the partner (split/disburse):** PayTabs/Moyasar/HyperPay/Tap/Telr (documented split) or PIS/sarie via Lean; consider **ANB Connect bulk payments** as a bank-direct path.
+- **Cost-to-serve (Partner P&L):** SiFi/Moola/Pemo spend data.
+- **Working-capital partner offers (optional):** Erad/HALA (embedded), Lendo/Tameed/Funding Souq (PO/invoice finance).
+
+## A16. Deliberately EXCLUDED (could not verify — not in the catalogue above)
+Listed by name so the gap is explicit, not silently dropped. **Do not add without a source.**
+- **Accounting/ERP/POS:** Anbar, Mtaajer/متاجر, Defenders, Onyx Pro (resolves to "Onyx FC", a D365 consultancy — disambiguate), Focus (Focus Softnet — KSA-ZATCA source not surfaced), Cordis, Marsai, Mrina, ClearVAT, Twasal, Rubikon, Anyware/Mishkah-as-POS, generic "Cashier".
+- **Payments/wallets:** Surepay (no KSA SAMA source), Edenred-KSA (UAE confirmed, KSA unconfirmed), friendi/Mobily Money, Alinma Pay, Misned, Mala, "T2" (parent **Thiqah** is verified; no product literally "T2").
+- **Lending/BNPL:** Cashew (UAE-centric, no KSA SAMA), Postpay (no KSA SAMA source), Dapi (KSA status unconfirmed), Msool (no source), "Quara" as a *BNPL* (only **Quara Finance** consumer/SME lender verified).
+- **Identity/RegTech/spend:** Tam, Authentica, Baianat (the verified bureau is **Bayan**), Premium/Baseeta, "Qoyod-expense" module.
+- **Banks/infra:** "Vault", "Nuyu" (not real KSA banks — the four digital banks are STC Bank, D360, Saudi Digital Bank, EZ Bank), "SiNet" (no verifiable KSA payments entity).
+
+## A17. Verification caveats & live sources a human must re-check
+- **SAMA permitted/licensed lists (403 to automated fetch — open in a browser to confirm current status):** Permitted fintechs — https://www.sama.gov.sa/en-US/-SandBox/pages/permitted-fintechs.aspx ; Licensed finance companies — https://www.sama.gov.sa/en-US/LicenseEntities/Pages/FinanceLicencedEntities.aspx ; licensed PSPs/banks pages on sama.gov.sa.
+- **ZATCA solution-provider directory (403; indicative, not a binding certification):** https://zatca.gov.sa/en/E-Invoicing/SolutionProviders/Pages/SolutionProvidersDirectory.aspx and the Arabic vendor PDF.
+- **Bank developer portals** (developer.alrajhibank.com.sa, developer.anb.com.sa, developer.saib.com.sa, developer.bankalbilad.com, riyadbank.com/open-banking, alinma.com) are live but anti-bot; confirm endpoint/sandbox details directly.
+- **Split/payout capability** is asserted **only** for PayTabs, Moyasar, HyperPay, Tap, Telr (documented), plus partial for Paymob/BayanPay. Everything else marked *Unknown* must be confirmed with the vendor before design.
+- **Licence statuses** evolve quickly (e.g., open banking only became a licensed activity in Mar 2026); treat any licence note as "as of 2026-05", re-verify at build time.
 
 ---
 
