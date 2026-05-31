@@ -1,5 +1,13 @@
 # Gap Analysis — End-to-End Business Workflow PDF vs. Current Prototype
 
+> **STATUS: RESOLVED.** The benchmark below was the *original* finding
+> (11 covered / 7 partial / 4 missing of 22 phases). It has since been closed:
+> **11 new screens were built** and all **22 phases now map to a real canonical
+> screen** (see `workflow.mjs` — the single source of truth). The product plays
+> the full 22-phase journey via `journey.html`, the per-phase Prev/Next bar, and
+> deep-links across 55 screens. The benchmark table is kept below as the record
+> of what drove the build.
+
 **Source:** `Partner_Revenue_OS_End_to_End_Business_Workflow.pdf` — 60 pages, read in
 full. Structure: Part A = **22 workflow phases**; Part B = integration workflows;
 Part C = Advanced Ecosystem Attribution Hub gap analysis; Part D = domain objects;
@@ -86,10 +94,16 @@ center, CRM link. **Missing from MVP build-first list:** partner **intake** (G2)
 **qualification** (G3), **claim preflight** (G8), **payout eligibility preview**
 (G11), **finance evidence pack** (G4).
 
-## Re-do plan (pending answers — see questions in chat)
-1. Re-sequence the journey to the 22 phases: rebuild `DEEPLINKS` as the canonical
-   phase chain w/ Back/Next; add a phase/roadmap **journey navigator** page.
-2. Build the agreed gap screens in the Stitch HTML/Tailwind style (priority:
-   the 5 MVP gaps — intake, qualification, preflight, eligibility, evidence pack).
-3. Optionally tag screens by phase # and role; optionally an operating-cadence view.
-4. Verify (click-through + screenshots), update SKILL.md + CLAUDE.md.
+## Re-do plan — DONE
+1. ✅ Re-sequenced to the 22 phases: per-phase Prev/Next bar + `journey.html`
+   navigator (grouped by layer, MVP/V1/V2/V3 tiers). `workflow.mjs` is the SoT.
+2. ✅ Built **all 11** gap screens (not just the 5 MVP ones) in full Stitch/MD3
+   Tailwind style with rendered thumbnails: strategy/thesis, segmentation/role
+   taxonomy, sourcing & intake, qualification scorecard, approval workflow,
+   touchpoint ledger, claim preflight, CRM link & sync, revenue-event validation,
+   payout eligibility, finance evidence pack.
+3. ✅ Per-phase role + tier surfaced on each screen and in the journey map;
+   `cadence.html` operating-cadence view added.
+4. ✅ Verified: audit PASS (0 broken links / placeholders / blocked hosts /
+   render errors / dead deep-links across 60 pages) + click-through; deep-links
+   across 55 screens; CLAUDE.md + SKILL.md updated.
