@@ -24,6 +24,7 @@ This manual is deliberately layered so it doubles as a learning path and a build
 - **Part VII — Overlooked Patterns & Levers, Phasing, Risks, Sources** (§19–§23).
 - **Appendix A — Saudi Local Product Landscape (Verified Catalogue)** (§A1–§A17): ~115 source-verified local products across every function (accounting, e-invoicing, ERP, POS, payments, wallets/e-money, spend, lending/BNPL, identity/KYB/AML, HR/payroll, credit data, banks, government rails), with a strict **Verified-vs-Excluded** split so nothing speculative is presented as fact.
 - **Appendix B — Back-Office & Front-Office Tool Stack** (§B1–§B20): the accounting/financial **back-office** (ERP, close/consolidation/EPM, reconciliation, AP/AR automation, treasury & bank APIs, spend, EOR/payroll, tax) and the **front-office/GTM** stack (CRM, billing, CPQ, CLM/e-sign, support, CPaaS, affiliate/marketplace) your clients and partners actually run — KSA-usage-verified where possible, with integration mechanics, mapped to the data flows. Uses a stricter **Verified-vs-[Unverified-for-KSA]** standard.
+- **Appendix C — Stakeholder Tiers, Market Segments & Tool Adoption** (§C1–§C6): *who* runs which back-office/front-office accounting & financial tools, by **organizational tier** (T0 micro → T6 RHQ/MNC) and **functional persona** (CFO/controller/AP/AR/treasury/tax/FP&A vs CRO/sales/RevOps/partner/CS), plus the **segmentation lattice** of non-obvious levers (SEZ/RHQ tax branches, rail availability, residency, sector statutory rails…) that flip the integration approach. Structural facts are source-verified.
 
 It does not restate the PDR. Where the PDR (Section 12) and the Workflow doc (Part B) already define an integration, this manual goes deeper: the Saudi-specific mechanics, the data-flow detail, and the levers those documents do not name.
 
@@ -1280,6 +1281,123 @@ Real products, but **no KSA-specific adoption evidence** found (do not assert KS
 - Several bank/vendor pages (Riyad Access, ANB, Al Rajhi, Kyriba, BlackLine, DocuSign/Adobe legality, emdha/Signit) returned **HTTP 403** to automated fetch; facts rest on official-domain search extracts + corroboration — confirm specifics directly at build time.
 - **emdha/Signit API mechanics** and the **basic-vs-qualified e-signature** distinction under KSA law (accredited-TSP requirement) are flagged, not asserted.
 - **Stripe-not-onshore** and the **ANB-Connect bulk-payment** path are the two findings most likely to change a build decision — verify both against live docs.
+
+---
+
+# APPENDIX C — STAKEHOLDER TIERS, MARKET SEGMENTS & TOOL ADOPTION (with the non-obvious levers)
+
+**Why this appendix exists (plain):** Appendices A/B catalogue the *tools*. This one answers **who runs which tools, and what that means for how the OS integrates with them** — segmented two ways: by the **organizational tier** of the client/partner (a micro merchant and a giga-project do not integrate the same way) and by the **functional persona** inside that organization (the AP clerk and the CRO touch entirely different systems). It closes with the **segmentation lattice** — the non-obvious dimensions that multiply into the real "100x" segment space and change the integration approach.
+
+**Fact discipline:** the *structural* facts (SME thresholds, RHQ, SEZ tax/VAT) are verified with sources in §C6. The *tool-by-tier/persona* mappings are grounded in the **verified KSA adoption data of Appendices A/B** plus established finance/GTM org structure — labelled **[pattern]** where it is a well-established norm rather than a per-company claim. Named-company examples are only the ones verified earlier (Aramco, SATORP, Zahid). No adoption statistics are invented.
+
+## C1. The two axes (why one segmentation isn't enough)
+- **Axis 1 — Organizational tier (firmographic):** decides *which systems exist* and *how you reach them* (CSV/portal → unified-API → native → middleware/SI → government rail).
+- **Axis 2 — Functional persona:** decides *which object you read/write* and *which OS stakeholder (PDR §6) you serve*.
+The OS must integrate across **both at once**: e.g., a *Tier-3 enterprise's AR clerk* (HighRadius cash-app) is a different integration than the same enterprise's *partner manager* (CRM + portal). The product wins when each persona, at each tier, sees the OS speak their system's language.
+
+## C2. Axis 1 — Organizational tiers × back-office & front-office tool stack
+| Tier | Who (KSA) | Back-office accounting/finance tools | Front-office tools | What it means for OS integration (the lever) |
+|---|---|---|---|---|
+| **T0 — Micro / sole establishment** (1–5 staff, ≤SAR 3M) | freelancers, single-branch retail/F&B, online sellers | Qoyod / Wafeq / Daftra / Zoho Invoice; POS (Rewaa/Foodics/Marn); ZATCA via the app | Salla/Zid storefront; mada/Moyasar/PayTabs acceptance; WhatsApp (Unifonic/Taqnyat) — **no CRM** | **CSV/portal-first + unified-API (Codat) for books**; revenue proof from POS/commerce webhooks; payout to a single IBAN. Manual-safe (PDR §12.1). |
+| **T1 — Small** (6–49) | growing SMEs, multi-branch retail, agencies | Qoyod/Wafeq/Zoho Books; spend (SiFi/Moola); payroll (Jisr/ZenHR + Mudad/WPS) | HubSpot/Zoho CRM; PSP + Salla/Zid; affiliate (ArabClicks) | Native REST to the accounting SaaS (webhooks where present); light iPaaS; ZATCA via their tool. |
+| **T2 — Medium / mid-market** (50–249, <SAR 200M) | mid-market B2B SaaS, distributors, mid retail groups | **NetSuite / Odoo / D365 Business Central**; close (FloQast where present); spend (Qashio/SiFi); AP (Zoho/Medius); payroll (Jisr/ZenHR) | **Salesforce/Dynamics/HubSpot/Zoho CRM**; Chargebee-type billing; CPQ; CLM (emdha/Signit/DocuSign) | **Native connectors** (CDC/webhooks); the sweet-spot ICP (PDR §5). ZATCA middleware (InvoiceQ/Complyance) often already in place → read once. |
+| **T3 — Large enterprise (local)** (250+ / >SAR 200M) | banks, telcos, large retail/industrial, listed cos | **SAP S/4HANA / Oracle Fusion / D365 F&O**; **BlackLine** (recon), **Kyriba** (treasury), **HighRadius** (AR), **Oracle EPM/Anaplan** (close/FP&A), **SAP Ariba** (P2P); bank host-to-host | **Salesforce / Dynamics 365**; CPQ; ServiceNow; data warehouse (Snowflake/BigQuery) | **Reach via SI / middleware** (SAP BTP, Oracle OIC, MuleSoft/Boomi), not direct; bank corporate APIs (Riyad Access/ANB Connect) for payout/recon; in-Kingdom + NCA/CCC posture. |
+| **T4 — Conglomerate / family business house** (multi-entity, multi-sector) | family groups & holdings (e.g., **Zahid Group** — verified Kyriba) | multiple ERPs per subsidiary + **shared-services centre**; **consolidation/EPM** (Oracle EPM/OneStream); **treasury across many banks** (Kyriba); intercompany | mixed CRM estate; per-business GTM tools | **Multi-entity, intercompany, multi-currency** is the headline; connector-per-entity + a consolidation read; one master-data/identity-resolution problem (E8). |
+| **T5 — Government / SOE / PIF / giga-project** | ministries, SOEs, PIF portfolio (NEOM, ROSHN, Red Sea), gov-related entities | **SAP / Oracle** (heavy); **Etimad** (gov procurement, contract value, **disbursement status**); sector rails (Nphies/Najm/Wafi) | gov portals; Salesforce/Dynamics in some | **Etimad is the authoritative revenue/disbursement source** for gov-facing partners; **strict in-Kingdom residency + NCA ECC/CCC + SAMA (if financial)**; gov rails are partnership-gated (§A13). |
+| **T6 — MNC subsidiary / RHQ** | regional HQs + KSA subsidiaries of multinationals | **global ERP instance** (SAP/Oracle/D365) + a **KSA localization overlay** (ZATCA middleware) for Fatoora/VAT; global treasury | **global Salesforce/Dynamics** instance | **RHQ = 0% WHT on eligible activities** → the WHT engine must *check RHQ status before withholding*; integrate as a **localization overlay on a global instance**, not a greenfield connector. |
+
+**Plain rationale:** the integration approach is a function of the tier, not the feature list. The same "read AR invoices" requirement is a unified-API call at T0–T2, a middleware project at T3–T5, and a localization-overlay read at T6.
+
+## C3. Axis 2 — Functional personas × tools (back office & front office)
+**Back-office finance personas** — what they run, what the OS reads/writes, and which OS stakeholder (PDR §6) they are:
+| Persona | Their tool(s) | OS reads / writes | PDR map |
+|---|---|---|---|
+| **CFO / Finance Director** | EPM/consolidation + BI; the board pack | reads: payout liability, leakage, partner ROI · writes: the **CRO/CFO pack** (§10.12) | §6.6 |
+| **Financial Controller / Chief Accountant** | ERP GL, close (BlackLine/FloQast), ZATCA | reads: GL/journal, cleared invoices · writes: finance-evidence pack | §6.6/§6.7 |
+| **AP / Payables clerk** | AP automation (Ariba/Tipalti/Zoho), vendor master | the **partner-payout leg**: vendor bill, payment batch, IBAN | §6.6 |
+| **AR / Collections / Credit** | AR automation (HighRadius), cash application | the **revenue-proof leg**: invoice⇄payment match | §6.6 |
+| **Treasury / Cash manager** | Kyriba, bank portals (Riyad Access/ANB Connect) | the **payout/settlement + bank-recon leg** | §6.6 |
+| **Tax / Zakat manager** | ZATCA Fatoora, VAT/WHT | the **compliance leg**: VAT lines, WHT records, SEZ/RHQ treatment | §6.8 |
+| **FP&A analyst** | Anaplan / Oracle EPM / Adaptive | partner-revenue forecast vs actual feed | §6.5/§6.10 |
+| **Procurement / buyer** | Ariba / Etimad; supplier onboarding | partner-as-vendor master + **Wathq/KYB** gate | §6.6/§6.9 |
+| **Payroll / HR-finance** | Jisr/ZenHR/Mudad/WPS, GOSI | the **payout-vs-wages boundary** (keep commissions off WPS) | §6.9 |
+| **Internal audit / Compliance** | audit logs, screening (FOCAL/Sumsub) | the **audit trail + evidence provenance** (§11.4) | §6.8/§6.9 |
+
+**Front-office / GTM personas:**
+| Persona | Their tool(s) | OS reads / writes | PDR map |
+|---|---|---|---|
+| **CRO / VP Sales** | CRM pipeline, forecast | partner-sourced/-influenced pipeline (§14.2) | §6.5 |
+| **Sales rep / AE** | CRM (native partner fields) | conflict alerts, minimal data entry, write-back | §6.4 |
+| **RevOps** | CRM hygiene, field mapping | the **data-quality engine** (§11.1), sync monitoring | §6.7 |
+| **Partner / channel manager** | the **partner portal + OS itself** | deal registration, claims, attribution | §6.1/§6.2 |
+| **Marketing** | HubSpot/Marketo, UTM, CPaaS | partner co-marketing **influence signals** (§12.10) | — |
+| **CS / Account manager** | Gainsight/Freshworks/ServiceNow | **post-sale** partner contribution (renewal/expansion) | — |
+| **Deal desk / Quoting** | CPQ (Salesforce CPQ/DealHub) | the **rate basis** for commission rules | §6.7 |
+| **Legal / Contracts** | CLM/e-sign (emdha/Signit/DocuSign) | agreement metadata → executable rules | §6.8 |
+| **Order mgmt / Billing ops** | billing/subscription (Chargebee/Stripe/Wafeq) | the **revenue-materialization** signal (`invoice.paid`) | §6.6 |
+
+**Plain rationale:** a partner-revenue claim travels across ~10 personas and their systems before it becomes a reconciled, taxed payout. The OS's job is to be the one place that connects them — which is only possible if the integration layer reads each persona's system of record (Axis 2) at each tier's reachability (Axis 1).
+
+## C4. The segmentation lattice — non-obvious levers (the real "100x")
+The honest framing: there are not 100 *named* segments — there is a **combinatorial lattice**. ~7 tiers × ~19 personas × the orthogonal levers below produces the large segment space, and each lever **flips the integration approach**. These are the dimensions teams routinely miss:
+
+**Tax-treatment levers (change the money math):**
+1. **SEZ status** (KAEC/Ras Al-Khair/Jazan/Cloud Computing) → **0% intra-zone VAT / out-of-scope** → the OS's VAT & ZATCA logic needs a zero-rated/out-of-scope branch; a partner *or customer* in an SEZ changes a commission invoice's tax.
+2. **RHQ status** → **0% WHT on eligible activities** → the WHT engine must check RHQ status *before* withholding on a cross-border partner payment.
+3. **Bonded / integrated-logistics zone** (e.g., Riyadh SILZ) → customs/VAT-suspended → different invoice treatment.
+4. **Zakat vs income-tax payer** (Saudi/GCC-owned → Zakat; foreign-owned → CIT; mixed) → affects entity classification on partner records.
+
+**Compliance / residency levers (change the deployment & access):**
+5. **ZATCA wave** (already-live > SAR 375k vs not) → is structured invoice data already available?
+6. **ZATCA-middleware-in-place** (Complyance/InvoiceQ/Accqrate) → read once vs N ERPs.
+7. **Cloud-residency requirement** (in-Kingdom mandatory for finance data) → deployment tier (CST class).
+8. **Regulated entity** (SAMA/CMA/IA) → SAMA CSF third-party security review; gated gov data via aggregator.
+9. **PDPL posture / cross-border** → SCCs + Transfer Risk Assessment vs in-Kingdom only.
+
+**Rail levers (change how money moves & reconciles):**
+10. **PSP split-capability** of their gateway (PayTabs/Moyasar/Tap/HyperPay/Telr = yes; Geidea/APS = unknown) → payout-rail choice.
+11. **Bank corporate-API availability** (ANB Connect bulk + SADAD / Riyad Access vs host-to-host file vs manual).
+12. **Open-banking adoption** (AIS for reconciliation / PIS or sarie for instant payout) vs card-only.
+13. **mada-only vs card-heavy acceptance** → acceptance economics + which collection data you see.
+14. **WPS exposure** (employees) → keep partner commissions off the wage rail.
+
+**Data / architecture levers (change build vs buy):**
+15. **On-prem vs cloud ERP** → middleware/SI vs direct REST.
+16. **Unified-API coverage** of their accounting system (Codat-supported?) → buy vs build the connector.
+17. **ERP-localization maturity** (native ZATCA like NetSuite/Zoho/Odoo vs connector-bolted QBO/Xero).
+18. **Multi-entity / multi-currency** complexity → connector-per-entity + intercompany + FX.
+19. **Hijri vs Gregorian** close calendar → period mapping for revenue/payout cut-offs.
+20. **Arabic RTL / bilingual** requirement → partner statements + portal localization.
+21. **Webhook fidelity** of their stack (Salesforce CDC strong vs Zoho workflow-webhooks weak) → CDC vs poll.
+
+**Sector & commercial-model levers (change the revenue-event source):**
+22. **Sector statutory rail** as the revenue oracle: Nphies (health claims), Najm (motor), Wafi (off-plan escrow), Etimad (gov disbursement) — these *are* the revenue/payment-status source for partners in those sectors.
+23. **Marketplace/GMV channel** (Salla/Zid/Noon/Amazon) → 3P-seller-payout + affiliate-commission as claim sources.
+24. **Commission model**: one-time vs **recurring/usage** → continuous attribution + influence decay (§19, lever 21).
+25. **Existing PRM/affiliate** (PartnerStack/ArabClicks/Impact) → migration/coexistence vs greenfield.
+26. **Earned-wage-access / payroll-fintech** (Qsalary) present → alternative disbursement context.
+27. **Credit-bureau footprint** (SIMAH/Bayan) + **LEI** (MOARIF) → partner-entity risk & unique resolution.
+28. **Saudization / Nitaqat band** → HR/payroll tooling depth + eligibility/risk signal for B2B partners.
+29. **Government-contract exposure** → Etimad as source **and** the RHQ-preference dynamic (post-1 Jan 2024).
+30. **Family-conglomerate shared-services** → one integration serves many legal entities (high leverage).
+
+**Plain rationale:** pick any client and you are at a *coordinate* in this lattice — e.g., "T6 RHQ, regulated, in-Kingdom, SAP-on-S/4, ZATCA-live, mada+open-banking, recurring-commission." That coordinate — not a generic "enterprise" label — determines the connector set, the tax branches, the payout rail, and the deployment. The lattice *is* the 100x.
+
+## C5. Tier → integration-strategy decision matrix (quick pick)
+| Tier | Reach the books via | Prove revenue via | Pay the partner via | Deploy |
+|---|---|---|---|---|
+| T0–T1 | unified-API (Codat) / portal / CSV | POS/commerce + billing webhooks | single-IBAN PSP payout | multi-tenant, in-Kingdom |
+| T2 | native REST/CDC connectors | billing `invoice.paid` + ZATCA | PSP split (PayTabs/Moyasar/Tap) | in-Kingdom |
+| T3 | SI / middleware (BTP/OIC/MuleSoft) | ERP AR + ZATCA + AIS recon | bank API (ANB/Riyad) or PIS/sarie | in-Kingdom, NCA/CCC |
+| T4 | per-entity connectors + consolidation read | multi-entity ERP + EPM | multi-bank treasury (Kyriba) | in-Kingdom, multi-entity |
+| T5 | SAP/Oracle via SI + **Etimad** | Etimad/ERP + sector rail | gov/bank rails | in-Kingdom, sovereign/CST-B |
+| T6 | localization overlay on global instance | global ERP + KSA ZATCA layer | global treasury + KSA rail; **check RHQ WHT** | hybrid, residency-aware |
+
+## C6. Verified structural facts, sources & caveats
+- **Monsha'at SME tiers** — Micro 1–5 staff & ≤SAR 3M; Small 6–49; Medium 50–249; SME ceiling <250 staff & <SAR 200M (higher of the two criteria). Source: https://www.monshaat.gov.sa/en/SMEs-definition ; https://saudipedia.com/en/small-and-medium-enterprises-general-authority
+- **RHQ program** — 0% CIT + 0% WHT on eligible activities for **30 years** (renewable); WHT exemption covers dividends, payments to related persons, and payments to unrelated persons for necessary services; **gov-contracting preference for RHQ from 1 Jan 2024** (MISA + MoF + ZATCA). Sources: KPMG https://kpmg.com/sa/en/insights/tax-insights/tax-alert-tax-incentives-are-announced-for-the-rhq-program.html ; EY https://www.ey.com/en_gl/technical/tax-alerts/saudi-arabia-unveils-new-tax-rules-for-the-regional-headquarters ; PwC https://taxsummaries.pwc.com/saudi-arabia/corporate/tax-credits-and-incentives
+- **Special Economic Zones** — four SEZs (KAEC, Ras Al-Khair, Jazan, Cloud Computing) under **ECZA**; **5% CIT up to 20 years**, **0% WHT on profit repatriation**, **0% customs on capital inputs**, and **0% VAT on intra-zone / inter-SEZ / mainland-into-zone** activity (some imports out-of-scope), Zakat relief; entities must be a Saudi LLC sited in the zone. Implementing tax/VAT regulations in force 2026. Sources: KPMG https://kpmg.com/sa/en/insights/tax-insights/saudi-arabia-publishes-regulatory-frameworks-governing-four-of-its-special-economic-zones.html ; Aurifer https://aurifer.tax/ ; ECZA context via Grant Thornton https://www.grantthornton.sa/en/insights/articles-and-publications/special_economic_zones_new_regulatory_frameworks_issued/
+- **Caveats:** tool-by-tier/persona rows are **[pattern]** grounded in Appendices A/B (verified KSA adoption) + standard finance/GTM org structure — not per-company assertions except the verified examples (Aramco/SATORP = SAP; Zahid = Kyriba). **Nitaqat** band specifics and conglomerate ERP choices are referenced generically on purpose (band rules were revamped; per-group ERP not individually verified) — confirm before relying. SEZ/RHQ tax treatment is **entity- and activity-specific** → route through a KSA tax advisor before encoding tax branches.
 
 ---
 
