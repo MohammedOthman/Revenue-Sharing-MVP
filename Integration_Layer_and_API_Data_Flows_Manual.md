@@ -19,6 +19,7 @@ This manual is deliberately layered so it doubles as a learning path and a build
 - **Part III — The Integration Catalogue** (§7–§12): every connectable system, organised by financial function and by Saudi vs global, with mechanics, direction, priority, and plain rationale.
 - **Part IV — Saudi Compliance & Money Rails** (§13–§16): ZATCA e-invoicing, VAT/WHT, payments & open banking, KYB & identity — the rails that make Saudi finance data legal and movable.
 - **Part V — End-to-End Data-Flow Walkthroughs** (§17): the actual API/data flows, step by step.
+- **Part Vb — Integration Engineering Reference (build-grade)** (§E1–§E12): the canonical data model, source→canonical field maps, sequence diagrams, verified webhook/CDC event semantics, idempotency/reconciliation/error/identity-resolution algorithms, security-control-to-step mapping, the connector build spec, the OS's own API surface, and NFR budgets. This is the "how to build it" layer.
 - **Part VI — Market Benchmark & Local B2B Behaviour** (§18): what KSA corporates run by segment, how they buy and integrate, and a benchmark of the adjacent tool categories the OS coexists with.
 - **Part VII — Overlooked Patterns & Levers, Phasing, Risks, Sources** (§19–§23).
 - **Appendix A — Saudi Local Product Landscape (Verified Catalogue)** (§A1–§A17): ~115 source-verified local products across every function (accounting, e-invoicing, ERP, POS, payments, wallets/e-money, spend, lending/BNPL, identity/KYB/AML, HR/payroll, credit data, banks, government rails), with a strict **Verified-vs-Excluded** split so nothing speculative is presented as fact.
@@ -432,6 +433,270 @@ This is the execution core of revenue-sharing. (Saudi rails detailed in §15; he
 - Governed partner-revenue tables export to **Snowflake/BigQuery** (+ data dictionary) for Power BI/Tableau.
 - **Reverse-ETL** writes computed commission/eligibility/statement status back to **CRM** (controlled fields only) and to billing where useful.
 **Plain rationale:** be the system of truth *and* let the truth flow into the buyer's stack — portability is what enterprise trust is made of.
+
+---
+
+# PART Vb — INTEGRATION ENGINEERING REFERENCE (BUILD-GRADE)
+
+> Purpose: turn Parts II–V from *what* and *why* into *how to build it*. This part is the engineering contract for the integration layer — the canonical data model, the source→canonical field maps, the actual call/event sequences, the verified webhook/CDC semantics, and the idempotency, reconciliation, error, identity-resolution, and security mechanics that make partner money correct.
+>
+> **Fact discipline (per "no mistakes / no hallucination"):** external vendor specifics below (event names, ZATCA artifacts, Stripe primitives) are only those verified in §13/§A5 and re-confirmed against vendor docs. Anything that is *our design* (the canonical model, the OS's own API surface, NFR budgets) is labelled **[design]** — it is a recommended contract, not a claim about an external system. Exact field casing for third-party schemas is marked "confirm against live schema" where not certain.
+
+## E1. The Canonical Data Model (CDM) — the layer's internal contract `[design]`
+
+Every connector maps its source into one normalized model; every consumer (rules engine, payout, dashboards, warehouse) reads from the CDM, never from a raw source. This decoupling is what lets you add a 30th accounting system without touching the rules engine.
+
+**Core entities** (system-of-record per §4; "OS-owned" = the OS is the system of record):
+
+| CDM entity | Purpose | Fed by (source) | OS-owned? |
+|---|---|---|---|
+| `Partner` / `PartnerLegalEntity` | Operating + legal identity of a partner | Wathq, KYB vendor, portal | Partner: yes; legal facts: Wathq |
+| `BankAccount` | Partner payout destination | Portal + AIS + IBAN validator | OS (verified flag from AIS) |
+| `Agreement` / `AgreementRule` | Commercial terms as executable rules | CLM/e-sign + manual | OS |
+| `CustomerAccount` | The end customer | CRM | CRM |
+| `Opportunity` | The deal | CRM | CRM |
+| `PartnerRevenueClaim` | The atomic unit (PDR §8.2) | Portal/CRM/marketplace | **OS** |
+| `AttributionDecision` | Credit decision + evidence | OS workflow | **OS** |
+| `ProtectionWindow` | Partner rights window | OS engine | **OS** |
+| `RevenueEvent` | Proof revenue materialised | Billing, ERP/AR | Billing/ERP |
+| `Invoice` (+ ZATCA fields) | Statutory invoice | ERP/accounting + ZATCA | ERP; cleared-XML = ZATCA |
+| `Payment` | Collection / bank credit | Billing/PSP, AIS | source |
+| `PayoutEligibility` | Computed entitlement | OS engine | **OS** |
+| `WHTRecord` | Withholding at payout | OS engine + ERP | **OS** |
+| `Payout` | Disbursement to partner | PSP/PIS/bank | source (status), OS (intent) |
+| `Dispute` | Conflict + resolution | Portal/support | **OS** |
+| `EvidenceItem` | Provenance-scored evidence | All | **OS** |
+| `AuditEvent` | Immutable change log | All | **OS** |
+| `IntegrationConnection` / `SyncCheckpoint` | Connector state + cursors | OS platform | **OS** |
+
+**Two rules every CDM record obeys `[design]`:**
+1. **External-ID map, not overwrite.** Each record carries `external_ids: [{system, external_id, external_version}]`. Identity across systems is resolved (E8), never assumed by name.
+2. **Sync metadata on every row:** `source_system`, `source_id`, `source_version`, `ingested_at`, `last_synced_at`, `payload_checksum`, `confidence (0–1)`. This is what makes reconciliation (E6) and audit (§11.4) possible.
+
+**Worked field detail for the four money-critical entities `[design]`:**
+
+`RevenueEvent` — `id` · `claim_id?` · `customer_ref` · `opportunity_ref?` · `invoice_ref?` · `type {invoiced|collected|recognized|refunded|credit_note|chargeback}` · `gross_amount` · `currency` · `fx_rate?` · `event_time` · `source_system` · `source_id` · `confidence`.
+
+`Invoice` — `id` · `direction {AR_customer|AP_partner}` · `number` · `issue_date` · `net` · `vat_amount (15%)` · `total` · `buyer_vat_id` · `seller_vat_id` · **ZATCA block:** `zatca_uuid` · `zatca_invoice_hash` · `pih (previous-invoice-hash)` · `icv (counter)` · `clearance_status {cleared|reported|rejected}` · `cleared_xml_ref` · `qr_tlv`.
+
+`PayoutEligibility` — `id` · `claim_id` · `agreement_rule_id` · `gross_payout` · `wht_rate` · `wht_amount` · `net_payout` · `currency` · `status (PDR §9.6)` · `missing_conditions[]` · `evidence_refs[]`.
+
+`Payout` — `id` · `partner_id` · `bank_account_id` · `eligibility_ids[]` (batchable) · `net_amount` · `currency` · `rail {PSP_split|PIS|bank_bulk|file}` · `provider_ref` · `settlement_ref (e.g. balance_transaction)` · `status {intended|submitted|settled|failed|reversed}` · `wht_record_id`.
+
+## E2. Source → Canonical field-mapping reference
+
+Concrete maps for the highest-traffic sources. Field names are the provider's documented names where verified; **"confirm against live schema"** flags casing/availability to check at build.
+
+**CRM — Salesforce `Opportunity` → `Opportunity` (+ seeds `RevenueEvent` on closed-won)**
+| Salesforce field | CDM field | Transform |
+|---|---|---|
+| `Id` | `external_ids[salesforce]` | store, don't use as PK |
+| `AccountId` | `customer_ref` | resolve via E8 |
+| `Amount` | `RevenueEvent.gross_amount` (on win) | currency from org/CurrencyIsoCode |
+| `StageName` / `IsWon` / `IsClosed` | `Opportunity.stage` / revenue status | map win → emit `RevenueEvent{type:invoiced?}` only after billing proof |
+| `CloseDate` | `expected_close` / `event_time` | |
+| `OwnerId` | sales owner | |
+| `LeadSource` / custom partner fields | claim seed / influence signal | feeds attribution |
+
+**Billing — Stripe `invoice.paid` event → `RevenueEvent{collected}` + `Payment`**
+| Stripe field | CDM field | Note |
+|---|---|---|
+| `data.object.id` (Invoice) | `Invoice.external_ids[stripe]` | |
+| `data.object.customer` | `customer_ref` | resolve E8 |
+| `data.object.amount_paid` / `currency` | `Payment.amount` / `currency` | minor units → decimal |
+| `status_transitions.paid_at` | `RevenueEvent.event_time` | |
+| `charge` / `payment_intent` | `Payment.provider_ref` | |
+| (later) `charge.refunded` / `charge.dispute.created` | `RevenueEvent{refunded|chargeback}` | triggers clawback (E6) |
+
+**Accounting AR invoice (NetSuite `invoice` / Wafeq invoice) → `Invoice{AR_customer}`**
+| Source | CDM | Note |
+|---|---|---|
+| invoice id/number | `number` + external id | |
+| `tranDate` / issue date | `issue_date` | |
+| line tax / VAT line | `vat_amount` | must be 15% line |
+| total / amount | `total` / `net` | |
+| customer | `customer_ref` | |
+
+**ZATCA clearance response → `Invoice` ZATCA block** (the canonical payout evidence, §13)
+| ZATCA artifact | CDM field | Note |
+|---|---|---|
+| cleared signed XML | `cleared_xml_ref` | store immutably |
+| invoice UUID | `zatca_uuid` | |
+| invoice hash | `zatca_invoice_hash` | |
+| previous-invoice-hash | `pih` | unbroken chain |
+| invoice counter value | `icv` | monotonic |
+| clearance status | `clearance_status` | standard=cleared; simplified=reported≤24h |
+
+**KYB — Wathq Commercial Registration → `PartnerLegalEntity`**
+| Wathq field | CDM | Note |
+|---|---|---|
+| CR number | `cr_number` (natural key) | identity anchor |
+| business/trade name | `legal_name` | Arabic + English |
+| status + date | `cr_status` | gate payout if not active |
+| capital / activities | `capital` / `activities[]` | risk scoring |
+| parties (owners/managers) | `signatories[]` | match portal signatory; UBO → screening |
+
+**Bank AIS transaction (SAMA/OBIE-style) → `Payment` / reconciliation**
+| AIS field (confirm against live schema) | CDM | Note |
+|---|---|---|
+| `TransactionId` | `external_id` | |
+| `Amount` + `CreditDebitIndicator` | `amount` + sign | credit = collection; debit = our payout |
+| `BookingDateTime` | `event_time` | |
+| `TransactionReference` | match key | tie to `Payout.provider_ref` |
+
+## E3. Critical-flow sequence diagrams
+
+**Flow A — Revenue proof** (narrative §17.2). Note the consistency tiers in the margin.
+```mermaid
+sequenceDiagram
+  participant CRM as Salesforce (CDC)
+  participant BILL as Billing (webhook)
+  participant ZATCA as ZATCA Fatoora
+  participant ERP as ERP/AR
+  participant OS as Partner Revenue OS
+  CRM-->>OS: ChangeEvent Opportunity closed-won (Replay ID)
+  OS->>OS: update claim.revenue_status (no money yet)
+  BILL-->>OS: invoice.paid (at-least-once)
+  OS->>OS: dedup(event.id); create RevenueEvent{collected}
+  OS->>ZATCA: reference cleared invoice (uuid, hash, PIH)
+  OS->>ERP: match AR invoice + GL posting (poll/batch)
+  OS->>OS: claim -> revenue-validated; evidence stored
+  Note over OS: refund/credit-note later -> RevenueEvent{refunded} -> clawback (E6)
+```
+
+**Flow B — Payout with WHT, split & settlement** (narrative §17.3)
+```mermaid
+sequenceDiagram
+  participant OS as Partner Revenue OS
+  participant TAX as WHT engine
+  participant ZATCA as ZATCA
+  participant PSP as PSP split / PIS / ANB bulk
+  participant AIS as Bank AIS
+  OS->>OS: eligibility = rule(gross) ; attribution+protection+revenue OK
+  OS->>TAX: if non-resident -> withhold (5/15/20%); net = gross - wht
+  OS->>ZATCA: clear partner commission invoice -> cleared XML
+  OS->>PSP: disburse net to validated IBAN (idempotency key)
+  PSP-->>OS: settlement_ref (e.g. balance_transaction) ; status
+  OS->>AIS: reconcile payout debit (E6)
+  Note over OS,PSP: refund != auto-reverse transfer — must reverse/net later (E6)
+```
+
+**Flow C — KYB onboarding gate** (narrative §17.1): portal submit → Wathq (CR+owners) → National Address → IBAN MOD-97 (+AIS ownership) → FOCAL/Sumsub screen entity+UBOs → VAT check → `payout_ready` only if all pass; any fail → review queue.
+
+**Flow D — Reconciliation sweep** (E6): scheduler → per source/window fetch keys+sums → diff vs CDM → classify {missing, extra, amount_mismatch, stale} → exception queue → finance task.
+
+## E4. Webhook & change-data event reference (verified semantics)
+
+| Source | Mechanism | Key events / tokens | Delivery | Dedup / ordering key | Replay |
+|---|---|---|---|---|---|
+| **Stripe** | Webhooks | `invoice.paid`, `invoice.payment_failed`, `charge.refunded`, `charge.dispute.created`; transfer reversals; `balance_transaction` = recon key | at-least-once | `event.id` | events retrievable ~30 days |
+| **Chargebee** | Webhooks | event types; `resource_version` for ordering | at-least-once (**duplicates possible**) | `id` + `resource_version` | events API; retry ~2 days |
+| **Zuora** | Callouts | event-driven; OAuth2 or HMAC; ~25s timeout | at-least-once | event id | configurable |
+| **Salesforce** | **CDC + Pub/Sub** | ChangeEvents; **Replay ID**; Platform Events; Outbound Messages (SOAP) | at-least-once | Replay ID | **~72h retention** → reconcile beyond |
+| **HubSpot** | Webhooks | object create/update events | at-least-once (**duplicate deliveries documented**) | objectId+propertyVersion | — |
+| **Dynamics/Dataverse** | Webhooks + change tracking | create/update/delete; delta tokens | at-least-once | delta token | change-tracking cursor |
+| **ZATCA** | **Synchronous API** (not webhook) | Compliance CSID → Production CSID → Clearance/Reporting | request/response | `icv`+`pih` chain | re-submit on reject |
+| **Bank AIS / PIS** | Consent + poll (FAPI) | account/transaction reads; payment initiation status | request/response | `TransactionId` | re-poll window |
+| **PSP (PayTabs/Moyasar/Tap)** | Webhooks | payment + payout/split status (exact names — confirm per §A5) | at-least-once | provider txn id | provider-specific |
+
+**Build rule:** treat *every* row as at-least-once → dedup is mandatory on financial paths (E5).
+
+## E5. Idempotency, ordering & dedup `[design]`
+
+- **Idempotency key** on every outbound money call (`Payout`): `sha256(eligibility_ids + partner + amount + currency + rail)` — re-submitting never double-pays.
+- **Inbound dedup:** store processed `event.id` (or `id+resource_version`) in a key store with **TTL > provider retry window** (Stripe/Chargebee redeliver; HubSpot duplicates). First-write-wins.
+- **Ordering:** never trust arrival order. Order by provider token (`resource_version`, Replay ID) or `event_time`; drop an event whose version ≤ the stored version (stale update).
+- **Outbox/event-sourcing:** persist the domain event + state change in one transaction, publish after commit — no lost write-backs, no phantom payouts.
+- **Goal is exactly-once *effect*, not exactly-once *delivery*** — every handler must be safe to run twice.
+
+## E6. Reconciliation engine `[design]`
+
+The three-tier doctrine made concrete: **retries handle minutes, replay handles hours, reconciliation handles everything else.**
+
+**Money reconciliation chain (must all tie out):**
+`Invoice(AR) ⇄ RevenueEvent{collected} ⇄ Payment(bank credit via AIS)` and `PayoutEligibility ⇄ Payout ⇄ PSP settlement_ref ⇄ bank debit (AIS) ⇄ AP vendor bill (ERP)`.
+
+**Sweep algorithm (per source, per window):**
+```
+for window W, source S:
+   src = S.fetch(keys, sums, W)          # API/Bulk/file
+   cdm = CDM.fetch(S, W)
+   diff = compare(src, cdm)              # by external_id + amount(±tolerance)
+   classify -> missing | extra | amount_mismatch | stale
+   route(exception) -> finance_task ; raise if > SLA
+```
+**Tolerances:** FX rounding ±0.01 / configured bps; reject anything above tolerance.
+**Clawback rule (verified):** a billing **refund/chargeback does NOT auto-reverse a split transfer** — the engine must reduce a later payout or issue a `Payout{reversed}`; never assume the rail unwound it.
+
+## E7. Error & exception taxonomy `[design]`
+
+| Class | Examples | Policy |
+|---|---|---|
+| Transient | 5xx, timeout, network | retry exp-backoff **+ jitter**, cap, then DLQ |
+| Rate-limit | 429 | honor `Retry-After`; token-bucket per connector |
+| Auth | 401/expired token | refresh OAuth2; alert if refresh fails |
+| Validation | bad field/schema drift | quarantine row, alert; **never silent-drop** |
+| Business-rule | missing agreement, no protection | route to review queue (not an error) |
+| Data-quality | unmatched entity, low confidence | identity-resolution review (E8) |
+| Compliance-block | failed KYB, sanctions hit, IBAN invalid, WHT unknown | **hard stop** payout; finance/compliance task |
+
+DLQ is monitored and replayable in bulk; partner-facing vs internal errors are separated.
+
+## E8. Identity resolution engine `[design]`
+
+1. **Deterministic match first** on natural keys: `cr_number`, `vat_id`, validated `IBAN`, CRM `AccountId`, email domain.
+2. **Probabilistic fallback:** fuzzy name + National Address + normalized legal-form; score 0–1.
+3. **Thresholds:** ≥0.95 auto-link; 0.80–0.95 → review queue; <0.80 → new entity.
+4. **Merge/split** are first-class, audited operations (CRM duplicates are the norm — PDR §18.1).
+5. Every link writes an `external_ids` row + `confidence`; downstream consumers can filter by confidence.
+
+## E9. Security & compliance control → data-flow-step mapping
+
+| Step | PDPL / residency | ZATCA | Tax (WHT/VAT) | SAMA/NCA | Platform |
+|---|---|---|---|---|---|
+| **Ingest** | consent + lawful basis; in-Kingdom landing | — | — | FAPI/mTLS for bank APIs | signature-verify webhooks |
+| **Store** | data classification; in-Kingdom for finance data; encryption at rest | cleared-XML immutable retention | VAT/WHT records retained | NCA ECC/CCC controls | RBAC + field-level security |
+| **Process** | processor DPA; purpose limitation | hash-chain integrity (PIH/ICV) | correct VAT/WHT computation | audit trail | idempotency + outbox |
+| **Payout** | minimize PII in payloads | partner commission invoice cleared | withhold at source; remit ≤10 days month-after | licensed rail / sponsor | idempotency key; 4-eyes |
+| **Export (DWH)** | SCCs + Transfer Risk Assessment if cross-border | evidence references | — | — | data dictionary; lineage |
+
+Cross-border export of partner/IBAN/owner PII requires SDAIA SCCs + a TRA (§15); in-Kingdom hosting is the safe default (§13/§18.2).
+
+## E10. Connector build specification + decision matrix `[design]`
+
+**Every connector implements this contract:** auth (+token refresh) · sync mode (webhook/CDC/poll/file) · object set + **field map to CDM** · pagination + **incremental cursor** + **backfill** · rate-limit/backoff · dedup + ordering · error→DLQ · **health metrics** (last sync, lag, error rate, DLQ depth) · sandbox/test mode · teardown.
+
+**How to reach each system class:**
+| System class | Default reach | Why |
+|---|---|---|
+| Revenue-critical, rich events (Stripe Connect, Salesforce) | **Native connector** | need full event fidelity + write-back |
+| Accounting long tail (40+ KSA/global) | **Unified API (Codat)** | one integration, many ERPs (§12) |
+| On-prem giants (SAP ECC/S4, Oracle EBS, Tally) | **Middleware / customer SI** (BTP, OIC, MuleSoft/Boomi) | brittle direct access; security |
+| Banks (corporate) | **Bank dev portal** (Riyad Access, ANB Connect) **or** AIS aggregator (Lean/Tarabut) | payout + statement; licensing |
+| ZATCA compliance estate | **EGS / ZATCA middleware** (InvoiceQ/Complyance) as normalized read | invoice truth once, not N times |
+| No API (some POS/legacy) | **Scheduled file / SFTP** + reconciliation | only option; treat as reference |
+
+## E11. The OS's own API & webhook surface `[design]`
+
+What the OS *exposes* (so partners' and clients' systems can integrate inward):
+- **REST resources:** `/partners`, `/claims`, `/agreements`, `/revenue-events`, `/payout-eligibility`, `/payouts`, `/statements`, `/disputes`, `/evidence`, `/integration-connections`. Cursor pagination; `If-Match`/version concurrency.
+- **Idempotency:** `Idempotency-Key` header required on POST that move money/state.
+- **OS-emitted webhooks** (so customers react to us): `claim.submitted`, `claim.attributed`, `protection.expiring`, `eligibility.changed`, `payout.settled`, `dispute.opened`, `statement.ready`. At-least-once with `event.id` for dedup — we hold ourselves to the same contract we expect of others.
+- **Auth:** OAuth2 (client-credentials for system, auth-code for users) + **SCIM** provisioning + SSO (SAML/OIDC); internal vs external-partner scopes.
+- **Warehouse export contract:** governed tables + data dictionary + lineage (Snowflake/BigQuery), and reverse-ETL back to CRM/billing for computed commissions (§11, §A15).
+
+## E12. Non-functional engineering budgets `[design]`
+
+| Dimension | Target | Source |
+|---|---|---|
+| Scale | thousands of partners, **millions of events**, multi-entity/-currency | PDR §15.3 |
+| Revenue-proof latency | webhook→RevenueEvent < seconds; ERP match < batch window | §17.2 |
+| Payout integrity | zero double-pay (idempotency); WHT/VAT exact | §14 |
+| Reliability | retry+DLQ, replay, reconciliation tiers; **no silent failure** | PDR §11.2/§15.2 |
+| Observability (Integration Health Monitor) | last-sync, sync-success rate, webhook-failure count, DLQ depth, data-completeness, duplicate-account rate, CRM write-back adoption | PDR §11.2, Workflow Phase 7 |
+| Auditability | full claim/attribution/eligibility/payout history + provider updates | PDR §15.5 |
+
+**Bottom line:** the CDM (E1) + verified event semantics (E4) + idempotency/reconciliation (E5–E6) are the load-bearing trio. Get those three right and every connector in Appendices A–B becomes a thin, replaceable adapter rather than a source of money errors.
 
 ---
 
