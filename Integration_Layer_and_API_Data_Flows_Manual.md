@@ -22,6 +22,7 @@ This manual is deliberately layered so it doubles as a learning path and a build
 - **Part VI — Market Benchmark & Local B2B Behaviour** (§18): what KSA corporates run by segment, how they buy and integrate, and a benchmark of the adjacent tool categories the OS coexists with.
 - **Part VII — Overlooked Patterns & Levers, Phasing, Risks, Sources** (§19–§23).
 - **Appendix A — Saudi Local Product Landscape (Verified Catalogue)** (§A1–§A17): ~115 source-verified local products across every function (accounting, e-invoicing, ERP, POS, payments, wallets/e-money, spend, lending/BNPL, identity/KYB/AML, HR/payroll, credit data, banks, government rails), with a strict **Verified-vs-Excluded** split so nothing speculative is presented as fact.
+- **Appendix B — Back-Office & Front-Office Tool Stack** (§B1–§B20): the accounting/financial **back-office** (ERP, close/consolidation/EPM, reconciliation, AP/AR automation, treasury & bank APIs, spend, EOR/payroll, tax) and the **front-office/GTM** stack (CRM, billing, CPQ, CLM/e-sign, support, CPaaS, affiliate/marketplace) your clients and partners actually run — KSA-usage-verified where possible, with integration mechanics, mapped to the data flows. Uses a stricter **Verified-vs-[Unverified-for-KSA]** standard.
 
 It does not restate the PDR. Where the PDR (Section 12) and the Workflow doc (Part B) already define an integration, this manual goes deeper: the Saudi-specific mechanics, the data-flow detail, and the levers those documents do not name.
 
@@ -860,6 +861,160 @@ Listed by name so the gap is explicit, not silently dropped. **Do not add withou
 - **Bank developer portals** (developer.alrajhibank.com.sa, developer.anb.com.sa, developer.saib.com.sa, developer.bankalbilad.com, riyadbank.com/open-banking, alinma.com) are live but anti-bot; confirm endpoint/sandbox details directly.
 - **Split/payout capability** is asserted **only** for PayTabs, Moyasar, HyperPay, Tap, Telr (documented), plus partial for Paymob/BayanPay. Everything else marked *Unknown* must be confirmed with the vendor before design.
 - **Licence statuses** evolve quickly (e.g., open banking only became a licensed activity in Mar 2026); treat any licence note as "as of 2026-05", re-verify at build time.
+
+---
+
+# APPENDIX B — BACK-OFFICE & FRONT-OFFICE TOOL STACK (the systems your clients & partners actually run)
+
+**Why this appendix exists (plain):** the integration layer's whole job is to plug into the systems your clients and partners already operate. This appendix catalogues those systems by the **function** the OS connects to — split into the **finance back-office** (where revenue is booked, reconciled, and paid) and the **front-office / go-to-market** stack (where partner influence, deals, contracts, and customer relationships live). It deliberately centres on **accounting and financial** tooling (per the product's focus) rather than industry-vertical platforms.
+
+**Verification rule (stricter than Appendix A):** "**Used in KSA — Verified**" requires real KSA evidence (a named Saudi customer, an in-Kingdom cloud region/data centre, or a regulatory mandate). Tools that are real and globally documented but for which **no KSA-specific adoption evidence** was found are demoted to **[Unverified for KSA]** — listed by name, never asserted. Integration mechanics are stated **only where vendor docs confirm them**; otherwise "Unknown". Items already detailed in Appendix A are cross-referenced, not repeated.
+
+**One correction worth surfacing up front:** **Stripe is not available to onshore KSA merchants** — KSA businesses use it only via a foreign/US entity (e.g., Stripe Atlas). Don't assume a local Stripe rail; for KSA acceptance/payout use the local PSPs in §A5/§10.
+
+---
+
+## PART 1 — FINANCE BACK-OFFICE (where revenue is booked, reconciled, and paid)
+
+### B1. Core ERP & accounting (the books-of-record)
+Cross-ref §A1 (local SaaS) and §A3 (ERP). KSA-usage and new entries:
+| System | KSA usage (evidence) | Integration mechanics | OS reads |
+|---|---|---|---|
+| **SAP S/4HANA + SAP Ariba** | **Verified, dominant** — Aramco migrated all ERP to S/4HANA; SATORP runs Ariba via SAP's **Riyadh data centre** | OData/SOAP APIs, SAP BTP/Integration Suite; usually via **SI/middleware** | AR invoices, AP vendor bills, GL, payments; Ariba = supplier/partner master + PO/invoice |
+| **Oracle Fusion Cloud ERP** (+ Oracle Health) | **Verified** — active KSA deployments (e.g., Alrajhi Medicine) | Fusion REST, **Oracle Integration Cloud (OIC)** | AR/AP, receipts, GL journals |
+| **Microsoft Dynamics 365 Finance / Business Central** | **Verified** — large KSA partner base; ZATCA + Arabic RTL | OData/REST; BC webhooks | AR/AP, payments, GL |
+| **Zoho Books (KSA edition)** | **Verified** — KSA data centres (Riyadh/Jeddah) | REST API + webhooks; direct Fatoora | invoices, payments, bills, journals |
+| **Qoyod / Wafeq / Mezan / Daftra / Rewaa** | **Verified, KSA-native** (see §A1) | REST APIs (Qoyod/Wafeq strong; Mezan/Rewaa = Fatoora-integration confirmed, broader API Unknown) | SME books-of-record + cleared e-invoices |
+| **New/industry ERP:** Focus X, Epicor Kinetic/Prophet 21, Infor, IFS, Sage X3/300, RIB Candy/BuildSmart (construction), Cordis (hospital), Wazen, Zyno Books, PosBytz | **Verified KSA presence** (see §A3 additions) | Mixed; Focus X states API; Sage via Greytrix/Al Ebdaa for ZATCA; most enterprise ones via SI | revenue/AP/GL per system |
+
+### B2. Financial close / consolidation / EPM
+| Tool | KSA usage | Integration | Why it matters |
+|---|---|---|---|
+| **Oracle Fusion EPM (FCCS/Hyperion)** | **Verified** — Oracle KSA EPM pages + local partners (Appspro, Azdan) | REST + **EPM Automate**, via OIC | Consolidated, validated financials + intercompany reconciliation = the truth the OS reconciles partner revenue against |
+| **Anaplan** | **Verified** — hosted for KSA via **Google Cloud** partnership | REST/transactional APIs, Anaplan Connect | Partner-revenue/payout-pool planning, forecast vs actual |
+| **OneStream** | Partial — KSA certification training only (no named customer) | REST/marketplace (not verified here) | Consolidation/close |
+| **CCH Tagetik** | Partial — ME implementation partner; no named KSA customer | Unknown | Consolidation/close |
+| **[Unverified for KSA]** | Jedox, Board, Workday Adaptive Planning, LucaNet, Prophix, Vena, Fathom, Syft Analytics | — | real tools, KSA usage unconfirmed |
+
+### B3. Account reconciliation / close automation
+| Tool | KSA usage | Integration | Why it matters |
+|---|---|---|---|
+| **BlackLine** | **Verified, strong** — expanded to KSA with a **locally hosted Google Cloud region** for data residency; SAP/EY/Deloitte partners | REST APIs/connectors, prebuilt SAP/ERP | The reconciliation engine: matches bank/ERP transactions to validate revenue and reconcile partner balances before payout |
+| **FloQast** | Not confirmed KSA | **API documented** (developer platform) | Close/reconciliation control layer |
+| **[Unverified for KSA]** | Numeric, Ledge, ReconArt, AutoRek, Trintech | — | KSA usage unconfirmed |
+
+### B4. AP automation / procure-to-pay / e-procurement
+| Tool | KSA usage | Integration | Why it matters |
+|---|---|---|---|
+| **SAP Ariba** | **Verified** — Aramco e-Marketplace, SATORP | APIs + Cloud Integration Gateway; via SAP middleware | Supplier/partner master + PO/invoice validation + payables backbone for payouts |
+| **Etimad** (MoF) | **Verified, mandatory for gov** | **Developer portal** (apiportal.etimad.sa); Contract Data Inquiry API | Authoritative contract value, claims & **disbursement status** for partners doing government business |
+| **Zoho Procurement / Zoho Expense** | **Verified** (Zoho KSA) | Zoho REST APIs | source-to-pay, AP automation, expense |
+| **Qashio** | **Verified** — launched KSA with **Alinma Bank** (invested Sept 2025) | Platform/integrations | spend + AP automation |
+| **Mala** | **Verified** — Saudi B2B **"Procure-Now, Pay-Later"** (launched KSA Q4 2024) | Unknown | procurement financing for partners |
+| **Lawazem / BRKZ** | **Verified** — Saudi B2B procurement marketplaces (BRKZ = construction materials) | Unknown | supplier procurement + payout flows |
+| **[Unverified for KSA]** | Coupa, Tipalti, Stampli, Medius, Basware, Yokoy, Kofax, Esker | documented globally | KSA usage unconfirmed |
+
+### B5. AR automation / collections / cash application
+| Tool | KSA usage | Integration | Why it matters |
+|---|---|---|---|
+| **HighRadius** | **Verified** (KSA among customer geographies per 6sense telemetry — directional) | ERP integration + APIs; bank formats (MT940/CAMT/BAI2) | **Directly central:** auto cash-application matches incoming payments to invoices (revenue validation) and reconciles AR — the exact mechanics of partner-payment reconciliation |
+| **[Unverified for KSA]** | Chaser, Upflow, Gaviti, Esker AR | — | KSA usage unconfirmed |
+
+### B6. Treasury & cash management / bank connectivity (the payout + reconciliation rail)
+| Tool | KSA usage | Integration | Why it matters |
+|---|---|---|---|
+| **Kyriba** | **Verified, strong** — Zahid Group/Zahid Tractor; Saudi German Health | bank + ERP connectivity (10,000+ banks), APIs, bank formats | executes/reconciles outbound partner payments; validated cash positions |
+| **SAMA Open Banking** | **Verified, regulatory** — AIS + **PIS (Sept 2024)** + CAF; Open Banking Lab | FAPI-secured standardized APIs (authorized TPPs only) | sanctioned route to read account/transaction data (reconciliation) and **initiate partner payments** across KSA banks |
+| **Riyad Bank — "Riyad Access"** | **Verified** | corporate APIs + **API sandbox** | statement retrieval + payment initiation |
+| **ANB — "ANB Connect"** | **Verified** | **developer portal** (developer.anb.com.sa) incl. **SADAD** + bulk-payment APIs | strongest documented bank-direct **payout** path |
+| **Al Rajhi — "alrajhi business"/eCorp** | **Verified** (largest KSA bank) | **ARB developer portal** (open-banking + payment-gateway APIs) | statements + payments |
+| **SNB — "eCorp / AlAhli eCorp"** | **Verified** (largest by assets) | open-banking APIs (host-to-host specifics Unknown) | corporate payments/statements |
+| **SAB — "SAB Connect (B2B)" / HSBCnet** | **Verified** (top-3) | host-to-host / file-based B2B channel | file-based payment & statement exchange |
+| **SADAD** | **Verified, national EBPP** (SAMA) | via bank channels; ANB exposes SADAD APIs | authoritative payment-status source for bill/collection-type revenue |
+| **[Unverified for KSA]** | TIS, GTreasury (named KSA customer not found); SWIFT/virtual accounts = generic rails | — | pattern real, named KSA deployment unconfirmed |
+
+### B7. Spend management / corporate cards
+Cross-ref §A7. KSA-verified: **SiFi** (SAMA EMI affiliate), **Moola**, **Pemo** (via neoleap), **Qashio** (via Alinma), **DarbPay** (fleet), **Pluto** ([verify] KSA licence). **Why:** cost-to-serve / Partner P&L inputs.
+
+### B8. EOR / payroll / WPS
+Cross-ref §A10. KSA-local: **Jisr, Bayzat, Palm HR, ZenHR** (+ **Mudad** WPS rail). Global EOR serving KSA (**Verified**): **Deel** (API), **Mercans, Multiplier, Remofirst, Rippling** (API), **Skuad, Remote, Papaya Global, Safeguard Global, NNRoad, Horizons, Tarmack**. **Why:** partner-as-employer context + payout-vs-wages separation (keep partner commissions off WPS — §15).
+
+### B9. Tax / zakat / e-invoicing middleware
+Cross-ref §A2. KSA-verified additions: **ZATCA Fatoora** (sandbox→production), **Greytrix ZATCA for Sage**, **Al Ebdaa** (Sage 300), **Avalara** (VAT/e-invoicing content + APIs), **AvTax connector** (makes QuickBooks/Xero/Loyverse ZATCA-compliant). **Why:** the cleared invoice is the canonical revenue/payout evidence (§13).
+
+---
+
+## PART 2 — FRONT-OFFICE / GO-TO-MARKET (where partner influence, deals & contracts live)
+
+### B10. CRM (KSA-verified)
+| CRM | KSA evidence | Integration mechanics (documented) |
+|---|---|---|
+| **Salesforce** | **Verified, strong** — in-country launch + **Hyperforce data residency on AWS (Nov 2025)**, $500M investment; customers (Aramco Sales Cloud, Umrahme); big partner base | REST/SOAP/Bulk; **Change Data Capture**, **Platform Events**, Outbound Messages; AppExchange managed package |
+| **Microsoft Dynamics 365 Sales** | **Verified** — large KSA Gold-partner base; ZATCA + Arabic | Dataverse **Web API (OData)**; **webhooks** + **change tracking**; Azure Service Bus |
+| **Zoho CRM** | **Verified** — KSA data centres (Riyadh/Jeddah, PDPL residency) | REST API + webhooks |
+| **HubSpot** | **Verified** — KSA partners; auto ZATCA-aligned invoices | CRM API + **Webhooks API** (deal/line-item events) |
+| **Pipedrive / Odoo CRM** | Partial/Verified-presence (regional resellers / KSA partner directory) | REST + webhooks (Pipedrive); XML-RPC/JSON-RPC (Odoo) |
+| **[Unverified for KSA]** | Creatio, SugarCRM, Zoho Bigin, Bitrix24 | — |
+
+**Why it matters:** CRM is where partner-sourced/-influenced opportunities live; CDC/webhooks/change-tracking are the canonical hooks for reading deal & stage changes into the attribution engine, and selective write-back returns claim/eligibility status (§7, §17.2).
+
+### B11. Billing / subscription / revenue
+- **KSA-local (Verified):** Wafeq, Qoyod (books-of-record + cleared e-invoices — §A1).
+- **Global (documented mechanics; [Unverified for KSA] adoption):** **Chargebee** (webhooks with `resource_version` ordering, 2-day retry), **Zuora** (callouts w/ OAuth2/HMAC, 25s timeout), Recurly, Paddle (MoR), Maxio, Chargify.
+- **Stripe Billing:** **not onshore in KSA** (foreign-entity only) — see top-of-appendix note. **Why:** these emit the `invoice.paid`/refund/dispute events that prove revenue materialised and trigger clawback (§9, §17.2).
+
+### B12. CPQ / quoting / proposals
+**All [Unverified for KSA]** (real, documented, KSA adoption unconfirmed): Salesforce CPQ, DealHub, Oracle CPQ, **PandaDoc CPQ** (Salesforce AppExchange — quote + e-sign), Qwilr, Proposify. **Why:** quote lines carry the SKU/price/term/discount that commission rules depend on (§11).
+
+### B13. CLM / e-signature (agreement execution)
+| Tool | KSA evidence | Note |
+|---|---|---|
+| **emdha** | **Verified, KSA-local** — first **CST-licensed** Trust Service Provider, DGA-regulated, WebTrust, Saudi National Root CA; Cloud Signature Consortium member | qualified KSA signatures; API via CSC (specifics [verify], 403) |
+| **Signit** | **Verified, KSA-local** — DGA-licensed **Comprehensive Digital Trust Service Provider**; "only CLM built in KSA"; 700+ orgs | e-sign + contract management; API [verify] |
+| **DocuSign / Adobe Acrobat Sign / Zoho Sign** | **Verified via KSA legality pages**; Zoho Sign is **Nafath-integrated** | global; **qualified** signatures may require an accredited KSA TSP (emdha/Signit) |
+| **[Unverified for KSA]** | Ironclad, ContractBook | — |
+
+**Why it matters:** the signed-agreement event is the clean "deal is real / agreement active" trigger for commission eligibility (§11, §17.2); a locally-recognised qualified signature strengthens the legal basis.
+
+### B14. Customer support / success
+- **Verified KSA:** **Freshworks** (Freshdesk — Al Tayyar Travel; UAE AWS DC for MEA), **ServiceNow** ($500M KSA investment, 2 in-country data centres, Riyadh MENA HQ).
+- **[Unverified for KSA]:** Zendesk, Intercom, Jira Service Management, Gainsight, Totango, ChurnZero. **Why:** post-sale partner contribution (implementation/adoption) + dispute/exception workflows + support cost into Partner P&L (§11).
+
+### B15. Marketing / campaign & CPaaS (partner-influence signals + notification rail)
+Cross-ref the fuller CPaaS list. **KSA-local CPaaS (Verified):** **Unifonic** (Riyadh HQ; OTP/2FA; clients IKEA/Aramex/Careem), **Taqnyat** (REST SMS/OTP/WhatsApp), **Msegat, OurSMS, 4Jawaly, Deewan, Mottasl, Yamamah**. **KSA-operating BSPs:** **Infobip** (in-Kingdom data centre, 2024), **Cequens, Route Mobile, Sinch, Twilio, Vonage**. **Engagement:** MoEngage, CleverTap, WebEngage. **Marketing:** HubSpot Marketing (Verified).
+**KSA SMS compliance to bake into the notification layer:** mandatory **CST/CITC alphanumeric Sender-ID registration** (~2 weeks), **`-AD` suffix** for promotional, **opt-out (STOP)** required, **9am–9pm** promo window, URL/content filtering. **Why:** this is how partner statements/approval alerts/portal-OTP are delivered (§11 Communication, §17).
+
+### B16. Affiliate / marketplace commission sources (front-office attribution inputs)
+A revenue-sharing platform should treat these as *partner-commission data sources*, not just commerce:
+- **Salla Affiliate API** (per-affiliate codes/links + configurable commission); **Noon** (3P seller payouts, 5–27%, weekly) and **Amazon.sa** (SP-API, referral fees) — marketplace 3P payouts; **ArabClicks / DCMnetwork / Boostiny** — KSA/MENA affiliate networks (CPA/CPS); **Resal / YouGotaGift / PointCheckout** — loyalty/gift-card APIs (redemption/commission). **Why:** these contain partner-attributable commission events that the claim ledger can ingest (§7 marketplace/marketing rows, §17.2).
+
+---
+
+## PART 3 — USING THIS STACK
+
+### B17. Mapping to the OS data flows (plain)
+- **Back-office feeds revenue-proof + reconciliation + payout:** ERP/accounting (B1) + e-invoicing (B9) prove revenue; close/recon (B2/B3) and treasury/bank APIs (B6) reconcile; AP (B4) + bank payout APIs (B6, e.g., **ANB Connect bulk payments**) + spend (B7) execute and account for payouts; AR/cash-app (B5) confirms collection.
+- **Front-office feeds attribution + agreement + notification:** CRM (B10) + affiliate/marketplace (B16) supply partner-influence/deal signals; billing (B11) proves materialised revenue; CPQ (B12) supplies the rate basis; CLM/e-sign (B13) activates the agreement rule; support/CS (B14) supplies post-sale contribution + dispute workflow; CPaaS (B15) delivers statements/approvals/OTP.
+- This maps directly onto Parts II–V (system-of-record map §4, financial-function coverage §6, end-to-end flows §17).
+
+### B18. Integration-mechanics cheat-sheet (documented)
+- **Salesforce:** CDC + Pub/Sub (72h replay), Platform Events, Outbound Messages, Bulk for backfill.
+- **Dynamics/Dataverse:** Web API (OData), webhooks + change-tracking delta tokens, Azure Service Bus fan-out.
+- **HubSpot:** Webhooks API (dedupe — duplicate deliveries).
+- **Chargebee:** webhooks with `resource_version` ordering, 2-day retry (dedupe).
+- **Zuora:** callouts (OAuth2/HMAC, 25s timeout).
+- **Banks:** corporate APIs/sandboxes (Riyad Access, ANB Connect, Al Rajhi, SNB, SAB) + **host-to-host + MT940/CAMT/BAI2** files; SAMA Open Banking FAPI for authorized TPPs.
+- **EPM/ERP enterprise:** Oracle EPM REST + EPM Automate via **OIC**; SAP via **BTP/Integration Suite**; heterogeneous estates via **MuleSoft/Boomi** (pattern real; named KSA finance deployment unverified).
+- **ZATCA:** public **sandbox** → production clearance/reporting (§13).
+
+### B19. Deliberately EXCLUDED / Unverified-for-KSA (consolidated)
+Real products, but **no KSA-specific adoption evidence** found (do not assert KSA usage): **EPM/FP&A** — Jedox, Board, Workday Adaptive, LucaNet, Prophix, Vena, Fathom, Syft; **recon** — Numeric, Ledge, ReconArt, AutoRek, Trintech; **AP** — Coupa, Tipalti, Stampli, Medius, Basware, Yokoy, Kofax, Esker; **AR** — Chaser, Upflow, Gaviti; **treasury** — TIS, GTreasury; **CRM** — Creatio, SugarCRM, Bigin, Bitrix24; **billing** — Chargebee, Zuora, Recurly, Paddle, Maxio (KSA adoption unconfirmed); **CPQ** — Salesforce CPQ, DealHub, Oracle CPQ, PandaDoc, Qwilr, Proposify; **CLM** — Ironclad, ContractBook; **support/CS** — Zendesk, Intercom, Jira SM, Gainsight, Totango, ChurnZero; **PRM/sales-engagement** — PartnerStack, Impartner, Allbound, Crossbeam, Reveal, Outreach, Salesloft; **middleware (as named KSA finance deployments)** — MuleSoft, Boomi, Oracle Integration Cloud, Informatica. **Stripe Billing** — not onshore KSA. Names that couldn't be confirmed at all: Defterly, Anbar, Motakamel, Mtaajer, Numu (≠ accounting), Priority/Syspro (KSA), Dext (KSA-ZATCA).
+
+### B20. Caveats
+- **KSA-usage standard:** "Verified" = named KSA customer, in-Kingdom region, or regulatory mandate; everything weaker is flagged or excluded.
+- Several bank/vendor pages (Riyad Access, ANB, Al Rajhi, Kyriba, BlackLine, DocuSign/Adobe legality, emdha/Signit) returned **HTTP 403** to automated fetch; facts rest on official-domain search extracts + corroboration — confirm specifics directly at build time.
+- **emdha/Signit API mechanics** and the **basic-vs-qualified e-signature** distinction under KSA law (accredited-TSP requirement) are flagged, not asserted.
+- **Stripe-not-onshore** and the **ANB-Connect bulk-payment** path are the two findings most likely to change a build decision — verify both against live docs.
 
 ---
 
