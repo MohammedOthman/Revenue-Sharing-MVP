@@ -1,11 +1,13 @@
 # Partner Revenue OS — The Reverse-Engineered Path
 ## PRM Wedge → Revenue-Sharing Moat → Partnership Orchestration
-### A CPO's decision-grade strategy report + a practical PM/GTM skills playbook
+### A CPO's decision-grade strategy report + a practical PM/GTM skills playbook (verified edition)
 
-**Document type:** Strategy memo + skills curriculum (deep-research synthesis)
+**Document type:** Strategy memo + skills curriculum (deep-research synthesis, fact-checked)
 **Prepared for:** Founder/CPO, Partner Revenue OS (pre-seed, pre-MVP)
-**Method:** Read of the full internal corpus (PDR v5, GTM Operating Manual, Venture-Scale Narrative, finance/onboarding/integration manuals) + 6 parallel external research tracks (≈60 web searches across PRM market, ecosystem-led growth, revenue-sharing/marketplace economics, wedge-to-platform strategy, GCC/Saudi + ZATCA, and category/GTM craft). Every external number is attributed; confidence and source-bias are flagged.
-**Evidence-quality caveat (read once, applies throughout):** many primary sites (analyst PDFs, vendor pages, .gov.sa domains) blocked automated fetching, so several figures were captured from search-engine extracts of those same primary pages and cross-checked against independent outlets. Vendor-published statistics (Crossbeam, Tackle, PartnerStack, Magentrix) are *interested* sources and are rated Med/Low unless an independent body (Gartner, Forrester, Canalys, HubSpot, GASTAT, ZATCA, PwC) corroborates. Before any figure goes into an investor/board deck, a human should re-open the starred primary source.
+**Method:** Full read of the internal corpus (PDR v5, GTM Operating Manual, Venture-Scale Narrative, finance/onboarding/integration manuals) + two rounds of external research: a gathering pass and a dedicated **verification pass** in which every load-bearing claim was tested for corroboration and actively refuted.
+
+> ### Evidence standard for this document (read once — it governs every number below)
+> In this environment, automated page-fetching was **blocked (HTTP 403) on essentially every primary domain** — SEC EDGAR, Gartner, Forrester, GASTAT, ZATCA, PwC, a16z, vendor sites. That means **no figure here was certified by opening the primary page**; each was instead **corroborated across ≥2 independent search results** (or rejected). I therefore label confidence honestly and, critically, I have **dropped claims that could not be corroborated** rather than carry them with a caveat. Where a figure is load-bearing, the primary URL is listed so a human can certify it in a browser before it goes into an investor/board deck. Vendor-published statistics (Crossbeam, Tackle, PartnerStack, Magentrix, Salesforce) are *interested* sources, rated Med/Low unless an independent body (Gartner, Forrester, Canalys/Omdia, HubSpot, MAGNiTT, MCIT/GASTAT, ZATCA, PwC, or an SEC filing) corroborates.
 
 ---
 
@@ -13,420 +15,356 @@
 
 You asked: *what if we reverse-engineer the product so it (1) starts as a PRM, (2) grows into managing revenue-sharing between two companies — the moat, (3) becomes the orchestration platform for building partnerships from idea to activation?*
 
-**The verdict in one breath:** Your *sequencing instinct is right* — start concrete and adoptable, make money-movement the moat, end as the network. But the *literal entry "a PRM" is a trap.* Entering as a generic PRM drops you into the single most commoditized, worst-adoption, lowest-differentiation layer of this market — exactly the layer the evidence shows value is *leaving*. The fix is small but decisive: **enter with a tool that the buyer experiences as an easy PRM, but whose core object and data model are the Revenue Claim and the cross-company link — the Trojan horse for the revenue-sharing system of record.** Keep your three phases. Change what Phase 1 *is* underneath.
+**The verdict in one breath:** Your *sequencing instinct is right* — start concrete and adoptable, make money-movement the moat, end as the network. But the *literal entry "a PRM" is a trap.* A generic PRM is the most commoditized, hardest-to-differentiate layer of this market, with no counter-position against incumbents — and it's the layer the evidence shows value is moving *away* from. The fix is small but decisive: **enter with a tool that the buyer experiences as an easy PRM, but whose core object and data model are the Revenue Claim and the cross-company link — the Trojan horse for the revenue-sharing system of record.** Keep your three phases. Change what Phase 1 *is* underneath.
 
-The four load-bearing facts behind that verdict:
+The four load-bearing facts behind that verdict (all corroborated across independent sources):
 
-1. **PRM is commoditized and badly adopted.** Software-only PRM TAM is ~$3–4B (not the $45–90B headline), and average PRM adoption is **17–30%** — partners are given a portal and don't log in. ([Market Research Future](https://www.marketresearchfuture.com/reports/partner-relationship-management-market-10569); [Pronto](https://www.gopronto.io/blog/the-top-5-reasons-your-prm-has-low-adoption-rates-and-how-to-solve-them); [Journeybee](https://www.journeybee.io/resources/prms-are-dead-whats-next-rethinking-partner-management))
-2. **The value is migrating up to the revenue/ecosystem layer — independently confirmed.** Gartner renamed the whole category to **PERM (Partner *and Ecosystem* Relationship Management)** in 2025, and Forrester found **67%** of B2B orgs expect indirect/partner revenue to grow **>30% YoY**. That is non-vendor validation of your Phase 2/3 — and a warning against leading with Phase 1. ([Gartner](https://www.gartner.com/en/documents/6982766); [Forrester](https://www.forrester.com/blogs/the-state-of-partner-ecosystems-2025/))
-3. **Revenue-sharing is the right moat — but the rails are already commoditized; the *settlement system-of-record* is the white space.** PartnerStack, Tipalti, Trolley, and Paddle already move cross-company money. Nobody owns the **bilateral ledger** — how two companies *define* revenue, split it, reconcile it, handle clawbacks/disputes, and produce audit-clean numbers for *both* sides' books. Own that, and embedded-finance economics (2–5× revenue per customer, à la Toast/ServiceTitan) become available. ([a16z Vertical OS](https://a16z.com/vertical-operating-systems-one-system-of-record-to-rule-them-all/); [Felicis](https://www.felicis.com/insight/financial-services-are-the-new-wedge))
-4. **"Tool → network" usually stalls unless the network is designed in on day one.** The canonical "come for the tool, stay for the network" thesis ([Chris Dixon](https://cdixon.org/2015/01/31/come-for-the-tool-stay-for-the-network/)) has a famous rebuttal: almost no great network was built by bolting a network onto a tool ([Choudary, TechCrunch](https://techcrunch.com/2016/12/01/come-for-the-tool-stay-for-the-network-reconsidered/)). So your Phase-3 orchestration network must be architected into the Phase-1 wedge (it already is — your PDR's cross-tenant partner identity, ADR-0003).
+1. **PRM is commoditized and its TAM is a definitional mirage.** Software-only estimates range from **~$0.78B (FactMR, 2024)** to **~$3.4B (Market Research Future, 2025)**; "broad" estimates that bundle services run **$45–91B (Grand View, Precedence)** — a **>100× spread**, so never quote one number. Adoption of standalone partner portals is widely described as weak (a single-analyst Canalys figure, vendor-republished, lands somewhere in the **~18–30%** range depending on the metric). ([FactMR](https://www.factmr.com/report/partner-relationship-management-software-market), [MRF](https://www.marketresearchfuture.com/reports/partner-relationship-management-market-10569), [Grand View](https://www.grandviewresearch.com/industry-analysis/partner-relationship-management-market-report))
+2. **The category's center of gravity is moving up to the ecosystem/revenue layer — confirmed by an independent analyst.** Gartner is **transitioning the category from "PRM" to "Partner *and Ecosystem* Relationship Management" (PERM)**, with a PERM-titled 2025 Market Guide (~Sep 2025). Forrester's 2025 partner-ecosystem research found **~67%** of B2B orgs expect indirect/partner revenue to grow strongly year-over-year. That is non-vendor validation of your Phase 2/3 — and a warning against leading with Phase 1. ([Gartner Peer Insights](https://www.gartner.com/reviews/market/partner-relationship-management-applications), [Forrester](https://www.forrester.com/blogs/the-state-of-partner-ecosystems-2025/))
+3. **Revenue-sharing is the right moat — but the *rails* are commoditized; the *bilateral settlement system-of-record* is the genuine white space.** PartnerStack, Tipalti, Trolley, and Tremendous are **disbursement rails**; Paddle is a **merchant-of-record checkout rail**. *None of them is a bilateral settlement system-of-record* — the shared, auditable ledger of how two specific companies define, split, reconcile, and pay shared revenue. Own *that*, and embedded-finance economics (a16z's thesis: 2–5× revenue per customer in vertical SaaS) become available. ([a16z "Fintech Scales Vertical SaaS"](https://a16z.com/fintech-scales-vertical-saas/))
+4. **"Tool → network" often stalls unless the network is designed in on day one.** The canonical "come for the tool, stay for the network" thesis ([Chris Dixon, 2015](https://cdixon.org/2015/01/31/come-for-the-tool-stay-for-the-network/)) has a well-known rebuttal — that almost no great network was built by bolting a network onto a tool ([Jon Evans, TechCrunch 2016](https://techcrunch.com/2016/12/01/come-for-the-tool-stay-for-the-network-reconsidered/)); Sangeet Choudary makes a related "interaction-first, not tool-first" argument in his platform work. So your Phase-3 network must be architected into the Phase-1 wedge — and it already is: your PDR's cross-tenant partner identity (ADR-0003).
 
-**What to actually do:** rename the phases in your head as **Capture → Settle → Orchestrate**, build the network primitive from MVP, lead the GCC wedge on compliance-native revenue handling that global incumbents structurally can't copy (ZATCA clearance + withholding tax + Sharia-aligned revenue-share), and run a founder-led, sales-led, paid-design-partner motion — not PLG. The rest of this document is the proof, the build plan, and the skills to execute it.
+**What to actually do:** rename the phases in your head as **Capture → Settle → Orchestrate**, ship the multi-company primitive from MVP, lead the GCC wedge on compliance-native revenue handling global incumbents can't copy (ZATCA clearance + withholding tax + Sharia-aligned revenue-share), and run a founder-led, sales-led, design-partner motion — not PLG. The rest is the proof, the build plan, and the skills.
 
 ---
 
 ## 1. Where the product is today (honest current-state)
 
-- **Stage:** Pre-revenue, pre-MVP, pre-seed. The repository is a *strategy corpus*, not code: PDR v5 (10 capability layers, 10 ADRs, MVP→V1→V2→V3 roadmap), a 20×-expanded GTM Operating Manual, a venture-scale narrative, plus finance/onboarding/integration manuals.
-- **Current thesis (what's written):** "Partner Revenue OS" = a *Partner Revenue Control Layer*. Wedge = the **Partner Revenue Claim ledger + attribution** ("capture first, attribute second"). Buyer = Head of Partnerships; validator = CFO. Moat = identity-resolution data network effect + finance/compliance trust. Recommended beachhead = GCC/Saudi regulated B2B.
-- **The explicit contradiction your question raises:** PDR v5 §1 literally lists "a PRM directory" under *"What it is not,"* and the GTM manual repeatedly warns operators against "drifting into generic PRM." Your proposal inverts that. So this is a genuine strategic fork, and it deserves a real answer rather than a reflexive defense of the existing doc.
-- **What's genuinely strong already and must be preserved:** the canonical-claim architecture; the separation of Contribution/Attribution/Eligibility/Payment; the append-only ledger and clawback-by-netting; the single bitemporal rule engine; **cross-tenant partner identity (ADR-0003)** — which, as you'll see, is the most important asset for the orchestration endgame; and the founders' anti-hallucination financial discipline.
+- **Stage:** Pre-revenue, pre-MVP, pre-seed. The repo is a *strategy corpus*, not code: PDR v5 (10 capability layers, 10 ADRs, MVP→V1→V2→V3 roadmap), a 20×-expanded GTM Operating Manual, a venture-scale narrative, finance/onboarding/integration manuals.
+- **Current thesis (as written):** "Partner Revenue OS" = a *Partner Revenue Control Layer*. Wedge = the **Partner Revenue Claim ledger + attribution** ("capture first, attribute second"). Buyer = Head of Partnerships; validator = CFO. Moat = identity-resolution data network effect + finance/compliance trust. Recommended beachhead = GCC/Saudi regulated B2B.
+- **The contradiction your question raises:** PDR v5 §1 lists "a PRM directory" under *"What it is not,"* and the GTM manual repeatedly warns against "drifting into generic PRM." Your proposal inverts that. This document treats it as a genuine fork and answers it on the evidence.
+- **One correction to your own corpus:** the Venture-Scale Narrative cites a "~24% median / top-quartile >40% partner-sourced revenue" figure. In verification, that statistic could **not** be traced to a real named survey (it appears to originate in a single SEO blog citing an apparently non-existent panel). **Recommend removing or re-sourcing it** in the narrative, because investors who check will find the same dead end. The defensible substitute is HubSpot × Canalys × Partnership Leaders (2022): **50% of organizations attribute 26%+ of revenue to partners** (n=664). ([HubSpot](https://www.hubspot.com/company-news/the-state-of-partner-ops-and-programs-report-2022))
+- **What's genuinely strong and must be preserved:** the canonical-claim architecture; the separation of Contribution/Attribution/Eligibility/Payment; the append-only ledger + clawback-by-netting; the single bitemporal rule engine; and **cross-tenant partner identity (ADR-0003)** — the single most valuable asset for the orchestration endgame.
 
 ---
 
 ## 2. The question, restated precisely
 
-You are proposing a **demand-pull, adoption-first re-sequencing**:
-
 | Your phase | Your words | What it really is, in market terms |
 |---|---|---|
 | **Phase 1** | "Starts as a PRM tool" | A concrete, low-friction operational tool a partner team will actually adopt |
-| **Phase 2** | "Manage revenue-sharing between two companies… our way to a full MOAT and integrated adoption/behavior" | The money-movement system of record — switching costs + embedded-finance economics |
-| **Phase 3** | "Orchestration for partnerships and revenue-sharing enablement… idea → full activation" | The multi-company network/platform — network economies, category ownership |
+| **Phase 2** | "Manage revenue-sharing between two companies… a full MOAT and integrated adoption/behavior" | The money-movement system of record — switching costs + embedded-finance economics |
+| **Phase 3** | "Orchestration for partnerships… idea → full activation" | The multi-company network/platform — network economies, category ownership |
 
-The instinct underneath is correct and sophisticated: **lead with something easy to say yes to; make the durable value the thing that moves money; end as the network everyone plugs into.** That is, almost exactly, the "come for the tool, stay for the network" playbook applied to partnerships. The research both *validates the shape* and *flags three specific ways the literal plan fails* — which Section 4 reconciles.
+The instinct is sophisticated: lead with something easy to say yes to; make the durable value the thing that moves money; end as the network. The research *validates the shape* and flags three specific ways the literal plan fails (Section 4 reconciles them).
 
 ---
 
-# PART A — THE EVIDENCE
+# PART A — THE EVIDENCE (verified)
 
-What the market actually says, organized by the decision each fact informs. (Citations inline; confidence and bias flagged.)
+Organized by the decision each fact informs. Confidence and source-bias flagged; dropped claims noted explicitly so you can see what *didn't* survive.
 
 ## A1. Is "start as a PRM" a good entry? (Mostly no — as written.)
 
-- **The PRM TAM is a definitional mirage — never quote one number.** Analyst estimates for the *same year* span ~100×: FactMR ~$776M, Market Research Future ~$3.25B (2024)→$8.25B (2035) at 5.2% CAGR, versus Grand View ~$90.2B and Precedence ~$91.3B (these bundle adjacent CRM/services). The honest **software-only** cluster is **~$3–4B growing ~14–17%**. *Confidence: High on the spread; Med on any single figure.* ([FactMR](https://www.factmr.com/report/partner-relationship-management-software-market), [MRF](https://www.marketresearchfuture.com/reports/partner-relationship-management-market-10569), [Grand View](https://www.grandviewresearch.com/industry-analysis/partner-relationship-management-market-report))
-- **PRM has a structural adoption disease you would inherit, not cure.** Average global PRM adoption ~**30%** (Pronto); one source puts industry-wide platform adoption at ~**17%** (Journeybee). Root cause is *workflow location* — a separate portal with a separate login that sits outside the rep's day. A better-looking PRM does not fix a "wrong place" problem. *Confidence: Med (both are vendor-adjacent but mutually corroborating).*
-- **The low end is price-anchored cheap (Kiflo ~$299/mo, Allbound ~$249–799/mo); the high end is incumbent-locked and services-heavy (Impartner ~$25K–$75K+).** A new PRM is squeezed between a race-to-the-bottom floor and entrenched suites with CRM gravity. ([Kiflo](https://www.kiflo.com/pricing), [Vendr/Impartner](https://www.vendr.com/marketplace/impartner-software))
-- **Counter-evidence (don't over-rotate to the bear case):** the category is *not* dead — partner-sales usage is near-universal (89%), partner-driven revenue is still rising, and the "PRM is dead" content is disproportionately published by vendors selling the replacement. The accurate read is **PRM is bifurcating and being absorbed into a bigger category, not dying.** ([PartnerStack research](https://partnerstack.com/resources/research-lab/tracking-the-growth-of-partnerships-revenue-in-the-partnerstack-ecosystem))
-- **The most important single datapoint for your decision:** Gartner *renamed* the category from "Partner Relationship Management Applications" to **"Partner and Ecosystem Relationship Management" (PERM)** in its 2025 Market Guide. An independent analyst formally renaming a category is the hardest evidence that the center of gravity is moving from "managing partners" to "orchestrating an ecosystem." *Confidence: High.* ([Gartner](https://www.gartner.com/en/documents/6982766))
+- **The PRM TAM is a definitional mirage — never quote one number.** *Software-only:* FactMR ~$0.78B (2024)→$2.95B (2034) at 14.3%; MRF ~$3.42B (2025)→$5.70B at 5.22%; Research Nester ~$3.04B (2025)→$8.25B at 10.5%. *Broad (bundles services/adjacent):* Grand View ~$90.2B (2024); Precedence ~$91.3B (2024). The honest takeaway is the **>100× spread itself**, and that the software floor is **sub-$1B to ~$3.4B**. *Confidence: High on the spread; Med on any single figure (all are analyst-firm marketing pages, not fetched).*
+- **Standalone partner portals are weakly adopted — but state this carefully.** The "partners are given a portal and don't log in" point is widely repeated; the actual number traces to a **single analyst (Canalys), vendor-republished**, and is internally inconsistent (~18% vs ~30% across the same publisher, likely different metrics: seats vs. logins vs. programs). **Dropped:** the "17%" figure (it does not hold up — likely a garbled echo). *Use the directional claim ("standalone portals are under-used"), not a hard percentage.*
+- **The low end is price-anchored cheap; the high end is incumbent-locked.** Kiflo ~$299/mo (range $149–$699); Impartner tiers ~$25K/$45K/$75K. A new PRM is squeezed between a commodity floor and entrenched suites with CRM gravity. *Confidence: High (multi-source: vendor + G2 + Vendr).* ([Kiflo](https://www.kiflo.com/pricing), [Impartner via G2](https://www.g2.com/products/impartner-prm/pricing))
+- **Counter-evidence — PRM is bifurcating, not dead.** Partner-sales usage is high (a widely-cited "89%" comes from **Salesforce's** *State of Sales*, a vendor survey, and its exact wording is ambiguous between "use partner sales" and "say partner selling is increasingly important" — treat as a vendor assertion). The "PRM is dead" content is disproportionately published by vendors selling the replacement. *The accurate read: PRM is being absorbed into a bigger category (PERM), not dying.*
+- **The single most important datapoint for your decision:** Gartner is **transitioning** "Partner Relationship Management Applications" → **"Partner and Ecosystem Relationship Management (PERM)"** (its Peer Insights page literally reads "(Transitioning to Partner and Ecosystem Relationship Management Applications)"; a PERM-titled Market Guide is dated 2025). An independent analyst moving the category boundary toward "ecosystem" is the hardest evidence the center of gravity is shifting. *Confidence: High that the transition is real; Med on the exact "rename" framing — it's a transition, not a clean one-time rename.* ([Gartner Peer Insights](https://www.gartner.com/reviews/market/partner-relationship-management-applications))
 
-## A2. Is revenue-sharing the right moat? (Yes — but not the part you might think.)
+## A2. Is revenue-sharing the right moat? (Yes — and the white space is specific.)
 
-- **Payout rails are commoditized.** PartnerStack automates partner payouts and already charges **3–15% on partner commissions** (your Phase-2 monetization mechanic *already exists in market*); generic global payout rails (Tipalti, Trolley, Tremendous) handle onboarding, tax forms, multi-currency disbursement; merchant-of-record (Paddle) takes ~**5% + $0.50** and absorbs tax/chargeback liability. *Confidence: Med–High.* ([Affonso/PartnerStack pricing](https://affonso.io/blog/partnerstack-pricing-guide), [Trolley](https://trolley.com/), [Paddle](https://www.paddle.com/resources/how-to-evaluate-a-merchant-of-record))
-- **The unowned white space is the bilateral settlement system-of-record.** The unsolved, sticky problem is the **shared, auditable ledger of how two companies define "revenue," split it, reconcile it against bank/sales data, handle clawbacks/adjustments/disputes, and produce ASC-606/IFRS-15-clean numbers for *both* sides.** The #1 cause of revenue-share disputes is precisely the *definition of revenue and deductible costs*. No incumbent owns this cross-company boundary. *Confidence: Med–High.* ([RevenueHub principal/agent](https://www.revenuehub.org/article/principalagent-considerations-gross-vs-net), [Intuit on rev-share disputes](https://www.intuit.com/enterprise/blog/financials/revenue-sharing/))
-- **Owning money flow is the prize, but earn it in stages.** Embedded fintech lifts revenue-per-customer **~2–5×** in vertical SaaS (Toast fintech ≫ software revenue; Shopify merchant solutions ~73% of revenue; ServiceTitan fintech ~25% of revenue at IPO and growing faster than the subscription core). *But this only works once you are the system of record* — a payments wrapper with no proprietary data and no switching cost is the classic thin-margin failure mode. *Confidence: Med–High on the pattern.* ([a16z Vertical OS](https://a16z.com/vertical-operating-systems-one-system-of-record-to-rule-them-all/), [Felicis](https://www.felicis.com/insight/financial-services-are-the-new-wedge), [Toast 8-K](https://www.sec.gov/Archives/edgar/data/0001650164/000165016424000069/tost-20231231xexhibit991.htm))
-- **The demand driver to anchor on is multiplying money-split events, not a headline TAM.** Cloud-marketplace software sales are forecast at **$30B (2024) → $163B (2030), ~29% CAGR** by Omdia — but a competing analyst, **Canalys, forecasts only ~$85B by 2028** off a $16B (2023) base, so disclose that "$163B" is *one firm's view*. The robust, structural fact is that **>50% of marketplace sales will flow through the channel by 2027** (Canalys), and committed-cloud-spend drawdown (Microsoft MACC / AWS EDP counts 100% of marketplace purchases toward the commit) is pushing deals into multi-party structures — every one of which is a revenue-split-and-reconcile event. *Confidence: High on the channel/drawdown mechanics; Med on the size forecasts.* ([Omdia via Computer Weekly](https://www.computerweekly.com/news/366632307/Enterprise-software-sales-through-cloud-hyperscale-marketplaces-set-to-hit-163bn-by-2030), [Canalys via Light Reading](https://www.lightreading.com/cloud/hyperscaler-cloud-marketplace-sales-to-hit-85-billion-by-2028-canalys), [Microsoft MACC](https://learn.microsoft.com/en-us/marketplace/macc-frequently-asked-questions))
+- **Payout/disbursement rails are commoditized.** PartnerStack (partner payouts; charges a base fee + a percentage on payouts — *the percentage is contested:* some reviewers cite ~3–15%, others ~15–25%, and pricing has been quote-only since 2020); Tipalti (mass payments, 196 countries); Trolley (global payouts + payee tax, 210+ countries); Tremendous (bulk payouts/rewards). *Confidence: High on what each does; Low on PartnerStack's exact %.*
+- **Merchant-of-record is a different model.** Paddle becomes the *reseller of record*, collects from end customers, remits tax, and pays the vendor net — headline ~**5% + $0.50** per transaction (effective cost rises with FX/chargebacks). This is a B2C checkout rail, **not** a bilateral settlement SoR. *Confidence: High.*
+- **The unowned white space — verified by elimination.** Across all five tools above, *none* is described as a **bilateral settlement system-of-record**: the shared, auditable ledger that is the authoritative record for reconciling obligations *between two specific named companies* — how they define "revenue," split it, reconcile it against bank/sales data, handle clawbacks/adjustments/disputes, and produce ASC-606/IFRS-15-clean numbers for *both* sides. The #1 cause of revenue-share disputes is precisely the *definition of revenue and deductible costs*. **This is your moat.** *Confidence: Med–High (the gap is inferred from the absence of any tool occupying it, plus the disputes literature).*
+- **Owning money flow is the prize — but earn it in stages, and don't overstate the economics.** a16z's thesis ("Fintech Scales Vertical SaaS," 2020, Angela Strange et al.) is that embedded fintech can lift revenue per customer **2–5×** — *this is an investment thesis, not a measured study.* The exemplars, from SEC filings (corroborated, not primary-fetched here):
+  - **Shopify FY2024:** Merchant Solutions ~$6.53B vs Subscription ~$2.35B → Merchant Solutions ~**73–74%** of $8.88B total. *(High.)*
+  - **Toast FY2024:** Financial-technology revenue ~**$4.05–4.1B (~83%)** vs subscription ~$219M — i.e., fintech dwarfs software *on revenue* (~18–19×). **Caveat:** fintech is a low-margin (~22% gross), pass-through-heavy line, so it does **not** dwarf software on *profit* — Toast itself steers investors to recurring gross profit. *(Med–High.)*
+  - **ServiceTitan (S-1, LTM to 7/31/24):** subscription ~71%, **usage-based ~24–25%** (fintech/payments-*dominated* but also includes Pro-product usage), professional services ~4%; payment take rate ~0.25% of GTV. **Correction to common shorthand:** the ~25% is *usage-based*, not pure fintech. *(High on the mix; Med on the take rate.)*
+  - The lesson: embedded finance works **only after** you're the system of record; a payments wrapper with no proprietary data and no switching cost is the thin-margin failure mode.
+- **The demand driver to anchor on is multiplying money-split events, not a headline TAM.** Cloud-marketplace software sales: **Omdia** forecasts **$30B (2024) → $163B (2030), ~29.1% CAGR**; **Canalys** earlier forecast **$16B (2023) → $85B (2028)** — they disagree by ~2×, and note **Omdia acquired Canalys (2024)**, so they're no longer independent houses (use the newer Omdia figure, disclosed as a single-firm view). The robust, structural fact is that **a majority of marketplace sales are expected to flow through the channel by ~2027** and committed-cloud-spend drawdown (Microsoft MACC / AWS EDP count 100% of marketplace purchases toward the commit) is pushing deals into multi-party structures — each one a revenue-split-and-reconcile event. AWS Marketplace fees (corroborated): 3% SaaS public; private offers tiered 3%/2%/1.5%; ~1.5% renewals. *Confidence: High on the mechanics; Med on the size forecasts.* ([Omdia](https://omdia.tech.informa.com/pr/2025/oct/hyperscaler-cloud-marketplace-sales-to-hit-us-163-billion-us-dollars-by-2030), [Canalys via Light Reading](https://www.lightreading.com/cloud/hyperscaler-cloud-marketplace-sales-to-hit-85-billion-by-2028-canalys), [Microsoft MACC](https://learn.microsoft.com/en-us/marketplace/macc-frequently-asked-questions))
 
 ## A3. Is "partnership orchestration" the right Phase-3 category? (Right motion, wrong banner.)
 
-- **"Orchestration" is not the market's word — "Ecosystem-Led Growth" (ELG) is, and it already has a king.** Crossbeam (after merging with Reveal in June 2024) sits on **~25,000+ companies** of ecosystem data and explicitly claims to "lead a new category." Naming *your* category "orchestration" means fighting an entrenched narrative head-on. *Confidence: High.* ([Crossbeam/Reveal merger](https://www.prnewswire.com/news-releases/crossbeam-and-reveal-are-joining-forces-to-disrupt-go-to-market-strategy-as-we-know-it-302180641.html))
-- **The independent demand signal for the ecosystem layer is real:** Forrester — **67%** expect >30% YoY indirect-revenue growth; **74%** of buyers rely on third parties to validate purchases (the empirical basis for the "trusted ecosystem" thesis). HubSpot×Canalys×Partnership Leaders — **50% of orgs attribute 26%+ of revenue to partners** (n=664; the most defensible third-party revenue-share datapoint). *Confidence: High / Med–High.* ([Forrester](https://www.forrester.com/blogs/the-state-of-partner-ecosystems-2025/), [HubSpot State of Partner Ops](https://www.hubspot.com/company-news/the-state-of-partner-ops-and-programs-report-2022))
-- **Caveat — the famous ELG ROI stats are vendor-grade.** Crossbeam's "+11.7% win rate / 3.5× larger deals," Tackle's "40% larger deals," and the floating "24% median / >40% top-quartile partner revenue" all come from interested parties or unsourced trade content, and they disagree with each other (win-rate lift ranges from +11.7% to "2.8×"). Use them as *color*, never as the business case; demand a vendor reproduce any lift claim on your own pipeline with a control. *Confidence on the stats: Low.*
-- **"Partner Attribution Leak" is a real mechanism but a manufactured, unquantified term** (trademarked by Magentrix): partner deals silently default to "Direct" when PRM↔CRM field-mapping fails. The mechanism is plausible and worth auditing; the percentage is not citable. *Confidence: Med on mechanism, Low on magnitude.*
+- **"Orchestration" is not the market's word — "Ecosystem-Led Growth" (ELG) is, and it has a leader.** Crossbeam (after merging with Reveal, **all-stock, announced June 25, 2024**) sits on a network of **~25,000+ companies** and explicitly claims a "new category." Declaring "orchestration" as your banner means fighting an entrenched narrative. *Confidence: High (merger; multi-source incl. independent press). The "25,000" is vendor-stated.* ([Crossbeam/Reveal merger](https://www.prnewswire.com/news-releases/crossbeam-and-reveal-are-joining-forces-to-disrupt-go-to-market-strategy-as-we-know-it-302180673.html))
+- **The independent demand signal is real (use these, not vendor stats):** Forrester 2025 — **~67%** expect indirect/partner revenue to grow strongly YoY. HubSpot × Canalys × Partnership Leaders 2022 — **50% of orgs attribute 26%+ of revenue to partners** (n=664). *Confidence: Med–High (both corroborated; HubSpot's is a vendor-led consortium, but n and dates check out).*
+- **Dropped:** Forrester "74% of buyers rely on third parties to validate purchases" — could not be corroborated and appears to collide with a *different* Forrester figure (~73% of purchases involving 3+ departments). Do not use "74%."
+- **Caveat — the famous ELG ROI stats are vendor-grade.** Crossbeam's "+11.7% win rate / 3.5× larger deals," Tackle's "40% larger deals," and the floating "~24% median partner revenue" are interested or untraceable, and they disagree with each other. Use as *color*, never as the business case.
+- **"Partner Attribution Leak"** is a real *mechanism* (partner deals silently default to "Direct" when PRM↔CRM mapping fails) but a **trademarked Magentrix term with zero credible quantification.** Audit it internally; never cite a leak percentage.
 
 ## A4. What sequencing strategy does the evidence support?
 
-- **"Come for the tool, stay for the network" (Dixon) maps onto your plan** — tool solves the cold-start, the network is the moat. ([cdixon.org](https://cdixon.org/2015/01/31/come-for-the-tool-stay-for-the-network/)) The B2B variant, "come for the tool, stay for the *exchange*," is the closest analog to PRM→rev-share→orchestration. ([a16z](https://a16z.com/come-for-the-tool-stay-for-the-exchange-bootstrapping-liquidity-in-the-private-markets/))
-- **The strongest counter-argument to your plan:** Sangeet Choudary argues almost no great network was built by bolting a network onto a tool — the single-player→multiplayer culture/architecture shift rarely succeeds if not designed in. **Implication: build the multi-company primitive into Phase 1.** ([TechCrunch](https://techcrunch.com/2016/12/01/come-for-the-tool-stay-for-the-network-reconsidered/)) A second inversion worth testing: "come for the *network*, stay for the tool" — sometimes the network is the cheap acquisition magnet and the workflow is the lock-in. ([Point Nine](https://medium.com/point-nine-news/come-for-the-network-stay-for-the-tool-5206c5736b11))
-- **At origination, your only real power is counter-positioning** — a model incumbents *rationally decline to copy* because it would cannibalize them (Helmer, *7 Powers*). Switching costs come once you're the system of record; network economies come last. So **sequence your moats**; don't expect all three at once. ([Helmer via Lenny's](https://www.lennysnewsletter.com/p/business-strategy-with-hamilton-helmer), [Commoncog](https://commoncog.com/c/concepts/counter-positioning/))
-- **Revenue-as-second-wedge is a proven pattern** (ServiceTitan, Toast) — but *only after* you own the workflow record. ([a16z](https://a16z.com/is-software-losing-its-head/))
-- **Premature platform expansion is the #1 documented startup killer:** ~74% of failed high-growth startups die from scaling before product-market fit. This is the discipline that turns your three phases into *gated* phases. ([Startup Genome](https://s3.amazonaws.com/startupcompass-public/StartupGenomeReport2_Why_Startups_Fail_v2.pdf))
-- **Counter-orthodoxy worth holding in tension:** Parker Conrad's "compound startup" — in crowded categories, a single narrow point solution has "no oxygen," and the defensible entry is multiple products on one shared data model. The reconciling rule: breadth is safe *only* if products share **data, buyer, and workflow.** Your shared primitive is the **partner/revenue graph** (analogous to Rippling's Employee Graph). ([SaaStr/Conrad](https://www.saastr.com/rippling-ceo-parker-conrads-theory-of-the-compound-startup/))
+- **"Come for the tool, stay for the network" (Dixon, 2015)** maps onto your plan; the B2B variant "come for the tool, stay for the *exchange*" (a16z, 2023) is the closest analog. ([Dixon](https://cdixon.org/2015/01/31/come-for-the-tool-stay-for-the-network/), [a16z](https://a16z.com/come-for-the-tool-stay-for-the-exchange-bootstrapping-liquidity-in-the-private-markets/))
+- **The strongest counter-argument:** Jon Evans (TechCrunch, 2016) argues almost no great network was built by bolting a network onto a tool — the single-player→multiplayer shift rarely succeeds if not designed in. Point Nine's "come for the *network*, stay for the tool" is a deliberate **inversion** — so do *not* cite Dixon and Point Nine as mutually reinforcing; they're opposing theses. **Implication: build the multi-company primitive into Phase 1.** ([Evans](https://techcrunch.com/2016/12/01/come-for-the-tool-stay-for-the-network-reconsidered/), [Point Nine](https://medium.com/point-nine-news/come-for-the-network-stay-for-the-tool-5206c5736b11))
+- **At origination, your only real power is counter-positioning** — a model incumbents *rationally decline to copy* because it would cannibalize them (Helmer, *7 Powers*; counter-positioning and cornered resource are the two origination-stage powers; switching costs and network economies are later). So **sequence your moats**. ([Commoncog on counter-positioning](https://commoncog.com/c/concepts/counter-positioning/))
+- **Revenue-as-second-wedge is a proven pattern** (a16z "Vertical Operating Systems": SoR → embedded fintech; Toast/ServiceTitan/Procore) — but *only after* you own the workflow record. Note: "system of record" ≠ "network" — they are distinct stages (which your Settle vs. Orchestrate split respects). ([a16z VOS](https://a16z.com/vertical-operating-systems-one-system-of-record-to-rule-them-all/))
+- **Premature platform expansion is the #1 documented startup killer:** the Startup Genome "Why Startups Fail" study found **74% of high-growth *internet* startups were classified as failing due to premature scaling** (companion figure: ~70% scaled prematurely). *Caveat: 2011 data, internet-specific, correlational — directionally powerful, not a timeless law.* This is the discipline that turns your phases into *gated* phases. ([Startup Genome PDF](https://s3.amazonaws.com/startupcompass-public/StartupGenomeReport2_Why_Startups_Fail_v2.pdf))
+- **Counter-orthodoxy to hold in tension:** Parker Conrad's "compound startup" — in crowded categories a single narrow point solution has "no oxygen"; the defensible entry is multiple products on one shared data model. Reconciling rule: breadth is safe *only* if products share **data + buyer + workflow.** Your shared primitive is the **partner/revenue graph** (analogous to Rippling's Employee Graph). ([SaaStr/Conrad](https://www.saastr.com/the-compound-startup-advantage-why-the-ceo-of-rippling-believes-focus-is-overrated/))
 
-## A5. Does a GCC-first landing hold up?
+## A5. Does a GCC-first landing hold up? (Yes — with a corrected TAM.)
 
-- **Fix the TAM first — your repo's numbers are stale.** Your docs cite "~$87B by 2025 → ~$133B by 2030"; official GASTAT data shows Saudi's digital economy was *already* **~SAR 495B (~$131.9B), 16.0% of GDP, in 2024.** The 2030 figure has effectively been hit, and "digital economy" (~$131B, very broad) ≠ ICT spend (IDC ~**$39.6B** in 2025) ≠ B2B-SaaS (a small slice of that). *Confidence: High.* ([GASTAT](https://www.stats.gov.sa/en/w/news/150), [trade.gov ICT](https://www.trade.gov/market-intelligence/saudi-arabia-ict-new-data-center-strategy-accelerate-ai-and-cloud-expansion))
-- **The compliance wedge is real and hard to copy.** ZATCA e-invoicing (Fatoorah) Phase 2 (since Jan 2023) requires **real-time clearance** — B2B invoices get a cryptographic stamp + QR and must be *approved by ZATCA before issuance*; Wave 24 (revenue > SAR 375K) deadline is **30 June 2026.** Cross-border partner payments trigger **withholding tax: 15% royalties / 5% technical services / 20% management fees**, and the Jan-2024 software-payment guideline makes the royalty-vs-service classification genuinely ambiguous. VAT is 15% with B2B reverse-charge. A revenue-share engine that natively models clearance + WHT + reverse-charge is a concrete differentiator global tools don't offer. *Confidence: High.* ([ZATCA roll-out](https://zatca.gov.sa/en/E-Invoicing/Introduction/Pages/Roll-out-phases.aspx), [PwC WHT](https://taxsummaries.pwc.com/saudi-arabia/corporate/withholding-taxes))
-- **Funding climate is a tailwind for *raising*, not proof of fast B2B-SaaS demand.** Saudi led MENA VC in 2024 (~$750M, 178 deals, ~40% of MENA capital) and accelerated to ~$860M in H1 2025 (+116% YoY); MENA seed valuations run ~$11.6M median. *Confidence: High.* ([MAGNiTT](https://magnitt.com/research/H1-2025-Saudi-Arabia-Venture-Capital-Report-51001))
-- **The real GCC risks:** small near-term B2B-SaaS pool; **6–18 month sales cycles** with multi-signatory approvals; an **RHQ requirement** to win public-sector deals; channel-led GTM is dominant. Plan for relationship/enterprise velocity, not PLG. *Confidence: Med–High.* ([trade.gov public sector](https://www.trade.gov/country-commercial-guides/saudi-arabia-selling-public-sector))
-- **Sharia is a product constraint and a marketable asset.** A standard commission-on-actual-sales revenue-share is generally permissible; the things to avoid are **guaranteed/fixed "returns on capital" (riba)** and **excessive uncertainty in payout terms (gharar).** Canonical profit-sharing structures are Mudarabah and Musharakah. A scholar/Shariah-board sign-off is required before *claiming* "Sharia-compliant" — and is itself a wedge incumbents won't bother to earn. *Confidence: High on principle, Med on product implications.* ([Pinsent Masons Islamic finance](https://www.pinsentmasons.com/out-law/guides/islamic-finance))
+- **Fix the TAM — your repo's numbers are stale.** Your docs cite "~$87B by 2025 → ~$133B by 2030." Reality outran that: the Saudi digital economy was **already ~SAR 495B (~$131.9B) in 2024** (per **MCIT / Vision 2030 Annual Report**, which pairs it with ~15% of GDP), and **GASTAT separately reports the digital economy at 16.0% of GDP in 2024**. *Attribute the absolute value to MCIT/Vision 2030 and the 16.0% share to GASTAT — they are different instruments; do not bundle them.* The 2024 actuals already exceeded the old "$133B by 2030" forecast, so the old framing understates and reads out-of-date. *Confidence: High on the figures; the MCIT-vs-GASTAT attribution split is the key nuance.* ([MCIT](https://www.mcit.gov.sa/en/news/saudi-arabia%E2%80%99s-digital-economy-new-era-tech-growth-innovation-and-global-impact-empowered-hrh), [GASTAT](https://www.stats.gov.sa/en/w/news/150))
+- **Use the right denominator.** "Digital economy" (~$131.9B, very broad) ≠ ICT spending (**IDC ~$39.6B, 2025**) ≠ Saudi B2B-SaaS (a small slice with **no clean public TAM**). For a software pitch, the **IDC ICT-spend ~$39.6B** is the addressable-spend anchor; the $131.9B is macro context only; B2B-SaaS must be **bottom-up** estimated (# GCC B2B companies with 20–200+ partners × realistic ACV). *Confidence: Med–High (IDC via trade/news echoes).*
+- **The compliance wedge is real and hard to copy.** ZATCA e-invoicing (Fatoorah): Phase 1 (Generation) from Dec 2021; Phase 2 (Integration) from Jan 2023, in revenue-threshold waves. **B2B "Standard Tax Invoices" require real-time *clearance* — cryptographic stamp + validation by ZATCA *before* issuance to the buyer** (B2C "simplified" invoices are only reported within 24h). **Wave 24** (VAT-subject revenue > **SAR 375,000**) has an integration deadline of **30 June 2026** — the mandate is reaching the smallest taxpayers now. Cross-border partner payments trigger **withholding tax: royalties 15% / technical services 5% / management fees 20%**, and a **Jan-2024 ZATCA guideline** makes the royalty-vs-service classification of software payments genuinely ambiguous. VAT is 15% with B2B reverse-charge. A revenue-share engine that natively models clearance + WHT + reverse-charge is a concrete differentiator global tools don't offer. *Confidence: High (multi-source: ZATCA + Big-4 advisories + PwC).* ([ZATCA roll-out](https://zatca.gov.sa/en/E-Invoicing/Introduction/Pages/Roll-out-phases.aspx), [PwC WHT](https://taxsummaries.pwc.com/saudi-arabia/corporate/withholding-taxes))
+- **Funding climate = tailwind for *raising*, not proof of fast B2B-SaaS demand.** MAGNiTT: Saudi led MENA VC in 2024 (~$750M, record 178 deals, ~40% of MENA capital) and accelerated to ~$860M in H1 2025 (+116% YoY). *Confidence: High.* ([MAGNiTT](https://magnitt.com/research/H1-2025-Saudi-Arabia-Venture-Capital-Report-51001))
+- **The real GCC risks:** small near-term B2B-SaaS pool; **6–18 month** enterprise sales cycles with multi-signatory approvals; an **RHQ requirement** (since Jan 2024) to win government contracts (exemptions: contracts < SAR 1M; sole/superior offers); channel-led GTM dominant. Plan for enterprise velocity, not PLG. *Confidence: High on RHQ; Med on cycle length (advisory/vendor sources).* ([trade.gov public sector](https://www.trade.gov/country-commercial-guides/saudi-arabia-selling-public-sector))
+- **Sharia is a constraint and a marketable asset.** Commission-on-actual-sales revenue-share is **generally permissible** (supported by *wakala*/paid-agency and *ju'ala*/fee-for-result doctrine) — it is not automatically *riba*. Avoid **guaranteed/fixed "returns on capital" (riba)** and **excessive uncertainty in payout terms (gharar)**. Canonical profit-sharing structures: *Mudarabah*, *Musharakah*. A Shariah-board sign-off is required before *claiming* "Sharia-compliant" — and is itself a wedge incumbents won't bother to earn. *Confidence: High on principle; structure-specific compliance needs a scholar's review.* ([Islamic finance — Pinsent Masons](https://www.pinsentmasons.com/out-law/guides/islamic-finance))
 
 ## A6. What GTM motion does a finance-touching, multi-stakeholder product require?
 
-- **Not PLG.** With a buying committee (Partnerships + RevOps + Finance + Legal/Procurement) and >$50K ACV, this is **sales-led** territory; forced PLG fails on "complex setup, enterprise buyer, long time-to-value." Product-led-sales is a *later* expansion layer, not a day-one motion. ([Sapphire PLG vs SLG](https://www.sapphireventures.com/blog/navigating-product-led-growth-vs-sales-led-growth-models/))
-- **The craft to use:** **founder-led sales** to first proof (don't hire AEs until you've closed the repeatable motion); **3–5 *paid* design partners** (paid filters tire-kickers and validates willingness-to-pay); **MEDDPICC** qualification (the "Paper Process" P is your #1 deal risk because finance/legal are in the loop); **Challenger / Command of the Message** because you're *teaching a new problem*; **Crossing the Chasm** beachhead discipline ("big enough to matter, small enough to win"); **Winning by Design's bowtie** because your value is realized *post-sale* (does the money actually flow correctly?); and **Play Bigger** category design held until you have proof. ([Unusual VC design partners](https://www.unusual.vc/field-guide/build-a-sales-motion-with-design-partners-for-a-b2b-product/), [Jen Abel on Lenny's](https://www.lennysnewsletter.com/p/master-founder-led-sales-jen-abel))
+- **Not PLG.** With a buying committee (Partnerships + RevOps + Finance + Legal/Procurement) and an enterprise ACV, this is **sales-led** territory; a16z's own "Growth + Sales" work argues PLG fails on complex setup + enterprise buyer + long time-to-value. The ACV→motion rule of thumb (<$5K PLG / >$50K sales-led) is *directional*, not a canonical benchmark. ([a16z Growth+Sales](https://a16z.com/growthsales-the-new-era-of-enterprise-go-to-market/))
+- **The craft to use (all verified as real frameworks):** **founder-led sales** to first proof; **design partners** with a **commitment and a path to paid** (avoid indefinitely-free pilots — the discipline is the commitment, not necessarily charging day one); **MEDDPICC** qualification (note: original PTC-1996 **MEDDIC** = 6 components; the extra **P**aper-process and **C**ompetition were added later — and the Paper Process is your #1 deal risk because finance/legal/procurement are in the loop); **Challenger / Command of the Message** because you're *teaching a new problem* (Challenger's edge is specific to complex B2B and is vendor-research, not independently replicated); **Crossing the Chasm** beachhead discipline (the "whole product" concept is Levitt's, popularized by Moore); **Winning by Design's bowtie** because value is realized *post-sale*; and **Play Bigger** category design held until you have proof. ([Unusual VC design partners](https://www.unusual.vc/field-guide/build-a-sales-motion-with-design-partners-for-a-b2b-product/), [Jen Abel on Lenny's](https://www.lennysnewsletter.com/p/master-founder-led-sales-jen-abel))
 
 ---
 
 # PART B — THE STRATEGIC VERDICT
 
-## B1. Pressure-test: the case *for* your PRM-first reverse-engineering
+## B1. The case *for* your PRM-first reverse-engineering
+1. **Adoption-first is psychologically correct.** "We help you run partner deals" is concrete; "we are the control layer for partner-sourced revenue" is abstract. People adopt a tool they can picture using on Monday.
+2. **A tool earns the right to the data the moat needs.** You can't run cross-company settlement (Phase 2) without first capturing partners, deals, agreements, and claims (Phase 1). Capture genuinely comes first — your *own* PDR says so.
+3. **Revenue-sharing as the moat is well-chosen** — money movement = switching costs + embedded-finance economics + the bilateral SoR nobody owns.
+4. **Orchestration as the endgame matches where independent analysts point** (Gartner PERM transition, Forrester demand).
 
-1. **Adoption-first is psychologically correct.** "We help you run partner deals" is concrete and adoptable; "we are the control layer for partner-sourced revenue" is abstract and cold. A buyer adopts a tool they can picture using on Monday.
-2. **A tool earns the right to the data the moat needs.** You cannot run cross-company revenue settlement (Phase 2) without first capturing partners, deals, agreements, and claims (Phase 1). Capture genuinely must come first — your *own* PDR already says "capture first, attribute second."
-3. **Revenue-sharing as the moat is well-chosen.** Money movement = switching costs + embedded-finance economics + the bilateral SoR nobody owns. This is the strongest part of your instinct.
-4. **Orchestration as the endgame matches where capital and analysts are pointing** (PERM rename, Forrester demand, a16z framing ELG as a third GTM motion).
+## B2. The case *against* it (the three traps)
+1. **Trap 1 — "Generic PRM" is the worst-positioned layer.** Smallest/most-disputed TAM, weak standalone-portal adoption, commoditized at the bottom, incumbent-locked at the top, and **zero counter-positioning** (a me-too PRM is what incumbents already do).
+2. **Trap 2 — Deferring the network to Phase 3 risks a network that never ignites** (Evans). If the multi-company primitive isn't in the Phase-1 data model, the orchestration "network" becomes a doomed bolt-on.
+3. **Trap 3 — The rev-share "moat" is partly occupied by rails.** PartnerStack/Tipalti/Trolley/Tremendous move money; Paddle is MoR. If Phase 2 = "we pay partners," you're late. The defensible thing is the **bilateral settlement system-of-record**, not the rail.
 
-## B2. Pressure-test: the case *against* it (the three traps)
+## B3. The reconciliation (the actual recommendation)
 
-1. **Trap 1 — "Generic PRM" is the worst-positioned layer.** Smallest defensible TAM, worst adoption reputation (17–30%), commoditized at the bottom, incumbent-locked at the top, and *zero counter-positioning* (a me-too PRM is, by definition, the thing incumbents already do). You'd be entering the layer value is leaving.
-2. **Trap 2 — Deferring the network to Phase 3 risks a network that never ignites** (Choudary). If the multi-company primitive isn't in the Phase-1 data model, the orchestration "network" becomes a doomed bolt-on.
-3. **Trap 3 — The rev-share "moat" is partly occupied.** PartnerStack already takes 3–15% of payouts; Tipalti/Trolley/Paddle already move money. If Phase 2 = "we pay partners," you're late. The defensible thing is the *settlement system-of-record between two companies*, not the rail.
-
-## B3. The reconciliation (this is the actual recommendation)
-
-The fork is false. You don't have to choose between "PRM-first (adoptable)" and "claim-ledger-first (differentiated)." **Merge them.** The Phase-1 product is a **claim-centric, workflow-embedded, compliance-native PRM** — a Trojan horse:
+The fork is false. Merge "PRM-first (adoptable)" with "claim-ledger-first (differentiated)." Phase 1 is a **claim-centric, workflow-embedded, compliance-native PRM** — a Trojan horse:
 
 > **To the buyer it feels like an easy PRM** (partner registry, deal registration, status, payout-readiness) so it adopts like a tool. **Underneath, its atomic object is the Partner Revenue Claim and its identity model is cross-tenant** (ADR-0003), so the same data becomes the substrate for Phase-2 settlement and the Phase-3 network. **And it counter-positions** on the one axis incumbents can't cheaply copy: finance-grade, ZATCA-cleared, WHT-correct, Sharia-aligned revenue handling.
 
-This keeps your sequencing, fixes all three traps, and stays faithful to the best of the existing PDR. Renamed for clarity, the three phases are:
+Renamed for clarity:
 
 | Phase | Old name | **Re-engineered name** | The one-sentence job |
 |---|---|---|---|
-| 1 | "PRM" | **Capture** (claim-centric, embedded PRM) | Become the partner team's daily tool *and* quietly capture the claim + cross-company link |
+| 1 | "PRM" | **Capture** (claim-centric, embedded PRM) | Be the partner team's daily tool *and* quietly capture the claim + cross-company link |
 | 2 | "Revenue-sharing" | **Settle** (bilateral revenue system-of-record) | Be the shared, auditable ledger two companies trust to split, reconcile, and pay — compliance-native |
 | 3 | "Orchestration" | **Orchestrate** (partnership network, idea→activation) | Be the network where partnerships are designed, activated, and run — monetized on the money layer |
 
-Three non-negotiable design rules that make the sequence work:
-- **Rule 1 — Embed, don't portal.** Phase 1 must live where work already happens (CRM, Slack/Teams, email), because the #1 PRM failure is the separate portal. Counter-position the incumbents' brochureware.
-- **Rule 2 — Network primitive on day one.** Cross-tenant partner identity ships in the MVP. One partner working with several of your customers has *one* identity. That is the seed of the Phase-3 network and it costs almost nothing to build early and almost everything to retrofit.
-- **Rule 3 — Counter-position, don't compete on features.** Never sell "a better PRM." Sell "the only partner tool whose payouts come out ZATCA-cleared, WHT-correct, and reconcilable for both companies' finance teams." That sentence is unavailable to PartnerStack, Impartner, and Crossbeam.
+**Three non-negotiable design rules:**
+- **Rule 1 — Embed, don't portal.** Phase 1 lives where work happens (CRM, Slack/Teams, email). The standalone portal is the thing buyers are fleeing; counter-position it.
+- **Rule 2 — Network primitive on day one.** Cross-tenant partner identity ships in the MVP. Cheap to build early, near-impossible to retrofit; it's the seed of the Phase-3 network.
+- **Rule 3 — Counter-position, don't compete on features.** Never sell "a better PRM." Sell "the only partner tool whose payouts come out ZATCA-cleared, WHT-correct, and reconcilable for both companies' finance teams" — a sentence unavailable to PartnerStack, Impartner, or Crossbeam.
 
 ---
 
 # PART C — THE THREE PHASES, END-TO-END (execution playbook)
 
-Each phase has: **what it is, who buys, what to build, what to deliberately NOT build, the GTM motion, pricing, how the moat accrues, the exit gate, and the kill-criteria.** Plain steps.
+Each phase: what it is, who buys, what to build, what to NOT build, GTM motion, pricing, how the moat accrues, the exit gate, kill-criteria.
 
 ## PHASE 1 — CAPTURE (claim-centric embedded PRM) · ~Months 0–9
-
-**What it is:** the partner team's daily operating tool — partner registry, deal/claim registration, attribution decision, protection window, payout-readiness, simple executive view — embedded in the CRM/Slack, with the Revenue Claim as the atomic object and cross-tenant identity underneath.
-
-**Who buys:** Head of Partnerships (champion, budget mobilizer); CFO/Finance (validator — they care that payouts will be defensible and compliant); RevOps (process validator/blocker).
-
-**What to build (and only this):**
-1. Partner registry + governed intake (source + owner + dedupe) — *FR-01/02/03 in your PDR.*
-2. Deal/claim registration as the **Partner Revenue Claim** + preflight (the Trojan-horse object).
-3. One Attribution of Record (human-decided, model stubbed) — *FR-07.*
-4. Protection window with expiry notification — *FR-08.*
-5. Payout-readiness check (bank/tax verified) and a **first-payout milestone** — *FR-04/FR-12.*
-6. **Cross-tenant partner identity** (ADR-0003) — the network seed.
-7. **GCC compliance stubs from day one:** capture WHT status, VAT treatment, and ZATCA-relevant fields on the partner/claim even before you automate clearance. (Cheap to capture, expensive to backfill.)
-8. CRM link with bounded write-back + event/audit log.
-
-**What to NOT build yet:** full ERP/billing integration, settlement automation, multi-touch attribution scoring, full P&L, the partner network UI, marketplace attribution. (Your PDR already says this — hold the line; premature breadth is the #1 killer.)
-
-**GTM motion:** founder-led sales into a single GCC beachhead; 3–5 **paid** design partners; MEDDPICC discipline with explicit attention to the Paper Process; "teach the problem" (Challenger). No PLG, no AE hires, no paid marketing until reply rates and discovery confirm resonance (your GTM manual's Gates 2–4).
-
-**Pricing:** annual SaaS + implementation, packaged Starter/Growth/Enterprise. Price on **active partners or partner-attributed revenue**, never seats/portals (dodges the $299 commodity floor). Keep it simple; the value-based % comes in Phase 2.
-
-**How the moat accrues:** you start the **data flywheel** (every resolved partner/claim improves identity resolution) and you bank **counter-positioning** (compliance-native). Neither is a moat yet — they're the *seeds*.
-
-**Exit gate (do not advance until ALL true):**
-- A working MVP processing **100+ real Partner Revenue Claims** on messy real CRM data.
-- **3–5 paid** design partners, with a finance reviewer who accepts an exported evidence pack.
-- **≥70% activation** and weekly usage at design partners; time-to-first-claim < ~14 days.
-- One undeniable proof sentence: *"their partner payouts now reconcile correctly and survive a ZATCA-clean invoice."*
-
-**Kill-criteria (if true, stop or pivot):** buyers only want generic CRM reporting; no executive cares; design partners won't pay; you cannot capture claims at low enough friction (capture-rate too low to feed Phase 2).
+**What it is:** the partner team's daily tool — partner registry, claim/deal registration, attribution decision, protection window, payout-readiness, simple executive view — embedded in CRM/Slack, with the Revenue Claim as the atomic object and cross-tenant identity underneath.
+**Who buys:** Head of Partnerships (champion); CFO/Finance (validator — payouts must be defensible/compliant); RevOps (process validator/blocker).
+**Build (only this):** (1) partner registry + governed intake (source+owner+dedupe); (2) claim registration + preflight; (3) one Attribution of Record (human-decided, model stubbed); (4) protection window + expiry notice; (5) payout-readiness + first-payout milestone; (6) **cross-tenant partner identity**; (7) **GCC compliance capture stubs** (WHT status, VAT treatment, ZATCA fields) even before automating clearance; (8) CRM link + event/audit log.
+**Don't build yet:** full ERP/billing integration, settlement automation, multi-touch scoring, full P&L, the network UI, marketplace attribution.
+**GTM:** founder-led sales into one GCC beachhead; 3–5 design partners with commitment + path to paid; MEDDPICC (watch the Paper Process); "teach the problem." No PLG, no AE hires, no paid marketing until reply/discovery resonance.
+**Pricing:** annual SaaS + implementation, Starter/Growth/Enterprise; price on **active partners or partner-attributed revenue**, never seats/portals.
+**Moat accrual:** start the data flywheel (identity resolution) + bank counter-positioning (compliance-native). Seeds, not yet a moat.
+**Exit gate (all true):** MVP processing **100+ real claims** on messy CRM data; **3–5 design partners** with a finance reviewer accepting an evidence pack; **weekly active usage**; time-to-first-claim < ~14 days; one undeniable proof sentence ("their payouts now reconcile and produce a ZATCA-clean invoice").
+**Kill-criteria:** buyers only want CRM reporting; no executive cares; partners won't commit/pay; capture friction too high to feed Phase 2.
 
 ## PHASE 2 — SETTLE (bilateral revenue system-of-record) · ~Months 9–24
-
-**What it is:** the shared, auditable ledger that two partnering companies trust to **define revenue, split it, reconcile it against bank/sales data, handle clawbacks/adjustments/disputes, and produce ASC-606/IFRS-15-clean numbers for *both* sides** — with ZATCA-cleared, WHT-correct, multi-currency payouts. *This is the moat.*
-
-**Who buys:** now the **CFO is the economic buyer**, not just validator. You've graduated from "partner tool" to "revenue infrastructure."
-
-**What to build:**
-1. Agreement→rule engine (terms → versioned, bitemporal, executable rules) — the heart of "how revenue is defined."
-2. Append-only double-entry payout ledger; accrued→eligible→approved→paid; **clawback by netting.**
-3. **Bilateral reconciliation + dispute workflow** (the actual white space — definition-of-revenue disputes resolved with an audit trail and audit rights).
-4. Finance evidence packs; partner statements; eligibility-with-explanation.
-5. **Compliance engine:** ZATCA clearance, WHT matrix (15/5/20), reverse-charge VAT, multi-entity, AR/EN bilingual documents.
-6. Billing/ERP integration; invoice/collection matching; FX.
-7. Settlement/disbursement — **build last in this phase, or partner for the rail** (don't become a regulated MoR before the SoR is entrenched).
-
-**What to NOT build yet:** the open partner network/marketplace; AI forecasting; tier/incentive simulation.
-
-**GTM motion:** land-and-expand inside Phase-1 logos (the CFO upsell); first **value-based pricing** experiment — a small **% of partner-attributed revenue under management** (~1–3%); reference-driven new logos; begin **Play Bigger** category POV ("partner revenue you can't attribute or pay out correctly" = the old way).
-
-**Pricing:** subscription + value-based % of revenue-under-management; optional basis-points on settled flow once you run the rail. This is where NRR is built (module attach: claim → statements → evidence → settlement).
-
-**How the moat accrues:** **switching costs** (you are now the finance system of record — rip-out means losing history, evidence, and audit trail) + the **bilateral data** no competitor has + the **compliance trust** (a passed real audit; a Shariah sign-off). This is the phase where the moat becomes real.
-
-**Exit gate:** settlement automated and idempotent (zero double-pays); deductions explained pre-settlement; refunds flow through eligibility→ledger reversal→clawback-by-netting; clean ERP reconciliation; first cohort showing **NRR signal (>110–120%)** via module attach; a CFO will say on a reference call "we trust these numbers."
-
-**Kill-criteria:** CFOs won't trust the numbers even with evidence packs; reconciliation breaks on real data; the rev-share dispute problem turns out to be tolerated (spreadsheets "good enough") rather than urgent.
+**What it is:** the shared, auditable ledger two companies trust to **define revenue, split, reconcile against bank/sales data, handle clawbacks/adjustments/disputes, and produce ASC-606/IFRS-15-clean numbers for both sides** — with ZATCA-cleared, WHT-correct, multi-currency payouts. *The moat.*
+**Who buys:** the **CFO is now the economic buyer.** You've moved from "partner tool" to "revenue infrastructure."
+**Build:** (1) agreement→rule engine (versioned, bitemporal); (2) append-only double-entry ledger (accrued→eligible→approved→paid; clawback-by-netting); (3) **bilateral reconciliation + dispute workflow** (the white space); (4) finance evidence packs, statements, eligibility-with-explanation; (5) **compliance engine** (ZATCA clearance, WHT 15/5/20, reverse-charge VAT, multi-entity, AR/EN bilingual docs); (6) billing/ERP integration, invoice/collection matching, FX; (7) settlement/disbursement **last — or partner for the rail** (don't become a regulated MoR before the SoR is entrenched).
+**Don't build yet:** the open network/marketplace; AI forecasting; tier/incentive simulation.
+**GTM:** land-and-expand inside Phase-1 logos (CFO upsell); first **value-based pricing** test (~1–3% of partner-attributed revenue under management); reference-driven new logos; develop the category POV.
+**Moat accrual:** **switching costs** (finance SoR — rip-out loses history/evidence/audit), bilateral data no competitor has, compliance trust (a passed audit; a Shariah sign-off). The moat becomes real here.
+**Exit gate:** settlement idempotent (zero double-pays); deductions explained pre-settlement; refunds flow through eligibility→ledger reversal→clawback-by-netting; clean ERP reconciliation; **NRR signal (>110–120%)** via module attach; a CFO says on a reference call "we trust these numbers."
+**Kill-criteria:** CFOs won't trust the numbers even with evidence; reconciliation breaks on real data; the dispute pain proves *tolerated* rather than urgent.
 
 ## PHASE 3 — ORCHESTRATE (partnership network, idea→activation) · ~Months 24+
-
-**What it is:** the platform where partnerships are **designed, activated, and run end-to-end — from idea to full activation** — across a multi-company network, with the Partner P&L, forecasting, and the quarterly partner-investment decision running on your ledger. Monetized on the **money layer**, not generic "orchestration."
-
-**Who buys:** Head of Partnerships + CRO + CFO + CEO/Strategy (the investment-decision committee). The cross-tenant identity from Phase 1 now pays off: partners have one identity across many of your customers → the network.
-
-**What to build:** partner P&L and ROI; effort-share and partner-health; forecasting; tier/incentive simulation; full multi-touch contribution (informativeness-weighted, contestable); identity-resolution/MDM at scale; the **partner network** (a partner working with many customers; cross-company introductions; co-sell account mapping); AI recommendations and "agentic" partner workflows (roadmap, not a category claim — the evidence here is hype-heavy).
-
-**Positioning discipline:** do **not** plant your flag as "partnership orchestration" — Crossbeam owns ELG. Position as **the revenue/settlement system of record that the ecosystem runs on**, adjacent to ELG (cite a16z/Forrester for air cover), and only run a Play Bigger "lightning strike" once you have category-king proof.
-
-**GTM motion:** hybrid — product-led-sales entry (a single partner manager adopts free; expand to the whole program via sales) layered on the enterprise motion; partner-network virality (cross-tenant identity makes onboarding the *other* side cheap).
-
-**How the moat accrues:** **network economies** (the terminal, winner-take-most moat) + data advantage + the switching costs already banked. This is the venture-scale outcome: *own the ledger every Partner P&L runs on.*
-
-**Exit/success:** the quarterly partner-investment decision runs from your product; durable NRR; multi-region (GCC → global on the same claim ledger); category-defining position on the money layer.
+**What it is:** the platform where partnerships are **designed, activated, and run from idea to full activation** across a multi-company network, with the Partner P&L and the quarterly partner-investment decision running on your ledger. Monetized on the **money layer**, not generic "orchestration."
+**Who buys:** Head of Partnerships + CRO + CFO + CEO/Strategy. The Phase-1 cross-tenant identity now pays off → the network.
+**Build:** partner P&L/ROI; effort-share/health; forecasting; tier/incentive simulation; full multi-touch contribution; identity-resolution/MDM at scale; the **partner network** (one partner across many customers; co-sell account mapping); AI/"agentic" workflows (roadmap, not a category claim — that space is hype-heavy today).
+**Positioning discipline:** do **not** plant the flag as "partnership orchestration" (Crossbeam owns ELG). Position as **the revenue/settlement system of record the ecosystem runs on**, adjacent to ELG; run a category "lightning strike" only with king-grade proof.
+**GTM:** hybrid — product-led-sales entry (one partner manager adopts; expand via sales) on top of the enterprise motion; network virality (cross-tenant identity makes onboarding the *other* side cheap).
+**Moat accrual:** **network economies** (terminal, winner-take-most) + data advantage + banked switching costs. The venture-scale outcome: *own the ledger every Partner P&L runs on.*
 
 ---
 
 # PART D — THE MOAT ARCHITECTURE (why "Settle" compounds)
 
-A moat is not a feature; it is *something that gets stronger as you grow and that a rational competitor won't copy.* Map your candidate moats to the [7 Powers](https://www.lennysnewsletter.com/p/business-strategy-with-hamilton-helmer) and sequence them:
+Map your candidate moats to 7 Powers and sequence them:
 
-| Power | When it's available to you | How you build it here | Honest status today |
+| Power | When available | How you build it here | Status today |
 |---|---|---|---|
-| **Counter-positioning** | Day one (origination) | Compliance-native, finance-grade revenue handling that incumbents can't copy without cannibalizing their transaction-layer model | Available now — *lead with it* |
-| **Switching costs** | Phase 2 (once you're the SoR) | Bilateral history, evidence packs, audit trail, operating-cadence rituals — rip-out loses all of it | Earned in Settle |
-| **Network economies** | Phase 3 | Cross-tenant partner identity → a partner working with many customers → the network everyone plugs into | Terminal moat; seed it day one |
-| **Cornered resource** | Phase 2–3 | Proprietary bilateral revenue/attribution graph + a Shariah/audit credential nobody else bothers to earn | Accrues with data |
-| **Scale economies / Process / Brand** | Later | Productized onboarding; category ownership on the money layer | Aspirational |
+| **Counter-positioning** | Day one | Compliance-native, finance-grade revenue handling incumbents won't copy without cannibalizing their transaction model | Available now — *lead with it* |
+| **Switching costs** | Phase 2 | Bilateral history, evidence packs, audit trail, operating-cadence rituals | Earned in Settle |
+| **Network economies** | Phase 3 | Cross-tenant identity → a partner across many customers → the network | Terminal moat; seed day one |
+| **Cornered resource** | Phase 2–3 | Proprietary bilateral revenue/attribution graph + a Shariah/audit credential | Accrues with data |
+| **Scale / Process / Brand** | Later | Productized onboarding; category ownership on the money layer | Aspirational |
 
-**Why the *settlement* SoR specifically compounds:** it sits *between two companies' books.* Every split, clawback, dispute resolution, and ZATCA-cleared invoice adds to a shared record that *both* finance teams now depend on. Two-sided dependency is far stickier than one-sided SaaS. And once you sit on the ledger, taking basis points of the flow (embedded fintech, 2–5× revenue/customer) is a natural, defensible extension — *because the SoR makes the money movement non-substitutable*, which is the exact opposite of a thin payments wrapper.
+**Why the *settlement* SoR compounds:** it sits *between two companies' books.* Every split, clawback, dispute resolution, and ZATCA-cleared invoice adds to a shared record *both* finance teams depend on — two-sided dependency is far stickier than one-sided SaaS. And once you hold the ledger, taking basis points of flow (embedded fintech) is a natural extension *because the SoR makes the money movement non-substitutable* — the opposite of a thin payments wrapper.
 
-**The embedded-finance staging (don't skip steps):**
-1. Be the **system of record for the rev-share agreement + reconciliation** (software ARR, "agent"/net accounting, low liability).
-2. Once you hold the ledger and the dispute data, **layer settlement/disbursement** and take a basis-point cut of flow.
-3. Going full merchant-of-record/PayFac is a *multi-year, regulated, balance-sheet* commitment — a deliberate later decision, not an MVP feature. (Beware ASC-606 principal-vs-agent: holding/disbursing funds can make *you* the principal, with gross revenue but real liability.)
+**Embedded-finance staging (don't skip):** (1) be the SoR for the rev-share agreement + reconciliation (software ARR, agent/net accounting, low liability); (2) once you hold the ledger + dispute data, layer settlement and take basis points; (3) full merchant-of-record/PayFac is a multi-year, regulated, balance-sheet commitment — a later decision, not an MVP feature. Watch ASC-606 principal-vs-agent: holding/disbursing funds can make *you* the principal (gross revenue, real liability).
 
 ---
 
 # PART E — GCC-FIRST LANDING (the compliance-native wedge)
 
-**Why GCC-first is right for *you* specifically:** it's your operating base (capital-efficient founder-led sales), the CFO pain is *non-discretionary* (ZATCA + WHT + payout liability), and the compliance requirements force you to build the hard, differentiating, finance-grade capability from day one — which is exactly the counter-position global incumbents underserve. The same claim ledger then expands to global co-sell/marketplace on identical primitives.
+**Why GCC-first fits *you*:** your operating base (capital-efficient founder-led sales); the CFO pain is *non-discretionary* (ZATCA + WHT + payout liability); compliance forces the hard, finance-grade capability that *is* your counter-position; the same claim ledger then expands globally.
 
-**The concrete, ownable GCC value proposition:** *"Partner payouts that come out automatically ZATCA-cleared, withholding-tax-correct, reverse-charge-VAT-aware, bilingual, and reconcilable for both companies' finance teams."* No global tool offers this.
+**The concrete value proposition:** *"Partner payouts that come out automatically ZATCA-cleared, withholding-tax-correct, reverse-charge-VAT-aware, bilingual, and reconcilable for both companies' finance teams."* No global tool offers this.
 
-**Five GCC execution rules:**
-1. **Build compliance into the engine, not as a localization afterthought** — ZATCA Phase-2 clearance (UBL 2.1 XML, cryptographic stamp, QR), the 15/5/20 WHT matrix, reverse-charge VAT, multi-entity, AR/EN bilingual invoices/quotes. A rev-share engine without these is *not deployable* in KSA — which is exactly why it's a moat once you have it.
-2. **Right-size GTM to the market reality:** 6–18 month cycles, multi-signatory approvals, channel-led distribution (local SIs/distributors), and an **RHQ** if you want public-sector deals. Do not model PLG velocity.
-3. **Make Sharia-alignment deliberate and scholar-validated:** structure rev-share as commission-on-actual-performance (permissible); avoid guaranteed/fixed returns (riba) and ambiguous payout terms (gharar); pursue a Shariah-board sign-off you can market.
-4. **Fix the TAM story before any deck:** drop "$133B by 2030" (already met). Build a **bottom-up** TAM: (# KSA/GCC B2B companies with 20–200+ partners) × (realistic ACV) — sized off ICT-spend/SaaS slices, not the $131B digital-economy headline. The honest, defensible number beats the impressive, indefensible one in diligence.
-5. **Use the VC tailwind for the *raise*, not as demand proof:** Saudi #1 in MENA VC, +116% H1'25 — great for fundraising narrative; it does not mean fast B2B-SaaS deal velocity.
+**Five execution rules:**
+1. **Build compliance into the engine, not as localization** — ZATCA clearance (UBL 2.1 XML, cryptographic stamp, QR), the 15/5/20 WHT matrix, reverse-charge VAT, multi-entity, AR/EN bilingual invoices. Not deployable in KSA without it — which is exactly why it's a moat once you have it.
+2. **Right-size GTM:** 6–18 month cycles, multi-signatory approvals, channel-led distribution (local SIs/distributors), an **RHQ** for public-sector deals. No PLG velocity.
+3. **Make Sharia-alignment deliberate and scholar-validated:** commission-on-actual-performance (permissible); avoid guaranteed/fixed returns (riba) and ambiguous terms (gharar); earn a Shariah-board sign-off you can market.
+4. **Fix the TAM story before any deck:** retire "$133B by 2030" (already met). Build a **bottom-up** TAM; use **IDC ICT-spend ~$39.6B (2025)** as addressable spend; cite the $131.9B digital economy only as macro context (and attribute it correctly: absolute → MCIT/Vision 2030; 16% of GDP → GASTAT).
+5. **Use the VC tailwind for the *raise*, not as demand proof:** Saudi #1 in MENA VC, +116% H1'25 — great narrative; not evidence of fast B2B-SaaS deal velocity.
 
 ---
 
-# PART F — THE CPO SKILL LAYER (product-management craft, with plain steps)
-
-You asked to *acquire* the skills, not just read conclusions. Here is how a Fortune-500-grade CPO would actually run this, framework by framework, in plain steps you can apply Monday.
+# PART F — THE CPO SKILL LAYER (product-management craft, plain steps)
 
 ### F1. Wedge → Moat → Network sequencing (the master skill)
-**Plain idea:** start with the smallest sharp thing people will pay for *that sits on the on-ramp to a much bigger system*; add the layer that creates lock-in; end with the network.
-**Steps:** (1) Write your *terminal* vision (the network). (2) Work *backward* to the system of record that the network needs. (3) Work backward again to the smallest tool that captures the data the SoR needs. (4) Sanity-check: does the wedge share **data + buyer + workflow** with the next layer? If not, it's a different company. (5) Put one *network primitive* in the wedge from day one.
+Start with the smallest sharp thing people pay for *that sits on the on-ramp to a much bigger system.* **Steps:** (1) write the terminal vision (the network); (2) work backward to the system of record it needs; (3) work backward to the smallest tool that captures the data the SoR needs; (4) check the wedge shares **data+buyer+workflow** with the next layer; (5) put one network primitive in the wedge on day one.
 
-### F2. Jobs-to-be-Done (JTBD)
-**Plain idea:** people "hire" a product to make progress in a situation. Sell the progress, not the features.
-**Steps:** interview 15–20 buyers; for each, capture the *triggering situation* ("we had a partner-credit fight in front of the CEO"), the *desired progress* ("never have that fight again"), and the *anxiety/habit* keeping them on spreadsheets. Your messaging = their words back to them. (Your GTM manual's pain-hypothesis library is JTBD in disguise — formalize it.)
+### F2. Jobs-to-be-Done
+People "hire" a product to make progress in a situation. **Steps:** interview 15–20 buyers; capture the triggering situation ("a partner-credit fight in front of the CEO"), the desired progress, and the habit keeping them on spreadsheets. Messaging = their words back to them.
 
-### F3. Opportunity-Solution Tree (Teresa Torres) + the four structural problems
-**Plain idea:** connect one outcome → many opportunities (pains) → many solutions → experiments. It stops you building features nobody asked for.
-**Steps:** put your North Star at the top; branch the *opportunities* (your PDR's four economic problems — adverse selection, moral hazard, hold-up, credible commitment — are excellent opportunity branches); under each, list 2–3 solutions; test the riskiest assumption of each before building.
+### F3. Opportunity-Solution Tree (Teresa Torres)
+Connect one outcome → opportunities (pains) → solutions → experiments. **Steps:** North Star on top; branch the four economic problems from your PDR (adverse selection, moral hazard, hold-up, credible commitment) as opportunities; 2–3 solutions each; test the riskiest assumption before building.
 
-### F4. North Star + metric tree (and counter-metrics)
-**Plain idea:** one number that only goes up when you deliver real value, plus guardrails it must not break.
-**Steps:** keep your North Star ("trusted partner-attributed revenue realized"); under it, track *input* metrics you can move (time-to-first-claim, activation %, evidence-pack completeness) and *guardrails* (dispute rate, double-pays = 0, clawback rate). If the North Star rises while guardrails degrade, the gain is fake.
+### F4. North Star + metric tree (+ counter-metrics)
+One number that only rises when you deliver value, plus guardrails. **Steps:** keep "trusted partner-attributed revenue realized"; track input metrics you can move (time-to-first-claim, activation, evidence completeness) and guardrails (dispute rate, double-pays = 0, clawback rate). North Star up + guardrails down = fake gain.
 
-### F5. Prioritization (RICE / cost-of-delay) + the "premature scaling" discipline
-**Plain idea:** rank by Reach × Impact × Confidence ÷ Effort; and *refuse* to scale before the gate.
-**Steps:** score every roadmap item RICE; then apply the phase-gate veto — *nothing from Phase 2 ships until Phase 1's exit gate is met.* Write the kill-criteria down so "founder excitement" can't override them. (Startup Genome: scaling before PMF kills ~74% of failed high-growth startups.)
+### F5. Prioritization (RICE) + premature-scaling discipline
+Rank by Reach×Impact×Confidence÷Effort; refuse to scale before the gate. **Steps:** RICE every item; apply the phase-gate veto (nothing from Phase 2 ships until Phase 1's exit gate is met); write kill-criteria so founder excitement can't override them.
 
-### F6. The product operating model (Cagan/SVPG) + the compound-startup data model
-**Plain idea:** empowered teams solving problems, organized around a shared data model so products compound.
-**Steps:** name your shared primitive — the **Partner/Revenue Graph** — and require every new module to read/write it (claim → settlement → P&L → network all on one graph). This is what makes you a *compound* product rather than three loosely-related tools. Organize squads around the graph, not around features.
+### F6. Product operating model (Cagan/SVPG) + compound-startup data model
+Empowered teams on a shared data model so products compound. **Steps:** name the shared primitive — the **Partner/Revenue Graph** — and require every module to read/write it (claim → settlement → P&L → network on one graph). Organize squads around the graph, not features.
 
-### F7. Evidence discipline (the skill your repo already shows)
-**Plain idea:** never smuggle an assumption in as a fact. Tag every claim [Confirmed]/[Assumption]/[Validation need].
-**Steps:** keep doing what your venture narrative does — it's a genuine diligence signal. Extend it: tag *external* stats with their source and bias, and treat vendor stats as Med/Low until an independent body corroborates (the exact method this report used).
+### F7. Evidence discipline (the skill this very redo demonstrates)
+Never smuggle an assumption in as a fact. **Steps:** tag claims [Confirmed]/[Assumption]/[Validation need]; tag external stats with source + bias; treat vendor stats as Med/Low until an independent body corroborates; **drop** claims you can't corroborate (as this edition dropped the "74%" and "~24%" stats). This is a genuine diligence signal.
 
 ---
 
-# PART G — THE GTM SKILL LAYER (go-to-market craft, with plain steps)
+# PART G — THE GTM SKILL LAYER (go-to-market craft, plain steps)
 
-### G1. Beachhead / Crossing the Chasm (Geoffrey Moore)
-**Plain idea:** win one segment "big enough to matter, small enough to win," deliver the *whole product*, harvest references, then expand.
-**Steps:** lock ONE beachhead (recommended: GCC B2B — fintech/IT-cloud/insurance/SaaS — with 20–200+ partners and ZATCA exposure). Refuse adjacent deals until you dominate it. References are a catch-22 (you need them to sell, you need to sell to get them) — so make your first 3–5 design partners *referenceable by design.*
+### G1. Beachhead / Crossing the Chasm (Moore)
+Win one segment "big enough to matter, small enough to win," deliver the *whole product*, harvest references, expand. **Steps:** lock ONE beachhead (GCC B2B, 20–200+ partners, ZATCA exposure); refuse adjacent deals until you dominate; make the first 3–5 design partners referenceable by design.
 
-### G2. Founder-led sales → first repeatable motion
-**Plain idea:** the founder must close the first deals personally; only systematize what *works*.
-**Steps:** founder runs every discovery call; write down the exact sequence that closes; **do not hire an AE until pipeline exceeds founder capacity and the motion is documented** (your GTM manual's Gate 3). For a finance-touching sale, founder credibility *is* the close.
+### G2. Founder-led sales → repeatable motion
+The founder closes the first deals personally; systematize only what works. **Steps:** founder runs every discovery call; document the sequence that closes; don't hire an AE until pipeline exceeds founder capacity. For a finance-touching sale, founder credibility *is* the close.
 
-### G3. MEDDPICC qualification (and why the "P" will hurt you)
-**Plain idea:** a checklist that tells you whether a deal is real: Metrics, Economic buyer, Decision criteria, Decision process, **Paper process**, Identify pain, Champion, Competition.
-**Steps:** for every deal, fill all eight. Your highest-risk box is **Paper process** — rev-share touches finance, legal, procurement, and (in KSA) possibly an RHQ/govt liaison. Map the paper path at deal *start*, not at the end, or your 6–18-month cycle becomes 24.
+### G3. MEDDPICC (and why the "P" hurts)
+Metrics, Economic buyer, Decision criteria, Decision process, **Paper process**, Identify pain, Champion, Competition. (Original PTC-1996 MEDDIC = the first 6; P and the 2nd C were added later.) **Steps:** fill all eight per deal; map the **Paper process** at deal *start* — finance/legal/procurement (and possibly an RHQ/govt liaison) are your cycle-killers.
 
-### G4. Challenger / Command of the Message (you're teaching a new problem)
-**Plain idea:** don't ask "what keeps you up at night"; *teach* them a problem they under-rate, then position yourself as the answer.
-**Steps:** build one "insight" deck: *"A quarter of your partner-sourced revenue is silently misbooked as direct, and your payouts aren't ZATCA-clean — here's what that costs you."* Lead discovery with the insight, not the demo.
+### G4. Challenger / Command of the Message
+Teach a problem they under-rate, then position as the answer. **Steps:** one insight deck ("a chunk of your partner revenue is mis-booked as direct, and your payouts aren't ZATCA-clean — here's the cost"); lead discovery with the insight, not the demo. (Challenger's edge is specific to complex B2B; it's vendor research — don't treat as universal law.)
 
-### G5. Design-partner motion (paid > free)
-**Plain idea:** a few co-building early customers, ideally paying, validate the product *and* willingness-to-pay.
-**Steps:** recruit 3–5; charge them (even a discounted pilot fee); define written success criteria and a conversion trigger up front; run weekly pilot reviews; pull the economic buyer in by mid-pilot. Free pilots teach you nothing about pricing.
+### G5. Design-partner motion
+A few co-building early customers with a commitment and a path to paid. **Steps:** recruit 3–5; written success criteria + conversion trigger up front; weekly reviews; pull the economic buyer in by mid-pilot. Avoid indefinitely-free pilots; the discipline is commitment, not necessarily charging on day one.
 
-### G6. The bowtie (Winning by Design): value is post-sale
-**Plain idea:** the funnel doesn't end at "closed-won"; recurring revenue comes from recurring *impact*.
-**Steps:** instrument the right side hard — onboarding → first correct payout → adoption → expansion. Your churn risk lives here: if the money doesn't actually flow correctly, no renewal. Tie CS comp to *activation and correct settlement*, not logos.
+### G6. The bowtie (Winning by Design)
+Value is post-sale; "no recurring impact, no recurring revenue." **Steps:** instrument onboarding → first correct payout → adoption → expansion; tie CS comp to activation and correct settlement, not logos.
 
-### G7. Category design (Play Bigger) — earn it, don't declare it
-**Plain idea:** category kings capture ~76% of the category's economic value — *if* they're truly the king.
-**Steps:** develop a Point of View now (name the "old way"); but **do not** launch a category banner or "lightning strike" until you have design-partner proof. And don't claim "orchestration" — Crossbeam owns ELG; own the narrower **money/settlement** category instead.
+### G7. Category design (Play Bigger) — earn it
+Category kings capture **~76% of category *market cap*** — but that's measured among **surviving, VC-funded post-2000 tech kings** (survivorship bias; it's not a 76% chance of winning). **Steps:** develop the POV now (name the "old way"); don't launch a category banner until you have proof; own the narrower **money/settlement** category, not "orchestration" (Crossbeam owns ELG).
 
-### G8. Pricing power (the through-line)
-**Plain idea:** price on the value you govern, not on seats.
-**Steps:** Phase 1 — per active partner / per partner-attributed revenue. Phase 2 — add value-based % (~1–3%) of revenue-under-management. Phase 3 — add basis points on settled flow. Never anchor to the $299 PRM floor; counter-position out of the commodity tier from day one.
+### G8. Pricing power (through-line)
+Price on value governed, not seats. **Steps:** Phase 1 — per active partner / partner-attributed revenue; Phase 2 — add value-based % (~1–3%) of revenue-under-management; Phase 3 — add basis points on settled flow. Never anchor to the ~$299 PRM floor.
 
 ---
 
 # PART H — RISKS, COUNTER-THESES, AND WHAT WOULD MAKE ME WRONG
 
-A Fortune-500 CPO writes down how the plan could be wrong, in advance:
+1. **"Come for the network, stay for the tool" might be truer.** If the partner *network* is the cheap acquisition magnet and the workflow is the retainer, seed the network even harder in Phase 1. *Test:* ask whether buyers would join for cross-company partner discovery before paying for a workflow tool.
+2. **The rev-share dispute pain might be *tolerated*, not urgent.** *Test:* quantify, at named accounts, the cost of mis-payment + dispute hours + partner deals booked as direct. If you can't make it bleed, Phase 2 timing slips.
+3. **The hardest layer (finance-grade attribution + identity resolution) is deferred to where the differentiation lives.** *Mitigation:* prototype identity resolution on real design-partner data early (precision/recall).
+4. **GCC could be too slow/small to hit the seed bar in 12 months.** *Mitigation:* run 2–3 global co-sell discovery conversations in parallel — evidence the expansion path without splitting build focus.
+5. **Crossbeam or an incumbent PRM extends into settlement.** *Mitigation:* the compliance-native + bilateral-SoR + GCC position is slowest to copy; bank switching costs fast.
+6. **Vendor-stat contamination (the lesson of this redo).** Much of the "partnerships are exploding" narrative is vendor-published, and two figures in the first draft (and one in your own venture narrative) didn't survive checking. *Mitigation:* lead with Gartner/Forrester/Canalys-Omdia/HubSpot/MAGNiTT/MCIT-GASTAT/ZATCA/PwC/SEC; treat the rest as color.
 
-1. **"Come for the network, stay for the tool" might be the truer ordering.** If the *partner network* is actually the cheap acquisition magnet and the workflow is the retainer, you'd seed the network even more aggressively in Phase 1. *Test:* in discovery, ask whether buyers would join for cross-company partner discovery before they'd pay for a workflow tool.
-2. **The rev-share dispute pain might be *tolerated*, not urgent.** Spreadsheets persist because they're "good enough" until a forcing event (audit, big dispute, budget cut). *Test:* quantify, at named accounts, the cost of mis-payment + dispute hours + the leakage of partner deals booked as direct. If you can't make it bleed, Phase 2 timing slips.
-3. **The hardest layer (finance-grade attribution + identity resolution) is deferred to exactly where the differentiation lives** — execution risk is concentrated there. *Mitigation:* prototype identity resolution on real design-partner data early (precision/recall) even though full MDM is Phase 3.
-4. **GCC could be too slow/small to reach the seed bar in 12 months.** *Mitigation:* run 2–3 global co-sell discovery conversations in parallel so the expansion path is evidenced, without splitting build focus.
-5. **Crossbeam (or an incumbent PRM) extends into settlement.** *Mitigation:* the compliance-native + bilateral-SoR + GCC position is the one they're slowest to copy; bank switching costs fast.
-6. **Vendor-stat contamination.** Much of the "partnerships are exploding" narrative is vendor-published. *Mitigation:* this report leaned on Gartner/Forrester/Canalys/HubSpot/GASTAT/ZATCA/PwC for the load-bearing claims; keep that discipline in the deck.
-
-**What would make me reverse the recommendation:** if discovery shows (a) buyers will pay for the abstract "control layer" directly (then skip the PRM framing entirely and lead with the claim ledger as the repo originally said), or (b) the GCC compliance pain is *not* a strong enough wedge (then lead globally on co-sell/marketplace settlement). Both are testable in 30–60 days.
+**What would reverse the recommendation:** if discovery shows (a) buyers will pay for the abstract "control layer" directly — then lead with the claim ledger as the repo originally said, skipping the PRM framing; or (b) the GCC compliance pain isn't a strong enough wedge — then lead globally on co-sell/marketplace settlement. Both are testable in 30–60 days.
 
 ---
 
-# PART I — THE PRACTICAL ACTION PLAN (plain steps)
+# PART I — THE PRACTICAL ACTION PLAN
 
 ### Next 30 days
-1. **Lock the framing:** adopt Capture → Settle → Orchestrate; write the one-sentence counter-position ("payouts that come out ZATCA-cleared, WHT-correct, reconcilable for both sides").
-2. **Fix the TAM:** delete the stale "$133B/2030"; build a bottom-up GCC B2B-SaaS TAM with a dated, named denominator.
-3. **Run 15–20 discovery interviews** (Heads of Partnerships + CFOs in GCC). Capture quantified pain (leakage %, dispute hours, manual payout hours) and willingness to pilot. Test counter-theses #1 and #2 above.
-4. **Spec the Phase-1 MVP** to the 8-item build list (claim-centric, embedded, cross-tenant identity, compliance stubs). Write the kill-criteria down.
+1. Adopt **Capture → Settle → Orchestrate**; write the one-sentence counter-position.
+2. **Fix the TAM** in all docs: retire "$133B/2030"; build a bottom-up GCC B2B-SaaS TAM; correct the MCIT-vs-GASTAT attribution; **remove the untraceable "~24%" stat from the venture narrative.**
+3. Run **15–20 discovery interviews** (GCC Heads of Partnerships + CFOs); quantify pain; test counter-theses #1 and #2.
+4. Spec the Phase-1 MVP to the 8-item list (claim-centric, embedded, cross-tenant identity, compliance stubs); write kill-criteria.
 
 ### Days 30–90
-5. **Build a clickable MVP slice:** register partner → register claim → attribution → ZATCA-clean evidence pack, on real-shaped data.
-6. **Sign 1–3 paid design partners** with written success criteria + conversion trigger (MEDDPICC the paper process).
-7. **Populate the financial model** with real GCC salary/cost inputs; size a milestone-based pre-seed (no vanity number); pick the instrument against MAGNiTT/local benchmarks.
-8. **Begin the Shariah-alignment review** so "Sharia-compliant revenue-share" becomes a credentialed marketing asset.
+5. Build a clickable MVP slice: register partner → register claim → attribution → ZATCA-clean evidence pack, on real-shaped data.
+6. Sign 1–3 design partners with commitment + conversion trigger (MEDDPICC the paper process).
+7. Populate the financial model with real GCC cost inputs; size a milestone-based pre-seed (no vanity number); pick the instrument against MAGNiTT/local benchmarks.
+8. Begin the Shariah-alignment review.
 
 ### Months 3–9 (reach the Phase-1 exit gate)
-9. MVP processing **100+ real claims**; **3–5 paid** partners; **≥70% activation**; finance-accepted evidence packs; one undeniable proof sentence.
-10. Only then unlock Phase-2 (Settle) build. Hold the gate.
+9. MVP on **100+ real claims**; **3–5 committed/paying** partners; weekly active usage; finance-accepted evidence packs; one undeniable proof sentence. *Then* unlock Phase-2 build. Hold the gate.
 
 ### Months 9–24 (Settle)
-11. Ship the agreement-rule engine, append-only ledger, **bilateral reconciliation + dispute** workflow, compliance engine; integrate billing/ERP; introduce value-based pricing; build the category POV.
-12. Prove NRR signal and CFO trust; pass a real audit. *Then* consider settlement/disbursement and basis-points-on-flow.
+10. Ship the rule engine, append-only ledger, **bilateral reconciliation + dispute** workflow, compliance engine; integrate billing/ERP; introduce value-based pricing; build the category POV. Prove NRR signal + CFO trust; pass a real audit. *Then* consider settlement/disbursement + basis-points-on-flow.
 
 ### Months 24+ (Orchestrate)
-13. Light up the partner network on the cross-tenant identity you've carried since Phase 1; add P&L/forecasting/co-sell; expand GCC → global on the same ledger; position on the money layer, adjacent to ELG.
+11. Light up the partner network on the cross-tenant identity carried since Phase 1; add P&L/forecasting/co-sell; expand GCC → global on the same ledger; position on the money layer, adjacent to ELG.
 
 ---
 
-## Appendix 1 — Source list (grouped; confidence & bias noted)
+## Appendix 1 — Source list (grouped; confidence, bias, and verification status)
 
-**Independent / primary (lead with these in any external doc):**
-- Gartner — PERM category rename, 2025 Market Guide: https://www.gartner.com/en/documents/6982766 *(High)*
-- Forrester — State of Partner Ecosystems 2025 (67% expect >30% YoY indirect growth; 74% buyer third-party validation): https://www.forrester.com/blogs/the-state-of-partner-ecosystems-2025/ *(High)*
-- HubSpot × Canalys × Partnership Leaders — State of Partner Ops 2022 (50% of orgs attribute 26%+ revenue to partners): https://www.hubspot.com/company-news/the-state-of-partner-ops-and-programs-report-2022 *(High)*
-- Canalys (AWS co-sell; >50% marketplace sales via channel by 2027; $85B by 2028): https://www.channelfutures.com/cloud/partners-to-hit-paydirt-with-hyperscaler-marketplaces ; https://www.lightreading.com/cloud/hyperscaler-cloud-marketplace-sales-to-hit-85-billion-by-2028-canalys *(Med–High; AWS reprint has sponsor bias)*
-- Omdia — marketplace $30B→$163B by 2030: https://www.computerweekly.com/news/366632307/Enterprise-software-sales-through-cloud-hyperscale-marketplaces-set-to-hit-163bn-by-2030 *(Med; single-firm forecast)*
-- Microsoft Learn — MACC drawdown mechanics: https://learn.microsoft.com/en-us/marketplace/macc-frequently-asked-questions *(High)*
-- AWS Marketplace listing fees: https://docs.aws.amazon.com/marketplace/latest/userguide/listing-fees.html *(High)*
-- ASC 606 / IFRS 15 principal-vs-agent: https://www.revenuehub.org/article/principalagent-considerations-gross-vs-net ; https://viewpoint.pwc.com/dt/us/en/pwc/accounting_guides/revenue_from_contrac/revenue_from_contrac_US/chapter_10_principa_US/10_1_chapter_overview_US.html *(High)*
-- GASTAT — Saudi digital economy ~$131.9B / 16% GDP (2024): https://www.stats.gov.sa/en/w/news/150 *(High)*
-- ZATCA e-invoicing roll-out + clearance: https://zatca.gov.sa/en/E-Invoicing/Introduction/Pages/Roll-out-phases.aspx *(High)*
-- PwC — KSA withholding tax (15/5/20): https://taxsummaries.pwc.com/saudi-arabia/corporate/withholding-taxes *(High)*; A&M software-payment guideline: https://www.alvarezandmarsal.com/insights/ksa-guideline-taxation-software-payments-key-observations-takeaways *(Med–High)*
-- MAGNiTT — KSA/MENA VC: https://magnitt.com/research/H1-2025-Saudi-Arabia-Venture-Capital-Report-51001 *(High)*
-- trade.gov — KSA public-sector/RHQ + ICT: https://www.trade.gov/country-commercial-guides/saudi-arabia-selling-public-sector ; https://www.trade.gov/market-intelligence/saudi-arabia-ict-new-data-center-strategy-accelerate-ai-and-cloud-expansion *(High/Med–High)*
-- Startup Genome — premature scaling: https://s3.amazonaws.com/startupcompass-public/StartupGenomeReport2_Why_Startups_Fail_v2.pdf *(High)*
-- Pinsent Masons — Islamic finance principles: https://www.pinsentmasons.com/out-law/guides/islamic-finance *(High on principle)*
+> Reminder: in this environment no primary page could be opened (universal 403), so every external figure is **multi-source-corroborated, not primary-fetched.** Open the starred URLs to certify before external use.
 
-**Strategy canon (named thinkers):**
+**Independent / primary (lead with these):**
+- Gartner — PERM transition (Peer Insights title; 2025 PERM Market Guide #6982766): https://www.gartner.com/reviews/market/partner-relationship-management-applications ; https://www.gartner.com/en/documents/6982766 — *High (transition real); Med (exact framing)*
+- Forrester — State of Partner Ecosystems 2025 (~67% expect strong YoY indirect growth): https://www.forrester.com/blogs/the-state-of-partner-ecosystems-2025/ — *Med–High. NOTE: the "74% validate via third parties" claim was DROPPED as uncorroborated.*
+- HubSpot × Canalys × Partnership Leaders 2022 (50% attribute 26%+; n=664): https://www.hubspot.com/company-news/the-state-of-partner-ops-and-programs-report-2022 — *Med–High (vendor-led consortium)*
+- Omdia — marketplace $30B→$163B by 2030: https://omdia.tech.informa.com/pr/2025/oct/hyperscaler-cloud-marketplace-sales-to-hit-us-163-billion-us-dollars-by-2030 — *Med (single firm; note Omdia acquired Canalys 2024)*
+- Canalys — marketplace $16B (2023)→$85B (2028): https://www.lightreading.com/cloud/hyperscaler-cloud-marketplace-sales-to-hit-85-billion-by-2028-canalys — *Med*
+- Microsoft MACC drawdown: https://learn.microsoft.com/en-us/marketplace/macc-frequently-asked-questions — *High*
+- AWS Marketplace fees: https://docs.aws.amazon.com/marketplace/latest/userguide/listing-fees.html — *High (corroborated by multiple recaps)*
+- ASC 606 / IFRS 15 principal-vs-agent: https://www.revenuehub.org/article/principalagent-considerations-gross-vs-net — *High*
+- ★ SEC filings (certify exact lines): Toast 10-K FY2024 https://www.sec.gov/Archives/edgar/data/0001650164/000165016425000072/tost-20241231.htm ; Shopify 10-K FY2024 https://www.sec.gov/Archives/edgar/data/1594805/000159480525000012/shop-20241231.htm ; ServiceTitan S-1 https://www.sec.gov/Archives/edgar/data/0001638826/000119312524260611/d577298ds1.htm — *High on direction; certify exact $*
+- a16z — "Fintech Scales Vertical SaaS" (the 2–5× *thesis*): https://a16z.com/fintech-scales-vertical-saas/ — *High that it's a16z's claim; it is a thesis, not a measured study*
+- MCIT / Vision 2030 — digital economy ~SAR 495B (~$131.9B), ~15% GDP: https://www.mcit.gov.sa/en/news/saudi-arabia%E2%80%99s-digital-economy-new-era-tech-growth-innovation-and-global-impact-empowered-hrh — *High*
+- GASTAT — digital economy 16.0% of GDP (2024): https://www.stats.gov.sa/en/w/news/150 — *High*
+- ZATCA — e-invoicing roll-out + clearance + Wave 24: https://zatca.gov.sa/en/E-Invoicing/Introduction/Pages/Roll-out-phases.aspx — *High*
+- PwC — KSA withholding tax (15/5/20): https://taxsummaries.pwc.com/saudi-arabia/corporate/withholding-taxes — *High*
+- MAGNiTT — KSA/MENA VC: https://magnitt.com/research/H1-2025-Saudi-Arabia-Venture-Capital-Report-51001 — *High*
+- trade.gov — KSA public-sector / RHQ: https://www.trade.gov/country-commercial-guides/saudi-arabia-selling-public-sector — *High*
+- Startup Genome — premature scaling (74% of high-growth *internet* startups, 2011): https://s3.amazonaws.com/startupcompass-public/StartupGenomeReport2_Why_Startups_Fail_v2.pdf — *High (primary text quoted); 2011, internet-specific, correlational*
+- Islamic finance principles: https://www.pinsentmasons.com/out-law/guides/islamic-finance — *High on principle*
+
+**Strategy / GTM canon (named thinkers):**
 - Dixon, "Come for the tool, stay for the network": https://cdixon.org/2015/01/31/come-for-the-tool-stay-for-the-network/
 - a16z, "Come for the Tool, Stay for the Exchange": https://a16z.com/come-for-the-tool-stay-for-the-exchange-bootstrapping-liquidity-in-the-private-markets/
-- Choudary (rebuttal), TechCrunch: https://techcrunch.com/2016/12/01/come-for-the-tool-stay-for-the-network-reconsidered/
-- Point Nine, "Come for the network, stay for the tool": https://medium.com/point-nine-news/come-for-the-network-stay-for-the-tool-5206c5736b11
-- Helmer, 7 Powers (Lenny's): https://www.lennysnewsletter.com/p/business-strategy-with-hamilton-helmer ; counter-positioning (Commoncog): https://commoncog.com/c/concepts/counter-positioning/
-- a16z, "Is Software Losing Its Head?": https://a16z.com/is-software-losing-its-head/ ; "Vertical Operating Systems": https://a16z.com/vertical-operating-systems-one-system-of-record-to-rule-them-all/
-- Felicis, "Financial Services are the New Wedge": https://www.felicis.com/insight/financial-services-are-the-new-wedge
-- Bessemer, "Second Act": https://www.bvp.com/atlas/six-product-strategies-to-catalyze-your-second-act
-- Conrad/Rippling compound startup (SaaStr): https://www.saastr.com/rippling-ceo-parker-conrads-theory-of-the-compound-startup/
+- **Jon Evans** (NOT Choudary), TechCrunch rebuttal: https://techcrunch.com/2016/12/01/come-for-the-tool-stay-for-the-network-reconsidered/
+- Point Nine, "Come for the network, stay for the tool" (the inversion): https://medium.com/point-nine-news/come-for-the-network-stay-for-the-tool-5206c5736b11
+- Helmer, 7 Powers / counter-positioning: https://commoncog.com/c/concepts/counter-positioning/
+- a16z, "Vertical Operating Systems": https://a16z.com/vertical-operating-systems-one-system-of-record-to-rule-them-all/
+- a16z, "Growth + Sales": https://a16z.com/growthsales-the-new-era-of-enterprise-go-to-market/
+- Conrad/Rippling compound startup: https://www.saastr.com/the-compound-startup-advantage-why-the-ceo-of-rippling-believes-focus-is-overrated/
 - NFX network-effects manual: https://www.nfx.com/post/network-effects-manual
-- Kwok, "The Arc of Collaboration": https://kwokchain.com/2019/08/16/the-arc-of-collaboration/
-
-**GTM craft:**
-- Sapphire — PLG vs SLG: https://www.sapphireventures.com/blog/navigating-product-led-growth-vs-sales-led-growth-models/
-- Unusual VC — design-partner motion: https://www.unusual.vc/field-guide/build-a-sales-motion-with-design-partners-for-a-b2b-product/
-- Jen Abel — founder-led sales (Lenny's): https://www.lennysnewsletter.com/p/master-founder-led-sales-jen-abel
-- Geoffrey Moore — beachhead (Lenny's): https://www.lennysnewsletter.com/p/geoffrey-moore-on-finding-your-beachhead
-- Winning by Design — bowtie / recurring-revenue operating model: https://winningbydesign.com/resources/research/the-operating-model-for-recurring-revenue/
-- Play Bigger — category design: https://playbigger.com/
+- Moore, Crossing the Chasm: https://www.lennysnewsletter.com/p/geoffrey-moore-on-finding-your-beachhead
+- Winning by Design bowtie: https://winningbydesign.com/resources/research/the-operating-model-for-recurring-revenue/
+- Play Bigger (category design; 76% = market cap of surviving kings): https://www.playbigger.com/
+- MEDDICC origin: https://meddicc.com/resources/who-created-meddic
+- Founder-led sales (Jen Abel): https://www.lennysnewsletter.com/p/master-founder-led-sales-jen-abel
+- Design partners (Unusual VC): https://www.unusual.vc/field-guide/build-a-sales-motion-with-design-partners-for-a-b2b-product/
 
 **Category/competitive (interested — Med/Low unless independently corroborated):**
-- Crossbeam/Reveal merger: https://www.prnewswire.com/news-releases/crossbeam-and-reveal-are-joining-forces-to-disrupt-go-to-market-strategy-as-we-know-it-302180641.html ; ELG: https://www.crossbeam.com/what-is-ecosystem-led-growth
-- PartnerStack pricing/payouts: https://affonso.io/blog/partnerstack-pricing-guide ; https://partnerstack.com/payouts
-- Impartner pricing: https://www.vendr.com/marketplace/impartner-software ; Kiflo: https://www.kiflo.com/pricing
-- Tackle — State of Cloud GTM: https://tackle.io/resources/report/2024-state-of-cloud-gtm-report/
-- Trolley/Tipalti/Paddle payout rails: https://trolley.com/ ; https://www.paddle.com/resources/how-to-evaluate-a-merchant-of-record
-- "PRM is dead" narrative (vendor): https://www.journeybee.io/resources/prms-are-dead-whats-next-rethinking-partner-management ; adoption: https://www.gopronto.io/blog/the-top-5-reasons-your-prm-has-low-adoption-rates-and-how-to-solve-them
-- "Partner Attribution Leak" (Magentrix, trademarked): https://www.magentrix.com/blog/what-is-partner-attribution-leak-tm
-- PRM market sizes: https://www.marketresearchfuture.com/reports/partner-relationship-management-market-10569 ; https://www.factmr.com/report/partner-relationship-management-software-market ; https://www.grandviewresearch.com/industry-analysis/partner-relationship-management-market-report
+- Crossbeam/Reveal merger (June 25, 2024): https://www.prnewswire.com/news-releases/crossbeam-and-reveal-are-joining-forces-to-disrupt-go-to-market-strategy-as-we-know-it-302180673.html
+- PartnerStack payouts (contested %): https://partnerstack.com/payouts
+- Impartner pricing: https://www.g2.com/products/impartner-prm/pricing ; Kiflo: https://www.kiflo.com/pricing
+- PRM market sizes: https://www.factmr.com/report/partner-relationship-management-software-market ; https://www.marketresearchfuture.com/reports/partner-relationship-management-market-10569 ; https://www.grandviewresearch.com/industry-analysis/partner-relationship-management-market-report
+- Payout rails: https://trolley.com/ ; https://tipalti.com/mass-payments/ ; https://www.tremendous.com/products/bulk-payouts/ ; Paddle MoR: https://www.paddle.com/
+- "Partner Attribution Leak" (Magentrix trademark; unquantified): https://www.magentrix.com/blog/what-is-partner-attribution-leak-tm
 
-## Appendix 2 — Glossary of the strategy terms used here
-- **Wedge:** the smallest sharp entry point that sits on the on-ramp to a much larger system.
-- **Moat:** something that strengthens as you grow and that a rational competitor won't copy.
-- **System of record (SoR):** the authoritative source for a class of data others depend on; the basis of switching costs.
-- **Counter-positioning:** a model incumbents won't copy because it would cannibalize their existing business.
-- **Network economies:** value rises with each additional participant; the terminal, winner-take-most moat.
-- **PERM:** Partner *and Ecosystem* Relationship Management — Gartner's 2025 category rename of PRM.
-- **ELG / nearbound:** Ecosystem-Led Growth — using partner-overlap data to win deals; the category Crossbeam owns.
-- **Bilateral settlement SoR:** the shared, auditable ledger *between two companies* for defining, splitting, reconciling, and paying shared revenue — the unowned white space and your proposed moat.
-- **ZATCA clearance:** Saudi requirement that B2B e-invoices be cryptographically approved by the tax authority *before* issuance.
-- **WHT:** withholding tax on cross-border payments (KSA: 15% royalties / 5% technical services / 20% management fees).
-- **Riba / gharar:** prohibited interest / excessive uncertainty under Sharia; shape revenue-share as commission-on-performance to stay clear.
+## Appendix 2 — What was dropped or corrected vs. the first draft (audit trail)
+- **DROPPED — Forrester "74% of buyers validate via third parties":** uncorroborated; likely conflated with a different ~73% (multi-department buying) figure.
+- **DROPPED — "~24% median / >40% top-quartile partner-sourced revenue":** untraceable to a real named survey; also present in your venture narrative — recommend removing there too.
+- **CORRECTED — "2–5× revenue/customer" attribution:** it is **a16z's** thesis ("Fintech Scales Vertical SaaS"), not Felicis; and it's a thesis, not a measured result.
+- **CORRECTED — "tool-first networks stall" attribution:** **Jon Evans (TechCrunch)**, not Choudary.
+- **CORRECTED — GCC figures:** "$131.9B / SAR 495B" → MCIT/Vision 2030 (~15% GDP); "16.0% of GDP" → GASTAT. Do not bundle.
+- **CORRECTED — ServiceTitan "~25%":** that is *usage-based* revenue (fintech-led, includes Pro-product usage), not pure fintech.
+- **CORRECTED — Toast:** fintech ~$4.05–4.1B (~83% of revenue), ~18–19× subscription *by revenue* — but ~22% gross margin, so not 18× more *profitable*.
+- **REFINED — Gartner:** "transitioning to PERM (2025)," not a clean one-time rename.
+- **REFINED — PRM adoption:** dropped "17%"; the "~30%" is a single-analyst (Canalys), vendor-republished figure (~18–30% by metric) — use the directional claim, not a hard number.
+- **REFINED — PRM TAM:** software floor is sub-$1B (FactMR ~$0.78B) to ~$3.4B; broad estimates $45–91B; spread >100×.
+- **REFINED — Startup Genome 74%:** high-growth *internet* startups, 2011 data, correlational.
+- **REFINED — Play Bigger 76%:** ~76% of category *market cap* among surviving VC-funded post-2000 tech kings (survivorship bias).
+- **REFINED — MEDDIC vs MEDDPICC:** original PTC-1996 MEDDIC = 6 components; P + 2nd C added later.
+- **REFINED — payout taxonomy:** Tipalti/Trolley/Tremendous/PartnerStack = disbursement rails; Paddle = merchant-of-record; none is a bilateral settlement system-of-record (this *confirms* the Phase-2 white space).
 
 ---
 
-*This is a strategy and skills document, not an offer, valuation, or financial projection. Company-specific commercial figures (traction, ACV, raise size, valuation, burn) are not yet established and must be validated. External figures are third-party estimates that vary by source and methodology and are used directionally; the most decision-relevant claims are anchored to independent bodies (Gartner, Forrester, Canalys, HubSpot, GASTAT, ZATCA, PwC) rather than vendor marketing.*
+*This is a strategy and skills document, not an offer, valuation, or financial projection. All company-specific commercial figures (traction, ACV, raise size, valuation, burn) are not yet established and must be validated. External figures are third-party estimates that vary by source and methodology, were corroborated across multiple search results but not certified against primary pages in this environment, and are used directionally; the most decision-relevant claims are anchored to independent bodies (Gartner, Forrester, Canalys/Omdia, HubSpot, MAGNiTT, MCIT/GASTAT, ZATCA, PwC) and SEC filings rather than vendor marketing.*
