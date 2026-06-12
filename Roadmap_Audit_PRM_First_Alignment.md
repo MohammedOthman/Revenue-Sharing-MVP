@@ -132,56 +132,54 @@ The repo had no top-level statement of positioning. `README.md` now carries the 
 the no-finance boundary, and the vocabulary cross-walk. *Keep it authoritative: update it first
 whenever phasing changes.*
 
-**F2 — Phase-vocabulary fragmentation. FIXED at top level; per-doc cross-references recommended.**
-Recommended one-line addition near the top of each operational manual:
-> "Product phases referenced in this document map to the canonical model in `README.md`
-> (Phase 1 PRM/Capture = MVP+V1 · Phase 2 Settle = V2 · Phase 3 Orchestrate = V3)."
-For `Large_Enterprise_Client_Onboarding_Manual.md`, additionally rename its "Phases 1–25" to
-"Steps 1–25" (or add a note that these are customer-journey steps, not product phases).
+**F2 — Phase-vocabulary fragmentation. FIXED.**
+Canonical cross-walk added to `README.md` §3, plus a phase-mapping cross-reference added at the
+top of `GTM_Operating_Manual.md` (§0.1), `Internal_Operating_Cadence_Manual.md` (§0),
+`Monthly_CFO_Review_Manual.md` (§0), `Large_Enterprise_Client_Onboarding_Manual.md` (intro note:
+its "Phases 1–25" are customer-journey steps, not product phases), `Partner_Revenue_OS_PDR.md`
+(§2.6), and `Partner_Revenue_OS_Venture_Scale_Narrative.md` (§8 stage↔phase mapping).
 
-**F3 — Missing explicit "not a fintech now" boundary in sales-facing docs. OPEN (highest-risk gap).**
-The GTM manual (2,397 lines) never states that payment execution is out of scope — a seller or CS
-hire could over-promise settlement features. Add to `GTM_Operating_Manual.md` §1 (after line 29) a
-"Scope boundaries — what we do NOT sell in Phase 1" block: no payment execution, no fund
-custody, no settlement execution, no payment-gateway features; the product calculates and
-evidences; the customer's systems pay. Mirror the same block in
-`Large_Enterprise_Client_Onboarding_Manual.md` §3 and in PDR §6 (non-goals) — PDR's closest line
-today is "move money before entitlement is trusted" (`partner-revenue-os-PDR-v5.md:100`), which
-gates *timing* but does not state the regulatory boundary.
+**F3 — Missing explicit "not a fintech now" boundary in sales-facing docs. FIXED.**
+Added "what we do NOT sell/do in Phase 1" blocks (no payment execution, no fund custody, no
+settlement execution; the product calculates and evidences, the customer's systems pay) to:
+`GTM_Operating_Manual.md` §0.1 ("Phase Scope and the Hard Boundary — read before selling"),
+`Large_Enterprise_Client_Onboarding_Manual.md` (intro + §3.2), `partner-revenue-os-PDR-v5.md` §6
+(new "Regulatory boundary" non-goal), and `Partner_Revenue_OS_PDR.md` §2.6.
 
-**F4 — No regulatory/licensing gate on expansion features. OPEN.**
-`Large_Enterprise_Client_Onboarding_Manual.md:2968–2978` lists expansion items ("payout accrual…
-collection status; ERP export") with no note that money-touching features require a licensing
-review. Add to the expansion decision criteria (~line 3001): *"any feature involving fund
-movement, custody, or settlement execution requires a documented legal/regulatory review
-(PayFac/MTL/SAMA) before build."* The strategy dossier already mandates this
-(`Partner_Revenue_OS_Master_Strategy_Dossier.md:281`); the operational docs should carry it too.
+**F4 — No regulatory/licensing gate on expansion features. FIXED.**
+`Large_Enterprise_Client_Onboarding_Manual.md` §35.3 now carries a regulatory-gate note (payout
+accrual / collection status are Phase 2 capabilities requiring a documented PayFac/MTL/SAMA
+review before build or sale), and the expansion decision criteria gained two mandatory bullets
+(regulatory/compliance review; legal+finance approval for any money-touching feature) — matching
+the gate the strategy dossier already mandates (`Partner_Revenue_OS_Master_Strategy_Dossier.md:281`).
 
-**F5 — "Payout eligibility preview" terminology. OPEN (low risk, high frequency).**
-The term appears across PDR, CFO manual (lines 961, 1096, 1121), onboarding manual, and GTM manual.
-It is used correctly (calculation, not execution) but is the single most misreadable phrase in the
-corpus. Either standardize to "payout-eligibility **reporting**" or add a one-line glossary entry
-wherever first used: *"Preview = the system calculates and explains eligibility; payment itself
-happens in the customer's systems (until Phase 3)."*
+**F5 — "Payout eligibility preview" terminology. MITIGATED.**
+The term is retained (it is used correctly throughout), but clarifying glosses now appear at
+first use in the GTM, onboarding, cadence, and CFO manuals: *preview/eligibility = the system
+calculates and explains what is owed; payment executes in the customer's systems until Phase 3.*
+Optional further step: globally rename to "payout-eligibility reporting" in a future doc pass.
 
-**F6 — Venture narrative carries two stats its own companion docs ordered removed. OPEN.**
-The Master Dossier and Reverse-Engineered Strategy both instruct (Dossier line 41; Strategy lines
-282, 354): remove the untraceable **"~24% median / >40% top-quartile partner-sourced revenue"**
-stat and retire the stale **"~$87B by 2025 → ~$133B by 2030"** GCC TAM. Both are still present in
-`Partner_Revenue_OS_Venture_Scale_Narrative.md` (24%: lines 97, 357, 395; TAM: lines 99, 399).
-Replace the 24% stat with the verified HubSpot×Canalys figure ("50% of orgs attribute 26%+ of
-revenue to partners") and rebuild the TAM per Dossier Part VI (IDC ICT spend ~$39.6B as the
-anchor). This matters for investor diligence, not just hygiene.
+**F6 — Venture narrative carried two stats its own companion docs ordered removed. FIXED.**
+Per the Dossier's instructions (line 41; Strategy lines 282, 354):
+- The untraceable **"~24% median / >40% top-quartile"** stat (was at lines 97, 357, 395) is
+  replaced with the verified HubSpot×Canalys×Partnership Leaders 2022 figure (50% of orgs
+  attribute 26%+ of revenue to partners; 40% have no partner-ops FTE), with a source-note
+  documenting the substitution.
+- The stale **"~$87B by 2025 → ~$133B by 2030"** GCC TAM (was at lines 99, 399) is replaced with
+  2024 actuals per Dossier Part VI: digital economy ~SAR 495B (~$132B, MCIT/Vision 2030; 16.0% of
+  GDP per GASTAT) with IDC ICT spend ~$39.6B (2025) as the addressable-spend anchor.
+- Bonus fix in the same class: the unquantified "Partner Attribution Leak: a quarter or more…"
+  vendor claim (line 112) is rewritten as mechanism-real / magnitude-unverified, per the
+  Dossier's "never cite a leak percentage" rule.
 
-**F7 — CFO manual has no phase linkage. OPEN (minor).**
-Add a cross-reference in its introduction: "For the product roadmap phases these financial
-milestones fund, see `README.md` §2 and Integration Manual §20."
+**F7 — CFO manual has no phase linkage. FIXED.**
+Cross-reference added in its §0 (canonical phases; pre-seed funds Phase 1 only; no payment-rail
+or licensing cost lines by design; pointer to Integration Manual §20).
 
-**F8 — Venture narrative line 134 ambiguity. OPEN (minor).**
-The core-architecture sentence lists "statements, evidence packs, settlement, clawback" inside the
-financial/evidence ledger description while Stage 1 scope excludes settlement. Add the
-records-vs-executes qualifier: the ledger *records* settlement outcomes from Phase 1; it
-*executes* nothing before Phase 3.
+**F8 — Venture narrative line 134 ambiguity. FIXED.**
+The core-architecture ledger description now reads "settlement **records**, clawback-by-netting —
+the ledger *records* settlement outcomes; payment execution stays in the customer's systems
+until V3."
 
 **F9 — Market-analysis PDFs 02–03 horizon mapping. ADDRESSED via README cross-walk.**
 If these PDFs are regenerated, add a "Horizon ↔ Phase" legend (Now=Phase 1, 6–18mo=Phase 2,

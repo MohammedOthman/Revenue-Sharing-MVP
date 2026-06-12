@@ -30,6 +30,16 @@ The system helps enterprises govern partner-generated revenue through:
 - Executive reporting
 - Future CRM / ERP / billing integrations
 
+**Phase scope note:**
+The "Phases 1–25" in this manual are **customer-journey steps**, not product phases. Product
+phases follow the canonical model in `README.md`: Phase 1 — PRM / Capture (MVP + V1) ·
+Phase 2 — Settle (V2) · Phase 3 — Orchestrate (V3). This manual operates inside **Phase 1**.
+
+In Phase 1 the product does **not** execute payments, move or hold funds, or perform settlement
+execution. "Payout eligibility" means the system calculates and explains what is owed; the
+client's own finance systems execute every payment. Never promise settlement or payout
+execution in a Phase 1 engagement.
+
 ---
 
 # Table of Contents
@@ -210,6 +220,15 @@ Partner Revenue OS focuses on:
 - auditability;
 - payout eligibility;
 - executive control.
+
+And in the current phase (Phase 1), Partner Revenue OS does **not**:
+
+- execute payments or payouts;
+- move, hold, or escrow funds;
+- perform settlement execution;
+- replace billing, ERP, or payment systems.
+
+It calculates, evidences, and reports. The client's systems pay.
 
 ## 3.3 The real buyer pain
 
@@ -2976,6 +2995,11 @@ Add:
 - ERP export;
 - exception approval.
 
+**Regulatory gate:** these are Phase 2 (V2) capabilities, not Phase 1 expansion. Any item that
+touches actual funds or cash movement (payout accrual, collection status) requires a documented
+legal/regulatory review (PayFac / money-transmission / SAMA payments licensing) before it is
+built or sold. See `README.md` §2.
+
 ### 35.4 CRM integration
 
 Add:
@@ -3008,7 +3032,10 @@ Expand only if:
 - finance sees value;
 - implementation effort is understood;
 - pricing reflects added complexity;
-- scope is documented.
+- scope is documented;
+- regulatory and compliance impact is reviewed (mandatory for payout accrual, collection
+  tracking, or any feature touching fund movement);
+- legal and finance have approved any feature involving money movement or financial control.
 
 ---
 

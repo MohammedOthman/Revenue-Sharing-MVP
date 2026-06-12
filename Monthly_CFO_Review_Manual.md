@@ -10,6 +10,14 @@ This document is the **Monthly CFO Review Manual** for the Partner Revenue OS bu
 
 It is designed for a pre-seed B2B SaaS company building a **Partner Revenue OS**: a product that helps companies govern partner revenue through Partner Revenue Claims, attribution workflows, protection windows, agreement rules, payout eligibility, evidence, audit trails, and executive reporting.
 
+Product phases referenced in this manual map to the canonical model in `README.md`
+(Phase 1 — PRM / Capture = MVP + V1 · Phase 2 — Settle = V2 · Phase 3 — Orchestrate = V3); the
+pre-seed period funds **Phase 1 only**. "Payout eligibility preview" in the MVP module list means
+calculation and reporting only — the product does not execute payments, move funds, or perform
+settlement in Phase 1, which is why this budget carries no payment-rail, payments-licensing, or
+money-transmission cost lines by design. For the phased integration roadmap see the Integration
+Layer and API Data Flows Manual, §20.
+
 The monthly CFO review is not only an accounting meeting.
 
 It is the monthly control system that answers:

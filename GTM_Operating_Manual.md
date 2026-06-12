@@ -28,6 +28,29 @@ The product is a **Partner Revenue Control Layer** that helps customers govern p
 - executive reporting,
 - and later integrations.
 
+## 0.1 Phase Scope and the Hard Boundary (read before selling)
+
+Product phases map to the canonical model in `README.md`:
+
+```text
+Phase 1 — PRM / Capture (MVP + V1) → Phase 2 — Settle (V2) → Phase 3 — Orchestrate (V3)
+```
+
+The entire 18-month plan in this manual executes inside **Phase 1**.
+
+In Phase 1 the company sells a SaaS workflow product. Do **not** sell, demo, or promise:
+
+- payment execution or payout processing of any kind,
+- moving, holding, or escrowing funds,
+- settlement execution or payment-gateway features,
+- replacing the customer's billing, ERP, or payment systems.
+
+What the product does with money today is informational only: it **calculates** payout
+eligibility, explains it, and produces evidence and statements. The customer's own finance
+systems execute every payment. Settlement automation and payout execution are later-phase
+capabilities (V2/V3, behind a regulatory/licensing review) and must never be committed in a
+Phase 1 deal.
+
 Therefore, GTM is not only:
 
 ```text

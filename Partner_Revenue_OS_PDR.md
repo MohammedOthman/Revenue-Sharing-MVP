@@ -80,6 +80,17 @@ The more accurate category definition is:
 
 > Do not build a PRM. Build the control system that turns partnership activity into governed, forecastable, finance-ready revenue.
 
+### 2.6 Phase and Regulatory Boundary
+
+Release phases in this document (MVP → V1 → V2 → V3) map to the canonical model in `README.md`
+(Phase 1 — PRM / Capture = MVP + V1 · Phase 2 — Settle = V2 · Phase 3 — Orchestrate = V3).
+
+Through MVP, V1, and V2 the product is a SaaS workflow and evidence layer, not a regulated
+financial service: it calculates payout eligibility and produces statements and evidence, but it
+does not execute payments, move or hold funds, or perform settlement execution. Payment
+execution arrives only in V3 (see the Integration Layer manual §20), and only after a documented
+regulatory/licensing review (PayFac / money-transmitter / SAMA payments).
+
 ---
 
 ## 3. Product Strategy

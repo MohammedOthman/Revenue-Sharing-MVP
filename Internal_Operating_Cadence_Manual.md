@@ -43,6 +43,12 @@ The product is a **Partner Revenue OS**. It helps customers control partner reve
 - Executive reporting
 - Future CRM / ERP / billing integrations
 
+Product phases map to the canonical model in `README.md`: Phase 1 — PRM / Capture (MVP + V1) ·
+Phase 2 — Settle (V2) · Phase 3 — Orchestrate (V3). The 18-month plan in this manual executes
+inside **Phase 1**. In Phase 1 the product calculates and reports payout eligibility only — it
+does not execute payments, move funds, or perform settlement; those are gated Phase 2–3
+capabilities (see the Integration Layer and API Data Flows Manual, §20).
+
 This means the company must operate with strong internal discipline. The same logic we sell to customers — clarity, accountability, evidence, cadence, and control — must exist inside our own company.
 
 ---
