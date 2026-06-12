@@ -1,6 +1,8 @@
 # Partner Revenue OS — Pre-Seed 12-Month Burn, Runway & Cash-Flow Model
 ## Questionnaire-Driven AI Prompt (CFO / Board-Ready · No-Hallucination · KSA/GCC-Calibrated · 13-Pillar)
 
+> **Phase discipline (governing):** This model conforms to the canonical roadmap **Phase 1 Capture (PRM) → Phase 2 Settle → Phase 3 Orchestrate** (see `ROADMAP_ALIGNMENT_AUDIT.md` §2). All twelve months of this model sit inside **Product Phase 1 — Capture**: the entry product is sold and experienced as an easy, claim-centric PRM, and no payout execution, settlement automation, or money movement is in scope for the modeled period (those are Phase 2 Settle, post-gate).
+
 ---
 
 ## What this is
