@@ -45,6 +45,8 @@ The product is a **Partner Revenue OS**. It helps customers control partner reve
 
 This means the company must operate with strong internal discipline. The same logic we sell to customers — clarity, accountability, evidence, cadence, and control — must exist inside our own company.
 
+> **Phase discipline (governing):** This cadence operates inside the canonical roadmap **Phase 1 Capture (PRM) → Phase 2 Settle → Phase 3 Orchestrate** (see `ROADMAP_ALIGNMENT_AUDIT.md` §2). The 18-month timeline in this manual maps as: months 1–9 = Phase 1 Capture; months 10–18 = Phase-1 hardening into early Phase 2 Settle. The entry product is sold and experienced as an easy, claim-centric PRM — never a fintech in Phase 1: "payout eligibility preview" is read/calculate/display only, and no settlement, payout execution, or money movement is built or operated before the Phase-1 exit gate.
+
 ---
 
 # 1. The Operating Philosophy
@@ -1080,9 +1082,10 @@ Quarterly.
 5. Did gross margin improve?
 6. Did GTM become more repeatable?
 7. Did product scope stay focused?
-8. Did burn buy enough proof?
-9. What should we change next quarter?
-10. What are the company OKRs?
+8. **Phase-discipline check: is Phase-1 scope still claim-centric and non-financial (no payout execution, no settlement automation, no rail integrations)? If Phase-2 work is being considered, has the Phase-1 exit gate been met, and is there a decision date for it?**
+9. Did burn buy enough proof?
+10. What should we change next quarter?
+11. What are the company OKRs?
 
 ### Outputs
 

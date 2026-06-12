@@ -6,7 +6,9 @@
 This manual is for onboarding every person inside the company — founders, CEO, product, engineering, GTM, RevOps, implementation, customer success, finance, and security/compliance — so everyone understands how one large enterprise client should move through the full Partner Revenue OS journey.
 
 **Product strategy reminder:**  
-Partner Revenue OS is **not** a generic PRM, partner portal, or dashboard product. It is a **Partner Revenue Control Layer**.
+Partner Revenue OS is **not** a *generic* PRM, partner portal, or dashboard product. It is experienced and sold as an easy, claim-centric PRM; engineered underneath as a **Partner Revenue Control Layer** — never a generic PRM, never a fintech in Phase 1.
+
+> **Phase discipline (governing):** This manual's 25 phases (§6) describe the **customer journey**, not the product roadmap. The entire journey through Phase 24 (Executive Value Review) runs on **Product Phase 1 — Capture** (the PRM: claims, attribution, protection, payout-readiness *preview*, evidence; **no payout execution, settlement automation, escrow, or automated ZATCA clearance**). Customer Phase 25 (Expansion, §35.3 "deeper finance workflow") is where **Product Phase 2 — Settle** capabilities enter, and only after the Phase-1 exit gate. See `ROADMAP_ALIGNMENT_AUDIT.md` §2.
 
 The core object is the **Partner Revenue Claim**.
 
@@ -208,8 +210,10 @@ Partner Revenue OS focuses on:
 - disputes;
 - finance visibility;
 - auditability;
-- payout eligibility;
+- payout eligibility *(preview/calculation in Phase 1 — execution is a Phase-2 Settle capability)*;
 - executive control.
+
+*(The buyer should still experience the entry product as an easy, claim-centric PRM — that is the adoption wedge. What we reject is the generic PRM category, not the PRM-shaped product.)*
 
 ## 3.3 The real buyer pain
 
@@ -357,7 +361,7 @@ Must make the customer trust the system as an enterprise-grade revenue governanc
 
 # 6. The Full Client Journey at a Glance
 
-The full journey has 25 phases.
+The full journey has 25 phases. **These are customer-journey phases, not product-roadmap phases:** Phases 1–24 run entirely on Product Phase 1 (Capture — the PRM); Phase 25 (Expansion) is where Product Phase 2 (Settle) capabilities may enter, gated on the Phase-1 exit criteria.
 
 | Phase | Name | Main Goal | Exit Gate |
 |---|---|---|---|

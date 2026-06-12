@@ -8,6 +8,8 @@
 
 > One-line thesis: **In this product the integration layer is not plumbing — it is the product.** Partner Revenue OS earns the right to "control the partnership" only by reading truth out of the systems where sales, finance, and money already live (CRM, billing, ERP, banks, tax authority), governing it, and writing a small amount of controlled truth back. Everything else is a feature on top of that data spine.
 
+> **Phase discipline (governing):** This manual catalogues the *full* integration surface across all phases. It conforms to the canonical roadmap **Phase 1 Capture (PRM) → Phase 2 Settle → Phase 3 Orchestrate** (see `ROADMAP_ALIGNMENT_AUDIT.md` §2). Concordance: **MVP + V1 = Phase 1 Capture · V2 = Phase 2 Settle · V3 = late Phase 2 / Phase 3.** In Phase 1, every finance-system integration is **read-only** (evidence, validation, reconciliation data); **no write/execute integration with any payment rail, PSP, bank, or clearance API ships in Phase 1.** Settlement and disbursement integrations (§15) are Phase-2-late/Phase-3 capabilities — built last, or partnered to a licensed rail. Cataloguing a rail here is not a commitment to build it early.
+
 ---
 
 ## 0. How to read this manual
@@ -68,6 +70,8 @@ It does not restate the PDR. Where the PDR (Section 12) and the Workflow doc (Pa
 **Proof of competence:** keep the OS's Revenue Events in agreement with a CRM (via CDC) and a billing system (via webhooks) for 30 days with zero double-counted revenue and a clean exception queue; demonstrate replay after an outage.
 
 ### 1.3 Advanced tier — "Govern money-grade data across many systems"
+
+*(Phase note: the settlement/disbursement skills in this tier are exercised in Phase 2 Settle and Phase 3 — they are listed here as the competence ladder, not as Phase-1 build scope.)*
 
 **What you can do**
 - Implement the **transactional outbox / event-sourcing** pattern so a domain event and the state change that produced it are persisted atomically, then published — no lost write-backs, no phantom payouts.
@@ -208,13 +212,13 @@ This is the answer to "identify the API/data flows … using as many … financi
 | **KYB / payout readiness** | Wathq, FOCAL/Uqudo, IBAN validation | CR record, screening result, validated IBAN | Gate: don't pay an unverified or sanctioned entity |
 | **Cost-to-serve (Partner P&L)** | Support/CS, marketing, billing | ticket cost, co-marketing spend | Net partner economics, not just gross revenue |
 
-**Plain rationale:** "revenue sharing" touches almost every finance function. If the OS only reads CRM, it is a PRM. If it reads and reconciles across AR, AP, collections, tax, treasury, and bank — it is the finance-grade control layer the PDR describes.
+**Plain rationale:** "revenue sharing" touches almost every finance function. If the OS only reads CRM, it is a generic PRM. If it reads and reconciles across AR, AP, collections, tax, treasury, and bank — it is the finance-grade control layer the PDR describes. **Read ≠ operate:** in Phase 1 the OS *reads* these functions for evidence and reconciliation only; it does not execute against any of them. Executing (payout disbursement, clearance, settlement) is Phase 2 Settle at the earliest, built last or partnered to a rail.
 
 ---
 
 # PART III — THE INTEGRATION CATALOGUE
 
-> Direction key: **R** read, **W** write, **R/W** both. Priority maps to PDR roadmap (MVP / V1 / V2 / V3).
+> Direction key: **R** read, **W** write, **R/W** both. Priority maps to PDR roadmap (MVP / V1 / V2 / V3). Canonical-phase concordance: **MVP + V1 = Phase 1 Capture · V2 = Phase 2 Settle · V3 = late Phase 2 / Phase 3 Orchestrate.** Any **W** against a payment/clearance/settlement system is Phase 2+, regardless of the row.
 > Confidence: most rows are well-sourced; **[verify]** marks a claim a build team must confirm against live docs (see §22).
 
 ## 7. CRM & sales-motion integrations
@@ -346,6 +350,8 @@ This is the execution core of revenue-sharing. (Saudi rails detailed in §15; he
 **Why it matters (plain):** if a partner sits **outside KSA**, the OS must **withhold the correct rate at payout**, net it from the eligible amount, generate a WHT record, and handle treaty relief. Misclassifying a service (5% vs 15% vs 20%) changes the net payout and creates liability. **Build a WHT engine; don't bolt it on.** **[verify]** treaty application is case-specific — route through a tax advisor.
 
 ## 15. Payments, open banking & settlement — how the partner's share actually moves
+
+> **⚠️ Phase gate: everything in this section is Phase 2 (Settle) at the earliest — and disbursement execution is late-Phase-2/V3, built last or partnered to a licensed rail.** Nothing here ships in Phase 1 (Capture). In Phase 1 the only permitted touchpoints with this layer are *read/validate* operations: IBAN format validation and open-banking **AIS reads** for reconciliation evidence. Fund-holding/escrow additionally requires an e-money/PI licence decision that is explicitly out of scope until the Phase-2 settlement gate is passed.
 
 **SAMA Open Banking Framework.** Release 1 = **Account Information Services (AIS)** (issued Nov 2022; banks live Q1 2023). Release 2 = **Payment Initiation Services (PIS)** + Confirmation of Availability of Funds (Sept 2024). APIs follow the UK OBIE-style standard, secured with a **FAPI** profile (mTLS, signed JWS request objects, explicit consent). The **Open Banking Lab** is a mandatory sandbox + conformance gate. **Key 2026 shift:** on **26 March 2026** SAMA moved open banking from sandbox to a **fully licensed activity**; **Lean Technologies** became the **first licensed open-banking provider** (Major Payment Institution licence).
 
@@ -763,10 +769,13 @@ What the OS *exposes* (so partners' and clients' systems can integrate inward):
 21. **Continuous attribution & influence decay** for usage-priced revenue — a partner who sourced a consumption account has a claim on a *stream*; statements must update as usage moves (per your market thesis and the Workflow doc's Influence Decay).
 
 ## 20. Phased integration sequence (tie to PDR roadmap)
-- **MVP — control the claim:** CSV import/export; CRM link (read-first) + light write-back; manual finance-evidence export; IBAN validation; Wathq KYB; **localisation fields** (VAT no., CR, National Address, IBAN cert, ZATCA references, Arabic legal name). *Do not* build deep ERP or payout execution yet.
-- **V1 — make it operational:** native CRM (CDC) + controlled write-back; data-quality + identity-resolution engine; data-warehouse export; integration health monitor (sync status, failed webhooks, DLQ, retry queue); SSO/SCIM.
-- **V2 — make it finance-ready:** billing integration (revenue proof); ERP/accounting read + approved-payout export; **ZATCA clearance**; **WHT engine**; invoice matching + collection validation; reconciliation; KYB/AML screening; open-banking AIS reconciliation.
-- **V3 — make it investable & automated:** PSP split + PIS/sarie payout execution; settlement reconciliation; reverse-ETL; marketplace/co-sell integrations; continuous KYB monitoring; forecasting/ROI feeds.
+
+> Concordance: **MVP + V1 = Phase 1 Capture (the PRM — read-only on finance systems, no money movement) · V2 = Phase 2 Settle · V3 = late Phase 2 / Phase 3 Orchestrate.** No item moves left of its phase without re-passing the relevant exit gate.
+
+- **MVP — control the claim** *(Phase 1 — Capture)*: CSV import/export; CRM link (read-first) + light write-back; manual finance-evidence export; IBAN validation; Wathq KYB; **localisation fields** (VAT no., CR, National Address, IBAN cert, ZATCA references, Arabic legal name — capture stubs only, no clearance). *Do not* build deep ERP, any payment-rail write integration, or payout execution yet.
+- **V1 — make it operational** *(Phase 1 — Capture)*: native CRM (CDC) + controlled write-back; data-quality + identity-resolution engine; data-warehouse export; integration health monitor (sync status, failed webhooks, DLQ, retry queue); SSO/SCIM.
+- **V2 — make it finance-ready** *(Phase 2 — Settle; entered only after the Phase-1 exit gate)*: billing integration (revenue proof); ERP/accounting read + approved-payout export; **ZATCA clearance**; **WHT engine**; invoice matching + collection validation; reconciliation; KYB/AML screening; open-banking AIS reconciliation.
+- **V3 — make it investable & automated** *(late Phase 2 / Phase 3 — Orchestrate; money movement built last or partnered to a licensed rail)*: PSP split + PIS/sarie payout execution; settlement reconciliation; reverse-ETL; marketplace/co-sell integrations; continuous KYB monitoring; forecasting/ROI feeds.
 
 ## 21. Risk & anti-pattern register
 | Risk / anti-pattern | Consequence | Mitigation |

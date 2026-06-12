@@ -116,11 +116,13 @@ The misalignments found are **language and gating-clarity problems, not architec
 
 ## 5. Edit checklist (tracking)
 
-- [ ] `Partner_Revenue_OS_PDR.md` — F-1 positioning amendment; F-2 no-execution boundary in MVP scope; move payout-approval/reversal execution behind Phase-1 gate; add phase concordance header.
-- [ ] `partner-revenue-os-PDR-v5.md` — F-1; F-2; concordance header.
-- [ ] `Integration_Layer_and_API_Data_Flows_Manual.md` — F-3 phase-gate §15 + read-vs-write labels; concordance header.
-- [ ] `GTM_Operating_Manual.md` — F-5 demo/pilot disclaimer; F-6 standardized sentence; map 18-month roadmap to phases.
-- [ ] `Internal_Operating_Cadence_Manual.md` — concordance header; add quarterly check: "Is Phase-1 scope still claim-centric and non-financial?"
-- [ ] `Large_Enterprise_Client_Onboarding_Manual.md` — F-4 customer-journey vs product-phase note; F-6 sentence.
-- [ ] `Partner_Revenue_OS_Venture_Scale_Narrative.md` — F-6 sentence; remove "~24%" stat; concordance header.
-- [ ] `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md` — F-6 sentence.
+**All edits applied 2026-06-12.**
+
+- [x] `Partner_Revenue_OS_PDR.md` — F-1 positioning amendment (§1, §2.5, §20); F-2 no-execution boundary (Finance Metrics, Layer 5, §16.1 MVP scope); payout-approval/batch-export/reversal execution annotated Phase 2; phase-discipline header + V-to-phase concordance on the roadmap.
+- [x] `partner-revenue-os-PDR-v5.md` — F-1 (§1 positioning note); F-2 (exec summary + §19 MVP finance boundary, "recorded not executed"); phase-discipline header; releases labeled with canonical phases.
+- [x] `Integration_Layer_and_API_Data_Flows_Manual.md` — F-3: phase-gate banner on §15, read≠operate rule in §6, W-against-payment-systems rule in catalogue key, §1.3 phase note, §20 concordance + per-release phase labels; phase-discipline header.
+- [x] `GTM_Operating_Manual.md` — F-5 Phase-1 demo rule (Stage 13), CFO demo-row disclaimer, Phase-1 pilot boundary (Stage 17); F-6 standardized sentence (§0, §1.2 nuance); §12 roadmap-to-phase concordance; phase-discipline header.
+- [x] `Internal_Operating_Cadence_Manual.md` — phase-discipline header; quarterly strategy review agenda item 8: phase-discipline check.
+- [x] `Large_Enterprise_Client_Onboarding_Manual.md` — F-4 customer-journey vs product-phase note (header + §6); F-6 sentence (§0, §3.2); payout-eligibility preview annotation.
+- [x] `Partner_Revenue_OS_Venture_Scale_Narrative.md` — F-6 sentence (§1); "~24%" stat removed in all 4 locations (replaced with HubSpot×Canalys 2022 + Forrester 2025); stale "$87B→$133B" TAM retired (replaced with MCIT/GASTAT 2024 actuals + IDC ICT-spend anchor) in §3 and Sources; venture-stage-to-phase concordance header.
+- [x] `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md` — F-6 sentence in Business context; 12-month operational phases mapped to Product Phase 1 Capture.
