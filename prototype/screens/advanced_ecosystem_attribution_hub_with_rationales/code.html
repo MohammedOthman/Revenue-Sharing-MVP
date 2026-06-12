@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Advanced Ecosystem Attribution Hub - Partner Revenue OS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "status-amber": "#F59E0B",
+                    "surface-dim": "#cbdbf5",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "secondary": "#006c49",
+                    "border-subtle": "#E2E8F0",
+                    "on-secondary-fixed": "#002113",
+                    "surface": "#f8f9ff",
+                    "primary-container": "#131b2e",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "surface-container-low": "#eff4ff",
+                    "on-surface": "#0b1c30",
+                    "inverse-primary": "#bec6e0",
+                    "surface-tint": "#565e74",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#7073ff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container": "#e5eeff",
+                    "surface-container-high": "#dce9ff",
+                    "on-background": "#0b1c30",
+                    "primary": "#000000",
+                    "outline": "#76777d",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#00714d",
+                    "on-secondary-fixed-variant": "#005236",
+                    "inverse-surface": "#213145",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#6cf8bb",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#d3e4fe",
+                    "secondary-fixed-dim": "#4edea3",
+                    "background": "#f8f9ff",
+                    "surface-variant": "#d3e4fe",
+                    "on-primary-container": "#7c839b",
+                    "tertiary-fixed": "#e1e0ff",
+                    "status-red": "#EF4444",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-primary-fixed": "#131b2e",
+                    "tertiary": "#000000",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary-container": "#07006c",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#07006c",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-tertiary": "#ffffff",
+                    "surface-base": "#F8FAFC",
+                    "on-surface-variant": "#45464d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "sidebar-width": "260px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Public Sans"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "display-metrics": [
+                            "Public Sans"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Public Sans"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "data-mono": [
+                            "Inter"
+                    ],
+                    "headline-sm": [
+                            "Public Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-metrics": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "30px",
+                            {
+                                    "lineHeight": "38px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-mono": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean OS look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-full py-6 fixed left-0 top-0 h-screen w-sidebar-width border-r border-border-subtle bg-surface-container-low z-20">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-xl">layers</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-black tracking-tight text-primary">RevOS</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Governance Layer</p>
+</div>
+</div>
+<div class="px-4 mb-6">
+<button class="w-full bg-primary text-on-primary rounded py-2.5 px-4 font-body-md text-body-md font-medium flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Claim
+            </button>
+</div>
+<ul class="flex flex-col gap-1 px-3 flex-grow overflow-y-auto">
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-on-surface">dashboard</span>
+<span class="font-body-md text-body-md group-hover:text-on-surface">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-on-surface">handshake</span>
+<span class="font-body-md text-body-md group-hover:text-on-surface">Partners</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-on-surface">payments</span>
+<span class="font-body-md text-body-md group-hover:text-on-surface">Claims</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded bg-surface-container-high text-on-surface border-r-4 border-primary font-semibold transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-xl icon-filled text-primary">rule</span>
+<span class="font-body-md text-body-md text-primary">Approvals</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200 group mt-auto" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-on-surface">settings</span>
+<span class="font-body-md text-body-md group-hover:text-on-surface">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-sidebar-width flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="docked full-width top-0 h-16 border-b border-border-subtle bg-surface-container-lowest flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop z-10 shrink-0">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface md:hidden">RevOS</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface hidden md:block">Partner Revenue OS</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-colors duration-200 active:scale-95">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="h-6 w-px bg-border-subtle mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-colors duration-200 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-colors duration-200 active:scale-95">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="ml-2 w-8 h-8 rounded-full bg-surface-variant border border-border-subtle flex items-center justify-center overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">person</span>
+</div>
+</div>
+</header>
+<!-- Canvas / Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop pb-24 md:pb-margin-desktop">
+<div class="max-w-[1200px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Page Header (Spans full width) -->
+<div class="col-span-1 md:col-span-12 mb-2 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Advanced Ecosystem Attribution Hub</span>
+<span class="w-1.5 h-1.5 rounded-full bg-border-subtle"></span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">ID: NX-8842-REV</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-3">
+                            Nexus Corp Enterprise Rollout
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-surface-variant text-on-surface-variant border border-border-subtle font-label-caps tracking-wide">
+                                In Delivery
+                            </span>
+</h2>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Total TCV:</span>
+<span class="font-display-metrics text-[32px] leading-tight font-bold text-primary">$1.2M</span>
+</div>
+</div>
+<!-- Main Left Column (Grid 8) -->
+<div class="col-span-1 md:col-span-8 flex flex-col gap-gutter">
+<!-- Multi-Role Attribution Map -->
+<section class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 hover:shadow-sm transition-shadow duration-300">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-surface-tint">hub</span>
+                                Multi-Role Attribution Map
+                            </h3>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Role 1: Sourcing -->
+<div class="border border-border-subtle rounded p-4 bg-surface relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-tint opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-2">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">Sourcing Partner (Referral)</div>
+<div class="font-body-lg text-body-lg font-medium text-on-surface">AlphaTech Solutions</div>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm text-primary">10%</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Commission</div>
+</div>
+</div>
+<div class="mt-3 pt-3 border-t border-border-subtle">
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+<span class="font-medium not-italic text-on-surface">Rationale:</span> Secures pipeline entry. Standard referral rate applied to Year 1 ACV.
+                                    </p>
+</div>
+</div>
+<!-- Role 2: Integration -->
+<div class="border border-border-subtle rounded p-4 bg-surface relative overflow-hidden group ml-4 md:ml-8">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-tint opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-2">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">Integration Partner (Architectural)</div>
+<div class="font-body-lg text-body-lg font-medium text-on-surface">CloudSync Inc.</div>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm text-primary">$15k</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Integration Bonus</div>
+</div>
+</div>
+<div class="mt-3 pt-3 border-t border-border-subtle">
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+<span class="font-medium not-italic text-on-surface">Rationale:</span> Recognizes technical enablement as a critical closer for enterprise deals. Flat fee for architectural design.
+                                    </p>
+</div>
+</div>
+<!-- Role 3: Implementation -->
+<div class="border border-border-subtle rounded p-4 bg-surface relative overflow-hidden group ml-8 md:ml-16">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-tint opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-2">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">Implementation Partner (Delivery)</div>
+<div class="font-body-lg text-body-lg font-medium text-on-surface">Synergy Tech</div>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm text-primary">5%</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Service Rebate on LTV</div>
+</div>
+</div>
+<div class="mt-3 pt-3 border-t border-border-subtle">
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+<span class="font-medium not-italic text-on-surface">Rationale:</span> Ensures long-term client success and adoption. Ongoing rebate tied to retained revenue.
+                                    </p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar Column (Grid 4) -->
+<div class="col-span-1 md:col-span-4 flex flex-col gap-gutter">
+<!-- Service Evidence Vault -->
+<section class="bg-surface-container-lowest border border-border-subtle rounded-lg p-5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-surface-tint">folder_managed</span>
+                            Service Evidence Vault
+                        </h3>
+<ul class="flex flex-col gap-2">
+<li class="flex items-center gap-3 p-2 rounded hover:bg-surface cursor-pointer border border-transparent hover:border-border-subtle transition-all">
+<span class="material-symbols-outlined text-surface-tint">picture_as_pdf</span>
+<div class="flex-1 truncate">
+<p class="font-data-mono text-data-mono text-on-surface truncate">Architectural Sign-off.pdf</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">CloudSync Inc. • Oct 12</p>
+</div>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">download</span>
+</li>
+<li class="flex items-center gap-3 p-2 rounded hover:bg-surface cursor-pointer border border-transparent hover:border-border-subtle transition-all">
+<span class="material-symbols-outlined text-surface-tint">description</span>
+<div class="flex-1 truncate">
+<p class="font-data-mono text-data-mono text-on-surface truncate">API Mapping Documentation</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">CloudSync Inc. • Oct 14</p>
+</div>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">download</span>
+</li>
+<li class="flex items-center gap-3 p-2 rounded hover:bg-surface cursor-pointer border border-transparent hover:border-border-subtle transition-all">
+<span class="material-symbols-outlined text-surface-tint">code_blocks</span>
+<div class="flex-1 truncate">
+<p class="font-data-mono text-data-mono text-on-surface truncate">Deployment Log Q3</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Synergy Tech • Nov 01</p>
+</div>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">download</span>
+</li>
+</ul>
+<button class="mt-4 w-full py-2 border border-dashed border-outline-variant rounded text-on-surface-variant font-body-sm text-body-sm hover:bg-surface transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">upload</span> Add Evidence
+                        </button>
+</section>
+<!-- Action Bar -->
+<section class="bg-surface-container-low border border-border-subtle rounded-lg p-5 mt-auto">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase tracking-wider">Governance Actions</h3>
+<div class="flex flex-col gap-3">
+<button class="w-full bg-surface-container-lowest border border-border-subtle text-on-surface py-2.5 px-4 rounded text-left hover:border-surface-tint hover:bg-surface transition-all group flex flex-col">
+<div class="flex items-center justify-between w-full mb-1">
+<span class="font-body-md text-body-md font-medium">Verify Milestone</span>
+<span class="material-symbols-outlined text-sm text-surface-tint group-hover:text-primary transition-colors">check_circle</span>
+</div>
+<span class="font-body-sm text-[10px] text-on-surface-variant leading-tight">Rationale: Triggers payout eligibility based on service completion, not just contract sign-off.</span>
+</button>
+<button class="w-full bg-surface-container-lowest border border-border-subtle text-on-surface py-2.5 px-4 rounded text-left hover:border-surface-tint hover:bg-surface transition-all group flex flex-col">
+<div class="flex items-center justify-between w-full mb-1">
+<span class="font-body-md text-body-md font-medium">Adjust Split Ratio</span>
+<span class="material-symbols-outlined text-sm text-surface-tint group-hover:text-primary transition-colors">tune</span>
+</div>
+<span class="font-body-sm text-[10px] text-on-surface-variant leading-tight">Rationale: Modifies baseline allocation based on manual exception or escalated service delivery.</span>
+</button>
+<button class="w-full bg-primary text-on-primary py-2.5 px-4 rounded text-left hover:bg-primary/90 transition-all group flex flex-col mt-2">
+<div class="flex items-center justify-between w-full mb-1">
+<span class="font-body-md text-body-md font-medium">Finalize Attribution</span>
+<span class="material-symbols-outlined text-sm">gavel</span>
+</div>
+<span class="font-body-sm text-[10px] text-on-primary/80 leading-tight">Rationale: Locks the multi-role ledger and queues payouts to respective partner accounts.</span>
+</button>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>
