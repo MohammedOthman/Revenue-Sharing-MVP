@@ -13,12 +13,14 @@
 
 ## 1. Verdict summary
 
-| Mandate | Verdict | Notes |
-|---|---|---|
-| PRM-first entry | ⚠️ **Split across doc generations** | Newer strategy docs comply (PRM-shaped entry, "Trojan horse"). Older docs (both PDRs, GTM Manual, Venture Narrative, Burn Prompt, Onboarding Manual) explicitly say "NOT a PRM." |
-| No direct finance now | ✅ **Substantively compliant, with creep risks** | No document puts money *movement* in Phase 1. But the PDR MVPs include payout approval workflow, refund/chargeback handling, and ledger liability states without an explicit "no execution" boundary; the Integration Manual catalogs payment rails ungated. |
-| Multi-phase expansion into revenue control | ✅ **Compliant in the canon** | Capture → Settle → Orchestrate is explicitly gated in the canonical strategy docs and all three pricing docs. |
-| Clarity across all phases/docs | ❌ **Not yet** | Five different phase-naming schemes coexist; no single governing statement existed before this document. |
+> **Status update (2026-06-12):** all findings below have been **fixed** — the F-1…F-7 edits were applied to every flagged document (see §5 for exactly what changed and where). The verdict table preserves the *pre-fix* state for the record; the current state of the corpus is ✅ on all four mandates.
+
+| Mandate | Pre-fix verdict | Current | Notes |
+|---|---|---|---|
+| PRM-first entry | ⚠️ Split across doc generations | ✅ Fixed | Older docs (both PDRs, GTM Manual, Venture Narrative, Burn Prompt, Onboarding Manual) said "NOT a PRM"; all now carry the governing "not a *generic* PRM — sold as an easy, claim-centric PRM" positioning. |
+| No direct finance now | ✅ Substantively compliant, with creep risks | ✅ Hardened | No doc ever put money *movement* in Phase 1; the explicit "read/calculate/display only, no execution" boundary is now written into the PDR MVP scopes, and the Integration Manual's payment-rail sections are phase-gated. |
+| Multi-phase expansion into revenue control | ✅ Compliant in the canon | ✅ | Capture → Settle → Orchestrate gating now referenced from every document, not just the strategy canon. |
+| Clarity across all phases/docs | ❌ Not yet | ✅ Fixed | All five phase-naming schemes now map to the canonical model via concordance headers in each doc plus the table in §2. |
 
 ---
 
@@ -65,7 +67,9 @@ Source of truth: `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestr
 | `Reven_Pricing_Architecture_Deep_Research.md` | Aligned. "Reven" = commercial brand for Partner Revenue OS. No Settle-flow monetization in Phase 1. Five pricing stages map cleanly onto the three phases. |
 | `Monthly_CFO_Review_Manual.md` | No issues — company-level financial controls only; assumes nothing about product payout execution. |
 
-### 3.2 Misaligned or unclear — required edits
+### 3.2 Was misaligned or unclear — findings and the fixes applied
+
+*(All findings below are **resolved**; line references describe the pre-fix text. §5 records the applied edits.)*
 
 **F-1 · Both PDRs reject the PRM entry the founder mandates.** *(Severity: HIGH — positioning)*
 - `Partner_Revenue_OS_PDR.md:81` — "Do not build a PRM." Also lines 15, 63–73.
