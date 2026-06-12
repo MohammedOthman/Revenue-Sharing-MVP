@@ -1,12 +1,12 @@
 # Reven — Pricing & Tiers: Executive Summary
 
-**Reven** is the enterprise, finance-grade **control layer for partner revenue** — the system of record for the partner-revenue claim, attribution, eligibility, statements, and settlement. This is the recommended pricing architecture and tier structure. All figures are **benchmarked recommendations to validate** (not list-locked), shown in **USD and SAR** (peg 3.75; KSA contracts in SAR, VAT 15%).
+**Reven** is the enterprise, finance-grade **control layer for partner revenue** — the system of record for the partner-revenue claim, attribution, eligibility, statements, and settlement. This is the recommended pricing architecture and tier structure. All figures are **benchmarked recommendations to validate** (not list-locked), quoted in **SAR** (KSA contracts in SAR; VAT 15%; USD peg 3.75 for reference only).
 
 ---
 
 ## 1. The recommendation, in one line
 
-> Sell a **hybrid platform subscription priced on *active (transacting) partners*, with unlimited internal seats**, packaged Good-Better-Best by capability depth, sold annually above a **~$25–30K high-touch floor** — with a **stackable GCC compliance/residency premium**, a **fenced fixed-fee implementation**, and a **flat per-payout fee** added only once Reven runs settlement. **Refuse the resented % take-rate early**; introduce a capped, Sharia-structured fee on revenue-under-management only at scale.
+> Sell a **hybrid platform subscription priced on *active (transacting) partners*, with unlimited internal seats**, packaged Good-Better-Best by capability depth, sold annually above a **~SAR 95–110K high-touch floor** — with a **stackable GCC compliance/residency premium**, a **fenced fixed-fee implementation**, and a **flat per-payout fee** added only once Reven runs settlement. **Refuse the resented % take-rate early**; introduce a capped, Sharia-structured fee on revenue-under-management only at scale.
 
 **Three metrics, kept deliberately separate:**
 
@@ -20,15 +20,17 @@
 
 ## 2. The tiers
 
-| Tier | Ideal customer | Annual list (USD) | Annual list (SAR) | Incl. active partners | Package & support | Pricing visibility |
-|---|---|---|---|---|---|---|
-| **1 · SME (Starter)** | Small referral/reseller program, low complexity | **$6–12K** | **22–45K** | ≤25 | Partner Operations · digital support | **Published** (low-touch / self-serve only) |
-| **2 · SMB (Growth)** | Growing multi-type channel, manual statements | **$18–40K** | **67–150K** | 25–75 | + Partner Revenue Control · named CSM (pooled) | **"Starting from"** |
-| **3 · Mid-market** | Material partner-attributed revenue, finance + legal involved | **$50–120K** | **188–450K** | 75–250 (banded) | + Partner Revenue Orchestration · dedicated CSM | **Sales-assisted** |
-| **4 · Semi-government** | Vision-2030 entity, vendor/concessionaire ecosystem, sovereignty + audit mandates | **$160–650K+** | **600K–2.5M+** | Negotiated | Ecosystem Enterprise + **in-Kingdom residency, Arabic/RTL, Etimad/RHQ-aware** · CSM + Solution Architect, premium SLA | **Custom quoted** |
-| **5 · Large enterprise** | Multi-entity / multi-country ecosystem, high event volume | **$150–500K+** | **560K–1.9M+** | Negotiated / unlimited | Ecosystem Enterprise + SSO/SCIM, multi-entity, dedicated-tenant option, capped settlement layer · CSM + SA | **Custom quoted** |
+| Tier | Ideal customer | Annual list (SAR) | Incl. active partners | Package & support | Pricing visibility |
+|---|---|---|---|---|---|
+| **1 · SME (Reven Start)** | Micro program, **<10 partners**, replacing a spreadsheet | **from SAR 50/mo** (≈ SAR 600–1,788/yr) | ≤10 | Partner Operations essentials · self-serve, digital/community support | **Published** |
+| **2 · SMB (Growth)** | Growing multi-type channel, manual statements | **SAR 67–150K** | 25–75 | + Partner Revenue Control · named CSM (pooled) | **"Starting from"** |
+| **3 · Mid-market** | Material partner-attributed revenue, finance + legal involved | **SAR 188–450K** | 75–250 (banded) | + Partner Revenue Orchestration · dedicated CSM | **Sales-assisted** |
+| **4 · Semi-government** | Vision-2030 entity, vendor/concessionaire ecosystem, sovereignty + audit mandates | **SAR 600K–2.5M+** | Negotiated | Ecosystem Enterprise + **in-Kingdom residency, Arabic/RTL, Etimad/RHQ-aware** · CSM + Solution Architect, premium SLA | **Custom quoted** |
+| **5 · Large enterprise** | Multi-entity / multi-country ecosystem, high event volume | **SAR 560K–1.9M+** | Negotiated / unlimited | Ecosystem Enterprise + SSO/SCIM, multi-entity, dedicated-tenant option, capped settlement layer · CSM + SA | **Custom quoted** |
 
-**Unlimited internal seats at every tier.** The active-partner *band* — not seats and not claims — is the headline scaling unit. Minimum ACVs gate entry (no sub-$6K Reven); any deal needing a sales + implementation motion must clear **~$25–30K**.
+**Unlimited internal seats at every tier.** The active-partner *band* — not seats and not claims — is the headline scaling unit. The **SME (Reven Start) tier is self-serve and zero-touch from SAR 50/mo** (a deliberate land-wedge — success is *expansion*, not margin). Any deal needing a **sales + implementation** motion must clear **~SAR 95–110K** (SMB+).
+
+> **SME micro-tier guardrails:** at SAR 50/mo it only works **fully self-serve** (no implementation, no CSM; AI/community support) — one human support call erases a year's revenue. Brand it distinctly and keep it off the enterprise/gov pricing surface so the low anchor doesn't dilute the finance-grade premium. Track **land-to-expand %** as the kill metric.
 
 ---
 
@@ -69,7 +71,7 @@ Four outcome-based packages map to the tiers — fencing on **scale, compliance,
 
 | Assumption | Test | If wrong |
 |---|---|---|
-| Buyers pay **≥$25–30K** for finance-grade attribution over cheaper PRM | 3–5 paid pilots from an *existing* budget line | Reven is an $6–18K SMB tool — re-baseline ACV and motion |
+| Buyers pay **≥ SAR 95–110K** for finance-grade attribution over cheaper PRM | 3–5 paid pilots from an *existing* budget line | Reven is an SMB-priced tool — re-baseline ACV and motion |
 | **"Active = transacted"** doesn't undercharge high-value-per-partner accounts | Instrument partner-count vs attributed-revenue across pilots | Shift the headline metric to attributed-revenue bands sooner |
 | Compliance/residency premium **and** semi-gov deployment leave **≥70% GM** | Loaded cost-to-serve model (KSA rails, ZATCA, KYB, residency, support) | Raise the premium/license, or decline sub-scale gov deals |
 

@@ -22,7 +22,7 @@ This inherits the repo's non-negotiable rule: **do not invent traction, willingn
 | **[Reven-recommended]** | This document's proposed Reven price/structure — a hypothesis, benchmarked, **not validated**. |
 | **[Assumption→validate]** | A load-bearing assumption that must be converted to evidence (paid pilot, WTP study, real ACV) before launch. |
 
-**Currency convention.** USD shown for comparability with the global comp set; **SAR at the USD/SAR ≈ 3.75 peg [Verified — SAMA]**. KSA contracts are signed in **SAR, VAT-inclusive (15%)** per GCC norms. So `$10,000 ≈ SAR 37,500`. VAT under B2B reverse-charge nets to nil for a fully-taxable customer (working capital, never revenue).
+**Currency convention.** **Reven's own prices are quoted in SAR** (KSA contracts are signed in SAR, VAT-inclusive 15%). Competitor/benchmark figures keep their **published source currency (mostly USD)** — converting sourced prices (e.g. Stripe 0.7%, Spiff $75/user/mo) would misrepresent them; convert at the **USD/SAR ≈ 3.75 peg [Verified — SAMA]** (so `$10,000 ≈ SAR 37,500`). VAT under B2B reverse-charge nets to nil for a fully-taxable customer (working capital, never revenue).
 
 **Method.** Six parallel web-research streams (PRM; ecosystem/account-mapping; affiliate/referral; commissions/ICM; billing/rev-rec; CLM/enterprise-platform) plus a GCC/procurement stream, each instructed to separate verified list prices from estimates and to cite sources. Many vendor and aggregator pages (Salesforce, Vendr, Crossbeam, Chargebee, Stripe, etc.) block automated fetch (HTTP 403); figures were extracted from search-indexed snapshots of those same pages and cross-checked across ≥2 independent sources. Treat all **[Estimated-market]** as directional, not point estimates.
 
@@ -57,7 +57,7 @@ This is **Scenario B ("Hybrid control layer")** from the repo, sequenced across 
 
 ## 1.4 How pricing differs across segments (one-line each)
 
-- **SME:** low-touch, productized Starter — **optional / land-wedge only** (see Q14); never a high-touch motion on a sub-$25K deal.
+- **SME:** **self-serve, zero-touch micro tier from SAR 50/mo** — a deliberate land-wedge (see Q14); never a sales motion below **~SAR 95–110K**.
 - **SMB:** published "Growth" tier; fast implementation; clear ROI; annual prepay.
 - **Mid-market:** sales-assisted GBB + modules + active-partner bands + dedicated CSM; the land-and-expand core.
 - **Semi-government:** custom annual/multi-year **platform license**; in-Kingdom residency, Arabic/RTL, Etimad/RHQ-aware, training & change-management, SLA; usage-based pricing minimized; procurement-friendly line items.
@@ -212,7 +212,7 @@ Six structures, each with the brief's full template. Verdict: **Adopt / Test / R
 - **Customer objections:** "why a base *and* a per-partner fee?" → the base buys the control-layer/finance-grade platform; the meter scales with your program.
 - **Revenue implications:** best blend of floor + expansion; supports NRR 110–118% at mid-market/enterprise ACV.
 - **Operational implications:** needs CPQ + entitlement tracking; a true-up mechanic for partner-band growth.
-- **Use case:** the deal Reven wants to sign most often above ~$25–30K ACV.
+- **Use case:** the deal Reven wants to sign most often above ~SAR 95–110K ACV.
 - **Verdict:** **Adopt now (primary).**
 
 ### Structure C — Per-payout flat rail fee + capped overage *(the Settle money layer)*
@@ -236,7 +236,7 @@ Six structures, each with the brief's full template. Verdict: **Adopt / Test / R
 - **Advantages:** budget/CAPEX-style number procurement can encumber; suits Etimad/committee buying; high ACV; predictable for both sides.
 - **Risks:** a flat license *breaks the NRR engine* if usage isn't an axis — recover expansion via entities, compliance tier, and modules; long cycles + long DSO.
 - **Customer objections:** "we need it in SAR, in-Kingdom, in Arabic, on our paper" → all answered as priced line items, not concessions.
-- **Revenue implications:** largest ACVs (SAR 600K–2.5M+ semi-gov; $150–500K+ enterprise); cash drag from net-60–120+ DSO → require annual-upfront.
+- **Revenue implications:** largest ACVs (SAR 600K–2.5M+ semi-gov; SAR 560K–1.9M+ enterprise); cash drag from net-60–120+ DSO → require annual-upfront.
 - **Operational implications:** in-KSA/dedicated deployment, ECC/CCC + PDPL evidence, RHQ/local-content, SI delivery.
 - **Use case:** Vision-2030 partner/concessionaire ecosystems; multi-entity GCC groups.
 - **Verdict:** **Adopt** for Gov/Large-Enterprise (with usage minimized for semi-gov).
@@ -271,17 +271,17 @@ Six structures, each with the brief's full template. Verdict: **Adopt / Test / R
 
 # Deliverable 5 — Final tier structure (indicative, SAR + USD)
 
-**Pricing-visibility strategy:** **publish** SME and SMB anchors (ACV <$25K converts far better with visible pricing; hiding all numbers drives ~30% abandonment); show **"starting at"** for mid-market; **custom-quote** semi-government and large enterprise (procurement expects it). All numbers **[Reven-recommended / Assumption→validate]**, benchmarked to the comps in Deliverable 2.
+**Pricing-visibility strategy:** **publish** SME and SMB anchors (lower-ACV deals convert far better with visible pricing; hiding all numbers drives ~30% abandonment); show **"starting at"** for mid-market; **custom-quote** semi-government and large enterprise (procurement expects it). All numbers **[Reven-recommended / Assumption→validate]**, benchmarked to the comps in Deliverable 2.
 
-| Tier | Ideal customer | Annual platform fee (USD) | Annual (SAR) | Monthly equiv. | Incl. internal users | Incl. active partners | Incl. programs | Incl. claims / activity | Incl. integrations | Incl. modules (package) | Support | Implementation fee | Overage | Term | Visibility |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| **1 · SME (Starter)** | Small partner/referral program, low complexity | **$6–12K** | **SAR 22–45K** | ~$500–1,000 | Unlimited | up to ~25 | 1 | allowance (e.g. 1.5K claims/yr) | 1 CRM connector | **Partner Operations** (registry, programs, claim ledger, basic attribution-of-record, protection, evidence export) | Digital / KB, pooled | Templated, **$2–5K or waived on annual prepay** | Partner-band step-up | Annual (monthly option +) | **Published** |
-| **2 · SMB (Growth)** | Growing multi-type channel, manual statements | **$18–40K** | **SAR 67–150K** | ~$1.5–3.3K | Unlimited | ~25–75 | up to 3 | allowance (e.g. 6K/yr) | up to 2 (CRM + 1) | **+ Partner Revenue Control** (statements, disputes, finance evidence pack, payout-eligibility preview, data-quality, conflict/dedup) | Named CSM (pooled), faster SLA | **$8–20K** (productized) | Partner band + payout overage | Annual (12-mo) | **"Starting from"** |
-| **3 · Mid-market** | Material partner-attributed revenue, multi-program, finance+legal involved | **$50–120K** | **SAR 188–450K** | ~$4.2–10K | Unlimited | ~75–250 (banded) | unlimited | high allowance / metered | 3–5 (CRM/ERP/billing) | **+ Partner Revenue Orchestration** (multi-party attribution, revenue-event matching, reversals/clawback, advanced workflows, multi-entity-lite, analytics) | Dedicated CSM | **15–30% of Y1 ACV** | Active-partner band + per-payout + capped event overage | Annual / 2-yr | **Sales-assisted ("starting at")** |
-| **4 · Semi-government** | Vision-2030 entity, concessionaire/vendor ecosystem, audit & sovereignty mandates | **$160–650K+** | **SAR 600K–2.5M+** | — | Unlimited | negotiated / unlimited | unlimited | committed floor + minimal usage | all required + Etimad/Nafath/sector rails | **Ecosystem Enterprise** + **L2 In-Kingdom** (+ optional **L3 Sharia**), Arabic/RTL, multi-entity | Dedicated CSM + Solution Architect, **premium SLA** | **SAR 300K–1.5M+** (config, migration, Arabic, change-mgmt, accreditation) | Minimized; entity/country expansion | **Multi-year (3–5 yr) + annual uplift, SAR, upfront** | **Custom quoted** |
-| **5 · Large enterprise** | Large multi-entity/multi-country ecosystem, high event volume | **$150–500K+** | **SAR 560K–1.9M+** | — | Unlimited | negotiated / unlimited (bands) | unlimited | metered with commit | all + premium API/sandbox | **Ecosystem Enterprise** (SSO/SCIM, multi-entity, dedicated tenant option, capped flow layer, data/benchmark licensing) | Dedicated CSM + SA, exec reviews | **0.5–1.0× Y1 ACV** (or fixed bands) | Per-entity + per-country + capped bps (late) | Multi-year + volume commit | **Custom quoted** |
+| Tier | Ideal customer | Annual platform fee (SAR) | Monthly equiv. | Incl. internal users | Incl. active partners | Incl. programs | Incl. claims / activity | Incl. integrations | Incl. modules (package) | Support | Implementation fee | Overage | Term | Visibility |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **1 · SME (Reven Start)** | Micro program, **<10 partners**, replacing a spreadsheet | **SAR 600–1,788/yr** | **SAR 50–149/mo** | Unlimited | ≤5 (Start) / ≤10 (Start+) | 1 | allowance (e.g. 1.5K claims/yr) | CSV / 1 CRM connector | **Partner Operations essentials** (registry, 1 program, claim ledger, attribution-of-record, protection, evidence, basic reports) | Digital / community / KB, self-serve | **None** (productized self-serve) | Partner-band step-up → graduate to SMB | Monthly or annual (−2 mo prepay) | **Published, from SAR 50/mo** |
+| **2 · SMB (Growth)** | Growing multi-type channel, manual statements | **SAR 67–150K** | ~SAR 5.6–12.5K | Unlimited | ~25–75 | up to 3 | allowance (e.g. 6K/yr) | up to 2 (CRM + 1) | **+ Partner Revenue Control** (statements, disputes, finance evidence pack, payout-eligibility preview, data-quality, conflict/dedup) | Named CSM (pooled), faster SLA | **SAR 30–75K** (productized) | Partner band + payout overage | Annual (12-mo) | **"Starting from"** |
+| **3 · Mid-market** | Material partner-attributed revenue, multi-program, finance+legal involved | **SAR 188–450K** | ~SAR 16–37K | Unlimited | ~75–250 (banded) | unlimited | high allowance / metered | 3–5 (CRM/ERP/billing) | **+ Partner Revenue Orchestration** (multi-party attribution, revenue-event matching, reversals/clawback, advanced workflows, multi-entity-lite, analytics) | Dedicated CSM | **15–30% of Y1 ACV** | Active-partner band + per-payout + capped event overage | Annual / 2-yr | **Sales-assisted ("starting at")** |
+| **4 · Semi-government** | Vision-2030 entity, concessionaire/vendor ecosystem, audit & sovereignty mandates | **SAR 600K–2.5M+** | — | Unlimited | negotiated / unlimited | unlimited | committed floor + minimal usage | all required + Etimad/Nafath/sector rails | **Ecosystem Enterprise** + **L2 In-Kingdom** (+ optional **L3 Sharia**), Arabic/RTL, multi-entity | Dedicated CSM + Solution Architect, **premium SLA** | **SAR 300K–1.5M+** (config, migration, Arabic, change-mgmt, accreditation) | Minimized; entity/country expansion | **Multi-year (3–5 yr) + uplift, SAR, milestone-billed** | **Custom quoted** |
+| **5 · Large enterprise** | Large multi-entity/multi-country ecosystem, high event volume | **SAR 560K–1.9M+** | — | Unlimited | negotiated / unlimited (bands) | unlimited | metered with commit | all + premium API/sandbox | **Ecosystem Enterprise** (SSO/SCIM, multi-entity, dedicated tenant option, capped flow layer, data/benchmark licensing) | Dedicated CSM + SA, exec reviews | **0.5–1.0× Y1 ACV** (or fixed bands) | Per-entity + per-country + capped bps (late) | Multi-year + volume commit | **Custom quoted** |
 
-**Notes.** (1) Implementation is **fenced** (reported separately, contribution-positive, pushed to SI partners over time). (2) Semi-gov & large-enterprise omit "monthly equivalent" by design — these are committed annual/multi-year licenses. (3) The **active-partner band**, not seats, is the headline scaling unit at every tier; **internal seats are unlimited everywhere**. (4) Minimum ACVs (Deliverable 11) gate which tier a buyer may enter — there is no sub-$6K Reven.
+**Notes.** (1) Implementation is **fenced** (reported separately, contribution-positive, pushed to SI partners over time). (2) Semi-gov & large-enterprise omit "monthly equivalent" by design — these are committed annual/multi-year licenses. (3) The **active-partner band**, not seats, is the headline scaling unit at every tier; **internal seats are unlimited everywhere**. (4) The **SME tier is self-serve from SAR 50/mo** (a micro on-ramp); any **sales-assisted** deal must clear **~SAR 95–110K** (Deliverable 11).
 
 ---
 
@@ -291,7 +291,7 @@ Six structures, each with the brief's full template. Verdict: **Adopt / Test / R
 |---|---|---|---|
 | **Goal** | Maximize logos/data fast | Adoption + margin + value capture | Maximize ACV; position as critical infrastructure |
 | **Model** | Low published SME/SMB GBB on active partners; generous limits; implementation waived on annual; no flow layer | GBB + hybrid base + modules + compliance ladder + fenced implementation; **flat per-payout in Settle**; capped bps + data licensing late | Platform-license-led; modules + compliance L2/L3 + per-entity + premium security + capped flow; services-rich; semi-gov/enterprise first |
-| **Entry ACV** | $6–18K | $18–120K (floor real high-touch ≥$25–30K) | $120K–650K+ |
+| **Entry ACV** | from SAR 50/mo (self-serve) | SAR 67–450K (high-touch floor ≥ SAR 95–110K) | SAR 450K–2.5M+ |
 | **Blended GM** | ~80% (pure SaaS) but low ARPU | **~72–78%** (subscription dominant, flow fenced) | 68–75% (services/residency heavier) |
 | **NRR** | ~100–108% (SMB ceiling ~97%) | **~112–120%** (module + band + payout + data) | ~115–122% (entity + compliance expansion) |
 | **CAC payback** | fast logo count, slow $ payback (valley-of-death risk) | <18 mo with annual prepay (toward ~8 mo) | long (6–18-mo cycles) but high ACV; prepay essential |
@@ -341,33 +341,33 @@ Four packages mapped to the tiers: **Ops** (Partner Operations · SME) · **Cont
 
 # Deliverable 8 — Add-on pricing
 
-Indicative **[Reven-recommended / Assumption→validate]**, anchored to comps (ICM connector $250/mo; Crossbeam seat $1,800/yr; ZATCA middleware SAR 0.5–2/clearance; sovereign premium ~15–30%; support 30% of license).
+Indicative **[Reven-recommended / Assumption→validate]**, anchored to comps (ICM connector ~SAR 940/mo; Crossbeam seat ~SAR 6,750/yr; ZATCA middleware SAR 0.5–2/clearance; sovereign premium ~15–30%; support 30% of license).
 
-| Add-on | Pricing basis | Indicative range (USD) | Indicative (SAR) | Cost-to-serve | Tiers | Recurring/one-time |
-|---|---|---|---|---|---|---|
-| Additional active-partner block | per band (e.g. +25) | $3–8K/block/yr | SAR 11–30K | low (software) | All | Recurring |
-| Additional claim/activity volume | per allowance block | $2–6K/yr | SAR 7.5–22K | low | SMB+ | Recurring |
-| Additional revenue-event volume | per allowance block | $3–8K/yr | SAR 11–30K | low-med | MM+ | Recurring |
-| Additional business entity | per entity | $8–25K/entity/yr | SAR 30–94K | low-med | MM+ / Gov | Recurring |
-| Additional country | per country | $6–20K/country/yr | SAR 22–75K | med (tax/locale) | Ent / Gov | Recurring |
-| Additional program/partner-type module | per module | $3–10K/yr | SAR 11–37K | low | All | Recurring |
-| Additional integration / connector | per connector | $4–15K/yr | SAR 15–56K | med (maintenance) | SMB+ | Recurring |
-| Premium API capacity | tier / per-call band | $10–40K/yr | SAR 37–150K | med | Ent | Recurring |
-| Advanced analytics / ecosystem intelligence | module | $12–40K/yr | SAR 45–150K | low (software) | MM+ | Recurring |
-| AI-assisted attribution | metered (capped) | $0.5–2 / scored claim or $10–50K/yr cap | SAR 37–188K cap | **high (inference)** — fence/cap | MM+ | Recurring (metered) |
-| **L2 In-Kingdom residency / dedicated tenant** | % uplift on license | **+15–30% of license** | proportional | high (infra) | Ent / Gov | Recurring |
-| **L3 Sharia certification (Ju'ala/Wakala + fatwa)** | premium + setup | $15–40K setup + premium | SAR 56–150K + | med + one-time fatwa | Regulated | Recurring + one-time |
-| **Compliance pack (ZATCA/WHT/PDPL)** | module / per-clearance | $10–30K/yr (or SAR ~1–2/clearance pass-through) | SAR 37–112K | med (middleware pass-through) | All KSA | Recurring |
-| Data migration / historical claim reconciliation | fixed by volume | $10–60K | SAR 37–225K | high (services) | MM+ / Gov | One-time |
-| Agreement digitization / rule configuration | fixed by complexity | $8–40K | SAR 30–150K | high (services) | MM+ / Gov | One-time |
-| Custom workflow / custom reporting | T&M or fixed | $150–350/hr or $8–30K | SAR 560–1,300/hr | high (services) | Ent / Gov | One-time |
-| Dedicated sandbox | flat | $5–15K/yr | SAR 19–56K | low-med | Ent | Recurring |
-| Premium support / 24-7 / custom SLA | % of ACV | **15–30% of ACV** | proportional | med | Ent / Gov | Recurring |
-| Managed partner operations / finance reconciliation | retainer (FTE-equiv) | $3–12K/mo | SAR 11–45K/mo | **high (services)** — fence | Gov / Ent | Recurring |
-| Partner onboarding services | per cohort | $5–25K | SAR 19–94K | high | All | One-time |
-| Training / change management | per program | $8–40K | SAR 30–150K | high | Gov / Ent | One-time |
-| Solution architecture / advisory | retainer / T&M | $200–400/hr | SAR 750–1,500/hr | high | Ent / Gov | Either |
-| Audit support (period-end / external audit) | per engagement | $5–20K | SAR 19–75K | med | Finance-led | One-time/recurring |
+| Add-on | Pricing basis | Indicative range (SAR) | Cost-to-serve | Tiers | Recurring/one-time |
+|---|---|---|---|---|---|
+| Additional active-partner block | per band (e.g. +25) | SAR 11–30K/block/yr | low (software) | All | Recurring |
+| Additional claim/activity volume | per allowance block | SAR 7.5–22K/yr | low | SMB+ | Recurring |
+| Additional revenue-event volume | per allowance block | SAR 11–30K/yr | low-med | MM+ | Recurring |
+| Additional business entity | per entity | SAR 30–94K/entity/yr | low-med | MM+ / Gov | Recurring |
+| Additional country | per country | SAR 22–75K/country/yr | med (tax/locale) | Ent / Gov | Recurring |
+| Additional program/partner-type module | per module | SAR 11–37K/yr | low | All | Recurring |
+| Additional integration / connector | per connector | SAR 15–56K/yr | med (maintenance) | SMB+ | Recurring |
+| Premium API capacity | tier / per-call band | SAR 37–150K/yr | med | Ent | Recurring |
+| Advanced analytics / ecosystem intelligence | module | SAR 45–150K/yr | low (software) | MM+ | Recurring |
+| AI-assisted attribution | metered (capped) | SAR ~2–7.5 / scored claim or SAR 37–188K/yr cap | **high (inference)** — fence/cap | MM+ | Recurring (metered) |
+| **L2 In-Kingdom residency / dedicated tenant** | % uplift on license | **+15–30% of license** | high (infra) | Ent / Gov | Recurring |
+| **L3 Sharia certification (Ju'ala/Wakala + fatwa)** | premium + setup | SAR 56–150K setup + premium | med + one-time fatwa | Regulated | Recurring + one-time |
+| **Compliance pack (ZATCA/WHT/PDPL)** | module / per-clearance | SAR 37–112K/yr (or SAR ~1–2/clearance pass-through) | med (middleware pass-through) | All KSA | Recurring |
+| Data migration / historical claim reconciliation | fixed by volume | SAR 37–225K | high (services) | MM+ / Gov | One-time |
+| Agreement digitization / rule configuration | fixed by complexity | SAR 30–150K | high (services) | MM+ / Gov | One-time |
+| Custom workflow / custom reporting | T&M or fixed | SAR 560–1,300/hr or SAR 30–112K | high (services) | Ent / Gov | One-time |
+| Dedicated sandbox | flat | SAR 19–56K/yr | low-med | Ent | Recurring |
+| Premium support / 24-7 / custom SLA | % of ACV | **15–30% of ACV** | med | Ent / Gov | Recurring |
+| Managed partner operations / finance reconciliation | retainer (FTE-equiv) | SAR 11–45K/mo | **high (services)** — fence | Gov / Ent | Recurring |
+| Partner onboarding services | per cohort | SAR 19–94K | high | All | One-time |
+| Training / change management | per program | SAR 30–150K | high | Gov / Ent | One-time |
+| Solution architecture / advisory | retainer / T&M | SAR 750–1,500/hr | high | Ent / Gov | Either |
+| Audit support (period-end / external audit) | per engagement | SAR 19–75K | med | Finance-led | One-time/recurring |
 
 **Rules:** recurring add-ons should be **high-margin software** (residency infra excepted); **services add-ons are fenced** (reported separately, contribution-positive, pushed to SI partners over time) to protect the ≥70% blended GM and the multiple. AI is **always metered/capped** because inference runs 50–60% GM vs 80–90% SaaS.
 
@@ -375,15 +375,15 @@ Indicative **[Reven-recommended / Assumption→validate]**, anchored to comps (I
 
 # Deliverable 9 — Implementation pricing
 
-Implementation is **priced separately from subscription**, recommended as **fixed-fee + milestone-based** (predictable for procurement, protects scope), **never pure T&M for the customer-facing scope**, with custom work billed as paid services. Mandatory for mid-market+ (it deepens switching cost and filters tire-kickers); **waivable/templated for SME** on annual prepay.
+Implementation is **priced separately from subscription**, recommended as **fixed-fee + milestone-based** (predictable for procurement, protects scope), **never pure T&M for the customer-facing scope**, with custom work billed as paid services. Mandatory for mid-market+ (it deepens switching cost and filters tire-kickers); **none/self-serve for SME** (the micro tier carries no implementation fee).
 
-| Package | Segment | Scope | Effort driver | Indicative fee | SAR | Pricing model |
-|---|---|---|---|---|---|---|
-| **Templated** | SME | Self-serve config, 1 CRM connector, standard workflow, digital training, go-live | ~10–25 hrs | **$2–5K or waived on annual** | SAR 7.5–19K | Fixed / waived |
-| **Standard** | SMB | Config, basic data import, 1 CRM integration, workflow setup, role training, go-live support | ~40–80 hrs | **$8–20K** (≈15–30% Y1 ACV) | SAR 30–75K | Fixed |
-| **Advanced** | Mid-market | Multiple integrations, data mapping, agreement-rule config, historical migration, RBAC/ABAC design, finance workflows, custom reports, change mgmt | ~120–300 hrs | **15–30% of Y1 ACV** (e.g. $15–60K) | SAR 56–225K | Fixed + milestones |
-| **Enterprise transformation** | Large enterprise | Multi-entity rollout, multiple ERPs/CRMs, identity architecture (SSO/SCIM), custom security, historical reconciliation, process redesign, program governance, exec reporting, regional rollout, adoption program | 600–2,000+ hrs | **0.5–1.0× Y1 ACV** | proportional | Milestone-based + SI |
-| **Semi-government** | Semi-gov | Above + in-KSA/dedicated deployment, ECC/CCC + PDPL evidence, Arabic/RTL, Etimad/Nafath/sector-rail integration, Arabic contract/SLA pack, accreditation, change management | 800–3,000+ hrs | **SAR 300K–1.5M+** | — | Milestone-based + local SI |
+| Package | Segment | Scope | Effort driver | Indicative fee (SAR) | Pricing model |
+|---|---|---|---|---|---|
+| **Templated** | SME | Self-serve config, 1 CRM connector, standard workflow, digital training, go-live | ~10–25 hrs | **None** (self-serve; productized) | Self-serve |
+| **Standard** | SMB | Config, basic data import, 1 CRM integration, workflow setup, role training, go-live support | ~40–80 hrs | **SAR 30–75K** (≈15–30% Y1 ACV) | Fixed |
+| **Advanced** | Mid-market | Multiple integrations, data mapping, agreement-rule config, historical migration, RBAC/ABAC design, finance workflows, custom reports, change mgmt | ~120–300 hrs | **15–30% of Y1 ACV** (e.g. SAR 56–225K) | Fixed + milestones |
+| **Enterprise transformation** | Large enterprise | Multi-entity rollout, multiple ERPs/CRMs, identity architecture (SSO/SCIM), custom security, historical reconciliation, process redesign, program governance, exec reporting, regional rollout, adoption program | 600–2,000+ hrs | **0.5–1.0× Y1 ACV** | Milestone-based + SI |
+| **Semi-government** | Semi-gov | Above + in-KSA/dedicated deployment, ECC/CCC + PDPL evidence, Arabic/RTL, Etimad/Nafath/sector-rail integration, Arabic contract/SLA pack, accreditation, change management | 800–3,000+ hrs | **SAR 300K–1.5M+** | Milestone-based + local SI |
 
 **Why these ratios:** they mirror the enterprise comps — ICM implementations run **20–40% of ACV** (Xactly/Varicent), CLM/control-layer "system-of-record" platforms run **0.5–1.5× ACV** (Icertis/Coupa/Zuora), while workflow-centric tools are lighter (Ironclad ~0.2–0.6×). Reven sits in the **finance-grade control-layer band**, so 15–30% (mid-market) rising to 0.5–1.0×+ (enterprise/gov) is correct — **but the strategic goal is to drive these down over time** via productization and SI partners, keeping services <20% of revenue (a board metric).
 
@@ -441,7 +441,7 @@ The limits that separate tiers (avoid arbitrary feature-withholding where the fe
 
 | Fence | SME | SMB | Mid-market | Semi-gov | Large enterprise |
 |---|---|---|---|---|---|
-| **Active partners** | ≤25 | ≤75 | ≤250 (banded) | negotiated | negotiated/unlimited |
+| **Active partners** | ≤10 | ≤75 | ≤250 (banded) | negotiated | negotiated/unlimited |
 | **Business entities** | 1 | 1 | ≤3 | multi (priced) | multi (priced) |
 | **Programs** | 1 | ≤3 | unlimited | unlimited | unlimited |
 | **Annual claim/activity** | ~1.5K allowance | ~6K allowance | high/metered | committed floor | metered + commit |
@@ -451,9 +451,9 @@ The limits that separate tiers (avoid arbitrary feature-withholding where the fe
 | **Deployment** | shared cloud | shared cloud | shared (+L2 A) | **in-KSA / dedicated** | dedicated option |
 | **Workflow complexity** | basic approvals | + disputes | + multi-party/reversals | + governance/Etimad | + custom governance |
 | **Support** | digital/pooled | named (pooled) | dedicated CSM | CSM+SA, premium SLA | CSM+SA, exec reviews |
-| **Minimum ACV** | **$6K / SAR 22K** | **$18K / SAR 67K** | **$50K / SAR 188K** | **~$160K / SAR 600K** | **$150K / SAR 560K** |
+| **Minimum ACV** | **SAR 600 (self-serve)** | **SAR 67K** | **SAR 188K** | **SAR 600K** | **SAR 560K** |
 
-**Minimum-ACV rationale:** the red team's load-bearing fix is to **floor the high-touch motion at ~$25–30K** — so SME ($6–18K) is served **low-touch/self-serve only**, and anything requiring a sales+implementation motion must clear ~$25–30K. Below that, route to self-serve or disqualify. Semi-gov/enterprise floors reflect procurement cost-to-serve (6–18-mo cycles, accreditation, residency).
+**Minimum-ACV rationale:** the red team's load-bearing fix is to **floor the high-touch motion at ~SAR 95–110K** — so the **SME tier is self-serve and zero-touch (from SAR 50/mo)**, a micro on-ramp for <10-partner programs replacing a spreadsheet, and **anything requiring a sales + implementation motion must clear ~SAR 95–110K**. Below that, route to self-serve or disqualify. The SME tier's success metric is **land-to-expand**, not margin; it must stay fully productized (no implementation, no CSM; AI/community support) or its cost-to-serve goes negative. Semi-gov/enterprise floors reflect procurement cost-to-serve (6–18-mo cycles, accreditation, residency).
 
 ---
 
@@ -486,11 +486,11 @@ How ACV, expansion, implementation, and gross margin evolve as Reven moves from 
 
 | Stage | What's monetized | Primary buyer | Value/pricing metric | Indicative ACV | Implementation | NRR | Blended GM | Multiple narrative |
 |---|---|---|---|---|---|---|---|---|
-| **1 · Claim Ledger + attribution wedge** | System of record for partner-sourced revenue | Head of Partnerships | Active partners (GBB) | ~$20–25K | 15–30% of ACV | ~105% | ~80% | pure SaaS |
-| **2 · Revenue eligibility + statements** | Finance trust: eligibility, evidence, statements | + CFO/Finance | + per-payout flat + modules | ~$40–60K | 15–30% (productizing) | ~112% | ~75% | SaaS spine + finance modules |
-| **3 · Program economics + ecosystem intelligence** | Program ROI, analytics, benchmarks | + CRO/CEO | + analytics module + capped overage | ~$80–120K | falling as % (SI-led) | ~115–118% | ~74% | recurring + data dominant in GP |
-| **4 · Multi-entity / multi-country orchestration** | Group-wide, cross-border partner revenue | + Group CFO / Board | + per-entity + per-country + residency | ~$150–300K | milestone, SI-delivered | ~118–120% | ~72% | enterprise control layer |
-| **5 · Enterprise partner-revenue infrastructure** | The ledger every Partner P&L runs on; network | Board / network | + capped bps on RUM + data licensing + network | 6–7 figures | productized + SI | ~120–125% | ~70–72% blended (data ~100% GM offsets flow) | infrastructure, **narrated on recurring + fintech gross profit** |
+| **1 · Claim Ledger + attribution wedge** | System of record for partner-sourced revenue | Head of Partnerships | Active partners (GBB) | ~SAR 75–95K | 15–30% of ACV | ~105% | ~80% | pure SaaS |
+| **2 · Revenue eligibility + statements** | Finance trust: eligibility, evidence, statements | + CFO/Finance | + per-payout flat + modules | ~SAR 150–225K | 15–30% (productizing) | ~112% | ~75% | SaaS spine + finance modules |
+| **3 · Program economics + ecosystem intelligence** | Program ROI, analytics, benchmarks | + CRO/CEO | + analytics module + capped overage | ~SAR 300–450K | falling as % (SI-led) | ~115–118% | ~74% | recurring + data dominant in GP |
+| **4 · Multi-entity / multi-country orchestration** | Group-wide, cross-border partner revenue | + Group CFO / Board | + per-entity + per-country + residency | ~SAR 560K–1.1M | milestone, SI-delivered | ~118–120% | ~72% | enterprise control layer |
+| **5 · Enterprise partner-revenue infrastructure** | The ledger every Partner P&L runs on; network | Board / network | + capped bps on RUM + data licensing + network | SAR 7-figure+ | productized + SI | ~120–125% | ~70–72% blended (data ~100% GM offsets flow) | infrastructure, **narrated on recurring + fintech gross profit** |
 
 **The through-line:** ACV climbs ~6–10× from Stage 1 to Stage 5; **expansion revenue overtakes new-logo revenue** by Stage 3 (the NRR engine); **implementation grows in absolute dollars but shrinks as a % of revenue** (productized + pushed to SI partners), protecting the multiple; and **gross margin is deliberately held software-like (≥70%)** by keeping subscription + ~100%-GM data licensing dominant in gross profit even as the flow layer is added. This is how a flow-touching business stays valued like software.
 
@@ -562,15 +562,15 @@ How ACV, expansion, implementation, and gross margin evolve as Reven moves from 
 # Deliverable 15 — Final recommendation
 
 1. **Pricing architecture:** **Hybrid platform subscription** — base platform fee + **active-(transacting-)partner bands** + modules + stackable **compliance ladder**, unlimited internal seats, packaged Good-Better-Best (Operations → Control → Orchestration → Ecosystem Enterprise), with a **flat per-payout rail fee** added in Settle and a **capped, Ju'ala-structured bps on revenue-under-management + data licensing** added only at Orchestrate scale.
-2. **Recommended starting prices [Reven-recommended / validate]:** SME $6–12K (SAR 22–45K) · SMB $18–40K (SAR 67–150K) · Mid-market $50–120K (SAR 188–450K) · Large enterprise $150–500K+ (SAR 560K–1.9M+) · Semi-gov $160–650K+ (SAR 600K–2.5M+). High-touch floor **~$25–30K**.
+2. **Recommended starting prices [Reven-recommended / validate]:** SME (Reven Start, self-serve) **from SAR 50/mo** (≈ SAR 600–1,788/yr) · SMB **SAR 67–150K** · Mid-market **SAR 188–450K** · Large enterprise **SAR 560K–1.9M+** · Semi-gov **SAR 600K–2.5M+**. **High-touch (sales-assisted) floor ~SAR 95–110K.**
 3. **Public vs custom:** **publish** SME; **"starting from"** SMB; **sales-assisted** mid-market; **custom-quote** semi-gov and large enterprise.
 4. **Primary value metric:** **trusted partner-attributed revenue realized** (the North Star).
 5. **Primary pricing metric:** **active (transacting) partners, banded × capability tier** (unlimited internal seats).
 6. **Primary expansion metric:** active partners → modules → compliance tier → entities/countries → payout/revenue-event volume → (late, capped) bps on revenue-under-management + data licensing.
-7. **Implementation model:** **fixed-fee + milestone-based, fenced**; templated/waivable for SME; mandatory and 15–30% of ACV (mid-market) rising to 0.5–1.0×+ (enterprise/gov); driven down over time via productization + SI partners; services <20% of revenue.
+7. **Implementation model:** **fixed-fee + milestone-based, fenced**; none/self-serve for SME; mandatory and 15–30% of ACV (mid-market) rising to 0.5–1.0×+ (enterprise/gov); driven down over time via productization + SI partners; services <20% of revenue.
 8. **Discount guardrails:** max discount **≤25%** by default (≤15% SMB, up to ~30% strategic enterprise with give-gets); every discount tied to a *commitment* (term/volume/prepay) and ideally a case-study/reference/expansion right; **minimum gross margin ≥70% blended**; annual-prepay default; auto-renew with max(CPI, 3–5%) uplift; approval ladder (AE ≤10%, leadership ≤25%, exec >25%).
-9. **Pilot structure:** **paid, ≤45 days, CFO-co-sponsored, binary success criteria, creditable to Y1, ≤3 concurrent** — fee $5–15K (SMB/MM), higher and scoped for semi-gov/enterprise; converts on a pre-committed budget line.
-10. **Assumptions to validate before launch (the load-bearing five):** (a) the **"active = transacted" partner definition** doesn't under-monetize high-value-per-partner accounts; (b) buyers pay a real **≥$25–30K** for finance-grade attribution over cheaper PRM; (c) the **compliance/residency premium** commands the assumed uplift before it commoditizes; (d) **implementation hours/logo** stay low enough to hold services <20%; (e) the **semi-gov tier's deployment/residency cost-to-serve** leaves ≥70% GM at the quoted license.
+9. **Pilot structure:** **paid, ≤45 days, CFO-co-sponsored, binary success criteria, creditable to Y1, ≤3 concurrent** — fee SAR 19–56K (SMB/MM), higher and scoped for semi-gov/enterprise; converts on a pre-committed budget line.
+10. **Assumptions to validate before launch (the load-bearing five):** (a) the **"active = transacted" partner definition** doesn't under-monetize high-value-per-partner accounts; (b) buyers pay a real **≥ SAR 95–110K** for finance-grade attribution over cheaper PRM; (c) the **compliance/residency premium** commands the assumed uplift before it commoditizes; (d) **implementation hours/logo** stay low enough to hold services <20%; (e) the **semi-gov tier's deployment/residency cost-to-serve** leaves ≥70% GM at the quoted license.
 
 ---
 
@@ -586,10 +586,10 @@ How ACV, expansion, implementation, and gross margin evolve as Reven moves from 
 8. **% of partner-attributed revenue?** → **No as headline.** Only a **late, capped, Ju'ala-structured** bps on willing accounts; the value-justified capture is **sub-30 bps**.
 9. **% of partner payouts?** → **Prefer a flat per-payout rail fee**; a **capped** % only late — never uncapped (the most-resented model).
 10. **Capture value without taxing growth?** → Expand via **bands + modules + compliance + entities + per-payout volume + data licensing** (value scales through NRR), and keep any % **capped/declining and invisible** relative to the partner's money.
-11. **Minimum ACV by segment?** → SME **$6K** · SMB **$18K** · Mid **$50K** · Semi-gov **~$160K (SAR 600K)** · Large ent **$150K**; high-touch floor **~$25–30K**.
+11. **Minimum ACV by segment?** → SME **~SAR 600/yr (self-serve, from SAR 50/mo)** · SMB **SAR 67K** · Mid **SAR 188K** · Semi-gov **SAR 600K** · Large ent **SAR 560K**; high-touch (sales-assisted) floor **~SAR 95–110K**.
 12. **Which segment gets public pricing?** → **SME (published)** and **SMB ("starting from")**.
 13. **Which segment custom pricing?** → **Semi-government and large enterprise** (mid-market sales-assisted).
-14. **Is an SME tier valuable or distracting?** → **Potentially distracting** — offer only as a **low-touch/self-serve land-wedge** into accounts underwritten to expand; never a high-touch motion on a sub-$25K deal. **Minimum complexity for Reven to be justified:** a partner program with *material* partner-attributed revenue **and** real claim/attribution ambiguity **and** finance involvement in payouts — not merely "an SME with partners."
+14. **Is an SME tier valuable or distracting?** → **Potentially distracting** — offer only as a **self-serve, zero-touch micro tier (from SAR 50/mo)** that never carries a sales/implementation cost, as a land-wedge into accounts underwritten to expand; success metric is **land-to-expand**, not margin. **Minimum complexity for Reven to be justified:** material partner-attributed revenue **and** real claim/attribution ambiguity **and** finance involvement — not merely "an SME with partners."
 15. **Reflect integration complexity?** → **Per-connector add-on + implementation tier**, metered *lightly* to encourage depth (integration depth is a switching-cost moat).
 16. **Semi-gov vs private-enterprise pricing?** → **Committed annual/multi-year license (usage minimized)**; **in-KSA residency + Arabic + Etimad/RHQ + accreditation as line items**; SAR, upfront, escalation; SI-delivered; **higher TCV but disciplined headline discount**.
 17. **Dedicated deployment a recurring premium?** → **Yes — recurring +15–30%** (sovereign-cloud-anchored), because it carries ongoing infra/ops cost.
@@ -611,13 +611,13 @@ How ACV, expansion, implementation, and gross margin evolve as Reven moves from 
 
 # Closing — assumptions, risks, and what must be validated
 
-**The recommendation in one paragraph.** Price Reven as a **hybrid, finance-grade control-layer subscription on active (transacting) partners with unlimited seats**, packaged Good-Better-Best, sold above a **~$25–30K high-touch floor**, with a **stackable GCC compliance/residency premium** that is the wedge incumbents can't retrofit, a **fenced fixed-fee implementation**, **annual-prepay** to beat the GCC cash cycle, and a **flat per-payout rail fee** introduced only once Reven is the settlement system of record. **Refuse the resented percentage-of-payout model early; re-introduce a capped, Sharia-structured bps on revenue-under-management — plus ~100%-GM data licensing — only at scale, and always narrate on gross profit.** Publish SME/SMB anchors; custom-quote semi-government and large enterprise. Govern the whole book toward **≥70% blended gross margin, services <20% of revenue, NRR modelled at 100–105% base / 115%+ bull**, and bias the mix toward mid-market, enterprise, and semi-government.
+**The recommendation in one paragraph.** Price Reven as a **hybrid, finance-grade control-layer subscription on active (transacting) partners with unlimited seats**, packaged Good-Better-Best, sold above a **~SAR 95–110K high-touch floor** (with a self-serve SME micro tier from SAR 50/mo below it), with a **stackable GCC compliance/residency premium** that is the wedge incumbents can't retrofit, a **fenced fixed-fee implementation**, **annual-prepay** to beat the GCC cash cycle, and a **flat per-payout rail fee** introduced only once Reven is the settlement system of record. **Refuse the resented percentage-of-payout model early; re-introduce a capped, Sharia-structured bps on revenue-under-management — plus ~100%-GM data licensing — only at scale, and always narrate on gross profit.** Publish SME/SMB anchors; custom-quote semi-government and large enterprise. Govern the whole book toward **≥70% blended gross margin, services <20% of revenue, NRR modelled at 100–105% base / 115%+ bull**, and bias the mix toward mid-market, enterprise, and semi-government.
 
 **The five assumptions that change the plan if wrong:**
 
 | Assumption | Why reasonable | How to test | What changes if wrong |
 |---|---|---|---|
-| Buyers pay **≥$25–30K** for finance-grade attribution over cheaper PRM | Impartner floors at $25K; finance pain is non-discretionary; ZATCA forcing function | 3–5 paid pilots converting at ≥$25K from an existing budget line | If they won't, Reven is an SMB tool at $6–18K — re-baseline ACV, motion, and the entire venture-scale thesis (red team Bet 11/24) |
+| Buyers pay **≥ SAR 95–110K** for finance-grade attribution over cheaper PRM | Impartner floors at ~SAR 95K; finance pain is non-discretionary; ZATCA forcing function | 3–5 paid pilots converting at ≥ SAR 95K from an existing budget line | If they won't, Reven is an SMB-priced tool — re-baseline ACV, motion, and the entire venture-scale thesis (red team Bet 11/24) |
 | **"Active = transacted"** captures value fairly | Tracks realized value; resists pruning | Model ACV vs partner-attributed revenue across pilot cohort | If a few partners drive huge revenue, **add a revenue-under-management expansion axis sooner** |
 | **Compliance/residency premium** holds before commoditizing | ZATCA Wave 24 still a 2026 differentiator; residency is a hard gate | Win-loss on the L2/L3 line item; procurement interviews | If it commoditizes fast, **rebundle into base** and rebuild the moat on trusted-custody + SoR lock-in |
 | **Implementation stays <20%** of revenue | Productizable; SI-deliverable | Instrument hours/logo from pilot #1 | If it balloons, the **multiple compresses** — accelerate productization and SI hand-off |
