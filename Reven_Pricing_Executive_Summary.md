@@ -32,6 +32,8 @@
 
 > **SME micro-tier guardrails:** at SAR 50/mo it only works **fully self-serve** (no implementation, no CSM; AI/community support) — one human support call erases a year's revenue. Brand it distinctly and keep it off the enterprise/gov pricing surface so the low anchor doesn't dilute the finance-grade premium. Track **land-to-expand %** as the kill metric.
 
+**Local Saudi calibration.** Against KSA front-office SaaS, **SAR 50/mo sits just below the local micro floor** (Marn ~56, Salla/Matajer ~99, ≈ one Zoho CRM seat ~53) — a frictionless wedge with headroom to ~SAR 99–149/mo. The **SMB+ tiers (SAR 67K↑)** benchmark *not* to SME commerce SaaS (which tops out ~SAR 13,800/yr) but to **enterprise CRM/ERP deployments** (Salesforce/Dynamics SAR 244–1,313/user/mo × seats + SAR 50K–2M implementation). The local market **validates** Reven's choices — unlimited seats (Rewaa & Absolute CRM headline "unlimited users"), **no software take-rate** (% lives only in the payments layer), flat-subscription core — and confirms the key signal: **no standalone Saudi-built partner/commission SaaS exists**, so Reven has no direct local competitor. *(Full table: Deliverable 2.5 of the research report.)*
+
 ---
 
 ## 3. What's in each package

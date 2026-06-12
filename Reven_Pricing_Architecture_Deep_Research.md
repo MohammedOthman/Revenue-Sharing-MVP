@@ -150,6 +150,47 @@ All figures 2024–2026. **[V]** = verified list, **[E]** = estimated/undisclose
 
 ---
 
+## 2.5 Local Saudi front-office benchmark (SAR) — the calibration check
+
+Because the global comps are mostly USD and SME/mid-market, this benchmarks Reven against **what KSA businesses actually pay for revenue-facing (front-office) software, in SAR**. Global CRMs shown at USD list × 3.75 (the SAR a KSA buyer is quoted). **[V]** = published, **[E]** = estimate/snapshot.
+
+| Local / in-KSA front-office tool | Category | Price (SAR) | Metric | Segment | Conf. |
+|---|---|---|---|---|---|
+| **Salla** | E-commerce storefront (KSA-built) | Free; Basic ~99–260/mo; Growth 460/mo; Pro 13,800/yr | per store (flat) | micro→mid | High |
+| **Zid** | E-commerce storefront (KSA-built) | Free; Basic ~99–230/mo; Growth 460/mo; up to ~13,800/yr | per store (flat) | micro→mid | High |
+| **Matajer** | E-commerce (KSA) | 99 / 249 / 499 /mo | per store | micro→SME | Med |
+| **Foodics** | POS — F&B/retail (KSA-born) | ~279–392/mo **per branch** (+ modules) | per branch | SME→ent | High/Med |
+| **Rewaa** | POS / inventory (KSA) | 3,449/yr (~287/mo) · 5,939/yr (~495/mo); **unlimited users** | per org, unlimited seats | micro→mid | High |
+| **Marn** | POS (KSA) | ~56 / 94 / 150 /mo | per terminal | micro→SME | Med |
+| **Zoho CRM** (in KSA) | CRM | ~53 / 86 / 150 / 195 /user/mo | per user | SME→mid | High |
+| **HubSpot** (in KSA) | CRM | ~56 / 188 / 281 /user/mo | per user | SME→ent | High (USD list) |
+| **Salesforce** (in KSA) | CRM | ~94 / 300–375 / 619–656 / 1,313 /user/mo | per user | SME→ent | High (USD list) |
+| **Dynamics 365 Sales** (in KSA) | CRM | ~244 / 394 / 563 /user/mo | per user | mid→ent | High (USD list) |
+| **Absolute CRM** (KSA) | Local CRM | "1 SAR/hour", **unlimited users** (anti-per-seat) | per usage | SME | Med |
+| **Unifonic** | Engagement / CPaaS (KSA) | 0.055 SAR/SMS + 299/yr sender-ID; platform quoted | per message | ent | High (SMS) |
+| **Taqnyat / Msegat** | Bulk SMS (KSA) | ~0.05–0.20 SAR/msg | per message | SME→ent | Est. |
+| **WhatsApp Business API** (in KSA) | Messaging | mktg ~0.17–0.35, util/auth ~0.04–0.15 SAR/msg + BSP ~99–117/mo | per message | SME→ent | High (rate card) |
+| **Resal** (Glee / BOONUS) | Loyalty / gifting (KSA) | Glee: prepaid wallet + platform fee; BOONUS: tiered SME sub — quoted | wallet / sub | SME→ent | Est. |
+| **Local ERP/CRM implementation** | Services (KSA SIs) | **50,000–2,000,000** (project) | project | SME→ent | Est. |
+| **Local partner/channel/commission SaaS** | **— whitespace —** | **None standalone** — only ERP sub-modules for *internal* reps / real-estate brokers; ArabClicks (Dubai) is a consumer affiliate network | — | — | High (gap) |
+
+**Where each Reven tier sits vs the local market:**
+- **Two distinct local price worlds, with a gap Reven spans.** (a) **SME front-office** = flat **SAR 0–500/mo**, topping at ~**SAR 13,800/yr** (Salla/Zid/Foodics/Rewaa/Matajer/SME-CRM). (b) **Enterprise CRM/ERP** = per-seat **SAR 244–1,313/user/mo** × dozens of seats **+ implementation SAR 50K–2M**. Almost nothing local sits between ~SAR 14K/yr and ~SAR 100K+/yr — exactly the band Reven's SMB/mid tiers occupy, so they must be sold on **finance-grade value**, not as "another SaaS subscription."
+- **SME (Reven Start, SAR 50/mo)** sits **just below the local micro floor** (Marn ~56, Salla/Matajer ~99, ≈ one Zoho CRM seat ~53). Frictionless as "*cheaper than a Salla store / less than one CRM seat*." Local norms would actually support a **SAR 99–149/mo** entry without exceeding the SME band — so SAR 50 is a deliberate adoption choice with headroom, not a value-justified ceiling.
+- **SMB (SAR 67–150K/yr)** ≈ a **10–25-seat Salesforce/Dynamics Enterprise deployment + implementation** — not comparable to SME commerce SaaS.
+- **Mid-market (SAR 188–450K)** ≈ a **25–60-seat enterprise-CRM deployment + implementation**; consistent with local enterprise-software spend.
+- **Semi-gov / Large (SAR 560K–2.5M+)** ≈ large CRM/ERP + implementation (local implementations *alone* run SAR 50K–2M).
+
+**What the local market validates about Reven's metric choices:**
+- **Unlimited internal seats ✓** — local SME winners (**Rewaa, Absolute CRM**) market "**unlimited users**" as a headline feature; per-seat is resented even locally.
+- **No take-rate on the subscription ✓** — in KSA, **% pricing lives *only* in the payments layer** (mada ~1.5%+1, credit ~2.2%, Foodics Pay 0–2.5%); **no local front-office tool takes a software GMV commission.** Reven's "don't tax the partner's money" posture *is* the local norm.
+- **Flat-subscription core + usage later ✓** — commerce/CRM are flat; only **messaging is per-unit** (per-SMS/WhatsApp). Supports a flat Reven subscription with capped per-payout/event usage introduced in Settle.
+- **Per-store / branch / org (not per-seat) ✓** — supports banding on a **unit of value (active partners)** rather than seats.
+
+**The decisive signal — whitespace.** There is **no standalone Saudi-built partner-revenue / channel-commission product.** Reven would be the **first KSA-built partner-revenue control layer**, so its price is anchored to *adjacent* front-office SaaS (for the SME on-ramp) and to *enterprise CRM/ERP deployments + value* (for SMB↑) — never to a local direct competitor, because none exists.
+
+---
+
 # Deliverable 3 — Pricing-metric scorecard
 
 Each metric scored **1 (poor) – 5 (excellent)** on the brief's 13 criteria. Columns: **CV**=customer-value alignment · **Pr**=predictability · **EU**=ease of understanding · **RS**=revenue scalability · **PA**=procurement acceptance · **EI**=ease of implementation (to meter) · **¬G**=resistance to gaming · **¬D**=does *not* discourage usage · then suitability by segment **SME / SMB / MM / Gov / Ent**. Higher is better on every column (so "¬G" = high means hard to game; "¬D" = high means it won't suppress usage).
