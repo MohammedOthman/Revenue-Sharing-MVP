@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Advanced Settlement Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@600;700;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#bec6e0",
+                    "primary": "#000000",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "tertiary-fixed": "#e1e0ff",
+                    "surface-base": "#F8FAFC",
+                    "surface": "#f8f9ff",
+                    "surface-tint": "#565e74",
+                    "surface-container": "#e5eeff",
+                    "background": "#f8f9ff",
+                    "status-red": "#EF4444",
+                    "surface-container-low": "#eff4ff",
+                    "tertiary-container": "#07006c",
+                    "error": "#ba1a1a",
+                    "border-subtle": "#E2E8F0",
+                    "on-secondary-container": "#00714d",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "surface-dim": "#cbdbf5",
+                    "surface-variant": "#d3e4fe",
+                    "on-tertiary-container": "#7073ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline-variant": "#c6c6cd",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#7c839b",
+                    "surface-container-high": "#dce9ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-error-container": "#93000a",
+                    "secondary": "#006c49",
+                    "primary-container": "#131b2e",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-surface": "#0b1c30",
+                    "on-background": "#0b1c30",
+                    "secondary-container": "#6cf8bb",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-secondary-fixed": "#002113",
+                    "surface-bright": "#f8f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "status-amber": "#F59E0B",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-surface": "#213145",
+                    "on-tertiary-fixed": "#07006c",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-error": "#ffffff",
+                    "outline": "#76777d",
+                    "on-secondary-fixed-variant": "#005236",
+                    "tertiary": "#000000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "margin-mobile": "16px",
+                    "unit": "4px",
+                    "sidebar-width": "260px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Public Sans"],
+                    "headline-md": ["Public Sans"],
+                    "body-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "display-metrics": ["Public Sans"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Public Sans"],
+                    "data-mono": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                    "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "display-metrics": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                    "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "600" }],
+                    "data-mono": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                    "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom scrollbar for data tables to maintain clean ledger look */
+        .ledger-scroll::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .ledger-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .ledger-scroll::-webkit-scrollbar-thumb {
+            background-color: #c6c6cd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface flex h-screen overflow-hidden font-body-md">
+<!-- Shared Component: SideNavBar -->
+<nav class="hidden md:flex fixed left-0 top-0 h-screen w-sidebar-width bg-surface-container-low dark:bg-surface-container-lowest border-r border-border-subtle dark:border-outline-variant flex-col py-6 z-20">
+<!-- Header -->
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-black tracking-tight text-primary dark:text-primary-fixed">RevOS</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Governance Layer</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<ul class="flex flex-col flex-1 px-4 gap-1">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest dark:hover:bg-inverse-surface transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md font-medium">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest dark:hover:bg-inverse-surface transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-body-md text-body-md font-medium">Partners</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest dark:hover:bg-inverse-surface transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md font-medium">Claims</span>
+</a>
+</li>
+<!-- Active Tab Context: Settlement Command Center aligns with Approvals/Execution -->
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-surface-container-high dark:bg-primary-container text-on-surface dark:text-on-primary-container border-r-4 border-primary font-semibold hover:bg-surface-container-highest dark:hover:bg-inverse-surface transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rule</span>
+<span class="font-body-md text-body-md font-medium">Approvals</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest dark:hover:bg-inverse-surface transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md font-medium">Settings</span>
+</a>
+</li>
+</ul>
+<!-- CTA -->
+<div class="px-6 mt-auto">
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-lg font-body-md text-body-md font-semibold shadow-sm hover:opacity-90 transition-opacity flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Claim
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-[260px] h-screen overflow-hidden">
+<!-- Shared Component: TopNavBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop bg-surface-container-lowest dark:bg-surface-container-low border-b border-border-subtle dark:border-outline-variant docked full-width top-0 h-16 z-10 shrink-0">
+<!-- Left Side -->
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Trigger (Visible only on small screens if needed, but strictly adhering to rules, keeping simple) -->
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-on-surface">Partner Revenue OS</span>
+<div class="hidden md:flex items-center ml-8 bg-surface-container-low border border-border-subtle rounded-md px-3 py-1.5 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2">search</span>
+<input class="bg-transparent border-none outline-none font-body-sm text-body-sm text-on-surface placeholder-on-surface-variant w-64 p-0 focus:ring-0" placeholder="Search Ledgers..." type="text"/>
+</div>
+</div>
+<!-- Right Side Actions -->
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200 rounded-full p-2 cursor-pointer active:scale-95 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200 rounded-full p-2 cursor-pointer active:scale-95 transition-transform">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-border-subtle overflow-hidden ml-2 cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate executive in high-key lighting. The individual is wearing a dark navy suit against a pristine white background, conveying authority and focus. The image has high contrast and sharp details, fitting for an enterprise software profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQfblNZdhCsPYcLxdCtIw7AjTrZdMkL9hTS-deSE-kCQV4Kia1qgaECCCMVEcXjXA7uhtrZkBkUdrrlpQN6PrbEWFq3yQuzLk-2zv6pWqXnAUxSfJBYwV_S0P8tzqrWZ8Kf3qsZVTRKPufkhuPYCxPL7sQIkcXk6KWcuuEB0o4gSNUMbLz_5RxyjgK1o-57V70c7KJ5p9f70YMrs4m2aTrfzKGZKlLT5iEeiiqOeE0tV7YyoB_XJt2VQel4cELEUwkGNcnvPBW7g"/>
+</div>
+</div>
+</header>
+<!-- Canvas Area -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop bg-surface-base">
+<div class="max-w-[1400px] mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Advanced Settlement Command Center</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Bridging resolved conflicts to financial execution via Ledger Batching.</p>
+</div>
+<button class="bg-tertiary-container text-on-tertiary px-4 py-2 rounded-md font-body-md text-body-md font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+                        Execute Pending Batches
+                    </button>
+</div>
+<!-- Recovery Analytics (North Star Metrics) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Metric 1 -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded-xl p-6 relative overflow-hidden group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-primary">
+<span class="material-symbols-outlined text-[64px]">account_balance_wallet</span>
+</div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Total Revenue Recovered (YTD)</h3>
+<div class="font-display-metrics text-display-metrics text-primary">$14.2M</div>
+<div class="mt-2 flex items-center gap-1 font-body-sm text-body-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+8.4% vs Last Quarter</span>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded-xl p-6 relative overflow-hidden group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-status-amber">
+<span class="material-symbols-outlined text-[64px]">pending_actions</span>
+</div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Pending Settlement Volume</h3>
+<div class="font-display-metrics text-display-metrics text-on-surface">$2.1M</div>
+<div class="mt-2 flex items-center gap-1 font-body-sm text-body-sm text-status-amber">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Across 14 Pending Batches</span>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-lowest border border-border-subtle rounded-xl p-6 relative overflow-hidden group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-primary">
+<span class="material-symbols-outlined text-[64px]">speed</span>
+</div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">Avg. Resolution to Execution</h3>
+<div class="font-display-metrics text-display-metrics text-on-surface">1.8d</div>
+<div class="mt-2 flex items-center gap-1 font-body-sm text-body-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Within 48h SLA Target</span>
+</div>
+</div>
+</section>
+<!-- Mid Section Bento Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Rationale for Settlement Batching (Col 8) -->
+<div class="lg:col-span-8 bg-surface-container-lowest border border-border-subtle rounded-xl p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">gavel</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Protocol: Settlement Batching Logic</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-4">
+                                To ensure unbroken auditability between resolved operational disputes and financial reality, the Revenue OS employs strict <strong class="text-primary font-medium">Cryptographic Batching</strong>. Resolved conflicts are not synced to the ERP piecemeal. Instead, they are aggregated into immutable settlement batches based on partner, currency, and fiscal period.
+                            </p>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+<div class="bg-surface-base p-4 rounded-lg border border-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant mb-2">receipt_long</span>
+<h4 class="font-label-caps text-label-caps text-primary mb-1">1. Aggregation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Disputes clustered by counterparty ID to minimize ERP transaction overhead.</p>
+</div>
+<div class="bg-surface-base p-4 rounded-lg border border-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant mb-2">lock</span>
+<h4 class="font-label-caps text-label-caps text-primary mb-1">2. Hashing</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Batch state is frozen and assigned a unique SHA-256 ledger hash for compliance.</p>
+</div>
+<div class="bg-surface-base p-4 rounded-lg border border-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant mb-2">sync_alt</span>
+<h4 class="font-label-caps text-label-caps text-primary mb-1">3. Execution</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Atomic sync to target ERP. Fails gracefully if target rejects any line item.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- ERP Sync Health Map (Col 4) -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-border-subtle rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">router</span>
+                                ERP Sync Health
+                            </h3>
+<span class="flex items-center gap-1 bg-secondary-container text-on-secondary-container px-2 py-1 rounded-full font-label-caps text-label-caps">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                                Healthy
+                            </span>
+</div>
+<!-- Abstract Node Connection Visual -->
+<div class="flex-1 flex flex-col justify-center gap-6 py-4">
+<!-- Source Node -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary text-on-primary flex items-center justify-center font-bold">OS</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Revenue Ledger</span>
+</div>
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+</div>
+<!-- Connecting Line -->
+<div class="flex pl-5">
+<div class="border-l-2 border-dashed border-outline-variant h-12 w-full relative">
+<!-- Animated pulse dot simulating data flow -->
+<div class="absolute -left-[5px] top-1/2 w-2 h-2 bg-primary rounded-full"></div>
+</div>
+</div>
+<!-- Target Nodes -->
+<div class="space-y-4">
+<div class="flex items-center justify-between bg-surface-base p-3 border border-border-subtle rounded-md">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#0A2E82] text-white flex items-center justify-center font-label-caps text-label-caps">SAP</div>
+<div>
+<div class="font-body-md text-body-md font-medium text-on-surface">Global Finance Core</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Last sync: 2m ago</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[20px]">cloud_done</span>
+</div>
+<div class="flex items-center justify-between bg-surface-base p-3 border border-border-subtle rounded-md">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#0086CE] text-white flex items-center justify-center font-label-caps text-label-caps">NS</div>
+<div>
+<div class="font-body-md text-body-md font-medium text-on-surface">Regional NetSuite</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Last sync: 5m ago</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[20px]">cloud_done</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Queue of Resolved Conflicts (The Ledger) -->
+<section class="bg-surface-container-lowest border border-border-subtle rounded-xl flex flex-col overflow-hidden">
+<!-- Table Header Actions -->
+<div class="p-4 border-b border-border-subtle bg-surface-container-lowest flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined">queue</span>
+                            Queue of Resolved Conflicts
+                        </h3>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 border border-border-subtle rounded-md font-body-sm text-body-sm font-medium hover:bg-surface-base transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                                Filter
+                            </button>
+<button class="px-3 py-1.5 border border-border-subtle rounded-md font-body-sm text-body-sm font-medium hover:bg-surface-base transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                Export
+                            </button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto ledger-scroll">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-border-subtle">
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant w-12">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap">Dispute ID</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant">Counterparty</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">Recovered Val</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant">Resolution Date</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant">Execution Status</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle bg-surface-container-lowest">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-base transition-colors group">
+<td class="py-2.5 px-4"><input checked="" class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-primary">DS-9924-A</td>
+<td class="py-2.5 px-4 font-body-md text-body-md font-medium text-on-surface">Acme Corp Logistics</td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-on-surface text-right">$45,200.00</td>
+<td class="py-2.5 px-4 font-body-sm text-body-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-caps text-label-caps bg-surface-variant text-on-surface border border-outline-variant">
+                                            Awaiting Batch
+                                        </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-tertiary-container hover:underline font-body-sm text-body-sm font-medium">Inspect</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-base transition-colors group">
+<td class="py-2.5 px-4"><input checked="" class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-primary">DS-9925-B</td>
+<td class="py-2.5 px-4 font-body-md text-body-md font-medium text-on-surface">Global Tech Partners</td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-on-surface text-right">$128,500.50</td>
+<td class="py-2.5 px-4 font-body-sm text-body-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-caps text-label-caps bg-surface-variant text-on-surface border border-outline-variant">
+                                            Awaiting Batch
+                                        </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-tertiary-container hover:underline font-body-sm text-body-sm font-medium">Inspect</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-base transition-colors group">
+<td class="py-2.5 px-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-primary">DS-9918-C</td>
+<td class="py-2.5 px-4 font-body-md text-body-md font-medium text-on-surface">Nexus Retail Group</td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-on-surface text-right">$12,400.00</td>
+<td class="py-2.5 px-4 font-body-sm text-body-sm text-on-surface-variant">Oct 23, 2023</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-caps text-label-caps bg-status-amber bg-opacity-20 text-status-amber border border-status-amber border-opacity-30">
+                                            Missing Metadata
+                                        </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-tertiary-container hover:underline font-body-sm text-body-sm font-medium">Resolve</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-base transition-colors group">
+<td class="py-2.5 px-4"><input checked="" class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-primary">DS-9901-A</td>
+<td class="py-2.5 px-4 font-body-md text-body-md font-medium text-on-surface">Acme Corp Logistics</td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-on-surface text-right">$8,900.00</td>
+<td class="py-2.5 px-4 font-body-sm text-body-sm text-on-surface-variant">Oct 22, 2023</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-caps text-label-caps bg-surface-variant text-on-surface border border-outline-variant">
+                                            Awaiting Batch
+                                        </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-tertiary-container hover:underline font-body-sm text-body-sm font-medium">Inspect</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-base transition-colors group bg-surface-container-high bg-opacity-30">
+<td class="py-2.5 px-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" disabled="" type="checkbox"/></td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-on-surface-variant">DS-9890-X</td>
+<td class="py-2.5 px-4 font-body-md text-body-md font-medium text-on-surface-variant">Stark Industries</td>
+<td class="py-2.5 px-4 font-data-mono text-data-mono text-on-surface-variant text-right">$450,000.00</td>
+<td class="py-2.5 px-4 font-body-sm text-body-sm text-on-surface-variant">Oct 20, 2023</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-caps text-label-caps bg-secondary-fixed text-on-secondary-fixed border border-secondary-fixed-dim">
+                                            Batched (B-492)
+                                        </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<span class="text-on-surface-variant font-body-sm text-body-sm">Locked</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="p-3 border-t border-border-subtle bg-surface-container-lowest flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>Showing 1-5 of 142 resolved conflicts</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-base disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-base">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Bottom Spacing for scrolling -->
+<div class="h-8"></div>
+</div>
+</main>
+</div>
+</body></html>

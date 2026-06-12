@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Partner Verification Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-tint": "#565e74",
+                        "primary-container": "#131b2e",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#6cf8bb",
+                        "inverse-primary": "#bec6e0",
+                        "status-red": "#EF4444",
+                        "on-background": "#0b1c30",
+                        "outline": "#76777d",
+                        "on-secondary-container": "#00714d",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#2f2ebe",
+                        "tertiary-fixed-dim": "#c0c1ff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#7c839b",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container": "#e5eeff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-container-low": "#eff4ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary-fixed": "#07006c",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#e1e0ff",
+                        "tertiary-container": "#07006c",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-base": "#F8FAFC",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "inverse-on-surface": "#eaf1ff",
+                        "border-subtle": "#E2E8F0",
+                        "surface": "#f8f9ff",
+                        "on-surface-variant": "#45464d",
+                        "secondary": "#006c49",
+                        "on-tertiary-container": "#7073ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "outline-variant": "#c6c6cd",
+                        "surface-variant": "#d3e4fe",
+                        "status-amber": "#F59E0B",
+                        "on-surface": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed": "#131b2e",
+                        "tertiary": "#000000"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "sidebar-width": "260px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "unit": "4px"
+                    },
+                    fontFamily: {
+                        "data-mono": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Public Sans"],
+                        "headline-sm": ["Public Sans"],
+                        "display-metrics": ["Public Sans"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Public Sans"]
+                    },
+                    fontSize: {
+                        "data-mono": ["13px", { lineHeight: "18px", letterSpacing: "-0.01em", fontWeight: "500" }],
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-lg": ["30px", { lineHeight: "38px", fontWeight: "600" }],
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "display-metrics": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-surface font-body-md antialiased selection:bg-primary selection:text-on-primary flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="w-[260px] h-screen fixed left-0 top-0 overflow-y-auto bg-surface-container-lowest dark:bg-primary-container flex flex-col h-full border-r border-border-subtle z-50">
+<!-- Brand Header -->
+<div class="px-6 py-6 border-b border-border-subtle">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dataset</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed truncate">Revenue Ledger</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70">Governance Layer</p>
+</div>
+</div>
+<button class="mt-6 w-full flex items-center justify-center gap-2 py-2 px-4 bg-primary text-on-primary font-body-sm font-medium rounded hover:bg-on-background transition-colors duration-150 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Claim
+            </button>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 py-4 flex flex-col gap-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 bg-surface-container dark:bg-surface-variant text-primary dark:text-on-primary-container font-semibold border-r-4 border-primary cursor-pointer active:scale-95 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-primary-container opacity-70 hover:opacity-100 hover:bg-surface-container-low dark:hover:bg-on-primary-fixed-variant transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">handshake</span>
+<span class="font-body-md text-body-md">Partners</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-primary-container opacity-70 hover:opacity-100 hover:bg-surface-container-low dark:hover:bg-on-primary-fixed-variant transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="font-body-md text-body-md">Claims</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-primary-container opacity-70 hover:opacity-100 hover:bg-surface-container-low dark:hover:bg-on-primary-fixed-variant transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="font-body-md text-body-md">Approvals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-on-primary-container opacity-70 hover:opacity-100 hover:bg-surface-container-low dark:hover:bg-on-primary-fixed-variant transition-colors duration-150 cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<!-- Footer Links -->
+<div class="p-4 border-t border-border-subtle mt-auto flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-on-primary-container opacity-70 hover:opacity-100 hover:bg-surface-container-low dark:hover:bg-on-primary-fixed-variant transition-colors duration-150 rounded cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="font-body-sm text-body-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-on-primary-container opacity-70 hover:opacity-100 hover:bg-surface-container-low dark:hover:bg-on-primary-fixed-variant transition-colors duration-150 rounded cursor-pointer" href="#">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="font-body-sm text-body-sm">Documentation</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col ml-[260px] w-[calc(100%-260px)] h-screen overflow-hidden">
+<!-- TopNavBar Component -->
+<header class="h-16 w-full sticky top-0 z-40 bg-surface-container-lowest dark:bg-primary-container border-b border-border-subtle flex justify-between items-center px-margin-desktop shrink-0">
+<!-- Search (Left) -->
+<div class="flex items-center w-96 relative text-on-surface-variant focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined absolute left-3 text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-base border border-border-subtle rounded font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all placeholder:text-on-surface-variant/50" placeholder="Search protocol records..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">history_edu</span>
+</button>
+<div class="w-px h-6 bg-border-subtle mx-2"></div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container text-primary font-label-caps text-label-caps border border-border-subtle hover:border-primary transition-all">
+                    AD
+                </button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 overflow-y-auto p-margin-desktop">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-8">
+<!-- Page Header -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Partner Verification Status</h2>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-caps text-label-caps bg-status-amber/10 text-status-amber border border-status-amber/20">
+                            Pending Clearance
+                        </span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
+                        Your organization is currently undergoing mandatory compliance and financial vetting. Access to core revenue operations is temporarily restricted until final clearance is granted.
+                    </p>
+</div>
+<!-- Verification Progress Tracker -->
+<section class="bg-surface-container-lowest border border-border-subtle rounded-lg p-8 shadow-sm">
+<div class="mb-6 border-b border-border-subtle pb-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Verification Lifecycle</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Track the administrative steps required for full protocol access.</p>
+</div>
+<div class="flex items-start justify-between relative mt-8">
+<!-- Connecting Line -->
+<div class="absolute top-4 left-0 w-full h-0.5 bg-border-subtle z-0"></div>
+<!-- Active Progress Line -->
+<div class="absolute top-4 left-0 w-1/2 h-0.5 bg-primary z-0 transition-all duration-500"></div>
+<!-- Step 1: Completed -->
+<div class="relative z-10 flex flex-col items-center gap-3 w-1/3 text-center">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center border-2 border-primary shadow-sm">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div>
+<h4 class="font-body-md text-body-md font-semibold text-primary">Identity Validation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 px-4">Corporate entity and authorized signatories verified.</p>
+</div>
+</div>
+<!-- Step 2: In Progress -->
+<div class="relative z-10 flex flex-col items-center gap-3 w-1/3 text-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest text-primary flex items-center justify-center border-2 border-primary shadow-sm ring-4 ring-primary/10">
+<span class="material-symbols-outlined text-[16px] animate-pulse">hourglass_top</span>
+</div>
+<div>
+<h4 class="font-body-md text-body-md font-semibold text-primary">Financial Compliance</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 px-4">Awaiting tax documentation and banking verification clearance.</p>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="relative z-10 flex flex-col items-center gap-3 w-1/3 text-center opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-base text-on-surface-variant flex items-center justify-center border-2 border-outline-variant">
+<span class="material-symbols-outlined text-[16px]">gavel</span>
+</div>
+<div>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Final Governance</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 px-4">Executive approval and ledger provisioning.</p>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Locked Capabilities (Main Column) -->
+<div class="col-span-12 xl:col-span-8 flex flex-col gap-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Governed Capabilities</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Modules awaiting clearance activation.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Locked Card 1 -->
+<div class="bg-surface-container-low border border-border-subtle rounded-lg p-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-surface-base/50 z-10 pointer-events-none backdrop-blur-[1px]"></div>
+<div class="flex items-start justify-between relative z-20 opacity-60">
+<div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment</span>
+</div>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<div class="relative z-20 opacity-60">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface mb-2">Deal Registration Desk</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Verification is required to unlock governed revenue sharing and deal protection protocols.</p>
+<button class="px-4 py-2 bg-surface-base border border-outline-variant text-outline rounded font-label-caps text-label-caps cursor-not-allowed" disabled="">
+                                        Restricted Access
+                                    </button>
+</div>
+</div>
+<!-- Locked Card 2 -->
+<div class="bg-surface-container-low border border-border-subtle rounded-lg p-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-surface-base/50 z-10 pointer-events-none backdrop-blur-[1px]"></div>
+<div class="flex items-start justify-between relative z-20 opacity-60">
+<div class="w-10 h-10 rounded bg-secondary-container/30 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-secondary-container text-[20px]">campaign</span>
+</div>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<div class="relative z-20 opacity-60">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface mb-2">Marketing Asset Ledger</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Access approved co-branding resources and campaign allocations upon successful clearance.</p>
+<button class="px-4 py-2 bg-surface-base border border-outline-variant text-outline rounded font-label-caps text-label-caps cursor-not-allowed" disabled="">
+                                        Restricted Access
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Start Side Column -->
+<div class="col-span-12 xl:col-span-4">
+<div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 h-full shadow-sm flex flex-col">
+<div class="flex items-center gap-2 mb-6 border-b border-border-subtle pb-4">
+<span class="material-symbols-outlined text-primary text-[20px]">rocket_launch</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Preparation Hub</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">
+                                Review necessary documentation while awaiting activation to ensure rapid deployment post-clearance.
+                            </p>
+<ul class="flex flex-col gap-3 flex-1">
+<li>
+<a class="flex items-start gap-3 p-3 rounded hover:bg-surface-container transition-colors border border-transparent hover:border-border-subtle group" href="#">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5 group-hover:scale-110 transition-transform">fact_check</span>
+<div>
+<span class="block font-body-md text-body-md font-medium text-on-surface">Compliance Checklist</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Review required tax formats.</span>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-start gap-3 p-3 rounded hover:bg-surface-container transition-colors border border-transparent hover:border-border-subtle group" href="#">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5 group-hover:scale-110 transition-transform">menu_book</span>
+<div>
+<span class="block font-body-md text-body-md font-medium text-on-surface">Platform Architecture Guide</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Understand data flow and ledger entries.</span>
+</div>
+</a>
+</li>
+<li>
+<a class="flex items-start gap-3 p-3 rounded hover:bg-surface-container transition-colors border border-transparent hover:border-border-subtle group" href="#">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5 group-hover:scale-110 transition-transform">support_agent</span>
+<div>
+<span class="block font-body-md text-body-md font-medium text-on-surface">Contact Deal Desk Support</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Direct channel for clearance inquiries.</span>
+</div>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
