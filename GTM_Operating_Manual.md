@@ -10,7 +10,9 @@ This is a complete launch-to-market operating manual for **Partner Revenue OS**.
 
 It is built for founders, GTM leaders, RevOps, product, customer success, implementation, finance, and operators who need to turn a complex B2B SaaS product into a repeatable market motion.
 
-The product is not a generic PRM.
+The product is not a *generic* PRM. It is experienced and sold as an easy, claim-centric PRM; engineered underneath as the system of record for partner revenue — never a generic PRM, never a fintech in Phase 1.
+
+> **Phase discipline (governing):** This manual operates inside the canonical roadmap **Phase 1 Capture (PRM) → Phase 2 Settle → Phase 3 Orchestrate** (see `ROADMAP_ALIGNMENT_AUDIT.md` §2). The 18-month roadmap in §12 spans Phase 1 (months 1–9: discovery → activation) into early Phase 2 (months 10–18: hardening → controlled scale). **GTM rule: nothing sold, demoed, or piloted in Phase 1 may promise payout execution, settlement automation, escrow, or automated ZATCA clearance — payout eligibility is a preview; settlement is the Phase-2 expansion conversation.**
 
 The product is a **Partner Revenue Control Layer** that helps customers govern partner revenue through:
 
@@ -107,6 +109,8 @@ The company should say:
 ```text
 We help companies run partner revenue like a controlled revenue line.
 ```
+
+*(Positioning nuance: the buyer should still **experience** the entry product as an easy, claim-centric PRM — that is the adoption wedge. What we avoid is the generic category label, not the PRM-shaped product. And in Phase 1 we never position as finance infrastructure or a payout/settlement tool.)*
 
 ## 1.3 The GTM Doctrine
 
@@ -1037,6 +1041,8 @@ The best demo mirrors the buyer's current pain and shows the future-state workfl
 10. Here is how leadership sees controlled partner revenue.
 ```
 
+> **Phase-1 demo rule:** step 8 is a **preview** — the product calculates and explains what would be payable; it does not pay, approve-to-pay, clear, or hold anything. Say this explicitly to finance stakeholders. Never promise payout execution, settlement automation, escrow, or automated ZATCA clearance in a Phase-1 demo; settlement is the Phase-2 (Settle) expansion conversation.
+
 ### Role-Based Demo Focus
 
 | Persona | Show them |
@@ -1045,7 +1051,7 @@ The best demo mirrors the buyer's current pain and shows the future-state workfl
 | Partner Manager | Review queue, claim detail, evidence |
 | Sales | Confirmation flow, conflict alerts |
 | RevOps | Data fields, CRM boundary, exports |
-| CFO | Payout eligibility, evidence, audit |
+| CFO | Payout eligibility **(preview only — state clearly that Phase 1 executes no payouts)**, evidence, audit |
 | CEO | Controlled Partner Revenue and ROI view |
 | External Partner | Submission and status visibility |
 
@@ -1196,6 +1202,8 @@ A good pilot has:
 - clear success metrics,
 - paid or commercially committed structure,
 - conversion path.
+
+> **Phase-1 pilot boundary:** the pilot scope must never include or promise payout execution, settlement automation, escrow, or automated ZATCA clearance. Phase-1 pilots prove claim capture, attribution, protection, payout-readiness *preview*, and finance evidence. Write this exclusion into the pilot agreement so finance stakeholders' expectations stay inside Phase 1 (Capture).
 
 ### Bad Pilot
 
@@ -2114,6 +2122,8 @@ Team is accepting too many customer-specific requirements.
 ---
 
 # 12. 18-Month Launch-to-Market Roadmap
+
+> **Phase concordance:** months 1–9 = **Phase 1 Capture** (the PRM: discovery → pilots → activation; no money movement); months 10–18 = Phase-1 hardening into **early Phase 2 Settle** — Settle capabilities are sold/built only after the Phase-1 exit gate (100+ real claims, 3–5 design partners with finance-accepted evidence packs, weekly active usage).
 
 ## Months 1–2 — Strategic Preparation
 

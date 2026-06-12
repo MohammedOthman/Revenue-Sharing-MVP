@@ -8,11 +8,13 @@
 **Deployment posture:** Overlay + integrations first; selective system of record for partner revenue claims over time  
 **North Star statement:** “When partnerships becomes material, help me run it like a predictable revenue line—so I can scale investment without scaling chaos.”
 
+> **Phase discipline (governing):** This PDR conforms to the canonical roadmap **Phase 1 Capture (PRM) → Phase 2 Settle → Phase 3 Orchestrate** (see `ROADMAP_ALIGNMENT_AUDIT.md` §2). Concordance: **MVP + V1 = Phase 1 Capture · V2 = Phase 2 Settle · V3 = Phase 3 Orchestrate.** The entry product is sold and experienced as an easy, claim-centric **PRM**. In Phase 1 (MVP/V1) the product **never moves money**: all payout-related features are read/calculate/display only — the system records that a payout became due and whether it was paid (entered manually or imported), but it does not approve-to-pay into any rail, execute, reverse, or clear anything. Money movement is the final step of Phase 2 (Settle) or is partnered to a rail.
+
 ---
 
 ## 1. Executive Summary
 
-The product is a **Partner Revenue OS** designed for companies where partnerships have become commercially material but operationally difficult to control. It is not a basic PRM, affiliate tracker, partner portal, or dashboard. It is a platform that turns partner activity into **attributable, governed, forecastable, finance-ready revenue**.
+The product is a **Partner Revenue OS** designed for companies where partnerships have become commercially material but operationally difficult to control. It is not a *generic* PRM, affiliate tracker, partner portal, or dashboard. It is experienced and sold as an easy, claim-centric PRM in Phase 1 (Capture), engineered underneath as the system of record for partner revenue — a platform that turns partner activity into **attributable, governed, forecastable, finance-ready revenue**, and never a fintech in Phase 1.
 
 The product exists because many companies reach a point where partnerships begin generating real pipeline and revenue, but the operating model remains fragmented across CRM, spreadsheets, WhatsApp, email, contracts, finance systems, and manual reporting. At that stage, leadership needs to know whether partnerships are a real revenue line or an informal relationship function that creates hidden operational chaos.
 
@@ -78,7 +80,7 @@ The more accurate category definition is:
 
 ### 2.5 Core Product Principle
 
-> Do not build a PRM. Build the control system that turns partnership activity into governed, forecastable, finance-ready revenue.
+> Do not build a *generic* PRM. Build a claim-centric PRM the buyer adopts easily, whose underlying control system turns partnership activity into governed, forecastable, finance-ready revenue. "Control layer" describes the architecture underneath — the Phase-1 go-to-market is the PRM.
 
 ---
 
@@ -266,6 +268,8 @@ Partner-linked revenue
 - Claims with missing evidence
 
 #### Finance Metrics
+
+*(Phase boundary: in Phase 1 these are tracking metrics computed from recorded/imported data — the product reports them; it does not execute, approve-to-pay, or move any of the amounts until Phase 2 Settle.)*
 
 - Payout-eligible revenue
 - Estimated payout liability
@@ -950,18 +954,18 @@ Turn partner contribution into finance-readable economics.
 - Invoice reference
 - Collection status
 - Recognized revenue reference
-- Payout eligibility
-- Estimated payout
-- Accrued payout liability
-- Payout approval workflow
+- Payout eligibility *(preview/calculation only in Phase 1)*
+- Estimated payout *(display only in Phase 1)*
+- Accrued payout liability *(recorded, not executed, in Phase 1)*
+- Payout approval workflow *(Phase 2 — Settle; behind the Phase-1 exit gate)*
 - Partner statement
 - Payable aging
-- Payout batch export
-- Adjustment handling
-- Refund handling
-- Credit note handling
-- Chargeback handling
-- Tax treatment metadata
+- Payout batch export *(Phase 2 — Settle)*
+- Adjustment handling *(recorded as data in Phase 1; execution semantics are Phase 2)*
+- Refund handling *(recorded as data in Phase 1; execution semantics are Phase 2)*
+- Credit note handling *(recorded as data in Phase 1; execution semantics are Phase 2)*
+- Chargeback handling *(recorded as data in Phase 1; execution semantics are Phase 2)*
+- Tax treatment metadata *(capture stub in Phase 1; no automated clearance)*
 
 #### Rationale
 
@@ -969,7 +973,7 @@ The CFO does not only need to know which partner helped. Finance needs to know w
 
 #### Second-Order Thinking
 
-Do not start by moving money. Start by proving entitlement. Once entitlement becomes trusted, settlement automation becomes natural.
+Do not start by moving money. Start by proving entitlement. Once entitlement becomes trusted, settlement automation becomes natural. **Explicit boundary:** in Phase 1 this layer reads, calculates, and displays; nothing in it approves-to-pay into a rail, executes, reverses, or clears money. Execution arrives in Phase 2 (Settle) — built last within that phase, or partnered to a rail.
 
 ---
 
@@ -2560,7 +2564,9 @@ The product must preserve:
 
 ## 16. Roadmap
 
-### 16.1 MVP — Control the Partner Revenue Claim
+> **Concordance:** MVP + V1 = **Phase 1 Capture** (the PRM) · V2 = **Phase 2 Settle** · V3 = **Phase 3 Orchestrate**. No V2 capability ships before the Phase-1 exit gate (100+ real claims, 3–5 design partners with finance-accepted evidence packs, weekly active usage).
+
+### 16.1 MVP — Control the Partner Revenue Claim *(Phase 1 — Capture)*
 
 #### Build
 
@@ -2571,7 +2577,7 @@ The product must preserve:
 - Protection window
 - CRM link
 - Basic partner portal
-- Payout eligibility preview
+- Payout eligibility preview *(read/calculate/display only — no execution)*
 - Executive dashboard
 - Audit log
 - CSV import/export
@@ -2579,7 +2585,10 @@ The product must preserve:
 #### Do Not Build Yet
 
 - Full ERP integration
-- Full payout execution
+- Any payout execution or approval-to-pay workflow
+- Bank/payment-rail write integrations
+- Automated ZATCA clearance (capture compliance fields only)
+- Escrow or holding of funds
 - Complex AI scoring
 - Full Partner P&L
 - Full CLM
@@ -2591,7 +2600,7 @@ MVP should prove that the product can create trusted partner revenue truth.
 
 ---
 
-### 16.2 V1 — Make Partner Revenue Operational
+### 16.2 V1 — Make Partner Revenue Operational *(Phase 1 — Capture)*
 
 #### Add
 
@@ -2611,7 +2620,7 @@ This makes the product part of the company’s operating rhythm.
 
 ---
 
-### 16.3 V2 — Make Partner Revenue Finance-Ready
+### 16.3 V2 — Make Partner Revenue Finance-Ready *(Phase 2 — Settle)*
 
 #### Add
 
@@ -2632,7 +2641,7 @@ This is where the product becomes CFO-grade.
 
 ---
 
-### 16.4 V3 — Make Partner Revenue Investable
+### 16.4 V3 — Make Partner Revenue Investable *(Phase 3 — Orchestrate)*
 
 #### Add
 
@@ -2786,7 +2795,7 @@ The product should help customers answer:
 
 The guiding principle for all product decisions is:
 
-> Do not build a PRM. Build the control system that turns partnership activity into governed, forecastable, finance-ready revenue.
+> Do not build a *generic* PRM. Build a claim-centric PRM the buyer adopts easily, whose underlying control system turns partnership activity into governed, forecastable, finance-ready revenue — and move no money until Phase 2 (Settle).
 
 ---
 

@@ -6,6 +6,8 @@
 **Source inputs:** the Partner Lifecycle Touchpoint Atlas v2 (requirements source), the v3 architecture audit (resolved here as ADRs), the partner-lifecycle economic deep-structure (thesis, metrics, moat).
 **How to read:** start with the Executive Summary. Part I is *why and for whom*; Part II is *what it does* (capabilities, journeys, requirements); Part III is *how it is built* (architecture and the ten decisions); Part IV is *how it ships and runs* (releases, metrics, risks, operating model). Appendix A (glossary) is binding language; §18 (ADR index) records every hard-to-reverse decision.
 
+> **Phase discipline (governing):** This PDR conforms to the canonical roadmap **Phase 1 Capture (PRM) → Phase 2 Settle → Phase 3 Orchestrate** (see `ROADMAP_ALIGNMENT_AUDIT.md` §2). Concordance: **MVP + V1 = Phase 1 Capture · V2 = Phase 2 Settle · V3 = Phase 3 Orchestrate.** The entry product is sold and experienced as an easy, claim-centric **PRM**. In Phase 1 the product **never moves money**: payout-related features read, calculate, and display only — the first-payout milestone is *recorded* (entered manually or imported), never *executed*. Settlement automation and money movement belong to Phase 2 (Settle), built last within that phase or partnered to a rail.
+
 ---
 
 ## Executive summary
@@ -18,7 +20,7 @@ Partner Revenue OS is the **system of record and control layer for partner-sourc
 
 **Who it's for.** The economic owner is the **Head of Partnerships**; the validator and second buyer is **Finance / Revenue Accounting**. The **partner** is a first-class user whose fast, fair, transparent experience is a design goal, not an afterthought. The product is built segment-agnostic and global-ready (multi-currency, multi-entity, Arabic/RTL, ZATCA/WHT/VAT), so it can serve the regulated and GCC buyers that incumbents underserve.
 
-**The MVP** proves one visible loop in days, not months: a partner registers a deal → a human attributes it (model-advised) → eligibility is previewed *with an explanation* → the first-payout milestone is visible. Finance-grade depth (ledger, tax, clawback) and the intelligence layer (effort-share, ROI, forecasting) follow on a sequenced roadmap.
+**The MVP** proves one visible loop in days, not months: a partner registers a deal → a human attributes it (model-advised) → eligibility is previewed *with an explanation* → the first-payout milestone is visible. The milestone is **recorded and displayed, not executed** — the MVP moves no money. Finance-grade depth (full ledger, tax, clawback, settlement) and the intelligence layer (effort-share, ROI, forecasting) follow on a sequenced roadmap in Phase 2 (Settle) and Phase 3 (Orchestrate).
 
 **The architecture** rests on ten decisions (Part III), led by: one canonical, human-authoritative Attribution of Record; an append-only double-entry payout ledger with clawback-by-netting; a single bitemporal rule-evaluation service; event-sourced writes; multi-tenancy with a cross-tenant partner identity; and a strict system-of-record boundary.
 
@@ -70,7 +72,7 @@ Partner Revenue OS is the **system of record and control layer for partner-sourc
 ## 1. Vision & product thesis
 
 - **One line:** Partner Revenue OS is the system of record and control layer for partner-sourced revenue — it governs the canonical claim, attributes credit defensibly, and makes partner economics finance-ready and investable.
-- **What it is not:** a PRM directory, an affiliate tracker, a partner portal, a dashboard, a contract repository, or a commission calculator. Those are features it subsumes, not the product.
+- **What it is not:** a *generic* PRM directory, an affiliate tracker, a partner portal, a dashboard, a contract repository, or a commission calculator. Those are features it subsumes, not the product. **Positioning note:** the Phase-1 entry product is nonetheless sold and experienced as an easy, claim-centric **PRM** — that is the adoption wedge; "system of record and control layer" describes the architecture underneath, and the product is never a fintech in Phase 1.
 - **The differentiating thesis (the moat):** competitors instrument the *transaction* layer. Partner Revenue OS instruments the **information and trust** layer — the touchpoints that determine partner-program outcomes and that operational tooling cannot see (time-to-first-value, time-to-first-payout, shadow contribution, effort-share, champion continuity, protection as an audited right, fair and contestable attribution, the humane reverse path).
 - **Strategic posture:** overlay and integrations first; a selective system of record for the partner-revenue objects it owns, expanding over time.
 
@@ -304,26 +306,29 @@ Recorded in the project ADR format — each is hard to reverse, surprising witho
 
 ## 19. Release plan
 
+> **Concordance:** MVP + V1 = **Phase 1 Capture** (the PRM) · V2 = **Phase 2 Settle** · V3 = **Phase 3 Orchestrate**. No V2 capability ships before the Phase-1 exit gate is met.
+
 The v3 roadmap front-loaded slow, invisible governance and had no fast aha. This sequence fixes that: capture and a visible first loop come first; finance-grade depth and the intelligence layer follow. Each release has a goal, a scope, explicit exit criteria (its definition of done), and the aha it unlocks.
 
-**MVP — Control the claim and prove the first loop.**
+**MVP — Control the claim and prove the first loop.** *(Phase 1 — Capture)*
 - *Goal:* become the trusted record of a partner-sourced deal and show one visible loop end to end.
-- *Scope:* partner registry, program, intake; agreement metadata; claim ledger; preflight; one Attribution of Record (human-decided, model recommendation stubbed); basic protection with expiry notification; CRM link; single eligibility service (preview); basic append-only ledger (accrued/eligible); executive view; event + audit log; CSV in/out. *(FR-01–FR-15.)*
+- *Scope:* partner registry, program, intake; agreement metadata; claim ledger; preflight; one Attribution of Record (human-decided, model recommendation stubbed); basic protection with expiry notification; CRM link; single eligibility service (preview); basic append-only ledger (accrued/eligible — **recording states, not executing them**); executive view; event + audit log; CSV in/out. *(FR-01–FR-15.)*
+- *Finance boundary:* everything payout-related in the MVP is read/calculate/display only. The first-payout milestone is recorded (manual entry or import), never executed; no approval-to-pay, no rail integration, no clearance automation, no holding of funds.
 - *Exit criteria:* a partner can register a deal, have it attributed by a human, see eligibility previewed *with an explanation*, and reach a recorded first-payout milestone; every state change emits an event and is auditable; no cross-tenant access; payout-bearing claims are blocked until bank/tax verified.
 - *Aha (days, not months):* register → attribute → preview eligibility → first-payout milestone visible.
-- *Do not build yet:* full ERP integration, settlement automation, full P&L, advanced multi-touch scoring, marketplace attribution.
+- *Do not build yet:* full ERP integration, settlement automation, any payout execution or approval-to-pay workflow, bank/payment-rail write integrations, automated ZATCA clearance, full P&L, advanced multi-touch scoring, marketplace attribution.
 
-**V1 — Operational.**
+**V1 — Operational.** *(Phase 1 — Capture)*
 - *Goal:* run a real program day to day without spreadsheets.
 - *Scope:* native CRM integration + selective write-back; partner statements; disputes; finance evidence pack; data-quality engine; integration health monitor; ABAC + delegation; warehouse export; basic ecosystem touchpoint ledger and journey timeline; configuration layer v1; time-to-first-payout and TTFV instrumented.
 - *Exit criteria:* a program runs end to end in-product with a draining exception queue; partners self-serve status and raise disputes; finance reviews against an evidence pack; the activation metrics are live.
 
-**V2 — Finance-ready.**
+**V2 — Finance-ready.** *(Phase 2 — Settle; entered only after the Phase-1 exit gate)*
 - *Goal:* finance trusts the money, including the reverse path.
 - *Scope:* billing + ERP integration; invoice/collection matching; full ledger (approved/paid/reversed); FX; tax/withholding/VAT + ZATCA; clawback-by-netting; payable aging; revenue-recognition references; attribution evidence pack; post-sale contribution.
 - *Exit criteria:* settlement is automated and idempotent (zero double-pays); deductions are explained pre-settlement; refunds flow through eligibility and ledger reversal to clawback-by-netting; reconciliation to ERP is clean.
 
-**V3 — Investable.**
+**V3 — Investable.** *(Phase 3 — Orchestrate)*
 - *Goal:* leadership reallocates capital on the product's evidence.
 - *Scope:* partner P&L and ROI; effort-share and partner-health scoring; forecasting; cohort and concentration analysis; tier/incentive simulation; full multi-touch credit recommendation; influence decay; identity-resolution/MDM at scale; decision→outcome measurement; AI recommendations.
 - *Exit criteria:* a defensible partner P&L exists per partner and program; the executive review runs from the product; decisions are logged and their outcomes measured.
