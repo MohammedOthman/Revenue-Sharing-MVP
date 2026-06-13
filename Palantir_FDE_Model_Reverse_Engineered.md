@@ -133,7 +133,7 @@ End-to-end, with **owner · key actions · artifacts · exit gate · metric** pe
 
 ## PART 4 — What this means for Reven (adopt / adapt / avoid)
 
-Our doc positioned Reven as **"the anti-FDE vertical SaaS play."** That does **not** mean reject the model — it means **steal the *function* (productization flywheel, value proof, land-and-expand) and shed the *cost* (a standing army of expensive on-site engineers).** Because Reven ships a **pre-built Ontology for one object** (the Partner Revenue Claim), most of what an FDE hand-builds, we ship as config.
+Our doc positioned Reven as **"the anti-FDE play."** (Reven is a *horizontal, single-function platform* — partner revenue across many markets — **not** vertical SaaS.) That does **not** mean reject the model — it means **steal the *function* (productization flywheel, value proof, land-and-expand) and shed the *cost* (a standing army of expensive on-site engineers).** Because Reven ships a **pre-built Ontology for one object** (the Partner Revenue Claim), most of what an FDE hand-builds, we ship as config.
 
 | Lever | Verdict for Reven | How |
 |---|---|---|
@@ -144,7 +144,7 @@ Our doc positioned Reven as **"the anti-FDE vertical SaaS play."** That does **n
 | **V9 FDE-intensity curve / V10 hero talent** | **AVOID the cost, KEEP the curve** | We start near the *bottom* of the intensity curve by design — the gap analysis (G1–G3) is what lets us. |
 | **V13 value-based pricing** | **ADOPT** | Price on **partner revenue governed / payout volume**, not seats — aligns with the value, matches the Phase-3 "basis points on settled flow" model. |
 
-**The synthesis:** Palantir pays expensive engineers to *discover* the product per customer, then races to productize it. **Reven's wedge is that the discovery is already done** — the Partner Revenue Claim, the contribution graph, the eligibility engine, the evidence spine are *pre-known* for this vertical. So we run the **same land→expand→productize flywheel with the FDE intensity pre-collapsed to near zero.** That is precisely how a focused vertical product beats a horizontal, services-heavy platform on cost-to-serve while keeping the stickiness.
+**The synthesis:** Palantir pays expensive engineers to *discover* the product per customer, then races to productize it. **Reven's wedge is that the discovery is already done** — the Partner Revenue Claim, the contribution graph, the eligibility engine, the evidence spine are *pre-known* for this one **function**. So we run the **same land→expand→productize flywheel with the FDE intensity pre-collapsed to near zero.** That is precisely how a **single-function platform — horizontal across markets but purpose-built for one need — beats a general-purpose, services-heavy platform** on cost-to-serve while keeping the stickiness.
 
 ---
 
