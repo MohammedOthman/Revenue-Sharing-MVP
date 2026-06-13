@@ -56,7 +56,7 @@ Demand is well-evidenced (a $4M Capital One affiliate-commission-diversion suit;
 1. **Money movement → licensing.** Touching funds makes you a PayFac/money-transmitter (FBO accounts, state MTLs). *Mitigation: be the ledger-of-record WITHOUT moving money first; add settlement later.*
 2. **ASC 606 principal-vs-agent.** The two companies must often book the *same* shared revenue differently (one gross/principal, one net/agent). A shared ledger must emit **two each-correct representations** — non-trivial, and a core reason finance teams keep separate books.
 3. **Neutrality / data-sensitivity trust.** Both parties must cede authority to a neutral system holding competitively sensitive revenue data (the friction Crossbeam solves only via escrow — and it still doesn't settle money).
-4. **Heterogeneity.** Splits, tiers, clawbacks, disputes are bespoke per contract (which is why the working examples are *vertical* — telecom, healthcare VBC, publishing royalties).
+4. **Heterogeneity.** Splits, tiers, clawbacks, disputes are bespoke per contract (which is why the working examples are *vertical* — telecom, healthcare VBC, publishing royalties). Today's examples are vertical only because no one has yet generalized the rule engine; Reven's horizontal bet is to make that per-contract heterogeneity **configurable across industries**, not rebuilt per vertical.
 
 **The sharpened wedge:** a **neutral, dual-sided ledger-of-record** that emits each side its own **ASC-606-correct, audit-ready statement that provably ties out**, with a built-in dispute/clawback workflow — *without moving money initially* (dodge the MTL trap). Add basis-points-on-flow once the ledger is trusted.
 
