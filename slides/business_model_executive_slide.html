@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reven — Business Model (Executive Slide)</title>
+<style>
+  /* Self-contained, offline-safe (no CDNs, system fonts) — per repo network policy */
+  :root{
+    --ink:#0b1f3a; --ink-soft:#33455f; --muted:#6b7a90;
+    --line:#e3e8f0; --bg:#f5f7fb; --card:#ffffff;
+    --capture:#2563eb; --settle:#0d9488; --orchestrate:#7c3aed;
+    --gold:#b8860b; --rake:#c2410c;
+    --shadow:0 1px 2px rgba(11,31,58,.06),0 8px 24px rgba(11,31,58,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
+    color:var(--ink);-webkit-font-smoothing:antialiased}
+  .slide{
+    width:1280px;height:720px;margin:24px auto;background:var(--card);
+    border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;overflow:hidden;position:relative}
+  /* ---- header ---- */
+  .head{padding:26px 40px 18px;border-bottom:1px solid var(--line);
+    display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:42px;height:42px;border-radius:11px;
+    background:linear-gradient(135deg,#2563eb 0%,#0d9488 60%,#7c3aed 100%);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;letter-spacing:.5px}
+  .brand h1{margin:0;font-size:22px;line-height:1.1;letter-spacing:-.2px}
+  .brand .sub{margin:2px 0 0;font-size:12.5px;color:var(--muted);font-weight:500}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.4px;color:var(--capture);text-transform:uppercase}
+  .stamp{text-align:right;font-size:11px;color:var(--muted);line-height:1.5}
+  .stamp b{color:var(--ink-soft);font-weight:700}
+  /* ---- thesis line ---- */
+  .thesis{padding:14px 40px;background:linear-gradient(90deg,#eef4ff,#effbf8 50%,#f5effd);
+    border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink-soft);line-height:1.45}
+  .thesis b{color:var(--ink)}
+  /* ---- phase columns ---- */
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:20px 40px 8px}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px 16px 14px;position:relative;overflow:hidden}
+  .col:before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
+  .c1:before{background:var(--capture)} .c2:before{background:var(--settle)} .c3:before{background:var(--orchestrate)}
+  .phase-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px}
+  .pnum{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+  .c1 .pnum{color:var(--capture)} .c2 .pnum{color:var(--settle)} .c3 .pnum{color:var(--orchestrate)}
+  .pstage{font-size:10.5px;color:var(--muted);font-weight:600}
+  .col h2{margin:2px 0 2px;font-size:18px;letter-spacing:-.2px}
+  .pwhat{font-size:11.5px;color:var(--muted);margin:0 0 12px;line-height:1.35;min-height:30px}
+  .row{display:flex;gap:8px;font-size:12px;padding:6px 0;border-top:1px dashed var(--line)}
+  .row .k{flex:0 0 78px;color:var(--muted);font-weight:600}
+  .row .v{color:var(--ink-soft);font-weight:600}
+  .acv{margin-top:11px;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:700;
+    display:flex;justify-content:space-between;align-items:center}
+  .c1 .acv{background:#eff5ff;color:#1d4ed8} .c2 .acv{background:#ecfdf9;color:#0f766e} .c3 .acv{background:#f5f0ff;color:#6d28d9}
+  .acv span{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;opacity:.75}
+  /* arrow chips between phases */
+  .flow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:26px;height:26px;border-radius:50%;background:#fff;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800;font-size:13px;box-shadow:var(--shadow)}
+  /* ---- bottom strip ---- */
+  .strip{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;padding:8px 40px 22px;margin-top:auto}
+  .panel{border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .panel h3{margin:0 0 9px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+  .wedge{background:linear-gradient(180deg,#fff,#fffaf4);border-color:#f0e2cf}
+  .wedge .big{font-size:14px;font-weight:700;color:var(--ink);line-height:1.4;margin:0 0 8px}
+  .wedge .big em{color:var(--gold);font-style:normal}
+  .vs{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;border:1px solid}
+  .pill.bad{color:var(--rake);border-color:#f3d6c4;background:#fff5ef}
+  .pill.good{color:#0f766e;border-color:#bfe9e0;background:#ecfdf9}
+  .econ{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  .metric{display:flex;flex-direction:column;gap:1px}
+  .metric .lbl{font-size:10.5px;color:var(--muted);font-weight:600}
+  .metric .val{font-size:13px;font-weight:800;color:var(--ink)}
+  .metric .val small{font-size:10.5px;font-weight:700;color:var(--muted)}
+  /* ---- footer ---- */
+  .foot{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;
+    padding:8px 40px;font-size:10px;color:var(--muted);border-top:1px solid var(--line);background:#fbfcfe}
+  .foot b{color:var(--ink-soft)}
+</style>
+</head>
+<body>
+  <section class="slide">
+    <!-- header -->
+    <div class="head">
+      <div class="brand">
+        <div class="logo">R</div>
+        <div>
+          <div class="kicker">Business Model</div>
+          <h1>Reven — Partner Revenue OS</h1>
+          <p class="sub">The finance-grade system of record for the Partner Revenue Claim · KSA / GCC beachhead</p>
+        </div>
+      </div>
+      <div class="stamp">
+        <div><b>Stage:</b> Pre-seed · pre-revenue</div>
+        <div><b>Motion:</b> Land &amp; expand, gated by phase</div>
+        <div><b>Payer:</b> the company, not the partner</div>
+      </div>
+    </div>
+
+    <!-- thesis -->
+    <div class="thesis">
+      Enter as a claim-centric <b>PRM</b>, earn the right to become the bilateral <b>revenue-sharing system of record</b>,
+      then expand into <b>revenue-sharing infrastructure for B2B</b> — monetizing on a subscription spine first,
+      and on flow only later, capped, and only where we provably enable it.
+    </div>
+
+    <!-- three phases -->
+    <div class="phases">
+      <div class="col c1">
+        <div class="phase-top"><span class="pnum">Phase 1 · Capture</span><span class="pstage">Seed · Mo 0–9</span></div>
+        <h2>The PRM</h2>
+        <p class="pwhat">Registry, claim registration, attribution &amp; protection. <b>No money moves.</b></p>
+        <div class="row"><span class="k">Buyer</span><span class="v">Head of Partnerships</span></div>
+        <div class="row"><span class="k">Metric</span><span class="v">Active partners (seats free)</span></div>
+        <div class="row"><span class="k">Model</span><span class="v">Good-Better-Best SaaS + impl. fee</span></div>
+        <div class="acv">Annual ACV <span>$6–50K</span></div>
+      </div>
+
+      <div class="col c2">
+        <div class="flow" style="left:-13px">→</div>
+        <div class="phase-top"><span class="pnum">Phase 2 · Settle</span><span class="pstage">Series A · Mo 9–24</span></div>
+        <h2>System of Record</h2>
+        <p class="pwhat">Rule engine, ledger, reconciliation, disputes, ERP &amp; compliance. Audit-/ZATCA-clean.</p>
+        <div class="row"><span class="k">Buyer</span><span class="v">CFO / Finance co-signs</span></div>
+        <div class="row"><span class="k">Metric</span><span class="v">+ payouts &amp; settled volume</span></div>
+        <div class="row"><span class="k">Model</span><span class="v">Sub + flat per-payout + capped bps</span></div>
+        <div class="acv">Annual ACV <span>$25–250K+</span></div>
+      </div>
+
+      <div class="col c3">
+        <div class="flow" style="left:-13px">→</div>
+        <div class="phase-top"><span class="pnum">Phase 3 · Orchestrate</span><span class="pstage">Series B+ · Mo 24+</span></div>
+        <h2>The Network</h2>
+        <p class="pwhat">Partner P&amp;L, forecasting, co-sell &amp; cross-tenant partner network.</p>
+        <div class="row"><span class="k">Buyer</span><span class="v">Enterprise / strategic</span></div>
+        <div class="row"><span class="k">Metric</span><span class="v">Revenue / GMV under mgmt</span></div>
+        <div class="row"><span class="k">Model</span><span class="v">Net bps (tiered+capped) + network fee</span></div>
+        <div class="acv">Annual ACV <span>6–7 figures</span></div>
+      </div>
+    </div>
+
+    <!-- bottom strip -->
+    <div class="strip">
+      <div class="panel wedge">
+        <h3>The Wedge — "Neutral Switzerland"</h3>
+        <p class="big">We <em>never skim a % of the partner's money</em> in Phases 1–2. Flow pricing comes late, capped, and only on volume we enable.</p>
+        <div class="vs">
+          <span class="pill bad">PartnerStack 3–15% rake</span>
+          <span class="pill bad">Paddle 5%</span>
+          <span class="pill bad">"a tax on your own success"</span>
+          <span class="pill good">Reven: flat per-payout rail</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Financial Discipline</h3>
+        <div class="econ">
+          <div class="metric"><span class="lbl">Spine</span><span class="val">Subscription SaaS</span></div>
+          <div class="metric"><span class="lbl">Blended gross margin</span><span class="val">≥ 70%</span></div>
+          <div class="metric"><span class="lbl">NRR ladder</span><span class="val">105% <small>→</small> 120% <small>→</small> 130%</span></div>
+          <div class="metric"><span class="lbl">Moat</span><span class="val">ZATCA · WHT · Sharia · PDPL</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="foot">
+      <span><b>Source:</b> internal — Pricing &amp; Commercial Strategy + Reverse-Engineered Strategy (PRM → Revenue-Sharing → Orchestration)</span>
+      <span>Indicative bands are <b>hypotheses to validate</b> — no signed customers yet · Confidential</span>
+    </div>
+  </section>
+</body>
+</html>
