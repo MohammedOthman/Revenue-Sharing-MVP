@@ -26,4 +26,5 @@ All documents in this repository conform to this sequencing. Where a document us
 | **Pricing & commercial** | `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md`, `Partner_Revenue_OS_Pricing_Strategy_Red_Team.md`, `Reven_Pricing_Architecture_Deep_Research.md` |
 | **Operating manuals** | `GTM_Operating_Manual.md`, `Internal_Operating_Cadence_Manual.md`, `Monthly_CFO_Review_Manual.md`, `Large_Enterprise_Client_Onboarding_Manual.md`, `Integration_Layer_and_API_Data_Flows_Manual.md` |
 | **Narrative & finance model** | `Partner_Revenue_OS_Venture_Scale_Narrative.md`, `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md` |
+| **Pitch deck** | `Reven_Pitch_Deck.pdf` — the definitive investor pitch deck |
 | **Audit & alignment** | [`ROADMAP_ALIGNMENT_AUDIT.md`](ROADMAP_ALIGNMENT_AUDIT.md) — doc-by-doc verification against the phase model, with the outstanding edit checklist |
