@@ -6,9 +6,22 @@ Project context + handoff so any future session can continue without rediscovery
 - **Strategy / operating docs** (root `*.md` + `*.pdf`): `Partner_Revenue_OS_PDR.md`,
   `GTM_Operating_Manual.md`, the onboarding/cadence/CFO manuals, market-analysis
   PDFs, and `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md`.
-- **`prototype/`** — the **Partner Revenue OS UI prototype**: ~46 Stitch-generated
-  HTML screens (the MVP→V3 product journey) made to **run fully offline**, with a
-  navigable index, recovered images, and clickable cross-screen navigation.
+- **`prototype/`** — an early **offline design exploration** (Stitch-generated HTML
+  mockups). Kept only as a historical artifact. **It is not the product UI/UX** —
+  see "Live product UI/UX" below.
+
+## Live product UI/UX — source of truth
+- The live product's UI/UX is the **Replit App "Enterprise Architect"** — the
+  technical UI/UX translation of all the strategy/operating work into a running
+  product. **This is the single source of truth for current UI/UX.**
+  - replId: `c36682f1-b8e3-4186-a46e-3044775b798f`
+  - URL: https://replit.com/@mohammedmukred1/Enterprise-Architect
+- Build, inspect, and iterate the live product **on Replit** via the Replit MCP
+  tools: `resolve_app_by_name` / `list_apps` to get the replId, then
+  `ask_question` (inspect / debug) or `update_app_using_prompt` (change it).
+  Describe changes in natural language — Replit Agent writes and deploys the code.
+- The static prototype screens do **not** define the product; do not treat them as
+  the spec for the live UI/UX.
 
 ## Active branch & PR
 - Branch: **`claude/tender-ptolemy-2PsAM`** → **PR #3**
@@ -16,79 +29,17 @@ Project context + handoff so any future session can continue without rediscovery
 - Develop here; commit + push to this branch. **Do not open a new PR** — #3 already
   tracks it. Push updates it.
 
-## Run / build the prototype
-```bash
-cd prototype && npm install && node build.mjs && node driver.mjs
-```
-- `build.mjs` compiles `screens/` → `dist/`. `driver.mjs` serves `dist/` and
-  screenshots it in a headless browser (→ `prototype/shots/`).
-- Full, verified instructions: **`.claude/skills/run-revenue-sharing-mvp/SKILL.md`**
-  (slash command `/run-revenue-sharing-mvp`).
-
-## Key facts about this environment (so you don't rediscover them)
-- The network policy **blocks**: Tailwind Play CDN, Google Fonts, Material Symbols,
-  `lh3.googleusercontent.com` (the screens' avatar/logo host), and the
-  Playwright/Chrome-for-Testing download CDNs. **npm and PyPI are reachable.**
-- That's why: Tailwind is compiled **per-page** from each screen's inline config
-  (don't merge configs); fonts/icons are vendored from npm; the headless browser is
-  **`@sparticuz/chromium`** (binary ships inside the npm tarball — no `playwright install`).
-- Container is **ephemeral**: `dist/`, `shots/`, `node_modules/` are generated and
-  git-ignored. `screens/` and `recovered/` are committed source. Commit anything worth keeping.
-
-## How images work (avatars / logos / world map)
-- The screens reference images from the blocked `lh3` host; the bytes aren't in the
-  export except **baked into each `screen.png` page render**.
-- **`recover-images.mjs`** crops those `<img>` regions out of `screen.png` (it
-  reproduces Stitch's 1600-wide layout so boxes map to screenshot pixels) and keeps
-  the ones that come back real. Output: **`recovered/<screen>/<imgIndex>.png`** (committed);
-  `build.mjs` wires them in, else a placeholder.
-
-## Navigation
-- Screens shipped with dead links (`href="#"`, unresolved `{{DATA:SCREEN:SCREEN_NN}}`).
-- `build.mjs` rewrites sidebar nav items to canonical screens via the **`NAV` map**
-  (Dashboard/Partners/Claims/Approvals/Settings/Documentation/Statements/Support) and
-  injects a bottom-left **"Overview"** button back to `index.html`. To re-point a
-  section, edit `NAV` in `build.mjs`.
-- **Deep-links** (the `DEEPLINKS` map in `build.mjs` + `deeplink.js`) wire primary
-  buttons / "View All" / table rows across **55 screens** to follow the workflow
-  (e.g. Submit Claim → Preflight → Attribution → CRM → Revenue → Payout → Evidence
-  → Statement; rows open the relevant detail/next screen). Matched by exact
-  icon-stripped control text / DOM order; only named controls are wired. Edit
-  `DEEPLINKS` to extend. Verified by the audit's functional deep-link check
-  (0 dead rules) + a 20-case click-through (all land correctly).
-
-## End-to-End Workflow model (the 22 phases)
-- `Partner_Revenue_OS_End_to_End_Business_Workflow.pdf` (60pp) is the spec. Its
-  22 workflow phases (Parts A–G) are encoded in **`prototype/workflow.mjs`** (the
-  single source of truth: per-phase group / tier / role / purpose / canonical
-  screen, plus the operating cadence). Edit there to change the journey.
-- **`gap_analysis_workflow_pdf.md`** (in `screens/`) = the benchmark: 11 covered /
-  7 partial / 4 missing → which drove the 11 new screens.
-- **`gen-screens.mjs`** generates the 11 gap screens (full Stitch/MD3 style) into
-  `screens/`. **`gen-thumbs.mjs`** renders each new screen's `screen.png` thumbnail
-  (1600-wide, overlays hidden; only touches the 11 new dirs). **`nav-pages.mjs`**
-  builds `journey.html` (22-phase map) + `cadence.html` (operating cadence) and the
-  per-phase Prev/Next bar. `build.mjs` imports both.
-  Full pipeline: `node gen-screens.mjs && node build.mjs && node gen-thumbs.mjs && node build.mjs`.
-
-## Status
-**Done**
-- ✅ 57 interactive screens run offline, fully styled, 0 console errors; navigable
-  `index.html` hub + `journey.html` (22-phase map) + `cadence.html`. All 11 new
-  screens have rendered thumbnails. Full audit passes: 0 broken links / placeholders
-  / blocked hosts / render errors / dead deep-links across 60 pages.
-- ✅ Benchmarked vs the End-to-End Business Workflow PDF; built the 11 gap screens
-  so all 22 phases now have a canonical screen.
-- ✅ 22 of 28 image slots recovered from screenshots (all avatars, 3 logos, world map).
-- ✅ Clickable nav (sidebar + Overview), journey deep-links, per-phase Prev/Next.
-- ✅ `/run-revenue-sharing-mvp` skill, verified end-to-end.
-
-**Open / next steps**
-- ⏳ **6 images can't be recovered** — down-scaled screens
-  (`partner_profit_loss_analysis`, `partner_profit_loss_with_rationales`,
-  `partner_roi_analysis`, `partner_performance_scorecard`, plus a 2nd/3rd avatar on
-  the dispute & resolution workspaces). To reach true 100%: unblock
-  `lh3.googleusercontent.com`, or add the source image files; then `node build.mjs`.
-- ◻ Optional: deepen deep-links on more existing screens (workspaces/list rows).
-- ◻ Optional: land/merge PR #3 (can subscribe to its CI/review events and autofix).
-- ◻ Larger: turn the static mockups into a real application (interactivity, state, data/backend).
+## Prototype (historical, offline) — optional
+- Only relevant if you need to view the old mockups. Run:
+  ```bash
+  cd prototype && npm install && node build.mjs && node driver.mjs
+  ```
+  `build.mjs` compiles `screens/` → `dist/`; `driver.mjs` serves `dist/` and
+  screenshots it in a headless browser (→ `prototype/shots/`). Skill:
+  `/run-revenue-sharing-mvp`.
+- Environment gotchas: the network policy blocks Tailwind Play CDN, Google Fonts,
+  Material Symbols, `lh3.googleusercontent.com`, and the Playwright/Chrome-for-Testing
+  CDNs; **npm and PyPI are reachable.** So Tailwind is compiled per-page, fonts/icons
+  are vendored from npm, and the headless browser is `@sparticuz/chromium`. The
+  container is ephemeral — `dist/`, `shots/`, `node_modules/` are generated and
+  git-ignored; `screens/` and `recovered/` are committed source.
