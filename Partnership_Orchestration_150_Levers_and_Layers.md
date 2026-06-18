@@ -10,7 +10,7 @@
 - Confidence on numbers: figures are tagged `[vendor]` (vendor self-report / advocacy, directional only), `[analyst]` (named analyst firm), `[primary]` (regulator/marketplace/standard), or `[indicative]` (practitioner rule-of-thumb, unverified primary). **Several headline stats could not be fully verified at source** — see the Verification Appendix; nothing here invents a number.
 - The single most important correction surfaced by the research: the often-quoted *"~a quarter of partner deals get misbooked as direct"* figure **could not be confirmed in any retrieved source**. "Partner Attribution Leak" is real and named (Magentrix) but should be cited *qualitatively*, not as a percentage.
 
-**Source legend (full URLs in the Sources section):** Canalys/Omdia *Channels Ecosystem Landscape*; Gartner *PERM Market Guide* (Sept 2025); Forrester *State of Partner Ecosystems 2025*; IDC ecosystem-orchestration prediction; Crossbeam/ELG Insider; Reveal / Nearbound (Fuller & Rowley); PartnerStack, Tipalti, Trolley, Magentrix, Impartner, HubSpot, Veeam; AWS/Azure/GCP Marketplace docs; IFRS 15 / ASC 606 / ASC 340-40; and the strategy classics — Jacobides–Cennamo–Gawer (2018), Adner (2012/2017), Iansiti & Levien (2004), Williamson & De Meyer (2012), Rochet–Tirole (2003), Eisenmann–Parker–Van Alstyne (2006/2011), Parker–Van Alstyne–Choudary (2016), Gawer & Cusumano (2002), Ghazawneh & Henfridsson (2010/2013). Repo: `workflow.mjs`, `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md`, `Partner_Revenue_OS_Venture_Scale_Narrative.md`.
+**Source legend (full URLs in the Sources section):** Canalys/Omdia *Channels Ecosystem Landscape*; Gartner *PERM Market Guide* (Sept 2025); Forrester *State of Partner Ecosystems 2025*; IDC ecosystem-orchestration prediction; Crossbeam/ELG Insider; Reveal / Nearbound (Fuller & Rowley); PartnerStack, Tipalti, Trolley, Magentrix, Impartner, HubSpot, Veeam; AWS/Azure/GCP Marketplace docs; IFRS 15 / ASC 606 / ASC 340-40; and the strategy classics — Jacobides–Cennamo–Gawer (2018), Adner (2012/2017), Iansiti & Levien (2004), Williamson & De Meyer (2012), Rochet–Tirole (2003), Eisenmann–Parker–Van Alstyne (2006/2011), Parker–Van Alstyne–Choudary (2016), Gawer & Cusumano (2002), Ghazawneh & Henfridsson (2010/2013). Repo: `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md`, `Partner_Revenue_OS_Venture_Scale_Narrative.md`.
 
 ---
 
@@ -318,7 +318,7 @@
 - Ghazawneh & Henfridsson (2010/2013), *Boundary Resources Model*: https://aisel.aisnet.org/icis2010_submissions/48/
 
 **Repository (internal model)**
-- `prototype/workflow.mjs` — the 22-phase end-to-end workflow & operating cadence
+- `Partner_Revenue_OS_End_to_End_Business_Workflow.pdf` — the 22-phase end-to-end workflow & operating cadence
 - `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md` — Capture→Settle→Orchestrate, 7-Powers moat map, GCC-compliance execution rules
 - `Partner_Revenue_OS_Venture_Scale_Narrative.md` — the core insight (attribution as binding constraint), beachhead, defensibility roadmap
 
