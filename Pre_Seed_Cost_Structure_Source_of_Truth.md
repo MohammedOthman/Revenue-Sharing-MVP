@@ -2,9 +2,10 @@
 ## Granular itemization · Pillars 1 & 2 · Founder-provided · SAR
 
 > **Status:** This is the **founder-declared source of truth** for the pre-seed cost structure, extracted from
-> the verified financial model sheet. It currently covers **Pillars 1 & 2 only** (official setup + founders &
-> cloud). The remaining operational pillars (later headcount expansion, GTM, COGS-at-scale, etc.) are **not yet
-> itemized**. The total raise is **SAR 2.0M**; **the fundraise may ultimately need more** than that. Every
+> the verified financial model sheet. It covers **Pillars 1, 2 & 3** (official setup + founders & cloud + the
+> execution team). With Pillar 3 added, **~95.7% of the SAR 2.0M is now committed**; only GTM/marketing, taxes,
+> and contingency remain un-itemized. The total raise is **SAR 2.0M**; **the fundraise will need more** — the
+> committed plan ends the year *below* the SAR 150K safety floor (see Reconciliation). Every
 > figure below is **🟢 FOUNDER INPUT**. The "Reconciliation" section at the end is **analysis added by the model**
 > (clearly marked) — it invents no numbers, it only checks and re-expresses the founder's figures.
 
@@ -39,6 +40,23 @@
 
 ---
 
+## Pillar 3 — Execution Team (Months 2–12, recurring · 11-month runtime)
+
+- **Total:** **926,200.00 SAR** · **84,200.00 SAR / month** · **Budget share: 46.31%**
+- Hired in **Month 2** → 11 months inside the first-year budget. Takes over pipeline build, client setup, and daily operations.
+
+| Role | Layer | SAR / month | 11-month total | Strategic ownership |
+|---|---|---|---|---|
+| Technical Solutions Architect | Onboarding | 19,160.00 | 210,760.00 | Customer integration maps; security questionnaires; data-sharing design |
+| Lead Cloud DevOps Engineer | Infrastructure | 17,120.00 | 188,320.00 | Customer env automation; server security; Riyadh data localization |
+| Backend Integration Engineer | Data pipeline | 15,715.00 | 172,865.00 | Salesforce/HubSpot connectors; secure API streams |
+| Inside Sales Executive | GTM | 13,040.00 | 143,440.00 | Mid-market pipeline; demos; annual contracts |
+| Customer Success Manager | Retention | 11,225.00 | 123,475.00 | Training workshops; adoption scoring; renewals |
+| Technical Support Specialist | Support | 7,940.00 | 87,340.00 | Day-to-day tickets; help library; basic bug fixes |
+| **Pillar 3 total** | | **84,200.00** | **926,200.00** | Full 11-month active runway |
+
+---
+
 ## Combined Foundation Reconciliation (as provided)
 
 | Cost element | Exact amount (SAR) | Strategic role |
@@ -52,46 +70,61 @@
 # Reconciliation & audit (model-added analysis — no new numbers)
 
 ### Totals verified
-- Pillar 1 line items sum to **158,083.75** ✓
-- Pillar 2 line items sum to **829,306.25** ✓
-- Combined **987,390.00** ✓
+- Pillar 1 sums to **158,083.75** ✓
+- Pillar 2 sums to **829,306.25** ✓
+- Pillar 3: each role × 11 months correct; monthly **84,200.00** ✓; 11-month **926,200.00** ✓
+- Combined **1 + 2 + 3 = 1,913,590.00** ✓
 
-### The SAR 2.0M raise is the denominator
-- 158,083.75 ÷ 0.0790 ≈ **2,000,000** · 829,306.25 ÷ 0.4147 ≈ **2,000,000**
-- Pillars 1 + 2 = **49.37%** of the 2.0M raise.
-- **Unallocated / not-yet-itemized: ≈ SAR 1,012,610 (50.63%)** — future operational spend (GTM, hires beyond founders, COGS at scale). Flagged 🔴 until itemized.
+### The SAR 2.0M raise — now ~95.7% committed
+| Pillar | SAR | Share of 2.0M |
+|---|---|---|
+| 1 — Setup (one-time, M1) | 158,083.75 | 7.90% |
+| 2 — Founders + cloud (12 mo) | 829,306.25 | 41.47% |
+| 3 — Execution team (11 mo, M2+) | 926,200.00 | 46.31% |
+| **Committed** | **1,913,590.00** | **95.68%** |
+| **Unallocated** | **86,410.00** | **4.32%** |
 
-### Team = 4 founders, mixed Saudi + expat
-- CEO, CTO, CRO, COO. The "international layer" (Pillar 1 visas) + GOSI line (Saudi pension *and* expat occ-hazard) confirm a **mixed Saudi/expat** founding team. Exact split not yet stated; the founder's GOSI figure already bakes it in, so the model uses **58,506.25** directly.
+→ Only **~SAR 86,410** is left over. There is **no budget line yet** for GTM/marketing spend, taxes (Zakat/VAT/WHT), travel, or contingency.
 
-### Founder payroll reconciliation (one small item to confirm)
-- Founder-stated pay = **SAR 15K/person/month** → 4 × 15,000 × 12 = **720,000**.
-- Sheet states **715,000** (≈ **14,895.83**/founder/month). **~0.7% gap (SAR 5,000).** → *Confirm: is each founder exactly 15,000 (=720,000), or is 715,000 the precise figure?*
+### Headcount = 10 people by Month 2
+- **Month 1:** 4 founders (CEO, CTO, CRO, COO) — mixed Saudi/expat (visas + GOSI line confirm the mix).
+- **Month 2+:** + 6 execution hires (Solutions Architect, DevOps, Backend Integration, Inside Sales, CSM, Support) = **10 total.**
 
-### Monthly run-rate (Pillar 2 ÷ 12)
-| Item | SAR / month |
-|---|---|
-| Founder payroll | 59,583.33 |
-| GOSI & levies | 4,875.52 |
-| Cloud | 4,650.00 |
-| **Recurring run-rate** | **69,108.85 / month** |
+### Monthly run-rate by phase
+| Period | Active layers | SAR / month |
+|---|---|---|
+| Month 1 | Pillar 2 run-rate (+ Pillar 1 one-time 158,083.75) | 69,108.85 |
+| Months 2–12 | Pillar 2 + Pillar 3 | **153,308.85** |
+
+*(Pillar 2 run-rate = payroll 59,583.33 + GOSI 4,875.52 + cloud 4,650.00 = 69,108.85.)*
 
 ### First-quarter (13-week) cash-out from *known* costs
-- 13 weeks ≈ 3 monthly cycles.
-- Pillar 1 one-time (month 1): **158,083.75**
-- Pillar 2 recurring × 3 months: **207,326.56** (payroll 178,750.00 + GOSI 14,626.56 + cloud 13,950.00)
-- **13-week known cash-out ≈ SAR 365,410.31** (before the unallocated ~50% and before any taxes/VAT timing).
+| Month | Components | SAR |
+|---|---|---|
+| Month 1 | Setup 158,083.75 + run-rate 69,108.85 | 227,192.60 |
+| Month 2 | Pillar 2 + Pillar 3 | 153,308.85 |
+| Month 3 | Pillar 2 + Pillar 3 | 153,308.85 |
+| **13-week total** | | **≈ 533,810.30** |
 
-### ⚠️ Month-1 front-load warning (key for the inflow-timing decision)
-- Month 1 alone needs **158,083.75 (setup) + 69,108.85 (run-rate) = SAR 227,192.60**.
-- To stay above the **SAR 150K floor** in month 1, you need **≈ SAR 377,193 in the bank by month 1.**
-- **Implication:** if the SAR 2.0M arrives in tranches, the **first tranche must be ≥ ~SAR 377K** (ideally more) or you breach the floor in the very first month. This is the single biggest reason to front-load the raise.
+*(before taxes/VAT timing and any GTM spend.)*
+
+### ⚠️ Month-1 front-load warning (key for inflow timing)
+- Month 1 needs **SAR 227,192.60** (Pillar 3 hasn't started yet).
+- To stay above the **SAR 150K floor**, you need **≈ SAR 377,193 in the bank by Month 1.**
+- **If the 2.0M arrives in tranches, the first tranche must be ≥ ~SAR 377K** or you breach the floor in Month 1.
+
+### ⚠️ 12-month runway reality check (why "the raise needs more")
+- Committed spend **1,913,590** vs raise **2,000,000** → year-end cash ≈ **SAR 86,410**, which is **below the SAR 150K floor.**
+- Even the **best case** (full 2.0M as a lump sum on day one, zero delay, **zero revenue**, **zero taxes**) crosses the 150K floor at roughly **Month 11–12.**
+- This **excludes** Zakat (2.5% on net assets, owed even pre-revenue), VAT timing, WHT on foreign cloud/SaaS, and **all GTM/marketing** — so the real breach is **earlier.**
+- **Conclusion:** the SAR 2.0M funds setup + team + cloud for ~a year with **almost no buffer.** To survive past ~Month 11 the company must **book real revenue during the year and/or raise more** — exactly as noted.
 
 ---
 
 ## Open items (still 🔴 for a complete model)
-1. **Inflow timing** of the SAR 2.0M (lump sum vs tranches) — base case modeled as lump sum + a 2-tranche stress.
-2. **Unallocated ~SAR 1,012,610 (50.6%)** — the other operational pillars, not yet itemized.
-3. **715K vs 720K** founder-payroll reconciliation.
-4. **Exact Saudi/expat split** of the 4 founders (cosmetic; GOSI total already given).
-5. **Tax/working-capital timing** in the window — VAT registration status, Zakat/CIT (ownership split), WHT on foreign cloud/SaaS vendors.
+1. **Inflow timing** of the SAR 2.0M (lump sum vs tranches) — base case lump sum + a 2-tranche stress; first tranche ≥ ~SAR 377K.
+2. **Pillar 3 burden:** do the per-role "monthly budgets" already **include** GOSI/levies, or are those on top? (Pillar 2 listed burden separately; Pillar 3 gives one figure per role.) If extra, add Saudi ~11–12% / expat fees.
+3. **715K vs 720K** founder-payroll reconciliation (SAR 5,000 / 0.7%).
+4. **Revenue:** any customer cash expected inside the year (none modeled yet) — directly sets the real cash-out month.
+5. **Tax/working-capital timing** — VAT registration status, Zakat/CIT (ownership split), WHT on foreign vendors.
+6. **Remaining ~SAR 86,410** — earmark as contingency, or will GTM/marketing come from a later raise?
