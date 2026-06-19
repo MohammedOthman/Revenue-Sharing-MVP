@@ -25,6 +25,6 @@ All documents in this repository conform to this sequencing. Where a document us
 | **Product requirements** | `Partner_Revenue_OS_PDR.md`, `partner-revenue-os-PDR-v5.md` |
 | **Pricing & commercial** | `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md`, `Partner_Revenue_OS_Pricing_Strategy_Red_Team.md`, `Reven_Pricing_Architecture_Deep_Research.md` |
 | **Operating manuals** | `GTM_Operating_Manual.md`, `Internal_Operating_Cadence_Manual.md`, `Monthly_CFO_Review_Manual.md`, `Large_Enterprise_Client_Onboarding_Manual.md`, `Integration_Layer_and_API_Data_Flows_Manual.md` |
-| **Narrative & finance model** | `Partner_Revenue_OS_Venture_Scale_Narrative.md`, `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md` |
+| **Narrative & finance model** | `Partner_Revenue_OS_Venture_Scale_Narrative.md`, `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md`, [`Pre_Seed_2M_SAR_Financial_Model_Blueprint.md`](Pre_Seed_2M_SAR_Financial_Model_Blueprint.md) — the canonical 2,000,000 SAR pre-seed ask & use-of-funds (10% equity, 12-month zero-revenue) |
 | **Pitch deck** | `Reven_Pitch_Deck.pdf` — the definitive investor pitch deck |
 | **Audit & alignment** | [`ROADMAP_ALIGNMENT_AUDIT.md`](ROADMAP_ALIGNMENT_AUDIT.md) — doc-by-doc verification against the phase model, with the outstanding edit checklist |
