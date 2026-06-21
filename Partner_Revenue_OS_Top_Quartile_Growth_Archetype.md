@@ -96,12 +96,12 @@ Founders say "the J-curve" and mean one thing. Operators manage three nested J-c
 | **Burn multiple** | net burn ÷ net-new ARR | ~1.5–2× | **<1×** | <0.5× | Bessemer (Sacks) |
 | **Magic number** | net-new ARR ÷ prior-Q S&M | ~0.5–0.75 | **>0.75** | >1.0 | Scale VP |
 | **Rule of 40** | growth% + FCF margin% | ~40 | **≥50** | ≥60 | Public-SaaS standard |
-| **Growth persistence** | this year's growth ÷ last year's | ~0.75 | **≥0.85** | ≥0.90 | Bessemer "growth endurance" |
-| **Mendoza line** | min. growth path to reach $100M ARR/IPO | — | on/above the line | above | Scale VP / Bessemer |
+| **Growth persistence / endurance** | this year's growth ÷ last year's | ~0.70 (Bessemer, private cloud) | **~0.80** (Bessemer, public) | **~0.85** (Scale VP, best-in-class) | Scale VP "persistence" / Bessemer "endurance" |
+| **Mendoza line** | min. growth path to reach $100M+ ARR/IPO | — | on/above the line | above | Scale VP (O'Driscoll) |
 
 **[External — all directional, re-verify exact thresholds before quoting.]**
 
-**The two that matter *most for Reven specifically*** (and why, see §6): **NRR** (because your whole thesis is land-narrow-expand-deep) and **growth persistence** (because your compliance moat's real prize is *low decay*, not peak rate). A company that sustains 85–90% persistence off a strong start beats a company with a higher peak that decays at 70%. **Endurance is the under-priced top-quartile asset, and it happens to be exactly what compliance buys you.** **[Assumption]**
+**The two that matter *most for Reven specifically*** (and why, see §6): **NRR** (because your whole thesis is land-narrow-expand-deep) and **growth persistence** (because your compliance moat's real prize is *low decay*, not peak rate). A company that sustains ~85% persistence (Scale VP's best-in-class) off a strong start beats a company with a higher peak that decays at ~70% (Bessemer's "good"). **Endurance is the under-priced top-quartile asset, and it happens to be exactly what compliance buys you.** **[Assumption — see the verified-numbers companion `…Deep_Research.md` §2 for the two competing decay constants.]**
 
 ---
 
@@ -132,7 +132,7 @@ This archetype is a *blend of four proven public-company DNA strands*. Benchmark
 |---|---|---|---|
 | **Compliance wedge → non-discretionary budget → endurance** | **Avalara** (sales-tax automation; taken private ~$8.4B), Vertex, Sovos | Compliance creates budget that doesn't get cut; integration- and partner-channel-led; *durable, not explosive*. | ZATCA/WHT/PDPL/Sharia wedge — the part incumbents can't retrofit. **[Confirmed wedge]** |
 | **System-of-record + flow monetization** | **Bill.com**, **Toast**, **Shopify** | Sell software, then monetize the *payment volume* that flows through the SoR; ACV uncaps with GMV/TPV. | L3 settlement: per-payout fee + WHT/FX on cross-border. **[Confirmed roadmap]** |
-| **Land-and-expand module attach** | **Datadog** (8+ products, NRR ~130%), **ServiceNow**, **CrowdStrike** | One wedge → many modules; >2-product customers retain far better; NRR is the growth engine. | Claim → finance evidence → settlement → Partner P&L. **[Confirmed ladder]** |
+| **Land-and-expand module attach** | **Datadog** (NRR ~120%, was >130% in '21–22; ~55% of customers on 4+ products), **ServiceNow** (98% renewal), **CrowdStrike** | One wedge → many modules; >2-product customers retain far better; NRR is the growth engine. | Claim → finance evidence → settlement → Partner P&L. **[Confirmed ladder]** |
 | **Data-gravity / consumption endgame** | **Snowflake** (NRR peaked ~165%+), Datadog | Usage-based pricing + accumulating proprietary data = expansion that compounds and a moat that widens. | Identity-resolution graph + value-based pricing on governed revenue. **[Confirmed thesis]** |
 
 **[External — all figures directional, re-verify.]**
@@ -262,7 +262,7 @@ How Reven *should aspire to score* on the metrics that made each comp top-quarti
 
 | Property | Datadog | Bill.com | Toast | Avalara | Snowflake | **Reven target** | Honest read |
 |---|---|---|---|---|---|---|---|
-| **NRR** | ~130% | ~120–130% (incl. flow) | scales w/ GPV | ~110%+ | ~130–165%+ peak | **120% → 130%** | Achievable *only* with L3 flow + module ladder. **[Assumption]** |
+| **NRR** | ~120% (was >130%) | **~92%** (compressed) | scales w/ GPV | ~115% ('21) | 178% peak → ~125% | **120% → 130%** | BILL proves flow ≠ automatic NRR; achievable only with L3 flow *plus* a real module ladder. **[Assumption]** |
 | **Expansion engine** | module attach | payment flow | payment flow | compliance breadth | consumption | **modules → flow** | Same engines, blended. Credible. |
 | **Durability driver** | platform stickiness | SoR + flow | SoR + flow | **non-discretionary compliance** | data gravity | **compliance + SoR + data** | Your *strongest* dimension. |
 | **Gross margin** | high (~80%) | software high, flow dilutes | flow dilutes (~20–25% blended) | high | high | **≥70% floor** | Flow will dilute — manage mix (§11). |
