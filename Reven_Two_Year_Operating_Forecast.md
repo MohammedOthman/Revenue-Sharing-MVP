@@ -174,3 +174,95 @@ The clean T2D3 ladder calls month-24 "approaching Y0" (SAR 5.6M ARR). **This eng
 **Derived/Assumption [Derived]:** the entire quarterly logo/ARR/headcount/cash build, the Year-2 cost scale-up, the GM/NRR/burn-multiple paths, and the three scenarios. These are **engineered hypotheses to validate** — the Van Westendorp/MaxDiff WTP work and the first paid pilots replace them with evidence.
 
 > **Disclaimer.** A bottoms-up operating forecast for internal planning, not an offer, projection of results, or guidance. The company is pre-revenue/pre-seed; Year-1 costs are the canonical model, but all revenue, logo, and Year-2 figures are assumptions to be proven. The deliberate conservatism — Year-1 revenue as upside, end-Y2 as mid-ramp — is the point: it is engineered to be *beaten with evidence*, not to flatter a deck.
+
+---
+
+## Appendix A — Revenue breakdown (by stream, tier, quarter & quality)
+
+The headline ARR (~SAR 0.9M at M12, ~SAR 3.3M at M24) decomposed. **Every table reconciles to §1–§6.** Two distinctions run through all of it: **(i) ARR** (exit run-rate, recurring) vs. **recognized revenue** (what's actually billed in-period, which includes one-time streams); and **(ii) recurring** (subscription, per-payout, SME) vs. **non-recurring** (implementation, pilot fees — never in ARR).
+
+### A.1 — The four revenue streams
+
+| Stream | Type | Recurring? | In ARR? | GM | Starts | Pricing basis (SAR) |
+|---|---|:--:|:--:|:--:|:--:|---|
+| **Subscription** (Starter/Growth/Mid/Enterprise) | platform SaaS | ✅ | ✅ | ~82% | Q1 (pilots) → Q2 (Growth) | active-partner bands × tier |
+| **Settle per-payout** | usage | ✅ | ✅ | ~40% net | Q6 | flat fee per payout (a rail fee, **not** a % skim) |
+| **SME self-serve** (Reven Start) | micro-SaaS wedge | ✅ | ✅ (tracked apart) | ~90% | Q1 | from SAR 50/mo; metric = land-to-expand % |
+| **Implementation / services** | one-time, fenced | ❌ | ❌ | ~30% | Q2 | 15–30% of Y1 ACV (push to SI by Phase 2) |
+| **Pilot fees** | one-time, creditable | ❌ | ❌ | ~70% | Q1 | SAR 19–56K, credits to Y1 ACV on convert |
+
+### A.2 — ARR composition by tier (the logo × ACV bridge)
+
+**End of Year 1 (M12) — ~SAR 0.9M paying ARR (+ ~SAR 23K SME):**
+
+| Tier | Logos | Avg ACV (SAR) | ARR (SAR) | % of ARR |
+|---|---:|---:|---:|---:|
+| Starter | 1 | 40K | 40K | 4% |
+| **SMB Growth** | **5** | **122K** | **610K** | **66%** |
+| Mid-market | 1 | 250K | 250K | 27% |
+| *SME wedge (separate)* | *25* | *~0.9K* | *~23K* | *3%* |
+| **Total** | **7 paying (+25 SME)** | — | **~923K** | **100%** |
+
+**End of Year 2 (M24) — ~SAR 3.3M ARR:**
+
+| Stream / Tier | Logos | Avg ACV (SAR) | ARR (SAR) | % of ARR |
+|---|---:|---:|---:|---:|
+| Starter | 6 | 40K | 240K | 7% |
+| **SMB Growth** | **19** | **100K** | **1,900K** | **58%** |
+| Mid-market | 2 | 250K | 500K | 15% |
+| Enterprise / Semi-gov | 1 | 360K | 360K | 11% |
+| **Subscription subtotal** | **28** | **~107K** | **3,000K** | **91%** |
+| Settle per-payout (usage) | — | — | 200K | 6% |
+| SME wedge | 110 | ~0.9K | 100K | 3% |
+| **Total ARR** | **28 paying (+110 SME)** | — | **3,300K** | **100%** |
+
+> **Read the concentration.** At both milestones **SMB Growth is the engine** (66% → 58% of ARR), with mid/enterprise providing the ACV lift and per-payout the first taste of Settle. The **110 SME logos are 3% of ARR** — exactly the wedge-not-pillar discipline (A3): they carry *count, data, and expansion funnel*, not revenue weight.
+
+### A.3 — Recognized revenue by stream (in-period, not run-rate)
+
+| Stream | **Year 1 (SAR)** | % | **Year 2 (SAR)** | % |
+|---|---:|---:|---:|---:|
+| Subscription | 0.28M | 57% | 1.59M | 79% |
+| Implementation / services | 0.08M | 16% | 0.25M | 12% |
+| Pilot fees (net of credits) | 0.12M | 25% | 0.05M | 3% |
+| Settle per-payout | — | — | 0.10M | 5% |
+| SME self-serve | 0.01M | 2% | 0.06M | 3% |
+| **Total recognized** | **~0.49M** | 100% | **~2.05M** | 100% |
+
+> Recognized revenue is **well below exit ARR** in both years (0.49M vs 0.9M; 2.05M vs 3.3M) because logos ramp *in* across the year — this is the normal ARR-vs-recognized gap, not a discrepancy.
+
+### A.4 — Quarterly recognized-revenue build (SAR)
+
+| Stream | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Subscription | 0.02 | 0.05 | 0.08 | 0.13 | 0.28 | 0.36 | 0.43 | 0.52 |
+| Implementation | 0.01 | 0.02 | 0.02 | 0.03 | 0.05 | 0.06 | 0.07 | 0.07 |
+| Pilot fees | 0.05 | 0.04 | 0.03 | — | — | — | — | — |
+| Per-payout | — | — | — | — | 0.01 | 0.02 | 0.03 | 0.04 |
+| SME | — | — | — | 0.01 | 0.01 | 0.01 | 0.02 | 0.02 |
+| **Total / Q** | **0.08** | **0.11** | **0.13** | **0.17** | **0.35** | **0.45** | **0.55** | **0.65** |
+
+### A.5 — Quality of revenue (recurring vs one-time; GM)
+
+| | Year 1 | Year 2 |
+|---|---:|---:|
+| **Recurring** (sub + per-payout + SME) | ~59% (0.29M) | ~85% (1.75M) |
+| **Non-recurring** (impl + pilot) | ~41% (0.20M) | ~15% (0.30M) |
+| Blended GM — **recurring only** | ~80% | ~80% |
+| Blended GM — **incl. services** | ~74% | ~75% |
+
+> **The quality trend is the point.** Recurring climbs **59% → 85%** of recognized revenue as pilots/services give way to subscription, and **services stay fenced under 20%** in Year 2 — keeping blended GM at ~75% and the multiple software-like (audit A4/A6). The thin per-payout layer (~40% net GM) is deliberately *capped and fenced* so it never drags blended GM toward payments territory.
+
+### A.6 — The ARR walk, M12 → M24 (how SAR 0.92M becomes SAR 3.3M)
+
+| Component | SAR | Driver |
+|---|---:|---|
+| **Begin ARR (M12)** | **0.92M** | 7 paying logos + SME |
+| + New-logo subscription | +2.06M | ~21 net new paying logos (Growth-led + 2 Mid + 1 Ent) |
+| + New Settle per-payout | +0.20M | the new usage stream (Q6 on) |
+| + Expansion (NRR ~110%) | +0.09M | tier upgrades + module attach on the first cohort |
+| + Net SME growth | +0.08M | 25 → 110 wedge logos |
+| − Churn (~5% of base) | −0.05M | early-cohort logo loss |
+| **= End ARR (M24)** | **~3.30M** | 28 paying logos + 110 SME |
+
+> **New-logo acquisition does ~85% of the Year-2 work** (SAR 2.26M of the SAR 2.38M net add); expansion is only ~SAR 0.09M because the renewal base is still tiny. This is correct for the ramp — the **NRR engine doesn't carry growth until Year 3+** (where the §8.4 ladder shows expansion becoming 36–68% of new ARR). In Years 1–2, **growth = landing logos**, full stop.
