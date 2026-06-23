@@ -65,7 +65,7 @@ The corpus (PDR v5 supersedes the older long PDR; `Reverse_Engineered_Strategy_�
 
 ### 2.2 Risks the strategy flags about *itself* (still open)
 
-1. **Beachhead unresolved** — GCC/Saudi compliance-wedge vs. global enterprise co-sell layer. The docs call this "the company's most important near-term strategic decision" (`…md:145`). It gates the data model, the compliance build, and the ICP. **Unresolved = everything downstream is provisional.**
+1. **Beachhead unresolved** — GCC/Saudi compliance-wedge vs. global enterprise co-sell layer. The docs call this the **"#1 unresolved strategic choice"** (`Partner_Revenue_OS_Venture_Scale_Narrative.md:58`). It gates the data model, the compliance build, and the ICP. **Unresolved = everything downstream is provisional.**
 2. **Dispute pain might be *tolerated*, not urgent** — if true, Phase 2 (Settle) slips and the whole monetization thesis weakens (`…md:267`).
 3. **Competitive clock** — `Master_Strategy_Dossier.md:24,153` predicted AppDirect could ship bilateral settlement in 2–4 quarters. **This is now happening** (see §4).
 4. **A self-audit (`ROADMAP_ALIGNMENT_AUDIT.md`) already caught language drift** — the PDRs literally said "Do not build a PRM" (contradicting the PRM-first wedge) and let payout/money-movement creep into MVP scope. It claims these are fixed, but flags them as "language and gating-clarity problems, not architecture problems." Fair — *for the docs.* The **code** has the opposite problem (below).

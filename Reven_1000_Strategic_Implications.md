@@ -1368,7 +1368,7 @@ The 10x expansion of `Reven_100_Strategic_Implications.md`. The five parent impl
 - *Tactical:* In briefings, request and argue for treatment as a separate emerging layer ("settlement/system of record"), supplying the rubric that separates it.
 - *Rationale:* Analyst taxonomy determines buyer mental models; an adjacent-but-separate shelf preserves the wedge's distinctness while keeping the orchestration tailwind.
 
-**254. Calibrate adjacency by buyer sophistication: lead with orchestration for ELG-mature buyers, with compliance for finance-led buyers.**
+**254. Calibrate the *adjacency anchor* by buyer sophistication: anchor to the orchestration/ELG tailwind for ELG-mature buyers, to controls/compliance for finance-led buyers — never positioning the product itself as an "orchestrator."**
 - *Strategic:* The same adjacency can be anchored to different references; partnership-led orgs respond to the ELG tie-in, finance-led orgs to the controls/compliance tie-in.
 - *Tactical:* Maintain two opening framings and let discovery route the prospect to the resonant one within the first call.
 - *Rationale:* Adjacency persuades only when the reference point is one the specific buyer already values; one size mis-fits.
@@ -2248,7 +2248,7 @@ The 10x expansion of `Reven_100_Strategic_Implications.md`. The five parent impl
 - *Tactical:* Cache the full serialized response keyed by idempotency key with a TTL exceeding any client retry window.
 - *Rationale:* Stable replay of results is what makes client retry logic safe to write.
 
-**426. Make ledger accounts explicit and typed (partner-payable, platform-revenue, escrow, dispute-hold) rather than implicit in claim status.**
+**426. Make ledger accounts explicit and typed (partner-payable, platform-revenue, escrow, dispute-hold) rather than implicit in claim status — these are accounting *account types* in the schema; Reven does not custody or operate escrow funds in any phase (see #429).**
 - *Strategic:* Named accounts are what let money "move" between states without leaving the ledger, e.g. parking a disputed amount in `dispute-hold` — impossible with a status flag.
 - *Tactical:* Define a chart of accounts; every claim's value lives in exactly one account at a time, moved only by balanced transactions.
 - *Rationale:* An explicit chart of accounts is the difference between bookkeeping and status-tracking.
@@ -2629,8 +2629,9 @@ The 10x expansion of `Reven_100_Strategic_Implications.md`. The five parent impl
 - *Tactical:* Route every subsystem's configuration through the published agreement ruleset so there is exactly one source of truth for how a relationship settles.
 - *Rationale:* A single governing object across the stack is what makes Reven the system of record rather than one tool among many.
 ### C6 ZATCA Phase-2 e-invoicing compliance (501–520)
+*Phase placement — this is the **Settle (Phase 2)** compliance layer. In Phase 1/MVP, Reven only **captures** ZATCA/WHT fields and emits eligibility evidence; automated clearance and money movement stay on the PDR's "Do Not Build Yet" list until Settle.*
 
-**501. Reven must ship a ZATCA-compliant invoice generator before any settlement feature, because in KSA a revenue event without a cleared/reported e-invoice is legally unbilled.**
+**501. Reven must make ZATCA-compliant invoice generation the first capability built inside Phase 2 (Settle) — before any disbursement/rail feature — because in KSA a revenue event without a cleared/reported e-invoice is legally unbilled.**
 - *Strategic:* The compliance wedge is only credible if Reven's own settlement output is itself a valid tax document, not a memo that customers must re-key into another tool. Owning invoice generation is what converts "system of record" from a slogan into a regulatory dependency.
 - *Tactical:* Generate UBL 2.1 XML or PDF/A-3 with embedded XML per ZATCA Phase-2, populating the standard tax invoice schema for B2B partner payouts and self-billed commissions; gate go-live on passing ZATCA's compliance/sandbox validation suite.
 - *Rationale:* Wave 23 (>SAR 750k) hits 31 Mar 2026 and Wave 24 (>SAR 375k) 30 Jun 2026, so Reven's first KSA partners are already in-scope and cannot adopt a settlement tool that breaks their clearance pipeline.
@@ -3566,10 +3567,10 @@ The 10x expansion of `Reven_100_Strategic_Implications.md`. The five parent impl
 - *Tactical:* Favor banded or platform-fee structures over per-transaction nickel-and-diming so customers don't route around the meter.
 - *Rationale:* A meter customers feel on every action invites avoidance, eroding the very data gravity that pricing should protect.
 
-**684. The embedded-finance layer, not the software subscription, is where Reven should capture the most value.**
-- *Strategic:* Toast earns $5B from embedded finance versus $936M from software, proving the money-movement layer monetizes far beyond the app; Reven's payout/financing layer is the prize.
-- *Tactical:* Build toward embedded payouts, early-payment financing, and FX on top of the settlement record as the high-margin value-capture layer.
-- *Rationale:* Owning the money record positions Reven to monetize money movement, the largest pool, rather than competing on software seats alone.
+**684. The embedded-finance layer is Reven's largest *long-term* value pool — captured late and capped, as a high-margin attach on the SaaS spine (which stays the majority of gross profit).**
+- *Strategic:* Toast earns $5B from embedded finance versus $936M from software, proving the money-movement layer monetizes far beyond the app; Reven's payout/financing layer is the eventual prize — but a Phase-3 attach, not a day-one rake.
+- *Tactical:* Build toward embedded payouts, early-payment financing, and FX on top of the settlement record as the high-margin layer — introduced late, capped, with the take-rate kept invisible (sub-30 bps).
+- *Rationale:* Owning the money record lets Reven monetize *settled* flow as an earned, capped attach — without reintroducing the resented take-rate the canon warns against, and with the SaaS subscription remaining the majority of gross profit.
 
 **685. Pricing power is itself a moat output — Reven should expect to raise price as switching costs deepen.**
 - *Strategic:* As dependency grows, Reven gains the ability to capture more value without churn; pricing power is the financial expression of the switching-cost moat.

@@ -21,7 +21,7 @@ Each step is gated on the prior. Resist building anything below your current lin
 1. **Append-only Partner Revenue Claim ledger** — immutable, double-entry, idempotent; server-side amounts (never client-supplied). `[#401–440]`
 2. **Cross-tenant partner identity** — ship in the MVP; impossible to retrofit; the seed of the network. `[#53, #581–590]`
 3. **One visible loop** — claim → attribution → eligibility → audited statement, demoable in days. `[#60, #461–500]`
-4. **ZATCA Phase-2 compliance hook** — clearance-model e-invoice (XML/PDF-A3, ECDSA stamp, TLV QR) + WHT engine (15%/10%). The proof sentence: *"payouts come out ZATCA-clean and both sides reconcile."* `[#501–540]`
+4. **ZATCA/WHT — *capture* in the MVP, *clearance* in Settle** — in Phase 1/MVP only *capture* ZATCA/WHT fields and emit eligibility evidence (no money moved, no auto-clearance — per the PDR's "Do Not Build Yet" list). The automated clearance-model e-invoice (XML/PDF-A3, ECDSA stamp, TLV QR) + WHT engine (15%/10%) is the **first Phase-2/Settle build**, timed to the 30 Jun 2026 Wave-24 *readiness* clock. Proof sentence: *"payouts come out ZATCA-clean and both sides reconcile."* `[#501–540]`
 5. **Integrations** — Salesforce/HubSpot + one billing/ERP + reliable webhooks. `[#561–580]`
 **Defer:** AI/forecasting, Partner P&L, money rails, breadth. `[#75, #80]`
 
