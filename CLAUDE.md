@@ -20,6 +20,16 @@ Project context + handoff so any future session can continue without rediscovery
   `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md`;
   doc-by-doc concordance in `ROADMAP_ALIGNMENT_AUDIT.md` §2.
 
+## Founders & naming convention
+- Founder profiles live in `Reven_Founding_Team.md` (linked from `README.md`).
+- All three founders share the given name **Mohammed (محمد)**. Use these canonical
+  names consistently across every document:
+  - **Mohammed Othman (محمد عثمان)** — Founder & CEO.
+  - **Mohammed Alqahtani (محمد القحطاني)** — Commercial & GTM.
+  - **Mohammed Masmali (محمد مسلمي)** — Legal & Contracts. **Previously written as
+    محمد عثمان مسلمي**; drop the middle name *Othman* going forward to avoid confusion
+    with the CEO, Mohammed Othman.
+
 ## Conventions
 - Pre-seed finance docs use the `Pre_Seed_*` filename prefix.
 - Generated / dependency directories (`node_modules/`, build output) are
