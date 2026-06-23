@@ -29,9 +29,54 @@ repository:
 ## Mohammed Othman — Founder & CEO
 **محمد عثمان**
 
-Founder and Chief Executive of Reven. Owns overall company strategy, the phase model
-(Capture → Settle → Orchestrate), fundraising, and the founding team. Detailed founder
-profile maintained separately; this entry establishes the canonical name and role.
+> *Achieving investment & commercial growth success — elevating growth beyond the numbers.*
+
+Founder and Chief Executive of Reven. Builds and delivers growth strategies and execution
+plans for enterprises, using financial analysis and practical growth strategy to maximize
+the value of the entity. Core focus areas:
+
+- Building **growth partnerships** for B2B businesses
+- Building **value-added partnerships** for enterprise clients
+- **Investment strategy** and value-creation plans
+- **M&A** plans and deal sourcing (buy-side and sell-side)
+- **Vertical growth** analysis — organic growth vs. M&A strategies
+
+### Selected engagements
+
+- **Delisting a ~$200M company (SAR ~1B project).** A cross-stakeholder transaction in the
+  Saudi ecosystem — family offices, banks, private-equity firms, and the **Public Investment
+  Fund (PIF)** — to delist an undervalued company from the Swiss market (SIX) and pursue a
+  TASI listing by 2028. Built the **undervaluation thesis**, ran apples-to-apples equity
+  research against **8+ TASI and global peers**, advanced financial-ratio analysis, the
+  post-listing **premium thesis / deal ROI**, Swiss vs. TASI macro and micro analysis, and
+  the SIX-vs-TASI premium-realization comparison.
+- **~SAR 50M acquisition (ongoing).** Built the **synergy quantification** (≈4× ROI in
+  5 years), the acquirer's vertical growth strategy, the IPO-premium impact for the buy-side,
+  global-comparables equity research, dynamic margin-synergy modeling, and sell-side
+  valuation with pre- vs. post-acquisition financial and margin analysis. Stakeholders
+  included Jadwa, Watheeq, Niceone, and مخازن العناية.
+- **Enterprise growth strategy for a B2B SaaS.** Took a company with no clear market size,
+  ICP, or growth path — and investors declining on an unjustified TAM — and redefined the
+  market size and ICP, market-penetration tactics, a year-2 TAM, the GTM motion and
+  scalability metrics, an API/digital growth strategy, a RevOps and growth engine, a
+  redesigned investor pitch deck, and an enterprise sales motion with a built-out pipeline.
+- **Late-stage VC investment firm.** Investment strategy and early-stage due-diligence
+  approach in the **gaming** sector, vertical and industry-history analysis, emerging
+  business-model assessment, and a value-creation roadmap for portfolio ventures.
+- **Sector strategy & value creation** across **B2B PropTech** (PropTech 1.0 → 3.0,
+  lead-management automation), **HealthTech** (5-year expansion, exit-strategy engineering,
+  genome-bank strategy), **EV & battery services**, a **social-media app** (network effects,
+  data monetization), and a **data company** (product-led motion, GTM metrics, VC due
+  diligence, global revenue-stream benchmarking).
+
+### What this means for Reven
+
+Reven is a bet on owning the commercial and financial "system of record" between B2B
+partners. The CEO pairs **investment-grade financial analysis** (valuation, synergy
+modeling, equity research, M&A) with **hands-on GTM and growth execution** (ICP, TAM, RevOps,
+enterprise sales) — the exact combination needed to set the phase model, defend its gates,
+raise capital against a credible value-creation thesis, and convert the strategy into a
+fundable, sellable product.
 
 ---
 
@@ -159,6 +204,6 @@ The team is structured around the governing sequence — **Capture → Settle �
 
 | Founder | Primary ownership | Where it matters most in the phase model |
 |---|---|---|
-| **Mohammed Othman** (CEO) | Strategy, fundraising, phase discipline, team | All phases — sets and defends the gates |
+| **Mohammed Othman** (CEO) | Strategy, investment/M&A, growth & fundraising, phase discipline, team | All phases — sets and defends the gates; owns the value-creation and capital thesis |
 | **Mohammed Alqahtani** | Commercial, GTM, enterprise deals, design partners | **Capture** — landing the first 3–5 design partners and 100+ real claims |
 | **Mohammed Masmali** | Legal, contracts, dispute & compliance design | **Capture → Settle** — claim integrity, dispute workflow, ledger defensibility |
