@@ -266,3 +266,72 @@ The headline ARR (~SAR 0.9M at M12, ~SAR 3.3M at M24) decomposed. **Every table 
 | **= End ARR (M24)** | **~3.30M** | 28 paying logos + 110 SME |
 
 > **New-logo acquisition does ~85% of the Year-2 work** (SAR 2.26M of the SAR 2.38M net add); expansion is only ~SAR 0.09M because the renewal base is still tiny. This is correct for the ramp — the **NRR engine doesn't carry growth until Year 3+** (where the §8.4 ladder shows expansion becoming 36–68% of new ARR). In Years 1–2, **growth = landing logos**, full stop.
+
+---
+
+## Appendix B — Alternative GTM: SME-land + two lighthouses
+
+**The directed strategy:** make **~90%+ of Year-1 logos SME self-serve** (activating the **SAR 50/mo** stream) to build a wide base to expand later, plus **two big "lighthouse" clients from other categories** (semi-gov / large enterprise — e.g., insurance, fintech, or a Vision-2030 entity). This **replaces** the base-case §4 mix (founder-led Growth-tier) with a **two-motion model**: PLG land underneath, enterprise lighthouse on top. The numbers below supersede §4–§6 *if this posture is adopted*; the cost model (SAR 2.0M) is unchanged.
+
+### B.1 — What this changes (and the one thing to internalize)
+
+> **SME is ~97% of *logos* but ~6% of *ARR*. The two lighthouses are ~1% of logos but ~75% of ARR.** That is not a flaw — it is the *definition* of a land-to-expand play: you are buying **logos, cross-tenant identity data, and an expansion funnel** now, and **revenue later**. But it means Year-1 revenue is **carried almost entirely by two accounts**, and Year-1 *success* must be measured on **land-to-expand %, activation, and time-to-first-claim** — not on SME ARR (which is rounding error).
+
+### B.2 — Revised Year-1 revenue (SME-land + 2 lighthouses)
+
+**End of Year 1 — ~SAR 1.55M ARR, ~155 logos:**
+
+| Segment | Logos | % of logos | Avg ACV (SAR) | ARR (SAR) | % of ARR | GM |
+|---|---:|---:|---:|---:|---:|:--:|
+| **SME (Reven Start, SAR 50/mo)** | **150** | **97%** | 600 | **90K** | 6% | ~90% |
+| SMB Growth (design-partner conversions) | 3 | 2% | 100K | 300K | 19% | ~80% |
+| **Lighthouse #1 — Semi-gov / large** | 1 | 0.6% | ~600K | 600K | 39% | ~70% |
+| **Lighthouse #2 — large, other category** | 1 | 0.6% | ~560K | 560K | 36% | ~70% |
+| **Total** | **155** | 100% | — | **~1.55M** | 100% | ~73% blended |
+
+- **SME ramp (the SAR 50/mo stream):** Q1 ~10 → Q2 ~45 → Q3 ~90 → Q4 ~150 self-serve logos. 150 × SAR 50/mo = **SAR 7,500 MRR (SAR 90K ARR)**.
+- **The two lighthouses land in H2** (KSA enterprise cycles are 6–18 mo from a pre-MVP start) — realistically one in Q3, one in Q4, often **milestone-based** with partial Year-1 recognition.
+- **Recognized revenue Y1 ≈ SAR 0.7M** (up from the base case's 0.49M, because the lighthouses add implementation + partial subscription): SME ~35K, SMB ~190K, lighthouses ~375K, pilot fees ~100K. **Net burn falls to ~SAR 1.2M; ~SAR 0.79M cash at M12** before the seed.
+
+### B.3 — Revised Year-2 (the expansion the land was *for*)
+
+The 150-logo SME base now becomes the **expansion funnel**: a fraction upgrade to paid Growth (land-to-expand), the two lighthouses expand (NRR + compliance tier), and new logos — SME and enterprise — keep landing.
+
+**End of Year 2 — ~SAR 4.3M ARR (base case):**
+
+| Segment | Logos | Avg ACV (SAR) | ARR (SAR) | % of ARR |
+|---|---:|---:|---:|---:|
+| SME base (self-serve) | ~490 | 600 | 294K | 7% |
+| **SME → Growth upgrades** (the payoff) | ~8 | 100K | 800K | 19% |
+| SMB (direct) | ~5 | 110K | 550K | 13% |
+| Mid-market | ~2 | 250K | 500K | 12% |
+| **Lighthouses + new enterprise** (3) | 3 | ~650K | 1,960K | 46% |
+| Settle per-payout | — | — | 200K | 5% |
+| **Total** | **~520 (≈500 SME + ~20 paying)** | — | **~4.3M** | 100% |
+
+- **End-Y2 ARR (~SAR 4.3M) is *higher* than the base-case §1 (~SAR 3.3M)** — the two lighthouses front-load enterprise ARR. Range: **bear ~SAR 3.5M** (slow upgrades / one lighthouse slips), **bull ~SAR 5.5M** (fast land-to-expand + a 4th big logo) — the bull **reaches the T2D3 Y0 base (SAR 5.6M) by M24**.
+- **Concentration improves but stays high:** 3 big clients = **~46% of ARR** (down from 75% in Y1 as the book broadens) — still a single-account-churn risk worth watching.
+
+### B.4 — The honest flags (this is a real trade, not a free lunch)
+
+| Flag | Why it matters | Mitigation |
+|---|---|---|
+| **🔴 Revenue concentration** | 2 clients = **75% of Y1 ARR**; losing one cuts ARR ~40% | Treat lighthouses as **multi-year, annual-prepay, milestone-secured**; never single-thread the relationship |
+| **🟠 GTM motion shift** | The repo is "explicitly **not** mass-market self-serve" (Venture Narrative); 150 SME logos need a **PLG/growth motion + marketing budget** the SAR 2.0M model (6 hires, 1 seller, no growth marketer) doesn't fund | Add a **self-serve onboarding + growth/community line** to the seed use-of-funds; or scale the SME target to ~80–100 if unfunded |
+| **🟠 SME churn / cost-to-serve** | At SAR 600/yr, **one human support call erases the year's revenue**; micro-SaaS churn is high | **100% self-serve, AI/community support only**; brand distinctly; keep off the enterprise pricing surface; **land-to-expand % is the kill metric** |
+| **🟠 Two motions at once is hard** | PLG land + enterprise lighthouse are **different muscles**; a 10-person team doing both pre-seed risks doing neither well | Sequence: lighthouses founder-led (the founders' time), SME self-serve **product-led** (engineering, not sales) |
+| **🟡 SME ARR is option value, not revenue** | SAR 90K is rounding error; the value is the **future expansion + data** | Report SME on **activation, land-to-expand %, time-to-first-claim** — never let SME ARR flatter the deck |
+
+### B.5 — Base case vs. SME-land + lighthouses (side by side)
+
+| | Base case (§1) | **SME-land + 2 lighthouses (App. B)** |
+|---|---:|---:|
+| End-Y1 ARR | ~SAR 0.9M | **~SAR 1.55M** |
+| End-Y1 logos | 7 paying + 25 SME | **2 big + 3 SMB + 150 SME** |
+| End-Y1 revenue concentration | low (spread) | **high (2 = 75% ARR)** |
+| End-Y1 recognized rev | ~0.49M | **~0.70M** |
+| End-Y2 ARR | ~SAR 3.3M | **~SAR 4.3M** (range 3.5–5.5M) |
+| Strategic asset built | a repeatable mid-market motion | **a wide SME base (~500) + 3 enterprise references** |
+| Primary risk | slower ARR | **concentration + an unfunded PLG motion** |
+
+> **The verdict.** This posture **front-loads ARR and builds a far larger logo base** (the expansion option you want) — and it can reach the T2D3 Y0 base a year earlier in the bull case. The price is **two real risks**: Year-1 revenue rides on **two accounts**, and the **150-SME land needs a self-serve/growth motion the current model doesn't fund**. Adopt it, but (a) **secure the lighthouses on multi-year annual-prepay**, (b) **fund the PLG motion in the seed**, and (c) **judge Year 1 on land-to-expand %, not SME ARR.**
