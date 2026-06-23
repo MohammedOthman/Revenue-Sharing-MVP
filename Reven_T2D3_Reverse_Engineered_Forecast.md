@@ -29,7 +29,7 @@
 
 | Dial | The question | The reverse-engineered answer | Where |
 |---|---|---|---|
-| **PRICE** | *How much do we charge?* | A per-logo **ACV ladder $25K→$120K**, priced on **active partners → +per-payout/capped-bps → net-bps-on-RUM**, capturing **10–20% of measured customer value (≈ sub-30 bps of governed partner revenue)** — never a visible % of the partner's money. | §5 |
+| **PRICE** | *How much do we charge?* | **Five tiers**, each anchored to what that KSA buyer already pays — **SME from SAR 50/mo (self-serve, *below* a Salla store / one Zoho seat)** up to enterprise SAR 560K–2.5M+. The **sales-led book** rides an ACV ladder **$25K→$120K** on **active partners → +per-payout/capped-bps → net-bps-on-RUM**, capturing **10–20% of measured value (sub-30 bps of governed revenue)** — never a visible % of the partner's money. | §5 |
 | **CAPTURE** | *How much of the pool do we convert?* | At $100M ARR we capture a **fraction of a percent** of an **L1 governed-revenue pool measured in the tens of billions** — but **well over 100% of the KSA software SAM**, which is *why the model is forced to travel* (MENA by Y2, global co-sell by Y3). | §6 |
 | **GROW** | *How do we get there?* | Four stacked engines: **(a)** ~910 cumulative logos via a CAC-disciplined motion; **(b)** an **NRR engine 105%→125%**; **(c)** geography KSA→MENA→global; **(d)** layer Capture→Settle→Orchestrate. T2D3 is the *output*, not an input. | §7 |
 
@@ -84,6 +84,8 @@ So **New-logo ARR required = End ARR − (Begin ARR × NRR)**. Given the T2D3 En
 - **New-logo blended ACV:** $35K → $55K → $80K → $100K → $120K (repo Scenario-B ACV path: seed ~$25K → A ~$60K → scale ~$120K). [Assumption within §6.2]
 - **Seed base Y0:** $1.5M ARR (mid of the $1–2M band), ~60 logos at ~$25K. [Assumption]
 
+> **Logo & ACV convention (read before the table).** Throughout §4 and §9, "logos" and "blended ACV" mean the **sales-led book (SMB+, at/above the SAR 95–110K high-touch floor)** — the paying mid/enterprise logos that carry the ARR. The **self-serve SME (Reven Start) tier is excluded from this count and from the blended ACV** (it is a land-wedge tracked on land-to-expand %, not ARR — see §5b). So "~60 logos at ~$25K" is *not* a statement that any SME pays $25K; an SME pays SAR 600–1,788/yr and sits in a separate funnel beneath the paying book.
+
 **The derived ladder (central path):**
 
 | Year | Begin ARR | × NRR | = Retained+expanded | + New-logo ARR (derived) | New-logo ACV | **New logos (derived)** | **End ARR** | Cum. logos | Blended ACV |
@@ -107,9 +109,35 @@ So **New-logo ARR required = End ARR − (Begin ARR × NRR)**. Given the T2D3 En
 
 ## 5. PRICE — how much to charge (the ACV engine)
 
-Price is the first dial because, per §4, **ACV and NRR carry the back half of the ladder**. The reverse-engineering of price has three layers: the *metric* (what scales), the *ladder* (the ACV path), and the *rule* (the ceiling).
+Price is the first dial because, per §4, **ACV and NRR carry the back half of the ladder**. But before any ladder, the price must **fit the segment** — and in KSA that means an SME can never be quoted what an enterprise pays. The reverse-engineering of price therefore has five layers: the *segmentation* (who pays what), the *SME floor* (affordability vs. local front-office tools), the *metric* (what scales), the *ladder* (the ACV path), and the *rule* (the ceiling).
 
-### 5a. The three-metric model (keep them separate)
+### 5a. The five tiers — and the Saudi-market price each is anchored to
+[Confirmed: `Reven_Pricing_Executive_Summary.md` §2; `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md` §2.5, §3]
+
+Reven is **not one price** — it is a five-tier ladder, each tier anchored to what that buyer *already pays* in the KSA market, never to a global list:
+
+| Tier | Ideal customer | Active partners | **Annual price (SAR)** | Motion | KSA anchor it's priced against |
+|---|---|---:|---:|---|---|
+| **1 · SME (Reven Start)** | Micro program, **<10 partners**, replacing a spreadsheet | ≤10 | **from SAR 50/mo (≈ SAR 600–1,788/yr)** | **self-serve, zero-touch** (AI/community support) | *below* the local micro-floor — Marn POS ~56, Salla/Matajer ~99, ≈ **one Zoho CRM seat ~53** |
+| **2 · SMB (Growth)** | Growing multi-type channel, manual statements | 25–75 | **SAR 67–150K** | sales-assisted, pooled CSM | a small **enterprise-CRM deployment** (not SME commerce SaaS) |
+| **3 · Mid-market** | Material partner-attributed revenue, finance + legal involved | 75–250 | **SAR 188–450K** | sales-assisted, dedicated CSM | a **25–60-seat enterprise-CRM deployment + implementation** |
+| **4 · Semi-government** | Vision-2030 entity, sovereignty + audit mandates | negotiated | **SAR 600K–2.5M+** | custom-quoted, SI-delivered | large CRM/ERP + implementation (local impl *alone* runs SAR 50K–2M) |
+| **5 · Large enterprise** | Multi-entity / multi-country ecosystem | negotiated / unlimited | **SAR 560K–1.9M+** | custom-quoted, SI-delivered | large CRM/ERP + implementation |
+
+**Unlimited internal seats at every tier** — the active-partner *band* is the scaling unit, never seats and never claims. This mirrors the local SME winners (**Rewaa, Absolute CRM** both headline "unlimited users"); per-seat pricing is resented even in KSA. **No software take-rate** at any tier — in KSA, % pricing lives *only* in the payments layer (mada ~1.5%+1, Foodics Pay 0–2.5%); **no local front-office tool takes a software GMV commission**, so Reven's "don't tax the partner's money" posture *is* the local norm. [Confirmed: §2.5]
+
+### 5b. The SME affordability floor — comparable to a KSA front-office tool, by design
+
+The explicit instruction this section honors: **do not price SMEs out of reach.** The repo already solves this, and the forecast must not contradict it:
+
+- **What an SME pays:** **from SAR 50/mo** — that is **≈ $13/mo (≈ $160/yr)**. It is *cheaper than a Salla store* (Basic ~SAR 99–260/mo), *less than one Zoho CRM seat* (~SAR 53/user/mo), and *below a Marn POS terminal* (~SAR 56/mo). An SME owner reads it as "less than my coffee budget," not "enterprise software." [Confirmed: §2.5]
+- **Local norms would even support SAR 99–149/mo** within the SME band — so SAR 50 is a **deliberate adoption choice with headroom**, not a value-justified ceiling. The wedge is frictionless on purpose.
+- **It only works fully self-serve.** At SAR 50/mo, *one human support call erases a year of that logo's revenue* — so the SME tier has **no implementation, no CSM, AI/community support only**, and is **branded distinctly and kept off the enterprise/gov pricing surface** so the low anchor never dilutes the finance-grade premium. [Confirmed guardrail: §2 exec summary]
+- **The "valley of death" the architecture avoids.** The pricing red-team flags the **SAR ~22–185K ($6–50K) sales-led band as a cash-incinerator** (too big for self-serve, too small for field sales). The tiering dodges it cleanly: **everything below the ~SAR 95–110K high-touch floor is self-serve; anything needing a salesperson + implementation must clear that floor.** There is no expensive, human-delivered SME deal. [Confirmed: `Partner_Revenue_OS_Pricing_Strategy_Red_Team.md`]
+
+> **How the SME tier relates to the T2D3 ladder (the critical clarification).** The SME (Reven Start) tier is a **land-wedge, not an ARR pillar** — its success metric is **land-to-expand %**, not ACV. It contributes **logos, cross-tenant identity data, and an expansion funnel** — *not* ARR weight (500 SME logos at SAR 600–1,788/yr ≈ SAR 0.3–0.9M ≈ <$240K, negligible against a multi-million-dollar book). **Therefore the "blended ACV" in §4 and §9 is the *sales-led book* (SMB+, at or above the SAR 95–110K high-touch floor) — it deliberately excludes the self-serve SME micro-tier.** Reading the $25K→$110K blended ACV as "what an SME pays" would be wrong: an SME pays SAR 600–1,788/yr; the blend describes the *paying enterprise/mid/SMB logos that carry the venture-scale ARR*, which sit on top of a much larger, near-free SME funnel.
+
+### 5c. The three-metric model (keep them separate)
 [Confirmed: `Reven_Pricing_Executive_Summary.md` §1]
 
 | | Metric | Why |
@@ -118,8 +146,8 @@ Price is the first dial because, per §4, **ACV and NRR carry the back half of t
 | **Pricing metric** | Active (transacting) partners, banded × tier → evolving to attributed-revenue / per-payout / net-bps | Buyer-friendly, category-standard, expands with the program |
 | **Expansion metric** | partners → modules → compliance tier → entities/countries → settlement volume → data licensing | The NRR engine, assembled incrementally |
 
-### 5b. The ACV ladder, reverse-engineered by phase
-The §4 blended-ACV path ($25K→$110K) is a *consequence* of moving the buyer up the value stack. Decomposed:
+### 5d. The ACV ladder, reverse-engineered by phase
+The §4 blended-ACV path ($25K→$110K) is a *consequence* of moving the *sales-led book* up the value stack (SME self-serve excluded, per §5b). Decomposed:
 
 | Phase | Buyer | Pricing metric added | Per-logo ACV band [Assumption] | Blended ACV in model | Corp-finance target |
 |---|---|---|---:|---:|---|
@@ -129,7 +157,7 @@ The §4 blended-ACV path ($25K→$110K) is a *consequence* of moving the buyer u
 
 [Confirmed bands: `Reven_Pricing_Executive_Summary.md` §2; `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md` §3, §7.2]
 
-### 5c. The pricing rule (the ceiling that prevents over-extraction)
+### 5e. The pricing rule (the ceiling that prevents over-extraction)
 The per-logo price is bounded by a **max() of three anchors**, and capped by a **value-share rule**: [Confirmed: `Saudi_Value_Pool_and_ICP_Strategic_Analysis.md` §8]
 
 ```
@@ -240,6 +268,8 @@ Pulling §4–§8 into a single reverse-engineered model. **Every cell is [Deriv
 | **Post-money** | SAR 20M | ~$11–18M | — | ~$50M | — | $100–300M | **~$0.8–1.0B** |
 
 > **How to read this table.** It is *not* a prediction; it is the **system of constraints** the venture must satisfy to trace T2D3 at a software multiple. Each row is a thing the validation round and the early operating cadence must instrument and prove. If any row breaks — NRR stalls below the enterprise-mix line, geography doesn't turn on by Y2, blended GM drifts toward payments territory — the achievable outcome is the §10 grounded case, not the Centaur.
+>
+> **Logo/ACV scope.** "Cum. logos" and "blended ACV" are the **sales-led book (SMB+)** only; the self-serve **SME (Reven Start) tier — from SAR 50/mo — is excluded** and tracked separately on **land-to-expand %** (§5b). The Centaur is built on the paying mid/enterprise book; the SME funnel feeds it logos, data, and expansion, not ARR weight.
 
 ---
 
