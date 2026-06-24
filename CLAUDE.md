@@ -1,4 +1,4 @@
-# CLAUDE.md — Revenue-Sharing-MVP
+# CLAUDE.md — Reven
 
 Project context + handoff so any future session can continue without rediscovery.
 
