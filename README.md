@@ -21,7 +21,7 @@ All documents in this repository conform to this sequencing. Where a document us
 
 | Area | Documents |
 |---|---|
-| **Canonical strategy & phasing** | `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md` (source of truth), `Partner_Revenue_OS_Master_Strategy_Dossier.md`, `Reverse_Engineered_Strategy_Deep_Dive_Companion.md` |
+| **Canonical strategy & phasing** | `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md` (source of truth), `Partner_Revenue_OS_Master_Strategy_Dossier.md`, `Reverse_Engineered_Strategy_Deep_Dive_Companion.md`, [`Compounding_Optionality_Strategic_Analysis.md`](Compounding_Optionality_Strategic_Analysis.md) — real-options read on the phase model: which growth paths are cheap options worth holding, which are paper options pending the code build, and what converts one into the other |
 | **Product requirements** | `Partner_Revenue_OS_PDR.md`, `partner-revenue-os-PDR-v5.md` |
 | **Pricing & commercial** | `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md`, `Partner_Revenue_OS_Pricing_Strategy_Red_Team.md`, `Reven_Pricing_Architecture_Deep_Research.md` |
 | **Operating manuals** | `GTM_Operating_Manual.md`, `Internal_Operating_Cadence_Manual.md`, `Monthly_CFO_Review_Manual.md`, `Large_Enterprise_Client_Onboarding_Manual.md`, `Integration_Layer_and_API_Data_Flows_Manual.md` |
