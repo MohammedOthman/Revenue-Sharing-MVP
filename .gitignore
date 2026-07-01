@@ -44,3 +44,5 @@ yarn.lock
 *.tmp
 *.temp
 ```
+# Keep env templates
+!.env.example

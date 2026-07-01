@@ -105,6 +105,15 @@ npm run dev
 
 Frontend will run on `http://localhost:3000`
 
+## Run on Replit
+
+The repository root contains a `.replit` config so the whole platform can run on Replit without local setup:
+
+1. In Replit, choose **Create App → Import from GitHub** and select this repository.
+2. Open **Tools → Database** and create the built-in PostgreSQL database. Replit sets `DATABASE_URL` automatically and the backend picks it up (it takes precedence over the `DB_*` variables).
+3. Open **Tools → Secrets** and add a `JWT_SECRET` value (any long random string).
+4. Click **Run**. The root `replit-run.sh` installs dependencies on first boot, starts the API on port 5000, and starts the frontend on port 3000, which is exposed as the webview. The Vite dev server proxies `/api` calls to the backend, so only the frontend port is public.
+
 ## API Endpoints
 
 ### Authentication
