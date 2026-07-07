@@ -1,7 +1,8 @@
-import { 
-  createPartner, findPartnerById, getAllPartners, 
-  updatePartner, deletePartner, getPartnerStats 
+import {
+  createPartner, findPartnerById, getAllPartners,
+  updatePartner, deletePartner, getPartnerStats
 } from '../models/partner.model.js';
+import { toSnakeCaseKeys } from '../utils/normalize.js';
 
 export const createPartnerController = async (req, res) => {
   try {
@@ -49,7 +50,7 @@ export const getPartnerController = async (req, res) => {
 export const updatePartnerController = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = toSnakeCaseKeys(req.body);
 
     const partner = await updatePartner(id, updates);
     if (!partner) {

@@ -1,27 +1,40 @@
 import pkg from 'pg';
-const { Pool } = pkg;
-import dotenv from 'dotenv';
+import env from './env.js';
 
-dotenv.config();
+const { Pool } = pkg;
+
+// Managed Postgres providers (Render, Railway, Neon, Supabase, Heroku, Replit)
+// hand out a single connection URL and usually require TLS.
+const sslRequired =
+  env.dbSsl || /\bsslmode=require\b/.test(env.databaseUrl);
+
+const poolConfig = env.databaseUrl
+  ? { connectionString: env.databaseUrl }
+  : {
+      host: env.db.host,
+      port: env.db.port,
+      database: env.db.name,
+      user: env.db.user,
+      password: env.db.password,
+    };
 
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  max: 20,
+  ...poolConfig,
+  ...(sslRequired ? { ssl: { rejectUnauthorized: false } } : {}),
+  max: env.dbPoolMax,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
-pool.on('connect', () => {
-  console.log('Database connected successfully');
+  connectionTimeoutMillis: 10000,
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
+  // An idle client failing (network blip, PG restart) must not kill the API;
+  // the pool discards the broken client and creates a new one on demand.
+  console.error('Unexpected error on idle database client:', err.message);
 });
+
+export const checkDatabaseConnection = async () => {
+  const result = await pool.query('SELECT 1 AS ok');
+  return result.rows[0]?.ok === 1;
+};
 
 export default pool;

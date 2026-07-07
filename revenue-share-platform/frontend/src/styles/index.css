@@ -492,3 +492,17 @@ body {
 .actions {
   white-space: nowrap;
 }
+
+.empty-state {
+  color: #888;
+  text-align: center;
+  padding: 24px 12px;
+  font-size: 14px;
+}
+
+.form-group small {
+  display: block;
+  color: #888;
+  margin-top: 4px;
+  font-size: 12px;
+}

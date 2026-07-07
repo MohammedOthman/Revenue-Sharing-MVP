@@ -10,6 +10,11 @@ export const createUser = async (email, password, fullName, role = 'user') => {
   return result.rows[0];
 };
 
+export const countUsers = async () => {
+  const result = await pool.query('SELECT COUNT(*)::int AS count FROM users');
+  return result.rows[0].count;
+};
+
 export const findUserByEmail = async (email) => {
   const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
   return result.rows[0];

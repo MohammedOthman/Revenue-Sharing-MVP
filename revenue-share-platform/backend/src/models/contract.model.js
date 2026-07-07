@@ -87,7 +87,7 @@ export const getContractStats = async () => {
       COUNT(CASE WHEN status = 'active' THEN 1 END) as active_contracts,
       COUNT(CASE WHEN status = 'draft' THEN 1 END) as draft_contracts,
       COUNT(CASE WHEN status = 'expired' THEN 1 END) as expired_contracts,
-      SUM(revenue_share_percentage) / COUNT(*) as avg_revenue_share
+      AVG(revenue_share_percentage) as avg_revenue_share
     FROM contracts
   `);
   return result.rows[0];

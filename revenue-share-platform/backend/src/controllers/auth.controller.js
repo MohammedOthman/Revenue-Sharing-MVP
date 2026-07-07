@@ -1,13 +1,27 @@
-import { createUser, findUserByEmail, findUserById, getAllUsers, updateUser, deleteUser } from '../models/user.model.js';
+import {
+  createUser, findUserByEmail, findUserById, getAllUsers,
+  updateUser, deleteUser, countUsers,
+} from '../models/user.model.js';
 import { generateToken } from '../utils/jwt.js';
 import { comparePassword } from '../utils/password.js';
+import { toSnakeCaseKeys } from '../utils/normalize.js';
+import env from '../config/env.js';
 
 export const register = async (req, res) => {
   try {
-    const { email, password, fullName, role } = req.body;
+    const { email, password, fullName } = req.body;
 
-    if (!email || !password || !fullName) {
-      return res.status(400).json({ error: 'Email, password, and full name are required' });
+    const existingUsers = await countUsers();
+    const isBootstrap = existingUsers === 0;
+    const isAdminRequest = req.user?.role === 'admin';
+
+    // Open self-signup is off by default for a finance tool: the first account
+    // becomes admin (bootstrap), after that admins create accounts — unless
+    // ALLOW_OPEN_REGISTRATION=true is set explicitly.
+    if (!isBootstrap && !isAdminRequest && !env.allowOpenRegistration) {
+      return res.status(403).json({
+        error: 'Registration is disabled. Ask an administrator to create your account.',
+      });
     }
 
     const existingUser = await findUserByEmail(email);
@@ -15,13 +29,16 @@ export const register = async (req, res) => {
       return res.status(409).json({ error: 'User already exists' });
     }
 
+    // Role is never taken from anonymous input; admins may set it explicitly.
+    const role = isBootstrap ? 'admin' : isAdminRequest && req.body.role ? req.body.role : 'user';
+
     const user = await createUser(email, password, fullName, role);
     const token = generateToken(user);
 
     res.status(201).json({
       message: 'User registered successfully',
       user: { id: user.id, email: user.email, fullName: user.full_name, role: user.role },
-      token
+      token,
     });
   } catch (error) {
     console.error('Register error:', error);
@@ -32,10 +49,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required' });
-    }
 
     const user = await findUserByEmail(email);
     if (!user) {
@@ -52,7 +65,7 @@ export const login = async (req, res) => {
     res.json({
       message: 'Login successful',
       user: { id: user.id, email: user.email, fullName: user.full_name, role: user.role },
-      token
+      token,
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -86,7 +99,7 @@ export const getAllUsersController = async (req, res) => {
 export const updateUserController = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = toSnakeCaseKeys(req.body);
 
     const user = await updateUser(id, updates);
     if (!user) {
@@ -103,6 +116,9 @@ export const updateUserController = async (req, res) => {
 export const deleteUserController = async (req, res) => {
   try {
     const { id } = req.params;
+    if (parseInt(id, 10) === req.user.id) {
+      return res.status(400).json({ error: 'You cannot delete your own account' });
+    }
     await deleteUser(id);
     res.json({ message: 'User deleted successfully' });
   } catch (error) {

@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import legalDocumentService from '../services/legalDocument.service';
 import contractService from '../services/contract.service';
+import { getApiError } from '../services/api';
 import '../styles/LegalDocuments.css';
+
+const emptyForm = {
+  contractId: '',
+  documentName: '',
+  documentType: 'agreement',
+  status: 'draft',
+  expiryDate: '',
+  notes: '',
+};
+
+const toDateInput = (value) => (value ? String(value).slice(0, 10) : '');
 
 const LegalDocuments = () => {
   const [documents, setDocuments] = useState([]);
@@ -10,14 +22,7 @@ const LegalDocuments = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingDoc, setEditingDoc] = useState(null);
-  const [formData, setFormData] = useState({
-    contractId: '',
-    title: '',
-    type: 'agreement',
-    status: 'draft',
-    expiryDate: '',
-    notes: '',
-  });
+  const [formData, setFormData] = useState(emptyForm);
 
   useEffect(() => {
     loadData();
@@ -29,10 +34,11 @@ const LegalDocuments = () => {
         legalDocumentService.getAll(),
         contractService.getAll(),
       ]);
-      setDocuments(docsData);
-      setContracts(contractsData);
+      setDocuments(docsData || []);
+      setContracts(contractsData || []);
+      setError('');
     } catch (err) {
-      setError('Failed to load data');
+      setError(getApiError(err, 'Failed to load data'));
     } finally {
       setLoading(false);
     }
@@ -42,23 +48,16 @@ const LegalDocuments = () => {
     if (doc) {
       setEditingDoc(doc);
       setFormData({
-        contractId: doc.contractId?._id || doc.contractId,
-        title: doc.title,
-        type: doc.type,
-        status: doc.status,
-        expiryDate: doc.expiryDate?.split('T')[0] || '',
+        contractId: doc.contract_id || '',
+        documentName: doc.document_name || '',
+        documentType: doc.document_type || 'agreement',
+        status: doc.status || 'draft',
+        expiryDate: toDateInput(doc.expiry_date),
         notes: doc.notes || '',
       });
     } else {
       setEditingDoc(null);
-      setFormData({
-        contractId: contracts[0]?._id || '',
-        title: '',
-        type: 'agreement',
-        status: 'draft',
-        expiryDate: '',
-        notes: '',
-      });
+      setFormData({ ...emptyForm, contractId: contracts[0]?.id || '' });
     }
     setShowModal(true);
   };
@@ -72,19 +71,23 @@ const LegalDocuments = () => {
     e.preventDefault();
     try {
       const payload = {
-        ...formData,
-        expiryDate: formData.expiryDate ? new Date(formData.expiryDate).toISOString() : null,
+        contractId: Number(formData.contractId),
+        documentName: formData.documentName,
+        documentType: formData.documentType,
+        status: formData.status,
+        expiryDate: formData.expiryDate || null,
+        notes: formData.notes || null,
       };
-      
+
       if (editingDoc) {
-        await legalDocumentService.update(editingDoc._id, payload);
+        await legalDocumentService.update(editingDoc.id, payload);
       } else {
         await legalDocumentService.create(payload);
       }
-      loadData();
+      await loadData();
       handleCloseModal();
     } catch (err) {
-      setError('Failed to save document');
+      setError(getApiError(err, 'Failed to save document'));
     }
   };
 
@@ -92,9 +95,9 @@ const LegalDocuments = () => {
     if (window.confirm('Are you sure you want to delete this document?')) {
       try {
         await legalDocumentService.delete(id);
-        loadData();
+        await loadData();
       } catch (err) {
-        setError('Failed to delete document');
+        setError(getApiError(err, 'Failed to delete document'));
       }
     }
   };
@@ -105,44 +108,52 @@ const LegalDocuments = () => {
     <div className="legal-documents-page">
       <div className="page-header">
         <h1>Legal Documents</h1>
-        <button className="btn-primary" onClick={() => handleOpenModal()}>
+        <button className="btn-primary" onClick={() => handleOpenModal()} disabled={contracts.length === 0}>
           + Add Document
         </button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {contracts.length === 0 && (
+        <div className="error-message">Create a contract first — documents are attached to contracts.</div>
+      )}
 
       <div className="table-container">
         <table className="data-table">
           <thead>
             <tr>
-              <th>Title</th>
+              <th>Name</th>
               <th>Type</th>
               <th>Contract</th>
               <th>Status</th>
-              <th>Created Date</th>
-              <th>Expiry Date</th>
+              <th>Created</th>
+              <th>Expires</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
+            {documents.length === 0 && (
+              <tr>
+                <td colSpan="7" className="empty-state">No documents yet.</td>
+              </tr>
+            )}
             {documents.map((doc) => (
-              <tr key={doc._id}>
-                <td>{doc.title}</td>
+              <tr key={doc.id}>
+                <td>{doc.document_name}</td>
                 <td>
-                  <span className={`badge badge-${doc.type}`}>{doc.type}</span>
+                  <span className={`badge badge-${doc.document_type}`}>{doc.document_type}</span>
                 </td>
-                <td>{doc.contractId?.title || 'N/A'}</td>
+                <td>{doc.contract_title || 'N/A'}</td>
                 <td>
                   <span className={`badge badge-${doc.status}`}>{doc.status}</span>
                 </td>
-                <td>{new Date(doc.createdAt).toLocaleDateString()}</td>
-                <td>{doc.expiryDate ? new Date(doc.expiryDate).toLocaleDateString() : 'N/A'}</td>
+                <td>{doc.created_at ? new Date(doc.created_at).toLocaleDateString() : '—'}</td>
+                <td>{doc.expiry_date ? new Date(doc.expiry_date).toLocaleDateString() : '—'}</td>
                 <td className="actions">
                   <button className="btn-sm" onClick={() => handleOpenModal(doc)}>
                     Edit
                   </button>
-                  <button className="btn-sm btn-danger" onClick={() => handleDelete(doc._id)}>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(doc.id)}>
                     Delete
                   </button>
                 </td>
@@ -163,21 +174,22 @@ const LegalDocuments = () => {
                   value={formData.contractId}
                   onChange={(e) => setFormData({ ...formData, contractId: e.target.value })}
                   required
+                  disabled={!!editingDoc}
                 >
                   <option value="">Select Contract</option>
                   {contracts.map((contract) => (
-                    <option key={contract._id} value={contract._id}>
+                    <option key={contract.id} value={contract.id}>
                       {contract.title}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="form-group">
-                <label>Document Title</label>
+                <label>Document Name</label>
                 <input
                   type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  value={formData.documentName}
+                  onChange={(e) => setFormData({ ...formData, documentName: e.target.value })}
                   placeholder="e.g., Revenue Share Agreement"
                   required
                 />
@@ -186,8 +198,8 @@ const LegalDocuments = () => {
                 <div className="form-group">
                   <label>Document Type</label>
                   <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    value={formData.documentType}
+                    onChange={(e) => setFormData({ ...formData, documentType: e.target.value })}
                   >
                     <option value="agreement">Agreement</option>
                     <option value="amendment">Amendment</option>
@@ -204,7 +216,7 @@ const LegalDocuments = () => {
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   >
                     <option value="draft">Draft</option>
-                    <option value="pending-review">Pending Review</option>
+                    <option value="pending_review">Pending Review</option>
                     <option value="approved">Approved</option>
                     <option value="signed">Signed</option>
                     <option value="expired">Expired</option>

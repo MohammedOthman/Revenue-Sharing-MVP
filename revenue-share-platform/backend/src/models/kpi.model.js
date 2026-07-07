@@ -1,12 +1,12 @@
 import pool from '../config/database.js';
 
 export const createKPI = async (data) => {
-  const { contractId, name, description, targetValue, unit, periodType } = data;
-  
+  const { contractId, name, description, targetValue, actualValue, unit, periodType, status } = data;
+
   const result = await pool.query(
-    `INSERT INTO kpis (contract_id, name, description, target_value, unit, period_type) 
-     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-    [contractId, name, description || null, targetValue, unit || null, periodType || 'monthly']
+    `INSERT INTO kpis (contract_id, name, description, target_value, actual_value, unit, period_type, status)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+    [contractId, name, description || null, targetValue, actualValue ?? 0, unit || null, periodType || 'monthly', status || 'active']
   );
   return result.rows[0];
 };

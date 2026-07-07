@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Layout.css';
 
@@ -18,6 +18,8 @@ const Layout = () => {
     { path: '/legal', label: 'Legal Docs', icon: '⚖️' },
   ];
 
+  const displayName = user?.fullName || user?.email || 'User';
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -30,7 +32,7 @@ const Layout = () => {
           <h2>RevenueShare</h2>
           {sidebarOpen && <span className="badge">B2B SaaS</span>}
         </div>
-        
+
         <nav className="sidebar-nav">
           {menuItems.map((item) => (
             <a
@@ -51,9 +53,9 @@ const Layout = () => {
         <div className="sidebar-footer">
           {sidebarOpen && (
             <div className="user-info">
-              <div className="avatar">{user?.name?.charAt(0) || 'U'}</div>
+              <div className="avatar">{displayName.charAt(0).toUpperCase()}</div>
               <div className="user-details">
-                <p className="user-name">{user?.name || 'User'}</p>
+                <p className="user-name">{displayName}</p>
                 <p className="user-email">{user?.email || ''}</p>
               </div>
             </div>
@@ -66,27 +68,22 @@ const Layout = () => {
 
       <div className="main-content">
         <header className="top-header">
-          <button 
-            className="toggle-sidebar" 
+          <button
+            className="toggle-sidebar"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             ☰
           </button>
           <div className="header-right">
-            <div className="notifications">
-              <span>🔔</span>
-              <span className="notification-badge">3</span>
-            </div>
             <div className="user-menu">
-              <span>{user?.name || 'User'}</span>
-              <span className="dropdown-arrow">▼</span>
+              <span>{displayName}</span>
             </div>
           </div>
         </header>
 
         <main className="content-area">
           <div className="outlet">
-            {/* Child routes render here */}
+            <Outlet />
           </div>
         </main>
       </div>
