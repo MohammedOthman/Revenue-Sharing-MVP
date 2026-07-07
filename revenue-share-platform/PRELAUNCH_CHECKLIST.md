@@ -1,91 +1,97 @@
-# Pre-Launch Checklist — Revenue Share Platform (Reven)
+# Pre-Launch Checklist — Reven (Partner Lifecycle Platform)
 
-The gate a B2B finance product must clear before real end users touch it. Status
-reflects the platform in this repo (verified by the automated test suite and a
-live production-mode boot). Re-verify any ☐/◐ item on the deployment target
-before announcing launch.
+Reven manages **partnerships across their full lifecycle** — capture and onboard
+partners, run agreements, track performance, settle what's owed, and renew or
+part ways cleanly. This checklist follows that lifecycle, aligned with the
+governing phase model (Capture → Settle → Orchestrate). Settlement is one stage
+of the lifecycle, not the product's identity.
+
+Status reflects the platform in this repo (verified by the automated test suite
+and a live production-mode boot). Re-verify any ☐/◐ item on the deployment
+target before announcing launch.
 
 Legend: ☑ done & verified ◐ partial / owner action needed ☐ not done
 
-## 1. Security & Access
+## 1. Capture — Partner Onboarding & Identity
 
-- ☑ Anonymous signup cannot choose its own role (no admin escalation)
-- ☑ First user = admin bootstrap; self-signup locked after that (`ALLOW_OPEN_REGISTRATION` opt-in)
-- ☑ Passwords bcrypt-hashed, minimum 8 characters
-- ☑ JWT secret required from environment in production — server refuses to boot without it
-- ☑ Security headers + CSP (helmet), CORS allowlist, 1 MB body limit
-- ☑ Rate limiting: strict on login/register, general ceiling on the API
-- ☑ Every non-auth endpoint requires a valid token; role checks on admin routes
-- ☑ Input validation on every write endpoint; invalid ids → 400, not 500
-- ☑ No stack traces or internal errors leaked in production responses
-- ◐ Change/rotate the seed admin password immediately after first deploy (owner)
+- ☑ Partner records with type (referral, affiliate, strategic, reseller), contact person, and status
+- ☑ Partner status lifecycle: pending → active → inactive
+- ☑ Team access is controlled: first user = admin bootstrap, then admin-created accounts (`ALLOW_OPEN_REGISTRATION` opt-in); no role escalation via signup
+- ☑ Guided dependency order in the UI (partner first → then contract → then revenue/KPIs/documents)
+- ☐ Partner-facing onboarding touch: first-login pointer to "add your first partner"
+- ☐ Partner self-service portal (partners see their own contracts/payouts) — Orchestrate-phase item, explicitly out of MVP scope
+
+## 2. Agreement Lifecycle — Contracts & Legal Documents
+
+- ☑ Contract lifecycle states: draft → active → expired / terminated
+- ☑ Terms captured per agreement: share %, minimum payout, payment terms, start/end dates
+- ☑ Contract terms validated at the door (share % 0–100, dates in order, payout non-negative)
+- ☑ Legal documents attached per contract with their own lifecycle (draft → pending review → approved → signed → expired), versions, and expiry dates
+- ☑ Deleting a team member never breaks agreements they created (FK → SET NULL)
+- ☐ Expiry visibility: surface contracts/documents nearing end date on the dashboard (renewal is where partnerships die silently)
+- ☐ Renewal flow: one-click "renew contract" carrying terms forward
+
+## 3. Performance — KPIs & Partnership Health
+
+- ☑ KPIs per contract with target vs actual, unit, period, and status (active / at-risk / achieved)
+- ☑ Quick value updates from the KPI board; progress computed live
+- ☑ Dashboard shows the real state of the book: partners, active agreements, revenue, pending obligations, contract status mix
+- ☑ Top-performing partners ranked from actual settlement data (not a stub)
+- ☐ Partnership health roll-up per partner (KPIs + payment recency in one view) — strong v1.1 candidate
+
+## 4. Settle — Revenue Sharing & Payouts
+
+- ☑ Revenue recorded per contract per period; the partner's share computed **by the system from the agreement terms** — never trusted from user input
+- ☑ Mismatched manually-entered amounts rejected loudly
+- ☑ Payout processing guarded against double-payment
+- ☑ Pending vs paid obligations visible at a glance
+- ☑ Database-level guardrails: share % 0–100, non-negative amounts, period order
+- ☐ Settlement export (CSV of payouts per partner per period) for sharing statements with partners
+
+## 5. Trust — Auditability & Data Stewardship
+
+Partnerships run on trust; every number must be explainable.
+
+- ☑ Full audit trail on every change: who, what, when, payload (secrets redacted)
+- ☑ Real recent activity on the dashboard from the audit log — zero fake/placeholder data anywhere in the UI
+- ☑ Secrets out of the repo; `.env.example` documents every variable
+- ◐ Privacy policy + terms of service pages/links (owner/legal — required before external users)
+- ☐ Data retention & deletion answer (what happens when a partner relationship ends and they ask for removal)
+
+## 6. Platform Engineering Readiness
+
+- ☑ Security: helmet + CSP, CORS allowlist, rate limiting (strict on login), 1 MB body limit, bcrypt (min 8 chars), JWT secret required in production, invalid ids → 400, no stack traces leaked
+- ☑ Reliability: health endpoint with DB probe, transient DB errors don't crash the process, graceful shutdown, managed Postgres (`DATABASE_URL` + SSL), idempotent schema upgrades
+- ☑ Testing: 16-test API suite (onboarding lockdown, escalation, validation, computed shares, payout idempotency, audit log) green in CI against real Postgres; frontend production build in CI
+- ☑ UX resilience: session expiry → clean re-login, error boundary (no blank pages), empty states with guidance, real server error messages, no demo credentials shown
+- ◐ Mobile/responsive pass on the top 3 flows (login, dashboard, record revenue)
+- ◐ One full manual UAT pass by the founder on the deployed URL (owner)
+- ☐ Error tracking (e.g. Sentry) for backend + frontend
 - ☐ Dependency audit in CI (`npm audit`) and a patching cadence
 
-## 2. Financial Integrity (the product's core promise)
-
-- ☑ Share/payout amounts computed server-side from contract terms; client mismatches rejected
-- ☑ DB CHECK constraints: percentage 0–100, non-negative amounts, period order
-- ☑ Double-payment blocked (paying a paid record fails loudly)
-- ☑ Audit trail on every mutation: who, what, when, payload (secrets redacted)
-- ☑ Deleting a user cannot orphan-break contracts (FK → SET NULL)
-- ☐ Reconciliation/export path (CSV of payouts per period) for the finance workflow
-
-## 3. Reliability & Operations
-
-- ☑ Health endpoint with real DB probe (503 when degraded)
-- ☑ Transient DB errors don't crash the process; pool self-heals
-- ☑ Graceful shutdown on SIGTERM (containers/deploys)
-- ☑ Managed Postgres support: `DATABASE_URL` + SSL
-- ☑ Idempotent schema bootstrap — upgrades existing databases in place
-- ☑ Request logging with status + latency
-- ◐ **Database backups**: enable automated backups/PITR on the managed Postgres (owner — provider setting)
-- ☐ Uptime monitoring + alerting pointed at `/api/health` (UptimeRobot/BetterStack, 5 min)
-- ☐ Error tracking (e.g. Sentry) for backend + frontend
-
-## 4. Data & Privacy
-
-- ☑ Secrets out of the repo; `.env.example` documents every variable
-- ☑ Lockfiles committed; env files git-ignored
-- ◐ Privacy policy + terms of service pages/links (owner/legal — required before external users)
-- ☐ Data retention & deletion answer (what happens when a customer asks to be removed)
-
-## 5. Product & UX
-
-- ☑ All pages render (routing/Outlet fixed) and consume the real API
-- ☑ Session expiry → clean redirect to login (no stuck screens)
-- ☑ Error boundary — no blank white pages on render errors
-- ☑ Empty states with guidance on every list; real server error messages on forms
-- ☑ No fake/demo data in the UI (fake notifications, placeholder activity, demo credentials removed)
-- ☑ Guided dependency order (partner → contract → revenue/KPI/document)
-- ◐ Mobile/responsive pass on the top 3 flows (login, dashboard, record revenue)
-- ☐ Onboarding touch: first-login pointer to "add your first partner"
-
-## 6. Testing & QA
-
-- ☑ 16-test API suite: auth bootstrap/lockdown, escalation, validation, computed shares, payment idempotency, audit log — green
-- ☑ CI on every push/PR: backend tests against real Postgres + frontend production build
-- ☑ Live production-mode boot verified (health, static serving, register→login→seed→dashboard)
-- ◐ One full manual UAT pass by the founder on the deployed URL (owner)
-- ☐ Cross-browser smoke (Chrome/Safari + one mobile browser)
-
-## 7. Deployment & Go-Live
+## 7. Go-Live Operations
 
 - ☑ Dockerfile + docker-compose (app + Postgres, healthchecked, single-port serve)
 - ☑ README deploy guides (Docker, Render/Railway-style, Replit)
+- ◐ **Database backups** enabled on the managed Postgres (owner — provider setting; partnership history is the asset)
 - ◐ Production domain + HTTPS (owner — host/provider step)
-- ◐ Set real `JWT_SECRET`, `SEED_ADMIN_*`, `CORS_ORIGINS` on the production host (owner)
-- ☐ Rollback plan: previous image kept; DB backup taken before each deploy
+- ◐ Real `JWT_SECRET`, `SEED_ADMIN_*`, `CORS_ORIGINS` set on the production host; rotate seed admin password after first login (owner)
+- ☐ Uptime monitoring + alerting on `/api/health`
+- ☐ Rollback plan: previous image kept; DB backup before each deploy
 - ☐ Load sanity: one 5-minute smoke at expected concurrent-user level
 
 ## 8. Launch Logistics
 
 - ☐ Support channel end users can reach (email alias is enough at MVP)
 - ☐ Known-issues / feedback capture loop for the first two weeks
-- ☐ Success metrics defined (activation: first contract created; first payout processed)
+- ☐ Success metrics tied to the lifecycle: partners onboarded, first contract activated, first settlement processed, first renewal
 
 ---
 
-**Bottom line:** all engineering-controlled items are done and test-verified.
-The remaining ◐/☐ items are launch-operations calls (backups, domain, monitoring,
-legal pages, UAT) that need the owner or the hosting provider — none require
-further code to start, and none should be skipped for a finance product.
+**Bottom line:** every engineering-controlled lifecycle item is done and
+test-verified. What remains splits into (a) launch operations that need the
+owner or hosting provider — backups, domain, monitoring, legal pages, UAT —
+and (b) lifecycle depth for right after launch: expiry/renewal visibility,
+settlement exports, and partner health roll-ups. The Orchestrate-phase items
+(partner portal, network features) are deliberately out of MVP scope per the
+phasing strategy.
