@@ -1,97 +1,142 @@
-# Pre-Launch Checklist — Reven (Partner Lifecycle Platform)
+# Pre-Launch Technical Readiness — Reven, Zero-to-One
 
-Reven manages **partnerships across their full lifecycle** — capture and onboard
-partners, run agreements, track performance, settle what's owed, and renew or
-part ways cleanly. This checklist follows that lifecycle, aligned with the
-governing phase model (Capture → Settle → Orchestrate). Settlement is one stage
-of the lifecycle, not the product's identity.
+Engineering spec for taking Reven from "verified build" to **first paying
+external clients**. Organized by priority, not category: P0 blocks onboarding
+client #1, P1 lands within the first two weeks of real usage, P2 is deferred
+until client count forces it. Each item states what to build, why it gates
+zero-to-one, and how to verify.
 
-Status reflects the platform in this repo (verified by the automated test suite
-and a live production-mode boot). Re-verify any ☐/◐ item on the deployment
-target before announcing launch.
-
-Legend: ☑ done & verified ◐ partial / owner action needed ☐ not done
-
-## 1. Capture — Partner Onboarding & Identity
-
-- ☑ Partner records with type (referral, affiliate, strategic, reseller), contact person, and status
-- ☑ Partner status lifecycle: pending → active → inactive
-- ☑ Team access is controlled: first user = admin bootstrap, then admin-created accounts (`ALLOW_OPEN_REGISTRATION` opt-in); no role escalation via signup
-- ☑ Guided dependency order in the UI (partner first → then contract → then revenue/KPIs/documents)
-- ☐ Partner-facing onboarding touch: first-login pointer to "add your first partner"
-- ☐ Partner self-service portal (partners see their own contracts/payouts) — Orchestrate-phase item, explicitly out of MVP scope
-
-## 2. Agreement Lifecycle — Contracts & Legal Documents
-
-- ☑ Contract lifecycle states: draft → active → expired / terminated
-- ☑ Terms captured per agreement: share %, minimum payout, payment terms, start/end dates
-- ☑ Contract terms validated at the door (share % 0–100, dates in order, payout non-negative)
-- ☑ Legal documents attached per contract with their own lifecycle (draft → pending review → approved → signed → expired), versions, and expiry dates
-- ☑ Deleting a team member never breaks agreements they created (FK → SET NULL)
-- ☐ Expiry visibility: surface contracts/documents nearing end date on the dashboard (renewal is where partnerships die silently)
-- ☐ Renewal flow: one-click "renew contract" carrying terms forward
-
-## 3. Performance — KPIs & Partnership Health
-
-- ☑ KPIs per contract with target vs actual, unit, period, and status (active / at-risk / achieved)
-- ☑ Quick value updates from the KPI board; progress computed live
-- ☑ Dashboard shows the real state of the book: partners, active agreements, revenue, pending obligations, contract status mix
-- ☑ Top-performing partners ranked from actual settlement data (not a stub)
-- ☐ Partnership health roll-up per partner (KPIs + payment recency in one view) — strong v1.1 candidate
-
-## 4. Settle — Revenue Sharing & Payouts
-
-- ☑ Revenue recorded per contract per period; the partner's share computed **by the system from the agreement terms** — never trusted from user input
-- ☑ Mismatched manually-entered amounts rejected loudly
-- ☑ Payout processing guarded against double-payment
-- ☑ Pending vs paid obligations visible at a glance
-- ☑ Database-level guardrails: share % 0–100, non-negative amounts, period order
-- ☐ Settlement export (CSV of payouts per partner per period) for sharing statements with partners
-
-## 5. Trust — Auditability & Data Stewardship
-
-Partnerships run on trust; every number must be explainable.
-
-- ☑ Full audit trail on every change: who, what, when, payload (secrets redacted)
-- ☑ Real recent activity on the dashboard from the audit log — zero fake/placeholder data anywhere in the UI
-- ☑ Secrets out of the repo; `.env.example` documents every variable
-- ◐ Privacy policy + terms of service pages/links (owner/legal — required before external users)
-- ☐ Data retention & deletion answer (what happens when a partner relationship ends and they ask for removal)
-
-## 6. Platform Engineering Readiness
-
-- ☑ Security: helmet + CSP, CORS allowlist, rate limiting (strict on login), 1 MB body limit, bcrypt (min 8 chars), JWT secret required in production, invalid ids → 400, no stack traces leaked
-- ☑ Reliability: health endpoint with DB probe, transient DB errors don't crash the process, graceful shutdown, managed Postgres (`DATABASE_URL` + SSL), idempotent schema upgrades
-- ☑ Testing: 16-test API suite (onboarding lockdown, escalation, validation, computed shares, payout idempotency, audit log) green in CI against real Postgres; frontend production build in CI
-- ☑ UX resilience: session expiry → clean re-login, error boundary (no blank pages), empty states with guidance, real server error messages, no demo credentials shown
-- ◐ Mobile/responsive pass on the top 3 flows (login, dashboard, record revenue)
-- ◐ One full manual UAT pass by the founder on the deployed URL (owner)
-- ☐ Error tracking (e.g. Sentry) for backend + frontend
-- ☐ Dependency audit in CI (`npm audit`) and a patching cadence
-
-## 7. Go-Live Operations
-
-- ☑ Dockerfile + docker-compose (app + Postgres, healthchecked, single-port serve)
-- ☑ README deploy guides (Docker, Render/Railway-style, Replit)
-- ◐ **Database backups** enabled on the managed Postgres (owner — provider setting; partnership history is the asset)
-- ◐ Production domain + HTTPS (owner — host/provider step)
-- ◐ Real `JWT_SECRET`, `SEED_ADMIN_*`, `CORS_ORIGINS` set on the production host; rotate seed admin password after first login (owner)
-- ☐ Uptime monitoring + alerting on `/api/health`
-- ☐ Rollback plan: previous image kept; DB backup before each deploy
-- ☐ Load sanity: one 5-minute smoke at expected concurrent-user level
-
-## 8. Launch Logistics
-
-- ☐ Support channel end users can reach (email alias is enough at MVP)
-- ☐ Known-issues / feedback capture loop for the first two weeks
-- ☐ Success metrics tied to the lifecycle: partners onboarded, first contract activated, first settlement processed, first renewal
+Current verified baseline (do not re-litigate): hardened auth (bootstrap
+admin, locked registration, no role escalation), validated writes, server-side
+settlement math with DB constraints, double-payout guard, full audit trail,
+health probe + graceful shutdown, Docker/compose packaging, 16-test CI suite
+against real Postgres, production-mode boot verified.
 
 ---
 
-**Bottom line:** every engineering-controlled lifecycle item is done and
-test-verified. What remains splits into (a) launch operations that need the
-owner or hosting provider — backups, domain, monitoring, legal pages, UAT —
-and (b) lifecycle depth for right after launch: expiry/renewal visibility,
-settlement exports, and partner health roll-ups. The Orchestrate-phase items
-(partner portal, network features) are deliberately out of MVP scope per the
-phasing strategy.
+## P0 — Blockers: cannot onboard client #1 without these
+
+### P0.1 Tenancy model — DECIDE FIRST, everything else inherits it
+
+The schema has no `org_id`; every authenticated user sees the entire
+workspace. Two viable zero-to-one paths:
+
+- **Option A (recommended): single-tenant instance per client.**
+  One container + one Postgres database per client, provisioned from the
+  existing Docker image. Zero code changes; isolation is physical; a client's
+  data cannot leak by definition. Cost: ~$10–15/client/month on Render/Railway;
+  provisioning is `docker compose up` + env file. Sustainable to ~10 clients.
+- **Option B: shared multi-tenant.** `organizations` table, `org_id` FK +
+  index on all 7 domain tables, org claim in the JWT, mandatory org scoping in
+  every model query, org-scoped uniqueness (e.g. partner email unique per org,
+  not globally), per-org rate limits. ~3–5 days of careful work + full test
+  rewrite. Do this at ~5+ clients, not before revenue.
+
+**Action:** commit to Option A for launch. Write `deploy/new-client.md`
+runbook: create DB → set env (`JWT_SECRET`, `DATABASE_URL`, `SEED_ADMIN_*`)
+→ deploy image → run seed → hand credentials to client admin.
+**Verify:** provision a second staging instance in < 30 minutes from runbook alone.
+
+### P0.2 Account lifecycle: password reset + user invitations (needs email)
+
+Today a locked-out user is unrecoverable without DB surgery, and an admin
+"creating an account" has no way to hand over credentials safely.
+
+- Transactional email service (Resend/Postmark/SES — one env var + tiny client).
+- `password_reset_tokens` table (user_id, token hash, expiry ≤ 1h, single-use).
+- `POST /api/auth/forgot-password` (always 200 to prevent email enumeration,
+  rate-limited) + `POST /api/auth/reset-password`.
+- Invitation flow: admin creates user → system emails a set-password link
+  (same token mechanism); remove any flow where an admin knows a user's password.
+- Forced password change for the seeded admin on first login.
+
+**Verify:** full loop on staging — invite, set password, log in, forgot,
+reset, old token rejected, audit entries present. Extend the API test suite.
+
+### P0.3 Production infrastructure (per client instance)
+
+- Managed Postgres with **automated daily backups + PITR enabled** — partner
+  history is the asset; verify a restore once, not just the backup checkbox.
+- Domain + TLS (host-managed cert), `CORS_ORIGINS` set, real `JWT_SECRET`
+  from the host's secret store (never in the repo/env file committed anywhere).
+- CD: deploy on merge to main (host auto-deploy or a GitHub Actions deploy job
+  gated on the existing CI passing).
+- Rollback: previous image tag retained; `pg_dump` before every deploy
+  (one line in the deploy job).
+
+**Verify:** kill the app container → auto-restarts; restore yesterday's
+backup to a scratch DB; deploy + rollback drill once.
+
+### P0.4 Observability — you cannot support clients blind
+
+- Error tracking: Sentry (or equivalent) in Express error middleware + React
+  ErrorBoundary; release tag = git SHA.
+- Uptime: external monitor on `/api/health` (checks DB, already built),
+  5-minute interval, alert to founder email/phone.
+- Log retention: host log drain or provider default ≥ 7 days; the request
+  logger (status + latency) already emits the needed lines.
+
+**Verify:** throw a deliberate staging error → Sentry event with SHA; stop
+DB → uptime alert fires on the 503.
+
+### P0.5 Zero-to-one product gaps that block real workflows
+
+- **Expiry/renewal visibility:** dashboard panel + `GET
+  /api/contracts?expiring=30d` for contracts/documents within 30 days of
+  `end_date`/`expiry_date` (indexes exist). Renewal is where partnerships
+  churn silently.
+- **Settlement statement export:** `GET /api/revenue/export?partnerId=&period=`
+  → CSV (period, contract, total revenue, share %, share amount, status,
+  paid date). First thing a partner asks: "show me how you got this number."
+- **Mobile pass:** login, dashboard, record-revenue, process-payout usable at
+  375 px (fix overflow/table scroll only — no redesign).
+
+**Verify:** seeded staging walk-through on phone + desktop; export opens in
+Excel/Sheets with correct totals.
+
+---
+
+## P1 — First two weeks of real usage
+
+- **Pagination + caps:** `limit/offset` (default 50, max 200) on the 6 list
+  endpoints; frontend "load more". Prevents payload blowup at a few hundred
+  records.
+- **Session hardening:** shorten JWT to 24h once reset flow exists (7d was a
+  crutch); optional refresh-token rotation only if clients complain.
+- **Partner health roll-up:** `GET /api/partners/:id/summary` — contracts,
+  KPI attainment %, last settlement date, pending balance in one call; UI
+  detail view.
+- **`npm audit` gate in CI** (fail on high/critical) + monthly dependency
+  patch cadence.
+- **Restore runbook test** repeated after first real data (backups only count
+  when restored).
+- **Support intake:** support@ alias + a "report a problem" mailto in the app
+  footer with app version/SHA prefilled.
+
+## P2 — Deferred until client count forces it (do NOT build now)
+
+- Shared multi-tenancy (P0.1 Option B) — at ~5+ clients.
+- Partner self-service portal (Orchestrate phase — partners view their own
+  contracts/statements).
+- SSO/SAML, granular RBAC beyond admin/user — first enterprise deal, not before.
+- File upload/storage for signed documents (S3 + signed URLs) — metadata +
+  `file_url` field covers MVP; build when a client refuses external links.
+- Read replicas, caching, background job queue — no load justifies it.
+
+---
+
+## Launch gate (all must be true for client #1)
+
+1. Staging instance provisioned **from the runbook alone** in < 30 min (P0.1)
+2. Invite → login → forgot → reset loop green on staging, tests extended (P0.2)
+3. Backups verified by an actual restore; rollback drill done once (P0.3)
+4. Sentry event + uptime alert both proven to fire (P0.4)
+5. Expiring-soon panel + CSV export live; mobile pass done (P0.5)
+6. Founder UAT: full lifecycle on staging — onboard partner → activate
+   contract → record revenue → verify computed share → process payout →
+   export statement → check audit trail
+7. Seed admin password rotated; privacy/ToS links present
+
+Rough effort for all P0 with existing baseline: **4–6 focused engineering days**
+(P0.2 is the largest at ~1.5–2 days; P0.5 ~1–1.5 days; the rest is
+configuration + drills).
