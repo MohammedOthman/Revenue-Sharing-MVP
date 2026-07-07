@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getApiError } from '../services/api';
 import '../styles/Login.css';
@@ -13,6 +13,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const notice = location.state?.message;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +38,7 @@ const Login = () => {
         <p className="subtitle">B2B SaaS Management System</p>
 
         <form onSubmit={handleSubmit}>
+          {notice && !error && <div className="notice-message">{notice}</div>}
           {error && <div className="error-message">{error}</div>}
 
           <div className="form-group">
@@ -67,6 +70,10 @@ const Login = () => {
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          <p style={{ marginTop: 14, textAlign: 'center' }}>
+            <Link to="/forgot-password">Forgot password?</Link>
+          </p>
         </form>
 
         {SHOW_DEMO && (

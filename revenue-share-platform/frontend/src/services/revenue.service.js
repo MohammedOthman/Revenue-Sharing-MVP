@@ -45,6 +45,11 @@ const revenueService = {
     const response = await api.get('/revenue/stats');
     return response.data.stats;
   },
+
+  exportCsv: async (params = {}) => {
+    const response = await api.get('/revenue/export', { params, responseType: 'blob' });
+    return response.data;
+  },
 };
 
 export default revenueService;

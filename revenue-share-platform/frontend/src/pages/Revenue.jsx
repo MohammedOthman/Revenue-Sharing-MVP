@@ -101,6 +101,22 @@ const Revenue = () => {
     }
   };
 
+  const handleExport = async () => {
+    try {
+      const blob = await revenueService.exportCsv();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'revenue-share-statement.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(getApiError(err, 'Failed to export statement'));
+    }
+  };
+
   const totalRevenue = revenueRecords.reduce((sum, r) => sum + Number(r.total_revenue || 0), 0);
   const pendingAmount = revenueRecords
     .filter((r) => r.status === 'pending')
@@ -115,9 +131,19 @@ const Revenue = () => {
     <div className="revenue-page">
       <div className="page-header">
         <h1>Revenue Management</h1>
-        <button className="btn-primary" onClick={handleOpenModal} disabled={contracts.length === 0}>
-          + Record Revenue
-        </button>
+        <div className="header-buttons">
+          <button
+            className="btn-secondary"
+            onClick={handleExport}
+            disabled={revenueRecords.length === 0}
+            title="Download a settlement statement CSV"
+          >
+            ⬇ Export CSV
+          </button>
+          <button className="btn-primary" onClick={handleOpenModal} disabled={contracts.length === 0}>
+            + Record Revenue
+          </button>
+        </div>
       </div>
 
       {error && <div className="error-message">{error}</div>}

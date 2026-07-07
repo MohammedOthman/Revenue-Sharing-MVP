@@ -36,6 +36,7 @@ const timeAgo = (dateString) => {
 const Dashboard = () => {
   const [overview, setOverview] = useState(null);
   const [activity, setActivity] = useState([]);
+  const [expiring, setExpiring] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -45,12 +46,14 @@ const Dashboard = () => {
 
   const loadDashboardData = async () => {
     try {
-      const [overviewData, activityData] = await Promise.all([
+      const [overviewData, activityData, expiringData] = await Promise.all([
         dashboardService.getOverview(),
         dashboardService.getRecentActivity(5).catch(() => []),
+        dashboardService.getExpiring(30).catch(() => null),
       ]);
       setOverview(overviewData);
       setActivity(activityData);
+      setExpiring(expiringData);
     } catch (err) {
       setError(getApiError(err, 'Failed to load dashboard data'));
     } finally {
@@ -146,6 +149,32 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {(expiring?.contracts?.length > 0 || expiring?.documents?.length > 0) && (
+        <div className="section renewal-radar">
+          <h2>⏰ Renewals &amp; Expirations (next {expiring.days} days)</h2>
+          <div className="activity-list">
+            {expiring.contracts.map((c) => (
+              <div className="activity-item" key={`c-${c.id}`}>
+                <span className="activity-icon">📄</span>
+                <span>
+                  Contract <Link to="/contracts">{c.title}</Link> with {c.partner_name || 'N/A'} ends{' '}
+                  {new Date(c.end_date).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+            {expiring.documents.map((d) => (
+              <div className="activity-item" key={`d-${d.id}`}>
+                <span className="activity-icon">⚖️</span>
+                <span>
+                  Document <Link to="/legal">{d.document_name}</Link> ({d.contract_title || 'N/A'}) expires{' '}
+                  {new Date(d.expiry_date).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="quick-actions">
         <h2>Quick Actions</h2>

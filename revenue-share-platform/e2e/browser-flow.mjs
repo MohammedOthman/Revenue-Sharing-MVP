@@ -6,7 +6,7 @@ let step = 0;
 const results = [];
 
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium' });
-const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, acceptDownloads: true });
 page.setDefaultTimeout(10000);
 
 const shot = async (name) => {
@@ -181,7 +181,96 @@ await check('dashboard totals and audit activity are real', async () => {
 });
 await shot('dashboard-final');
 
-// ---------- 8. Session behaviors ----------
+// ---------- 8. Renewal radar ----------
+await check('expiring contract appears on renewal radar', async () => {
+  await page.click('a.nav-item:has-text("Contracts")');
+  await page.waitForSelector('.contracts-page');
+  await page.click('button:has-text("+ Create Contract")');
+  await page.waitForSelector('.modal');
+  const soon = new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10);
+  await modalField('Partner').selectOption({ index: 1 });
+  await modalField('Contract Title').fill('Renewal Radar Test Agreement');
+  await modalField('Start Date').fill('2026-01-01');
+  await modalField('End Date (optional)').fill(soon);
+  await modalField('Revenue Share %').fill('10');
+  await modalField('Minimum Payout ($)').fill('0');
+  await modalField('Status').selectOption('active');
+  await page.click('.modal button:has-text("Create")');
+  await page.waitForSelector('.data-table tr:has-text("Renewal Radar Test Agreement")');
+
+  await page.click('a.nav-item:has-text("Dashboard")');
+  await page.waitForSelector('.renewal-radar');
+  const radar = await page.textContent('.renewal-radar');
+  if (!radar.includes('Renewal Radar Test Agreement')) throw new Error(`radar missing contract: ${radar}`);
+});
+await shot('renewal-radar');
+
+// ---------- 9. CSV export ----------
+await check('settlement CSV export downloads', async () => {
+  await page.click('a.nav-item:has-text("Revenue")');
+  await page.waitForSelector('.revenue-page');
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.click('button:has-text("Export CSV")'),
+  ]);
+  if (!/\.csv$/.test(download.suggestedFilename())) {
+    throw new Error(`unexpected filename: ${download.suggestedFilename()}`);
+  }
+});
+
+// ---------- 10. Team invite -> teammate activates account ----------
+let setupLink;
+await check('admin invites teammate and gets setup link', async () => {
+  await page.click('a.nav-item:has-text("Team")');
+  await page.waitForSelector('.data-table');
+  await page.click('button:has-text("+ Invite Teammate")');
+  await page.waitForSelector('.modal');
+  await modalField('Full Name').fill('Invited Analyst');
+  await modalField('Email').fill('analyst@reven.example');
+  await page.click('.modal button:has-text("Send Invitation")');
+  await page.waitForSelector('.modal textarea');
+  setupLink = await page.inputValue('.modal textarea');
+  if (!setupLink.includes('/reset-password?token=')) throw new Error(`bad setup link: ${setupLink}`);
+  await page.click('.modal button:has-text("Close")');
+  await page.waitForSelector('.data-table tr:has-text("analyst@reven.example")');
+});
+await shot('team-invited');
+
+await check('teammate sets password via link and logs in', async () => {
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(setupLink);
+  await page.waitForSelector('#password');
+  await page.fill('#password', 'AnalystPass2026');
+  await page.fill('#confirm', 'AnalystPass2026');
+  await page.click('.login-btn');
+  await page.waitForURL('**/login');
+  await page.fill('#email', 'analyst@reven.example');
+  await page.fill('#password', 'AnalystPass2026');
+  await page.click('button.login-btn');
+  await page.waitForSelector('.dashboard-header');
+  // Non-admin must not see the Team nav item.
+  const teamNav = await page.locator('a.nav-item:has-text("Team")').count();
+  if (teamNav !== 0) throw new Error('non-admin sees Team nav');
+});
+await shot('teammate-logged-in');
+
+await check('forgot-password page never reveals account existence', async () => {
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(`${BASE}/forgot-password`);
+  await page.fill('#email', 'ghost@nowhere.example');
+  await page.click('.login-btn');
+  await page.waitForSelector('text=/reset link is on its way/');
+});
+
+// ---------- 11. Session behaviors ----------
+await check('log back in as admin', async () => {
+  await page.goto(`${BASE}/login`);
+  await page.fill('#email', 'admin@reven.example');
+  await page.fill('#password', 'LaunchReady2026');
+  await page.click('button.login-btn');
+  await page.waitForSelector('.dashboard-header');
+});
+
 await check('deep-link refresh stays logged in', async () => {
   await page.goto(`${BASE}/partners`);
   await page.waitForSelector('.partners-page');

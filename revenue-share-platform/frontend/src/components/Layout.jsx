@@ -16,6 +16,7 @@ const Layout = () => {
     { path: '/revenue', label: 'Revenue', icon: '💰' },
     { path: '/kpis', label: 'KPIs', icon: '📈' },
     { path: '/legal', label: 'Legal Docs', icon: '⚖️' },
+    ...(user?.role === 'admin' ? [{ path: '/team', label: 'Team', icon: '👥' }] : []),
   ];
 
   const displayName = user?.fullName || user?.email || 'User';

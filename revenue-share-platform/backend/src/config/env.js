@@ -45,6 +45,11 @@ const env = {
   // user (who becomes admin). Further accounts are created by admins.
   allowOpenRegistration: bool(process.env.ALLOW_OPEN_REGISTRATION, false),
 
+  // Public URL of the app, used in password-reset/invite email links.
+  appBaseUrl: (process.env.APP_BASE_URL || '').replace(/\/$/, ''),
+  emailFrom: process.env.EMAIL_FROM || 'Reven <onboarding@resend.dev>',
+  resendApiKey: process.env.RESEND_API_KEY || '',
+
   rateLimitWindowMs: int(process.env.RATE_LIMIT_WINDOW_MS, 15 * 60 * 1000),
   rateLimitMax: int(process.env.RATE_LIMIT_MAX, 1000),
   authRateLimitMax: int(process.env.AUTH_RATE_LIMIT_MAX, 20),

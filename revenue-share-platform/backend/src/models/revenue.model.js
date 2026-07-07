@@ -46,6 +46,24 @@ export const getAllRevenueShares = async (filters = {}) => {
     paramCount++;
   }
 
+  if (filters.partnerId) {
+    query += ` AND c.partner_id = $${paramCount}`;
+    values.push(filters.partnerId);
+    paramCount++;
+  }
+
+  if (filters.from) {
+    query += ` AND r.period_start >= $${paramCount}`;
+    values.push(filters.from);
+    paramCount++;
+  }
+
+  if (filters.to) {
+    query += ` AND r.period_end <= $${paramCount}`;
+    values.push(filters.to);
+    paramCount++;
+  }
+
   query += ' ORDER BY r.period_end DESC';
   
   const result = await pool.query(query, values);

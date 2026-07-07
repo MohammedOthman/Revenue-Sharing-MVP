@@ -120,6 +120,18 @@ export const createTables = async () => {
       )
     `);
 
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS password_reset_tokens (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        token_hash VARCHAR(64) NOT NULL,
+        purpose VARCHAR(20) NOT NULL DEFAULT 'reset',
+        expires_at TIMESTAMP NOT NULL,
+        used_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Columns added after the original release (no-ops on fresh installs).
     await client.query(`ALTER TABLE legal_documents ADD COLUMN IF NOT EXISTS expiry_date DATE`);
     await client.query(`ALTER TABLE legal_documents ADD COLUMN IF NOT EXISTS notes TEXT`);
@@ -184,6 +196,9 @@ export const createTables = async () => {
     await client.query(`CREATE INDEX IF NOT EXISTS idx_legal_documents_contract_id ON legal_documents(contract_id)`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_partners_status ON partners(status)`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC)`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_prt_token_hash ON password_reset_tokens(token_hash)`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_contracts_end_date ON contracts(end_date)`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_legal_documents_expiry ON legal_documents(expiry_date)`);
 
     console.log('Database schema is up to date');
   } catch (error) {

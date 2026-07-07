@@ -145,6 +145,41 @@ export const deleteRevenueShareController = async (req, res) => {
   }
 };
 
+const csvEscape = (value) => {
+  const s = value === null || value === undefined ? '' : String(value);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+
+// Settlement statement export — the sheet you hand a partner when they ask
+// "show me how you got this number."
+export const exportRevenueSharesController = async (req, res) => {
+  try {
+    const { status, contractId, partnerId, from, to } = req.query;
+    const rows = await getAllRevenueShares({ status, contractId, partnerId, from, to });
+
+    const header = [
+      'Partner', 'Contract', 'Period Start', 'Period End',
+      'Total Revenue', 'Share %', 'Share Amount', 'Status', 'Paid At', 'Notes',
+    ];
+    const lines = rows.map((r) => [
+      r.partner_name, r.contract_title,
+      r.period_start ? String(r.period_start).slice(0, 10) : (r.period_start ?? ''),
+      r.period_end ? String(r.period_end).slice(0, 10) : (r.period_end ?? ''),
+      r.total_revenue, r.share_percentage, r.share_amount, r.status,
+      r.paid_at ? new Date(r.paid_at).toISOString().slice(0, 10) : '',
+      r.notes,
+    ].map(csvEscape).join(','));
+
+    const csv = [header.join(','), ...lines].join('\n');
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="revenue-share-statement.csv"');
+    res.send(csv);
+  } catch (error) {
+    console.error('Export revenue shares error:', error);
+    res.status(500).json({ error: 'Failed to export revenue shares' });
+  }
+};
+
 export const getRevenueStatsController = async (req, res) => {
   try {
     const stats = await getRevenueStats();

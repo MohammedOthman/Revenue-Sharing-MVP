@@ -506,3 +506,66 @@ body {
   margin-top: 4px;
   font-size: 12px;
 }
+
+.notice-message {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.renewal-radar {
+  margin-top: 20px;
+}
+
+/* --- Mobile pass: keep the core flows usable at ~375px --- */
+@media (max-width: 768px) {
+  .stats-grid,
+  .summary-cards,
+  .dashboard-sections,
+  .kpis-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .header-buttons {
+    flex-wrap: wrap;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    min-width: 640px;
+  }
+
+  .modal {
+    width: 92vw !important;
+    max-width: 92vw !important;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}

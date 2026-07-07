@@ -266,6 +266,96 @@ test('mutations are recorded in the audit log', { skip: !dbAvailable }, async ()
   assert.equal(partnerCreate.user_email, 'founder@test.example');
 });
 
+test('invite -> set password -> login flow (email unconfigured returns setup link)', { skip: !dbAvailable }, async () => {
+  const invited = await api('POST', '/api/auth/invite', {
+    token: state.adminToken,
+    body: { email: 'teammate@test.example', fullName: 'Teammate' },
+  });
+  assert.equal(invited.status, 201);
+  assert.equal(invited.data.emailDelivered, false);
+  assert.ok(invited.data.setupLink, 'expected setupLink when email is not configured');
+
+  const tokenParam = new URL(invited.data.setupLink).searchParams.get('token');
+  assert.ok(tokenParam);
+
+  const check = await api('GET', `/api/auth/reset-token/${tokenParam}`);
+  assert.equal(check.status, 200);
+  assert.equal(check.data.valid, true);
+  assert.equal(check.data.purpose, 'invite');
+
+  const weak = await api('POST', '/api/auth/reset-password', {
+    body: { token: tokenParam, password: 'short' },
+  });
+  assert.equal(weak.status, 400);
+
+  const set = await api('POST', '/api/auth/reset-password', {
+    body: { token: tokenParam, password: 'chosen-by-user-9' },
+  });
+  assert.equal(set.status, 200);
+
+  const login = await api('POST', '/api/auth/login', {
+    body: { email: 'teammate@test.example', password: 'chosen-by-user-9' },
+  });
+  assert.equal(login.status, 200);
+
+  // Single-use: the same token cannot be replayed.
+  const replay = await api('POST', '/api/auth/reset-password', {
+    body: { token: tokenParam, password: 'another-password-1' },
+  });
+  assert.equal(replay.status, 400);
+
+  // Non-admins cannot invite.
+  const forbidden = await api('POST', '/api/auth/invite', {
+    token: state.userToken,
+    body: { email: 'nope@test.example', fullName: 'Nope' },
+  });
+  assert.equal(forbidden.status, 403);
+});
+
+test('forgot-password never reveals whether an account exists', { skip: !dbAvailable }, async () => {
+  const known = await api('POST', '/api/auth/forgot-password', { body: { email: 'founder@test.example' } });
+  const unknown = await api('POST', '/api/auth/forgot-password', { body: { email: 'ghost@test.example' } });
+  assert.equal(known.status, 200);
+  assert.equal(unknown.status, 200);
+  assert.deepEqual(known.data, unknown.data);
+});
+
+test('expiring contracts/documents surface on the renewal radar', { skip: !dbAvailable }, async () => {
+  const soon = new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10);
+  const contract = await api('POST', '/api/contracts', {
+    token: state.adminToken,
+    body: {
+      partnerId: state.partnerId, title: 'Expiring Soon Agreement', startDate: '2026-01-01',
+      endDate: soon, revenueSharePercentage: 10, status: 'active',
+    },
+  });
+  assert.equal(contract.status, 201);
+
+  const doc = await api('POST', '/api/legal-documents', {
+    token: state.adminToken,
+    body: { contractId: state.contractId, title: 'Expiring NDA', type: 'nda', expiryDate: soon },
+  });
+  assert.equal(doc.status, 201);
+
+  const { status, data } = await api('GET', '/api/dashboard/expiring?days=30', { token: state.adminToken });
+  assert.equal(status, 200);
+  assert.ok(data.expiring.contracts.some((c) => c.title === 'Expiring Soon Agreement'));
+  assert.ok(data.expiring.documents.some((d) => d.document_name === 'Expiring NDA'));
+});
+
+test('settlement CSV export returns correct rows', { skip: !dbAvailable }, async () => {
+  const res = await fetch(`${baseUrl}/api/revenue/export`, {
+    headers: { Authorization: `Bearer ${state.adminToken}` },
+  });
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get('content-type'), /text\/csv/);
+  const csv = await res.text();
+  const lines = csv.split('\n');
+  assert.equal(lines[0].split(',')[0], 'Partner');
+  assert.ok(csv.includes('Test Agreement'));
+  assert.ok(csv.includes('1500'));
+});
+
 test('unknown API routes return JSON 404', { skip: !dbAvailable }, async () => {
   const { status, data } = await api('GET', '/api/nope', { token: state.adminToken });
   assert.equal(status, 404);

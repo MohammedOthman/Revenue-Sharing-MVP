@@ -54,3 +54,11 @@ export const updateUser = async (id, updates) => {
 export const deleteUser = async (id) => {
   await pool.query('DELETE FROM users WHERE id = $1', [id]);
 };
+
+export const updateUserPassword = async (id, password) => {
+  const passwordHash = await hashPassword(password);
+  await pool.query(
+    'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+    [passwordHash, id]
+  );
+};

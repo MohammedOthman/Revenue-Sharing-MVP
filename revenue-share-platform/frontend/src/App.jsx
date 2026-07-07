@@ -4,6 +4,9 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import Team from './pages/Team';
 import Dashboard from './pages/Dashboard';
 import Partners from './pages/Partners';
 import Contracts from './pages/Contracts';
@@ -27,6 +30,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route
               path="/"
               element={
@@ -41,6 +46,7 @@ function App() {
               <Route path="revenue" element={<Revenue />} />
               <Route path="kpis" element={<KPIs />} />
               <Route path="legal" element={<LegalDocuments />} />
+              <Route path="team" element={<Team />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

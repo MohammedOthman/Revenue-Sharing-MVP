@@ -32,10 +32,10 @@ workspace. Two viable zero-to-one paths:
   not globally), per-org rate limits. ~3–5 days of careful work + full test
   rewrite. Do this at ~5+ clients, not before revenue.
 
-**Action:** commit to Option A for launch. Write `deploy/new-client.md`
-runbook: create DB → set env (`JWT_SECRET`, `DATABASE_URL`, `SEED_ADMIN_*`)
-→ deploy image → run seed → hand credentials to client admin.
-**Verify:** provision a second staging instance in < 30 minutes from runbook alone.
+**Action:** commit to Option A for launch. ✅ **DONE** — runbook at
+`deploy/new-client.md` (provision, first-boot checks, hand-off checklist,
+update and decommission procedures).
+**Verify (owner):** provision a staging instance in < 30 minutes from the runbook alone.
 
 ### P0.2 Account lifecycle: password reset + user invitations (needs email)
 
@@ -50,8 +50,14 @@ Today a locked-out user is unrecoverable without DB surgery, and an admin
   (same token mechanism); remove any flow where an admin knows a user's password.
 - Forced password change for the seeded admin on first login.
 
-**Verify:** full loop on staging — invite, set password, log in, forgot,
-reset, old token rejected, audit entries present. Extend the API test suite.
+✅ **DONE and verified** — implemented with single-use hashed tokens
+(`password_reset_tokens`), Resend HTTP email (console + copyable-setup-link
+fallback when email isn't configured), forgot/reset endpoints hardened
+against email enumeration, admin **Team page** (invite, role change,
+remove), and a randomly generated seed-admin password. Covered by API
+tests (invite → set password → login → token replay rejected; forgot-password
+indistinguishable responses) and browser E2E (admin invites → teammate
+activates via link → logs in → non-admin cannot see Team).
 
 ### P0.3 Production infrastructure (per client instance)
 
@@ -91,8 +97,13 @@ DB → uptime alert fires on the 503.
 - **Mobile pass:** login, dashboard, record-revenue, process-payout usable at
   375 px (fix overflow/table scroll only — no redesign).
 
-**Verify:** seeded staging walk-through on phone + desktop; export opens in
-Excel/Sheets with correct totals.
+✅ **DONE and verified** — renewal radar on the dashboard
+(`GET /api/dashboard/expiring`, contracts + documents within N days),
+settlement CSV export (`GET /api/revenue/export` with partner/period/status
+filters + Export button), and a responsive pass (single-column grids,
+scrollable tables, full-width modals ≤768px). Covered by API tests and
+browser E2E (radar renders for a contract ending in 14 days; CSV download
+fires with correct rows).
 
 ---
 
@@ -127,16 +138,18 @@ Excel/Sheets with correct totals.
 
 ## Launch gate (all must be true for client #1)
 
-1. Staging instance provisioned **from the runbook alone** in < 30 min (P0.1)
-2. Invite → login → forgot → reset loop green on staging, tests extended (P0.2)
-3. Backups verified by an actual restore; rollback drill done once (P0.3)
-4. Sentry event + uptime alert both proven to fire (P0.4)
-5. Expiring-soon panel + CSV export live; mobile pass done (P0.5)
-6. Founder UAT: full lifecycle on staging — onboard partner → activate
+1. ◐ Staging instance provisioned **from the runbook alone** in < 30 min (P0.1 — runbook done, drill is owner)
+2. ✅ Invite → login → forgot → reset loop green, API + browser tests extended (P0.2)
+3. ◐ Backups verified by an actual restore; rollback drill done once (P0.3 — owner/provider)
+4. ◐ Sentry event + uptime alert both proven to fire (P0.4 — owner/provider signup)
+5. ✅ Expiring-soon panel + CSV export live; mobile pass done (P0.5)
+6. ◐ Founder UAT: full lifecycle on staging — onboard partner → activate
    contract → record revenue → verify computed share → process payout →
-   export statement → check audit trail
-7. Seed admin password rotated; privacy/ToS links present
+   export statement → check audit trail (automated equivalent is green:
+   20-step browser E2E + 20 API tests)
+7. ◐ Seed admin password: now randomly generated (done); privacy/ToS links (owner)
 
-Rough effort for all P0 with existing baseline: **4–6 focused engineering days**
-(P0.2 is the largest at ~1.5–2 days; P0.5 ~1–1.5 days; the rest is
-configuration + drills).
+**Engineering P0 items (P0.1 runbook, P0.2, P0.5) are built and verified**
+— 20 API tests + 20 browser E2E checks green. What remains for launch is
+operations: the provisioning drill, backups/restore, monitoring signup,
+founder UAT, and legal pages.

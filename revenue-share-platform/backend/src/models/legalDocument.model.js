@@ -87,6 +87,19 @@ export const deleteLegalDocument = async (id) => {
   await pool.query('DELETE FROM legal_documents WHERE id = $1', [id]);
 };
 
+export const getExpiringDocuments = async (days = 30) => {
+  const result = await pool.query(`
+    SELECT d.id, d.document_name, d.document_type, d.expiry_date, d.status, c.title as contract_title
+    FROM legal_documents d
+    LEFT JOIN contracts c ON d.contract_id = c.id
+    WHERE d.expiry_date IS NOT NULL
+      AND d.status <> 'expired'
+      AND d.expiry_date BETWEEN CURRENT_DATE AND CURRENT_DATE + ($1 || ' days')::interval
+    ORDER BY d.expiry_date ASC
+  `, [String(days)]);
+  return result.rows;
+};
+
 export const getLegalDocumentStats = async () => {
   const result = await pool.query(`
     SELECT 

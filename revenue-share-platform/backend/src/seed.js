@@ -2,6 +2,7 @@
 //   node src/seed.js            -> admin account only
 //   node src/seed.js --demo     -> admin account + demo partners/contracts/revenue
 // Idempotent: safe to run repeatedly.
+import crypto from 'crypto';
 import { validateEnv } from './config/env.js';
 
 validateEnv();
@@ -11,7 +12,9 @@ const { createTables } = await import('./models/schema.js');
 const { hashPassword } = await import('./utils/password.js');
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@example.com';
-const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'password123';
+// Never default to a known password: generate one and print it once.
+const GENERATED_PASSWORD = crypto.randomBytes(9).toString('base64url');
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || GENERATED_PASSWORD;
 const ADMIN_NAME = process.env.SEED_ADMIN_NAME || 'Platform Admin';
 const withDemo = process.argv.includes('--demo');
 
@@ -47,9 +50,9 @@ const run = async () => {
 
   if (!process.env.SEED_ADMIN_PASSWORD) {
     console.warn(
-      `WARNING: using default admin credentials (${ADMIN_EMAIL} / ${ADMIN_PASSWORD}). ` +
-        'Set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD for anything beyond a local demo, ' +
-        'and change the password after first login.'
+      `NOTE: SEED_ADMIN_PASSWORD not set — generated a one-time password for ${ADMIN_EMAIL}:\n` +
+        `    ${ADMIN_PASSWORD}\n` +
+        'Store it now (it is not saved anywhere) and change it after first login.'
     );
   }
 

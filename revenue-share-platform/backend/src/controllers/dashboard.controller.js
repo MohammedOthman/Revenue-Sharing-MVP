@@ -1,8 +1,8 @@
 import { getPartnerStats } from '../models/partner.model.js';
-import { getContractStats } from '../models/contract.model.js';
+import { getContractStats, getExpiringContracts } from '../models/contract.model.js';
 import { getRevenueStats, getRevenueByPeriod, getTopPartners } from '../models/revenue.model.js';
 import { getKPIStats } from '../models/kpi.model.js';
-import { getLegalDocumentStats } from '../models/legalDocument.model.js';
+import { getLegalDocumentStats, getExpiringDocuments } from '../models/legalDocument.model.js';
 import { getRecentActivity } from '../models/audit.model.js';
 
 const num = (value) => {
@@ -96,6 +96,21 @@ export const getContractStatusBreakdown = async (req, res) => {
   } catch (error) {
     console.error('Get contract status breakdown error:', error);
     res.status(500).json({ error: 'Failed to get contract status breakdown' });
+  }
+};
+
+// Renewal radar: contracts and documents approaching their end/expiry date.
+export const getExpiringController = async (req, res) => {
+  try {
+    const days = Math.min(parseInt(req.query.days, 10) || 30, 365);
+    const [contracts, documents] = await Promise.all([
+      getExpiringContracts(days),
+      getExpiringDocuments(days),
+    ]);
+    res.json({ expiring: { days, contracts, documents } });
+  } catch (error) {
+    console.error('Get expiring error:', error);
+    res.status(500).json({ error: 'Failed to get expiring items' });
   }
 };
 

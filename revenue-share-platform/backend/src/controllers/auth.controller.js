@@ -1,11 +1,16 @@
+import crypto from 'crypto';
 import {
   createUser, findUserByEmail, findUserById, getAllUsers,
-  updateUser, deleteUser, countUsers,
+  updateUser, deleteUser, countUsers, updateUserPassword,
 } from '../models/user.model.js';
+import { createResetToken, findValidToken, markTokenUsed } from '../models/passwordReset.model.js';
 import { generateToken } from '../utils/jwt.js';
 import { comparePassword } from '../utils/password.js';
+import { sendEmail, isEmailConfigured } from '../utils/mailer.js';
 import { toSnakeCaseKeys } from '../utils/normalize.js';
 import env from '../config/env.js';
+
+const appUrl = (req) => env.appBaseUrl || `${req.protocol}://${req.get('host')}`;
 
 export const register = async (req, res) => {
   try {
@@ -70,6 +75,103 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Failed to login' });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await findUserByEmail(email);
+
+    // Always 200 with the same message — never reveal whether an email exists.
+    if (user) {
+      const token = await createResetToken(user.id, 'reset', 60);
+      const link = `${appUrl(req)}/reset-password?token=${token}`;
+      await sendEmail({
+        to: user.email,
+        subject: 'Reset your Reven password',
+        text: `Hi ${user.full_name},\n\nReset your password using this link (valid for 1 hour):\n${link}\n\nIf you didn't request this, you can ignore this email.`,
+      }).catch((err) => console.error('Password reset email failed:', err.message));
+    }
+
+    res.json({ message: 'If an account exists for that email, a reset link has been sent.' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ error: 'Failed to process request' });
+  }
+};
+
+export const checkResetToken = async (req, res) => {
+  try {
+    const record = await findValidToken(req.params.token);
+    res.json({ valid: Boolean(record), purpose: record?.purpose || null });
+  } catch (error) {
+    console.error('Check reset token error:', error);
+    res.status(500).json({ error: 'Failed to check token' });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    const record = await findValidToken(token);
+
+    if (!record) {
+      return res.status(400).json({ error: 'This link is invalid or has expired. Request a new one.' });
+    }
+
+    await updateUserPassword(record.user_id, password);
+    await markTokenUsed(record.id);
+
+    res.json({ message: 'Password set successfully. You can now log in.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Failed to reset password' });
+  }
+};
+
+// Admin-only: create a teammate account and send a set-password link.
+// No one — including the admin — ever knows the user's password.
+export const inviteUser = async (req, res) => {
+  try {
+    const { email, fullName } = req.body;
+    const role = req.body.role === 'admin' ? 'admin' : 'user';
+
+    const existing = await findUserByEmail(email);
+    if (existing) {
+      return res.status(409).json({ error: 'A user with this email already exists' });
+    }
+
+    const randomPassword = crypto.randomBytes(24).toString('hex');
+    const user = await createUser(email, randomPassword, fullName, role);
+    const token = await createResetToken(user.id, 'invite', 72 * 60);
+    const setupLink = `${appUrl(req)}/reset-password?token=${token}&welcome=1`;
+
+    let emailDelivered = false;
+    try {
+      const result = await sendEmail({
+        to: email,
+        subject: `You've been invited to Reven`,
+        text: `Hi ${fullName},\n\n${req.user.email} invited you to the Reven partner platform.\nSet your password and log in here (link valid for 72 hours):\n${setupLink}`,
+      });
+      emailDelivered = result.delivered;
+    } catch (err) {
+      console.error('Invite email failed:', err.message);
+    }
+
+    res.status(201).json({
+      message: emailDelivered
+        ? 'Invitation sent by email'
+        : 'User created. Email is not configured — share the setup link below manually.',
+      user: { id: user.id, email: user.email, fullName: user.full_name, role: user.role },
+      emailDelivered,
+      // Safe to return to the inviting admin; it's how they hand off access
+      // when no email service is configured.
+      ...(emailDelivered ? {} : { setupLink }),
+    });
+  } catch (error) {
+    console.error('Invite user error:', error);
+    res.status(500).json({ error: 'Failed to invite user' });
   }
 };
 

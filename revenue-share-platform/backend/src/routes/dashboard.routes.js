@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   getDashboardOverview, getRevenueTrends, getTopPerformingPartners,
-  getContractStatusBreakdown, getRecentActivityController,
+  getContractStatusBreakdown, getRecentActivityController, getExpiringController,
 } from '../controllers/dashboard.controller.js';
 import { authMiddleware } from '../middleware/auth.js';
 
@@ -13,6 +13,7 @@ router.get('/overview', getDashboardOverview);
 router.get('/revenue-trends', getRevenueTrends);
 router.get('/top-partners', getTopPerformingPartners);
 router.get('/recent-activity', getRecentActivityController);
+router.get('/expiring', getExpiringController);
 
 // Aliases used by the web client.
 router.get('/analytics/trends', getRevenueTrends);

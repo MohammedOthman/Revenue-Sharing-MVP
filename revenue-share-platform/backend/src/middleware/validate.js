@@ -29,6 +29,22 @@ export const loginRules = [
   body('password').notEmpty().withMessage('Password is required'),
 ];
 
+export const forgotPasswordRules = [
+  body('email').isEmail().withMessage('A valid email is required').normalizeEmail(),
+];
+
+export const resetPasswordRules = [
+  body('token').isLength({ min: 32, max: 128 }).withMessage('A valid token is required'),
+  body('password')
+    .isLength({ min: PASSWORD_MIN_LENGTH })
+    .withMessage(`Password must be at least ${PASSWORD_MIN_LENGTH} characters long`),
+];
+
+export const inviteRules = [
+  body('email').isEmail().withMessage('A valid email is required').normalizeEmail(),
+  body('fullName').trim().isLength({ min: 1, max: 255 }).withMessage('Full name is required'),
+];
+
 export const partnerRules = [
   body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Partner name is required'),
   body('email').isEmail().withMessage('A valid partner email is required').normalizeEmail(),

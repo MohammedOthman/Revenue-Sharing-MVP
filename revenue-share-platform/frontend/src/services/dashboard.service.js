@@ -21,6 +21,11 @@ const dashboardService = {
     return response.data.contractStatus;
   },
 
+  getExpiring: async (days = 30) => {
+    const response = await api.get('/dashboard/expiring', { params: { days } });
+    return response.data.expiring;
+  },
+
   getRecentActivity: async (limit = 10) => {
     const response = await api.get('/dashboard/recent-activity', { params: { limit } });
     return response.data.activity;
