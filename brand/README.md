@@ -16,7 +16,7 @@ across the pitch deck, product UI, and any surface the brand appears on.
 | [`tokens/design-tokens.json`](tokens/design-tokens.json) | Canonical machine-readable tokens (color, type, layout, motif). |
 | [`tokens/reven-tokens.css`](tokens/reven-tokens.css) | CSS custom properties (`:root { --reven-* }`) — drop into any stylesheet. |
 | [`tokens/reven-tokens.js`](tokens/reven-tokens.js) | ESM export for React / Vite (`import { color, font } from ...`). |
-| [`assets/logo/`](assets/logo/) | **Transparent, ready-to-use wordmark PNGs** — see below. |
+| [`assets/logo/`](assets/logo/) | **Transparent, ready-to-use wordmark PNG** — see below. |
 | [`assets/pages/`](assets/pages/) | Full render of every guideline page, named by section. |
 
 ## The system in one screen
@@ -39,7 +39,6 @@ the native artwork embedded in the master PDF — not screenshots or traces.
 | File | Mark | Use on |
 |---|---|---|
 | [`assets/logo/reven-wordmark.png`](assets/logo/reven-wordmark.png) | Ink wordmark (`#0F1629`) + two-tone Accent Blue chip + blue period | Light surfaces — Canvas `#FBFAF7`, Card White, or a photo with a ≥40% navy scrim |
-| [`assets/logo/reven-wordmark-reversed.png`](assets/logo/reven-wordmark-reversed.png) | White wordmark + Accent Blue chip + blue period | Deep Navy `#0F1629` / dark surfaces |
 
 - Transparent RGBA PNG, 933×241, tightly trimmed. Add your own clearspace
   (**≥ the accent chip's height** on every side — Guidelines §04) via layout/CSS.
