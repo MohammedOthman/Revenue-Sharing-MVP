@@ -1,0 +1,98 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "Reven Brand System design tokens. Source of truth: brand/source/Reven_Brand_Guidelines.pdf (v1.0, July 2026). Do not add a value here that is not defined in the brand guidelines — extend the guidelines first.",
+  "meta": {
+    "brand": "Reven",
+    "product": "Partner Revenue OS",
+    "version": "1.0",
+    "date": "2026-07",
+    "usage": "Internal use",
+    "rule": "Blue is the only saturated hue in the system. Everything else is navy, cream, or gray."
+  },
+  "color": {
+    "primary": {
+      "ink":        { "value": "#0F1629", "role": "Primary text & logo" },
+      "canvas":     { "value": "#FBFAF7", "role": "Default bg, never pure white" },
+      "cardWhite":  { "value": "#FFFFFF", "role": "Elevated surfaces on canvas" },
+      "accentBlue": { "value": "#2C5BFF", "role": "The only saturated hue — signal" },
+      "accentDeep": { "value": "#1E47E0", "role": "Gradient partner for Accent Blue" },
+      "accentPale": { "value": "#8DA4FF", "valueAlt": "#AEC5FF", "role": "Headline highlights on dark panels" }
+    },
+    "muted": {
+      "bodyCopy":   { "value": "#5B6172", "role": "Body copy" },
+      "captions":   { "value": "#6B7180", "role": "Captions" },
+      "tertiary":   { "value": "#8A8F9C", "role": "Tertiary / mono labels" },
+      "microLabel": { "value": "#9AA3B5", "role": "Micro-labels" }
+    },
+    "status": {
+      "$comment": "Use sparingly, never as a primary color.",
+      "caution":  { "value": "#C98A1B", "role": "Caution / measure" },
+      "alert":    { "value": "#C0392B", "role": "Alert / dispute" },
+      "positive": { "value": "#1F8A5B", "role": "Positive / live" }
+    }
+  },
+  "background": {
+    "flatCanvas": { "value": "#FBFAF7", "type": "solid", "use": "The default. ~80% of slides." },
+    "radialWash": { "value": "radial-gradient(#F0EAFF, #FBFAF7)", "stops": ["#F0EAFF", "#FBFAF7"], "type": "radial-gradient", "use": "Cover and 1–2 transitions. ~15%." },
+    "deepNavy":   { "value": "#0F1629", "gradient": ["#1F1740", "#0F1629"], "type": "solid-or-gradient", "use": "Gravity slides for emphasis. ~5%." }
+  },
+  "typography": {
+    "display": {
+      "family": "Sora",
+      "weights": [700, 800],
+      "letterSpacing": "-0.02em to -0.035em",
+      "use": "Headlines, stat numbers, nameplates only."
+    },
+    "body": {
+      "family": "Manrope",
+      "weights": [400, 500, 600, 700],
+      "letterSpacing": "normal",
+      "use": "All reading copy, pill labels, quoted lines."
+    },
+    "label": {
+      "family": "IBM Plex Mono",
+      "weights": [400, 500, 600],
+      "letterSpacing": "0.08em to 0.24em",
+      "textTransform": "uppercase",
+      "use": "Every eyebrow, index and footer meta. Never body copy."
+    }
+  },
+  "logo": {
+    "wordmark": { "typeface": "Sora", "weight": "700/800", "color": "#0F1629" },
+    "accentChip": { "color": "#2C5BFF", "note": "Two-tone Accent Blue block breaking the R's counter and the foot of the n. The only permitted color break in the mark." },
+    "period": { "color": "#2C5BFF", "note": "The trailing period in 'Reven.' always renders in Accent Blue." },
+    "minSize": { "screen": "120px", "print": "25mm" },
+    "clearspace": "≥ the accent chip's height on every side",
+    "reversedScrim": "navy scrim ≥40% opacity over photography",
+    "rule": "Exactly one wordmark. No condensed cut, no icon-only mark, no alternate lockups."
+  },
+  "layout": {
+    "margin": {
+      "top": "78–84px",
+      "bottom": "104–112px",
+      "side": "104px"
+    },
+    "split": {
+      "primaryContent": "55–60%",
+      "supportingPanel": "40–45%",
+      "rule": "Body is asymmetric — never an even 50/50 split."
+    },
+    "footerInset": "46px",
+    "headline": "max-width · text-wrap: balance · exactly one accent clause"
+  },
+  "motif": {
+    "name": "node-and-flow constellation",
+    "stroke": "1–1.4px",
+    "opacity": "0.15–0.55",
+    "color": "#2C5BFF",
+    "where": "Dark-navy or gradient-tinted slides only — never on flat cream.",
+    "emphasisNode": "At most one glowing node per slide."
+  },
+  "radius": {
+    "$comment": "Observed from the guideline components (cards, pills, panels). Provided for implementation convenience; tune per surface.",
+    "card": "16px",
+    "panel": "20px",
+    "pill": "999px",
+    "chip": "8px"
+  }
+}
