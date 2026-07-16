@@ -100,8 +100,9 @@ one to re-examine. [A→validate]
 
 The prior card had a single SME rung and then nothing until SAR 67K. Three failures follow
 from that shape. A 10-partner account that outgrows Start faces a 37× renewal ask, which in
-practice means churn or a stalled account, since procurement psychology treats anything past
-~3× as a new purchase decision, not a renewal. The strategy's own kill metric for this tier
+practice means churn or a stalled account: an uplift that far past its anchor re-opens the
+purchase decision instead of renewing it [A — practitioner heuristic; no KSA sample behind
+the ~3× line]. The strategy's own kill metric for this tier
 is land-to-expand, which cannot be instrumented when there is nothing adjacent to expand
 into. And the riyal map's tail segment (1,500–3,500 accounts, SAR 30–60K willingness-to-pay
 [derived]) had no purchasable SKU: too big for Start, below the sales floor.
@@ -152,7 +153,7 @@ the first beta cohort]:
 
 Between 25 and 75 partners, an account could sit in Scale-with-blocks (SAR 14–21K/yr,
 zero-touch) or in Growth (SAR 96K+, human motion). The same partner count, up to a 4.6×
-price difference. That is not a leak; it is the price of the Control package: statements,
+price difference. The difference is the price of the Control package: statements,
 disputes, the finance evidence pack, a named CSM, and included compliance. An account whose
 finance team has not yet felt month-end pain should stay in Scale, cheaply, until the pain
 arrives — the product's statement-day friction grows with partner count, so the fence
@@ -318,13 +319,14 @@ structurally hard — splitting one partner into three fails against cross-tenan
 archiving a partner that still transacts fails because status is derived from events, not
 flags. Billing mechanics: band set at signing from trailing data, auto step-up after two
 consecutive months above band (pro-rated), step-down only at renewal; self-serve rungs
-soft-block at cap with an upgrade prompt, never a surprise charge. A system-of-record
-vendor whose own invoice is un-disputable is running its best product demo every month.
+soft-block at cap with an upgrade prompt, never a surprise charge. An invoice the customer
+can re-derive from their own ledger data is itself monthly evidence for the
+system-of-record claim.
 
 **5 · Published SAR 50 → anchor contamination risk → surface separation.** The wedge and
 the SAR 600K conversation must never share a pricing surface: separate pages, no public
 comparison table spanning both motions, "Reven Start" branding kept distinct from the
-enterprise materials. The tripwire (§3) is measured in win/loss, not vibes.
+enterprise materials. The tripwire (§3) is measured in win/loss records.
 
 **6 · Wave 24 passed → compliance premium half-life → charge now, re-underwrite annually.**
 The mandate universalized structured invoicing on 30 Jun 2026, so the GTM hook flips from
@@ -343,15 +345,16 @@ services organization should peak at "enablement," never "delivery."
 **8 · Two-motion split → hiring order → who not to hire.** The floor decides the org chart
 before revenue does: no field AEs until ≥6 quarters of core-ICP pipeline exist above the
 floor; solutions engineering before account executives (red team); the self-serve ladder
-hires a growth engineer, not a support team. Mixing motions is a hiring error dressed as a
-pricing decision, and it burns Pillar-3 salary months that the 2M SAR round cannot replace.
+hires a growth engineer, not a support team. A mixed motion shows up first as a hiring
+mistake: field AEs recruited for sub-floor pipeline burn Pillar-3 salary months the 2M SAR
+round cannot replace.
 
 **9 · Repricing policy set at deal one → renewal trust → the neutrality moat.** Contracts
 carry auto-renew with uplift = max(CPI, 3–5%) from the first signature; self-serve prices
 are protected 12 months, then change on 60 days' notice; founding logos hold −15% for three
 years. A record-custodian is held to a higher fairness standard than a tool vendor — a
 surprise repricing would damage the neutrality story that *is* the positioning, so pricing
-behavior is part of the moat, not adjacent to it.
+behavior is part of the moat itself.
 
 **10 · Revenue mix → the multiple → who buys the story.** Subscription + data must dominate
 gross profit; rail fees and services report as separate lines; the % refusal keeps the
@@ -368,8 +371,8 @@ KSA-specific — the UAE has no ZATCA-clearance equivalent — so GCC ACVs land 
 **12 · Rake refusal → Sharia posture → beachhead fit.** Refusing a percentage of the
 partner's money is also the clean posture with Islamic-finance buyers in the insurance
 beachhead; when Orchestrate bps eventually arrive, the Ju'ala fee-for-result structure gets
-a fatwa *before* any marketing says "Sharia-compliant." Sequence violations here are
-reputational, not just commercial.
+a fatwa *before* any marketing says "Sharia-compliant." A sequence violation here costs
+credibility with the insurance and Islamic-finance buyers the beachhead depends on.
 
 ---
 
@@ -388,7 +391,7 @@ The phase discipline (README) binds pricing: nothing is sold ahead of its gate.
 Self-serve launching *after* the sales motion is deliberate, and unusual: the funded team
 (one support specialist) cannot absorb self-serve ticket load until automation proves out,
 and the design partners are worth more as references than a thousand SAR 50 logos are as
-revenue. PLG here is a second act, not the opening.
+revenue.
 
 ---
 
@@ -425,7 +428,7 @@ Grandfathering rules from chain 9 apply to every contract from the first signatu
 ## 7. Validation: revealed evidence only, with pass thresholds and consequences
 
 Surveys and Van Westendorp are hypothesis generators, not validation (red team, accepted).
-Only revealed behavior — signed pilots, conversions, expansions, dinar-denominated
+Only revealed behavior — signed pilots, conversions, expansions, riyal-denominated
 objections — moves a price. Owner for the program: CRO; COO audits the GM claims.
 
 | # | Assumption at risk | Test | Pass threshold | If it fails |

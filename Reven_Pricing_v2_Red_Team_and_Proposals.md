@@ -16,7 +16,8 @@ Five findings, ranked by money at stake:
 
 1. **The headline pricing metric under-prices the #1 ICP by roughly 2–5×.** Active-partner
    bands charge for counterparty count, but the beachhead (insurers and aggregators) has
-   few counterparties and enormous governed flow. The metric is right for the mid-market
+   few counterparties and governed flow in the tens to hundreds of millions of riyals per
+   logo [derived, riyal map §1.2]. The metric is right for the mid-market
    and wrong for the exact segment the riyal map ranks first. Fix now, not in 2027 (P2).
 2. **The sales-assisted book sells tomorrow's product at today's price.** Every 2026
    contract spans the Capture→Settle value discontinuity. Flat annual pricing (and v1's
@@ -55,7 +56,7 @@ Each: the claim, the mechanism and evidence, the magnitude, and the verdict.
 ### 1.1 Partner bands price the wrong side of variance (v1 §3 deferred this; wrongly)
 
 Value tracks money-at-stake and dispute intensity, not counterparty count. Two accounts
-with 40 active partners: a franchisor settling SAR 15M of royalties, and an insurer
+with 40 active partners [illustrative]: a franchisor settling SAR 15M of royalties, and an insurer
 settling SAR 400M of broker commissions under IA conduct rules and IFRS-17. Partner bands
 price both into the same neighborhood; the second buyer gets finance-grade custody of a
 flow 25× larger for the same fee. The beachhead ICP is precisely the concentrated shape:
@@ -82,7 +83,8 @@ have the same defect at larger size.
 
 The mechanism that fixes it also strengthens the fundraising story: order forms that
 pre-price Settle modules with binary activation criteria convert roadmap risk into
-customer-committed, not-yet-billing ARR — evidence no survey can fake. **Verdict: fix now
+customer-committed, not-yet-billing ARR, which is revealed willingness-to-pay by the red
+team's own evidence standard. **Verdict: fix now
 (P3); founding program restated as discount-lock (P3c).**
 
 ### 1.3 The SAR 50 rung fails its own justification (v1 carried it from the stack)
@@ -134,8 +136,8 @@ automation module; keep readiness free (P4).**
 A SAR 19K, 45-day pilot is ~SAR 13K/month of commitment — sub-threshold for the CFO
 co-sponsorship it demands, and it answers the wrong question ("will you pay 19K for a
 trial?") when the load-bearing bet is "will you pay ≥96K from an existing budget line?"
-The pilot **is** the willingness-to-pay instrument; its price must be set where the signal
-is. **Verdict: pilot fee ≥25% of target Y1 ACV (P7).**
+The pilot **is** the willingness-to-pay instrument, and a SAR 19K pilot tests SAR 19K, not
+SAR 96K. **Verdict: pilot fee ≥25% of target Y1 ACV (P7).**
 
 ### 1.7 First renewals land in the worst possible month (v1 omission)
 
