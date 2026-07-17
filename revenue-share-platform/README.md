@@ -113,6 +113,16 @@ backend alongside it.
 
 See `backend/.env.example`.
 
+### Tests
+
+```bash
+cd backend
+npm test                   # node --test (no DB required)
+```
+
+Covers the amendment readiness/guardrail gate and the auth building blocks
+(JWT sign/verify, password hashing).
+
 ## API
 
 All business routes require a `Bearer` JWT (obtained from login/register).
