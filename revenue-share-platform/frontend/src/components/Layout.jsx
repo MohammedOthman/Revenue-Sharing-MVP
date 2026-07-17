@@ -13,6 +13,7 @@ const Layout = () => {
     { path: '/', label: 'Dashboard', icon: '📊' },
     { path: '/partners', label: 'Partners', icon: '🤝' },
     { path: '/contracts', label: 'Contracts', icon: '📄' },
+    { path: '/amendments', label: 'Amendment Journeys', icon: '📝' },
     { path: '/revenue', label: 'Revenue', icon: '💰' },
     { path: '/kpis', label: 'KPIs', icon: '📈' },
     { path: '/legal', label: 'Legal Docs', icon: '⚖️' },

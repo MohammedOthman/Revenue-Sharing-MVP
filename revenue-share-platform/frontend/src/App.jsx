@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Partners from './pages/Partners';
 import Contracts from './pages/Contracts';
+import Amendments from './pages/Amendments';
 import Revenue from './pages/Revenue';
 import KPIs from './pages/KPIs';
 import LegalDocuments from './pages/LegalDocuments';
@@ -33,6 +34,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="partners" element={<Partners />} />
             <Route path="contracts" element={<Contracts />} />
+            <Route path="amendments" element={<Amendments />} />
             <Route path="revenue" element={<Revenue />} />
             <Route path="kpis" element={<KPIs />} />
             <Route path="legal" element={<LegalDocuments />} />
