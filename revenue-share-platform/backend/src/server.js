@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { createTables } from './models/schema.js';
+import { runMigrations } from './migrate.js';
 
 // Import routes
 import authRoutes from './routes/auth.routes.js';
@@ -61,8 +61,8 @@ app.use((req, res) => {
 // Start server and initialize database
 const startServer = async () => {
   try {
-    // Initialize database tables
-    await createTables();
+    // Apply any pending database migrations
+    await runMigrations();
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

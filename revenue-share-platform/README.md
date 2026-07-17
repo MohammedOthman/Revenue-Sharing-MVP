@@ -76,8 +76,14 @@ cp .env.example .env       # then edit DB_* and JWT_SECRET
 npm run dev                # http://localhost:5000
 ```
 
-On startup the server connects to PostgreSQL and creates any missing tables
-(`CREATE TABLE IF NOT EXISTS`). Create the database named in `DB_NAME` first.
+Create the database named in `DB_NAME` first. Schema is managed by versioned
+migrations in `backend/migrations/` (tracked in a `schema_migrations` table).
+The server applies pending migrations on startup; you can also run them
+explicitly for controlled releases:
+
+```bash
+npm run migrate            # apply pending migrations
+```
 
 Load (or reset) a coherent Saudi/GCC demo dataset and the demo admin login:
 

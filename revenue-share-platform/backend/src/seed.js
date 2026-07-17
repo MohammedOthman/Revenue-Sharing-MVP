@@ -11,11 +11,11 @@
  * Demo login:  admin@example.com  /  password123
  */
 import pool from './config/database.js';
-import { createTables } from './models/schema.js';
+import { runMigrations } from './migrate.js';
 import { hashPassword } from './utils/password.js';
 
 const seed = async () => {
-  await createTables();
+  await runMigrations();
   const client = await pool.connect();
 
   try {
