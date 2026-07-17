@@ -1,0 +1,928 @@
+openapi: 3.0.3
+info:
+  title: Reven — Partner Revenue OS API
+  version: 1.0.0
+  description: >
+    Phase 1 "Capture" API for partner revenue and revenue-sharing governance:
+    partners, contracts, governed amendment journeys, revenue-share records,
+    KPIs, legal-document metadata, and dashboard analytics.
+
+
+    Phase boundary: this API does NOT move money. It records and previews
+    revenue-share data and payout-readiness status only. There is no
+    payment-execution, settlement, tax-clearance, or ERP-write endpoint.
+servers:
+  - url: /api
+    description: Same-origin API base path
+tags:
+  - name: Auth
+  - name: Partners
+  - name: Contracts
+  - name: Amendments
+  - name: Revenue
+  - name: KPIs
+  - name: Documents
+  - name: Dashboard
+  - name: System
+
+security:
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: API is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  message: { type: string }
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, fullName]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+                fullName: { type: string }
+                role: { type: string }
+      responses:
+        '201':
+          description: Registered
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/profile:
+    get:
+      tags: [Auth]
+      summary: Get the current user
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /partners:
+    get:
+      tags: [Partners]
+      summary: List partners
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: type, schema: { type: string } }
+      responses:
+        '200':
+          description: Partners
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partners:
+                    type: array
+                    items: { $ref: '#/components/schemas/Partner' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Partners]
+      summary: Create a partner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PartnerInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partner: { $ref: '#/components/schemas/Partner' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /partners/stats:
+    get:
+      tags: [Partners]
+      summary: Partner statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /partners/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Partners]
+      summary: Get a partner
+      responses:
+        '200':
+          description: Partner
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partner: { $ref: '#/components/schemas/Partner' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Partners]
+      summary: Update a partner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PartnerInput' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partner: { $ref: '#/components/schemas/Partner' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Partners]
+      summary: Delete a partner
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+
+  /contracts:
+    get:
+      tags: [Contracts]
+      summary: List contracts
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: partnerId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Contracts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contracts:
+                    type: array
+                    items: { $ref: '#/components/schemas/Contract' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Contracts]
+      summary: Create a contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContractInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contract: { $ref: '#/components/schemas/Contract' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /contracts/stats:
+    get:
+      tags: [Contracts]
+      summary: Contract statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /contracts/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Contracts]
+      summary: Get a contract
+      responses:
+        '200':
+          description: Contract
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contract: { $ref: '#/components/schemas/Contract' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Contracts]
+      summary: Update a contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContractInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Contracts]
+      summary: Delete a contract
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+
+  /amendments:
+    get:
+      tags: [Amendments]
+      summary: List amendment journeys
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Amendment journeys (each includes a readiness object)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amendments:
+                    type: array
+                    items: { $ref: '#/components/schemas/Amendment' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Amendments]
+      summary: Create an amendment journey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AmendmentInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amendment: { $ref: '#/components/schemas/Amendment' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /amendments/stats:
+    get:
+      tags: [Amendments]
+      summary: Amendment statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /amendments/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Amendments]
+      summary: Get an amendment journey
+      responses:
+        '200':
+          description: Amendment journey
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amendment: { $ref: '#/components/schemas/Amendment' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Amendments]
+      summary: Update an amendment journey (blocked once notified)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AmendmentInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Amendments]
+      summary: Delete an amendment journey
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+  /amendments/{id}/send-notice:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Amendments]
+      summary: Send the amendment notice
+      description: >
+        Blocked (422) until every readiness requirement is met; the response
+        lists the missing requirements. A notified journey cannot be re-sent.
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422':
+          description: Readiness requirements not met
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: { type: string }
+                  missing:
+                    type: array
+                    items: { type: string }
+                  readiness: { $ref: '#/components/schemas/Readiness' }
+  /amendments/{id}/acknowledge:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Amendments]
+      summary: Acknowledge a sent notice
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note: { type: string }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /revenue:
+    get:
+      tags: [Revenue]
+      summary: List revenue-share records
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Revenue-share records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  revenueShares:
+                    type: array
+                    items: { $ref: '#/components/schemas/RevenueShare' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Revenue]
+      summary: Create a revenue-share record (records/previews only — no payment)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RevenueShareInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  revenueShare: { $ref: '#/components/schemas/RevenueShare' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /revenue/stats:
+    get:
+      tags: [Revenue]
+      summary: Revenue statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /revenue/trends:
+    get:
+      tags: [Revenue]
+      summary: Revenue by period
+      parameters:
+        - { in: query, name: periodType, schema: { type: string, enum: [month, quarter, year] } }
+      responses:
+        '200':
+          description: Trend rows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { type: object } }
+  /revenue/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Revenue]
+      summary: Get a revenue-share record
+      responses:
+        '200':
+          description: Revenue-share record
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  revenueShare: { $ref: '#/components/schemas/RevenueShare' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Revenue]
+      summary: Update a revenue-share record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RevenueShareInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Revenue]
+      summary: Delete a revenue-share record
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+
+  /kpis:
+    get:
+      tags: [KPIs]
+      summary: List KPIs
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: KPIs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  kpis:
+                    type: array
+                    items: { $ref: '#/components/schemas/KPI' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [KPIs]
+      summary: Create a KPI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/KPIInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  kpi: { $ref: '#/components/schemas/KPI' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /kpis/stats:
+    get:
+      tags: [KPIs]
+      summary: KPI statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /kpis/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [KPIs]
+      summary: Get a KPI
+      responses:
+        '200':
+          description: KPI
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  kpi: { $ref: '#/components/schemas/KPI' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [KPIs]
+      summary: Update a KPI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/KPIInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [KPIs]
+      summary: Delete a KPI
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+
+  /documents:
+    get:
+      tags: [Documents]
+      summary: List legal-document metadata
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: contractId, schema: { type: integer } }
+        - { in: query, name: documentType, schema: { type: string } }
+      responses:
+        '200':
+          description: Documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items: { $ref: '#/components/schemas/LegalDocument' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Documents]
+      summary: Create a legal-document metadata record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LegalDocumentInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document: { $ref: '#/components/schemas/LegalDocument' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /documents/stats:
+    get:
+      tags: [Documents]
+      summary: Document statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /documents/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Documents]
+      summary: Get a document
+      responses:
+        '200':
+          description: Document
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document: { $ref: '#/components/schemas/LegalDocument' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Documents]
+      summary: Update a document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LegalDocumentInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Documents]
+      summary: Delete a document
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+
+  /dashboard/overview:
+    get:
+      tags: [Dashboard]
+      summary: Program overview (partners, contracts, revenue, KPIs, documents, amendments)
+      responses:
+        '200':
+          description: Overview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  overview: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /dashboard/revenue-trends:
+    get:
+      tags: [Dashboard]
+      summary: Revenue trends
+      parameters:
+        - { in: query, name: periodType, schema: { type: string } }
+      responses:
+        '200':
+          description: Trends
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trends: { type: array, items: { type: object } }
+  /dashboard/top-partners:
+    get:
+      tags: [Dashboard]
+      summary: Top-performing partners
+      parameters:
+        - { in: query, name: limit, schema: { type: integer, default: 5 } }
+      responses:
+        '200':
+          description: Top partners
+          content:
+            application/json:
+              schema: { type: object }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Id:
+      in: path
+      name: id
+      required: true
+      schema: { type: integer }
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: Conflict with current state
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Missing or invalid fields
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Message:
+      description: Operation result
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string }
+    Stats:
+      description: Aggregate statistics
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              stats: { type: object }
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        full_name: { type: string }
+        role: { type: string }
+    AuthResponse:
+      type: object
+      properties:
+        message: { type: string }
+        token: { type: string }
+        user:
+          type: object
+          properties:
+            id: { type: integer }
+            email: { type: string }
+            fullName: { type: string }
+            role: { type: string }
+    Partner:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string }
+        company: { type: string }
+        type: { type: string }
+        status: { type: string }
+        contact_person: { type: string }
+        phone: { type: string }
+        address: { type: string }
+        notes: { type: string }
+    PartnerInput:
+      type: object
+      required: [name, email]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        company: { type: string }
+        type: { type: string }
+        status: { type: string }
+        contactPerson: { type: string }
+        phone: { type: string }
+        address: { type: string }
+        notes: { type: string }
+    Contract:
+      type: object
+      properties:
+        id: { type: integer }
+        partner_id: { type: integer }
+        partner_name: { type: string }
+        title: { type: string }
+        description: { type: string }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        revenue_share_percentage: { type: number }
+        minimum_payout: { type: number }
+        payment_terms: { type: string }
+        status: { type: string }
+    ContractInput:
+      type: object
+      required: [partnerId, title, startDate, revenueSharePercentage]
+      properties:
+        partnerId: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        startDate: { type: string, format: date }
+        endDate: { type: string, format: date }
+        revenueSharePercentage: { type: number }
+        minimumPayout: { type: number }
+        paymentTerms: { type: string }
+        status: { type: string }
+    Readiness:
+      type: object
+      properties:
+        ready: { type: boolean }
+        missing: { type: array, items: { type: string } }
+        total: { type: integer }
+        satisfied: { type: integer }
+    Amendment:
+      type: object
+      properties:
+        id: { type: integer }
+        contract_id: { type: integer }
+        contract_title: { type: string }
+        article_reference: { type: string }
+        amendment_type: { type: string }
+        amendment_mechanism: { type: string }
+        reason: { type: string }
+        public_interest_basis: { type: string }
+        necessity_confirmed: { type: boolean }
+        no_new_contract_confirmed: { type: boolean }
+        no_nature_change_confirmed: { type: boolean }
+        notice_period_days: { type: integer }
+        authority_source: { type: string }
+        decision_date: { type: string, format: date }
+        effective_date: { type: string, format: date }
+        partner_impact: { type: string }
+        calculation_method: { type: string }
+        amendment_letter_reference: { type: string }
+        notice_channels: { type: array, items: { type: string } }
+        notice_message: { type: string }
+        notice_message_language: { type: string }
+        status: { type: string, enum: [draft, ready, notified, acknowledged] }
+        readiness: { $ref: '#/components/schemas/Readiness' }
+    AmendmentInput:
+      type: object
+      required: [contractId]
+      properties:
+        contractId: { type: integer }
+        articleReference: { type: string }
+        amendmentType: { type: string }
+        amendmentMechanism: { type: string }
+        reason: { type: string }
+        publicInterestBasis: { type: string }
+        necessityConfirmed: { type: boolean }
+        noNewContractConfirmed: { type: boolean }
+        noNatureChangeConfirmed: { type: boolean }
+        noticePeriodDays: { type: integer }
+        authoritySource: { type: string }
+        decisionDate: { type: string, format: date }
+        effectiveDate: { type: string, format: date }
+        partnerImpact: { type: string }
+        calculationMethod: { type: string }
+        amendmentLetterReference: { type: string }
+        noticeChannels: { type: array, items: { type: string } }
+        noticeMessage: { type: string }
+        noticeMessageLanguage: { type: string }
+    RevenueShare:
+      type: object
+      properties:
+        id: { type: integer }
+        contract_id: { type: integer }
+        contract_title: { type: string }
+        partner_name: { type: string }
+        period_start: { type: string, format: date }
+        period_end: { type: string, format: date }
+        total_revenue: { type: number }
+        share_percentage: { type: number }
+        share_amount: { type: number }
+        status: { type: string }
+        paid_at: { type: string, format: date-time }
+        notes: { type: string }
+    RevenueShareInput:
+      type: object
+      required: [contractId, periodStart, periodEnd, totalRevenue, sharePercentage, shareAmount]
+      properties:
+        contractId: { type: integer }
+        periodStart: { type: string, format: date }
+        periodEnd: { type: string, format: date }
+        totalRevenue: { type: number }
+        sharePercentage: { type: number }
+        shareAmount: { type: number }
+        status: { type: string }
+        notes: { type: string }
+    KPI:
+      type: object
+      properties:
+        id: { type: integer }
+        contract_id: { type: integer }
+        contract_title: { type: string }
+        name: { type: string }
+        description: { type: string }
+        target_value: { type: number }
+        actual_value: { type: number }
+        unit: { type: string }
+        period_type: { type: string }
+        status: { type: string }
+    KPIInput:
+      type: object
+      required: [contractId, name, targetValue]
+      properties:
+        contractId: { type: integer }
+        name: { type: string }
+        description: { type: string }
+        targetValue: { type: number }
+        actualValue: { type: number }
+        unit: { type: string }
+        periodType: { type: string }
+        status: { type: string }
+    LegalDocument:
+      type: object
+      properties:
+        id: { type: integer }
+        contract_id: { type: integer }
+        contract_title: { type: string }
+        document_type: { type: string }
+        document_name: { type: string }
+        file_path: { type: string }
+        file_url: { type: string }
+        version: { type: string }
+        status: { type: string }
+    LegalDocumentInput:
+      type: object
+      required: [contractId, documentType, documentName]
+      properties:
+        contractId: { type: integer }
+        documentType: { type: string }
+        documentName: { type: string }
+        filePath: { type: string }
+        fileUrl: { type: string }
+        version: { type: string }
+        status: { type: string }

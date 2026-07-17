@@ -142,6 +142,15 @@ Covers the amendment readiness/guardrail gate and the auth building blocks
 
 ## API
 
+The full API is described by an OpenAPI 3 contract at `backend/openapi.yaml`.
+When the server is running:
+
+- Interactive docs: `http://localhost:5000/api/docs`
+- Raw spec (JSON): `http://localhost:5000/api/openapi.json`
+
+The raw spec can also be loaded into Swagger Editor, Postman, or a client
+code generator.
+
 All business routes require a `Bearer` JWT (obtained from login/register).
 
 ### Authentication

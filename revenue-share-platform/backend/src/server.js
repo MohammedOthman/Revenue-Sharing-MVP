@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
 import { pathToFileURL } from 'url';
 import { runMigrations } from './migrate.js';
 import { assertEnv } from './config/env.js';
+import { openApiSpec } from './openapi.js';
 
 // Import routes
 import authRoutes from './routes/auth.routes.js';
@@ -61,6 +63,16 @@ app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
+
+// API contract: raw spec + interactive docs (public). Swagger UI needs inline
+// assets, so relax the CSP for the docs HTML only.
+app.get('/api/openapi.json', (req, res) => res.json(openApiSpec));
+app.use(
+  '/api/docs',
+  (req, res, next) => { res.removeHeader('Content-Security-Policy'); next(); },
+  swaggerUi.serve,
+  swaggerUi.setup(openApiSpec, { customSiteTitle: 'Reven API' })
+);
 
 // Routes
 app.use('/api/auth', authLimiter, authRoutes);
