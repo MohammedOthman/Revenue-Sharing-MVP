@@ -3,6 +3,17 @@ import {
   updateAmendment, deleteAmendment, markNotified, markAcknowledged,
   getAmendmentStats, computeReadiness, withReadiness,
 } from '../models/amendment.model.js';
+import { safeAudit } from '../models/audit.model.js';
+
+// Build a common audit context from the request + amendment.
+const auditFor = (req, amendment, action, metadata = {}) => ({
+  tenantId: req.tenantId,
+  actorUserId: req.user?.id,
+  entityType: 'amendment',
+  entityId: amendment?.id,
+  action,
+  metadata: { contractId: amendment?.contract_id, ...metadata },
+});
 
 export const createAmendmentController = async (req, res) => {
   try {
@@ -12,6 +23,7 @@ export const createAmendmentController = async (req, res) => {
     }
 
     const amendment = await createAmendment({ ...req.body, createdBy: req.user.id });
+    await safeAudit(auditFor(req, amendment, 'created'));
     res.status(201).json({
       message: 'Amendment journey created successfully',
       amendment: withReadiness(amendment),
@@ -60,6 +72,7 @@ export const updateAmendmentController = async (req, res) => {
     }
 
     const amendment = await updateAmendment(req.params.id, req.body);
+    await safeAudit(auditFor(req, amendment, 'updated'));
     res.json({
       message: 'Amendment journey updated successfully',
       amendment: withReadiness(amendment),
@@ -73,6 +86,13 @@ export const updateAmendmentController = async (req, res) => {
 export const deleteAmendmentController = async (req, res) => {
   try {
     await deleteAmendment(req.params.id);
+    await safeAudit({
+      tenantId: req.tenantId,
+      actorUserId: req.user?.id,
+      entityType: 'amendment',
+      entityId: Number(req.params.id),
+      action: 'deleted',
+    });
     res.json({ message: 'Amendment journey deleted successfully' });
   } catch (error) {
     console.error('Delete amendment error:', error);
@@ -105,6 +125,10 @@ export const sendNoticeController = async (req, res) => {
     }
 
     const notified = await markNotified(req.params.id);
+    await safeAudit(auditFor(req, notified, 'notice_sent', {
+      channels: notified.notice_channels,
+      noticePeriodDays: notified.notice_period_days,
+    }));
     res.json({
       message: 'Amendment notice sent',
       amendment: withReadiness(notified),
@@ -126,6 +150,7 @@ export const acknowledgeNoticeController = async (req, res) => {
     }
 
     const acknowledged = await markAcknowledged(req.params.id, req.body?.note);
+    await safeAudit(auditFor(req, acknowledged, 'acknowledged'));
     res.json({
       message: 'Amendment notice acknowledged',
       amendment: withReadiness(acknowledged),

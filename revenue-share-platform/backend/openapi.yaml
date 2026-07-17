@@ -23,6 +23,7 @@ tags:
   - name: KPIs
   - name: Documents
   - name: Dashboard
+  - name: Audit
   - name: System
 
 security:
@@ -666,6 +667,27 @@ paths:
             application/json:
               schema: { type: object }
 
+  /audit:
+    get:
+      tags: [Audit]
+      summary: List audit events (append-only history)
+      parameters:
+        - { in: query, name: entityType, schema: { type: string } }
+        - { in: query, name: entityId, schema: { type: integer } }
+        - { in: query, name: actorUserId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Audit events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items: { $ref: '#/components/schemas/AuditEvent' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -926,3 +948,15 @@ components:
         fileUrl: { type: string }
         version: { type: string }
         status: { type: string }
+    AuditEvent:
+      type: object
+      properties:
+        id: { type: integer }
+        tenant_id: { type: integer }
+        actor_user_id: { type: integer }
+        actor_name: { type: string }
+        entity_type: { type: string }
+        entity_id: { type: integer }
+        action: { type: string }
+        metadata: { type: object }
+        created_at: { type: string, format: date-time }

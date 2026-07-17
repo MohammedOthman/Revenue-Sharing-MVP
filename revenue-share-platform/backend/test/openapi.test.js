@@ -21,6 +21,7 @@ test('every API group is documented', () => {
     '/kpis', '/kpis/{id}',
     '/documents', '/documents/{id}',
     '/dashboard/overview', '/dashboard/revenue-trends', '/dashboard/top-partners',
+    '/audit',
   ];
   for (const p of expected) {
     assert.ok(spec.paths[p], `missing documented path: ${p}`);
