@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Layout.css';
 
@@ -51,9 +51,9 @@ const Layout = () => {
         <div className="sidebar-footer">
           {sidebarOpen && (
             <div className="user-info">
-              <div className="avatar">{user?.name?.charAt(0) || 'U'}</div>
+              <div className="avatar">{user?.fullName?.charAt(0) || 'U'}</div>
               <div className="user-details">
-                <p className="user-name">{user?.name || 'User'}</p>
+                <p className="user-name">{user?.fullName || 'User'}</p>
                 <p className="user-email">{user?.email || ''}</p>
               </div>
             </div>
@@ -78,7 +78,7 @@ const Layout = () => {
               <span className="notification-badge">3</span>
             </div>
             <div className="user-menu">
-              <span>{user?.name || 'User'}</span>
+              <span>{user?.fullName || 'User'}</span>
               <span className="dropdown-arrow">▼</span>
             </div>
           </div>
@@ -86,7 +86,7 @@ const Layout = () => {
 
         <main className="content-area">
           <div className="outlet">
-            {/* Child routes render here */}
+            <Outlet />
           </div>
         </main>
       </div>

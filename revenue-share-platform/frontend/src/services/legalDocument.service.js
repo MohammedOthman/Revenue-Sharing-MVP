@@ -1,40 +1,30 @@
 import api from './api';
 
+// Backend mounts legal documents at /api/documents. In Phase 1 these are
+// document metadata / evidence links (no file upload/storage yet).
 const legalDocumentService = {
   getAll: async () => {
-    const response = await api.get('/legal-documents');
-    return response.data;
+    const response = await api.get('/documents');
+    return response.data.documents;
   },
 
   getById: async (id) => {
-    const response = await api.get(`/legal-documents/${id}`);
-    return response.data;
+    const response = await api.get(`/documents/${id}`);
+    return response.data.document;
   },
 
   create: async (documentData) => {
-    const response = await api.post('/legal-documents', documentData);
-    return response.data;
+    const response = await api.post('/documents', documentData);
+    return response.data.document;
   },
 
   update: async (id, documentData) => {
-    const response = await api.put(`/legal-documents/${id}`, documentData);
-    return response.data;
+    const response = await api.put(`/documents/${id}`, documentData);
+    return response.data.document;
   },
 
   delete: async (id) => {
-    const response = await api.delete(`/legal-documents/${id}`);
-    return response.data;
-  },
-
-  getByContract: async (contractId) => {
-    const response = await api.get(`/legal-documents/contract/${contractId}`);
-    return response.data;
-  },
-
-  upload: async (contractId, formData) => {
-    const response = await api.post(`/legal-documents/contract/${contractId}/upload`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const response = await api.delete(`/documents/${id}`);
     return response.data;
   },
 };

@@ -53,17 +53,24 @@ export const getAllRevenueShares = async (filters = {}) => {
 };
 
 export const updateRevenueShare = async (id, updates) => {
-  const allowedFields = ['total_revenue', 'share_percentage', 'share_amount', 'status', 'paid_at', 'notes'];
+  // [column, camelCase alias] — updates may arrive in either form.
+  const fieldMap = [
+    ['period_start', 'periodStart'], ['period_end', 'periodEnd'],
+    ['total_revenue', 'totalRevenue'], ['share_percentage', 'sharePercentage'],
+    ['share_amount', 'shareAmount'], ['status', 'status'], ['paid_at', 'paidAt'],
+    ['notes', 'notes'],
+  ];
   const fields = [];
   const values = [];
-  
-  allowedFields.forEach((field) => {
-    if (updates[field] !== undefined) {
-      fields.push(`${field} = $${values.length + 1}`);
-      values.push(updates[field]);
+
+  fieldMap.forEach(([column, camel]) => {
+    const value = updates[camel] !== undefined ? updates[camel] : updates[column];
+    if (value !== undefined) {
+      fields.push(`${column} = $${values.length + 1}`);
+      values.push(value);
     }
   });
-  
+
   if (fields.length === 0) return null;
   
   values.push(id);

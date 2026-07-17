@@ -3,21 +3,16 @@ import api from './api';
 const dashboardService = {
   getOverview: async () => {
     const response = await api.get('/dashboard/overview');
-    return response.data;
+    return response.data.overview;
   },
 
-  getRevenueTrends: async (period = '30') => {
-    const response = await api.get(`/dashboard/analytics/trends?period=${period}`);
-    return response.data;
+  getRevenueTrends: async (periodType = 'month') => {
+    const response = await api.get(`/dashboard/revenue-trends?periodType=${periodType}`);
+    return response.data.trends;
   },
 
-  getPartnerPerformance: async () => {
-    const response = await api.get('/dashboard/analytics/partner-performance');
-    return response.data;
-  },
-
-  getContractStatus: async () => {
-    const response = await api.get('/dashboard/analytics/contract-status');
+  getTopPartners: async (limit = 5) => {
+    const response = await api.get(`/dashboard/top-partners?limit=${limit}`);
     return response.data;
   },
 };

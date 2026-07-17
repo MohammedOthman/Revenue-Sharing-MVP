@@ -52,17 +52,23 @@ export const getAllKPIs = async (filters = {}) => {
 };
 
 export const updateKPI = async (id, updates) => {
-  const allowedFields = ['name', 'description', 'target_value', 'actual_value', 'unit', 'status'];
+  // [column, camelCase alias] — updates may arrive in either form.
+  const fieldMap = [
+    ['name', 'name'], ['description', 'description'], ['target_value', 'targetValue'],
+    ['actual_value', 'actualValue'], ['unit', 'unit'], ['period_type', 'periodType'],
+    ['status', 'status'],
+  ];
   const fields = [];
   const values = [];
-  
-  allowedFields.forEach((field) => {
-    if (updates[field] !== undefined) {
-      fields.push(`${field} = $${values.length + 1}`);
-      values.push(updates[field]);
+
+  fieldMap.forEach(([column, camel]) => {
+    const value = updates[camel] !== undefined ? updates[camel] : updates[column];
+    if (value !== undefined) {
+      fields.push(`${column} = $${values.length + 1}`);
+      values.push(value);
     }
   });
-  
+
   if (fields.length === 0) return null;
   
   values.push(id);

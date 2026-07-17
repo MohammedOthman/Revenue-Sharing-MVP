@@ -13,8 +13,10 @@ const Partners = () => {
     email: '',
     company: '',
     type: 'referral',
-    sharePercentage: 10,
+    contactPerson: '',
+    phone: '',
     status: 'active',
+    notes: '',
   });
 
   useEffect(() => {
@@ -36,12 +38,14 @@ const Partners = () => {
     if (partner) {
       setEditingPartner(partner);
       setFormData({
-        name: partner.name,
-        email: partner.email,
-        company: partner.company,
-        type: partner.type,
-        sharePercentage: partner.sharePercentage,
-        status: partner.status,
+        name: partner.name || '',
+        email: partner.email || '',
+        company: partner.company || '',
+        type: partner.type || 'referral',
+        contactPerson: partner.contact_person || '',
+        phone: partner.phone || '',
+        status: partner.status || 'active',
+        notes: partner.notes || '',
       });
     } else {
       setEditingPartner(null);
@@ -50,8 +54,10 @@ const Partners = () => {
         email: '',
         company: '',
         type: 'referral',
-        sharePercentage: 10,
+        contactPerson: '',
+        phone: '',
         status: 'active',
+        notes: '',
       });
     }
     setShowModal(true);
@@ -66,7 +72,7 @@ const Partners = () => {
     e.preventDefault();
     try {
       if (editingPartner) {
-        await partnerService.update(editingPartner._id, formData);
+        await partnerService.update(editingPartner.id, formData);
       } else {
         await partnerService.create(formData);
       }
@@ -109,21 +115,21 @@ const Partners = () => {
               <th>Company</th>
               <th>Email</th>
               <th>Type</th>
-              <th>Share %</th>
+              <th>Contact</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {partners.map((partner) => (
-              <tr key={partner._id}>
+              <tr key={partner.id}>
                 <td>{partner.name}</td>
                 <td>{partner.company}</td>
                 <td>{partner.email}</td>
                 <td>
                   <span className={`badge badge-${partner.type}`}>{partner.type}</span>
                 </td>
-                <td>{partner.sharePercentage}%</td>
+                <td>{partner.contact_person || '—'}</td>
                 <td>
                   <span className={`badge badge-${partner.status}`}>{partner.status}</span>
                 </td>
@@ -131,7 +137,7 @@ const Partners = () => {
                   <button className="btn-sm" onClick={() => handleOpenModal(partner)}>
                     Edit
                   </button>
-                  <button className="btn-sm btn-danger" onClick={() => handleDelete(partner._id)}>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(partner.id)}>
                     Delete
                   </button>
                 </td>
@@ -161,7 +167,6 @@ const Partners = () => {
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  required
                 />
               </div>
               <div className="form-group">
@@ -173,39 +178,56 @@ const Partners = () => {
                   required
                 />
               </div>
-              <div className="form-group">
-                <label>Type</label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                >
-                  <option value="referral">Referral</option>
-                  <option value="affiliate">Affiliate</option>
-                  <option value="strategic">Strategic</option>
-                  <option value="reseller">Reseller</option>
-                </select>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Type</label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                  >
+                    <option value="referral">Referral</option>
+                    <option value="affiliate">Affiliate</option>
+                    <option value="strategic">Strategic</option>
+                    <option value="reseller">Reseller</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Contact Person</label>
+                  <input
+                    type="text"
+                    value={formData.contactPerson}
+                    onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="form-group">
-                <label>Share Percentage</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={formData.sharePercentage}
-                  onChange={(e) => setFormData({ ...formData, sharePercentage: Number(e.target.value) })}
-                  required
+                <label>Notes</label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  rows="2"
                 />
-              </div>
-              <div className="form-group">
-                <label>Status</label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="pending">Pending</option>
-                </select>
               </div>
               <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={handleCloseModal}>

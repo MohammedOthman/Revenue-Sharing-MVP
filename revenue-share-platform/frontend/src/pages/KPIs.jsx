@@ -3,6 +3,17 @@ import kpiService from '../services/kpi.service';
 import contractService from '../services/contract.service';
 import '../styles/KPIs.css';
 
+const emptyForm = {
+  contractId: '',
+  name: '',
+  description: '',
+  targetValue: 100,
+  actualValue: 0,
+  unit: '%',
+  periodType: 'monthly',
+  status: 'on-track',
+};
+
 const KPIs = () => {
   const [kpis, setKpis] = useState([]);
   const [contracts, setContracts] = useState([]);
@@ -10,16 +21,7 @@ const KPIs = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingKpi, setEditingKpi] = useState(null);
-  const [formData, setFormData] = useState({
-    contractId: '',
-    name: '',
-    description: '',
-    targetType: 'percentage',
-    targetValue: 100,
-    currentValue: 0,
-    unit: '%',
-    status: 'on-track',
-  });
+  const [formData, setFormData] = useState(emptyForm);
 
   useEffect(() => {
     loadData();
@@ -44,27 +46,18 @@ const KPIs = () => {
     if (kpi) {
       setEditingKpi(kpi);
       setFormData({
-        contractId: kpi.contractId?._id || kpi.contractId,
-        name: kpi.name,
-        description: kpi.description,
-        targetType: kpi.targetType,
-        targetValue: kpi.targetValue,
-        currentValue: kpi.currentValue,
-        unit: kpi.unit,
-        status: kpi.status,
+        contractId: kpi.contract_id || '',
+        name: kpi.name || '',
+        description: kpi.description || '',
+        targetValue: kpi.target_value,
+        actualValue: kpi.actual_value,
+        unit: kpi.unit || '',
+        periodType: kpi.period_type || 'monthly',
+        status: kpi.status || 'on-track',
       });
     } else {
       setEditingKpi(null);
-      setFormData({
-        contractId: contracts[0]?._id || '',
-        name: '',
-        description: '',
-        targetType: 'percentage',
-        targetValue: 100,
-        currentValue: 0,
-        unit: '%',
-        status: 'on-track',
-      });
+      setFormData({ ...emptyForm, contractId: contracts[0]?.id || '' });
     }
     setShowModal(true);
   };
@@ -78,7 +71,7 @@ const KPIs = () => {
     e.preventDefault();
     try {
       if (editingKpi) {
-        await kpiService.update(editingKpi._id, formData);
+        await kpiService.update(editingKpi.id, formData);
       } else {
         await kpiService.create(formData);
       }
@@ -100,13 +93,27 @@ const KPIs = () => {
     }
   };
 
-  const handleUpdateValue = async (id, value) => {
+  const handleUpdateValue = async (kpi, value) => {
     try {
-      await kpiService.updateValue(id, value);
+      await kpiService.update(kpi.id, { actualValue: value });
       loadData();
     } catch (err) {
       setError('Failed to update KPI value');
     }
+  };
+
+  const ratio = (kpi) => {
+    const target = Number(kpi.target_value);
+    if (!target) return 0;
+    return (Number(kpi.actual_value) / target) * 100;
+  };
+
+  const progressClass = (kpi) => {
+    const r = ratio(kpi);
+    if (r >= 100) return 'achieved';
+    if (r >= 70) return 'on-track';
+    if (r >= 40) return 'at-risk';
+    return 'off-track';
   };
 
   if (loading) return <div className="loading">Loading KPIs...</div>;
@@ -124,23 +131,23 @@ const KPIs = () => {
 
       <div className="kpis-grid">
         {kpis.map((kpi) => (
-          <div key={kpi._id} className="kpi-card">
+          <div key={kpi.id} className="kpi-card">
             <div className="kpi-header">
               <h3>{kpi.name}</h3>
               <span className={`badge badge-${kpi.status}`}>{kpi.status}</span>
             </div>
-            <p className="kpi-contract">{kpi.contractId?.title || 'N/A'}</p>
+            <p className="kpi-contract">{kpi.contract_title || 'N/A'}</p>
             <p className="kpi-description">{kpi.description}</p>
-            
+
             <div className="kpi-progress">
               <div className="progress-info">
-                <span>Progress: {kpi.currentValue} / {kpi.targetValue} {kpi.unit}</span>
-                <span>{Math.round((kpi.currentValue / kpi.targetValue) * 100)}%</span>
+                <span>Progress: {kpi.actual_value} / {kpi.target_value} {kpi.unit}</span>
+                <span>{Math.round(ratio(kpi))}%</span>
               </div>
               <div className="progress-bar">
-                <div 
-                  className={`progress-fill ${kpi.status}`} 
-                  style={{ width: `${Math.min((kpi.currentValue / kpi.targetValue) * 100, 100)}%` }}
+                <div
+                  className={`progress-fill ${progressClass(kpi)}`}
+                  style={{ width: `${Math.min(ratio(kpi), 100)}%` }}
                 />
               </div>
             </div>
@@ -149,11 +156,11 @@ const KPIs = () => {
               <input
                 type="number"
                 placeholder="Update value"
-                onBlur={(e) => e.target.value && handleUpdateValue(kpi._id, Number(e.target.value))}
+                onBlur={(e) => e.target.value && handleUpdateValue(kpi, Number(e.target.value))}
                 className="value-input"
               />
               <button className="btn-sm" onClick={() => handleOpenModal(kpi)}>Edit</button>
-              <button className="btn-sm btn-danger" onClick={() => handleDelete(kpi._id)}>Delete</button>
+              <button className="btn-sm btn-danger" onClick={() => handleDelete(kpi.id)}>Delete</button>
             </div>
           </div>
         ))}
@@ -170,10 +177,11 @@ const KPIs = () => {
                   value={formData.contractId}
                   onChange={(e) => setFormData({ ...formData, contractId: e.target.value })}
                   required
+                  disabled={!!editingKpi}
                 >
                   <option value="">Select Contract</option>
                   {contracts.map((contract) => (
-                    <option key={contract._id} value={contract._id}>
+                    <option key={contract.id} value={contract.id}>
                       {contract.title}
                     </option>
                   ))}
@@ -199,15 +207,14 @@ const KPIs = () => {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Target Type</label>
+                  <label>Period Type</label>
                   <select
-                    value={formData.targetType}
-                    onChange={(e) => setFormData({ ...formData, targetType: e.target.value })}
+                    value={formData.periodType}
+                    onChange={(e) => setFormData({ ...formData, periodType: e.target.value })}
                   >
-                    <option value="percentage">Percentage</option>
-                    <option value="amount">Amount ($)</option>
-                    <option value="count">Count</option>
-                    <option value="ratio">Ratio</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -238,9 +245,8 @@ const KPIs = () => {
                     type="number"
                     min="0"
                     step="0.01"
-                    value={formData.currentValue}
-                    onChange={(e) => setFormData({ ...formData, currentValue: Number(e.target.value) })}
-                    required
+                    value={formData.actualValue}
+                    onChange={(e) => setFormData({ ...formData, actualValue: Number(e.target.value) })}
                   />
                 </div>
               </div>

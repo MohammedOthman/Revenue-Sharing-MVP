@@ -39,17 +39,23 @@ export const getAllPartners = async (filters = {}) => {
 };
 
 export const updatePartner = async (id, updates) => {
-  const allowedFields = ['name', 'email', 'company', 'type', 'status', 'contact_person', 'phone', 'address', 'notes'];
+  // [column, camelCase alias] — updates may arrive in either form.
+  const fieldMap = [
+    ['name', 'name'], ['email', 'email'], ['company', 'company'], ['type', 'type'],
+    ['status', 'status'], ['contact_person', 'contactPerson'], ['phone', 'phone'],
+    ['address', 'address'], ['notes', 'notes'],
+  ];
   const fields = [];
   const values = [];
-  
-  allowedFields.forEach((field) => {
-    if (updates[field] !== undefined) {
-      fields.push(`${field} = $${values.length + 1}`);
-      values.push(updates[field]);
+
+  fieldMap.forEach(([column, camel]) => {
+    const value = updates[camel] !== undefined ? updates[camel] : updates[column];
+    if (value !== undefined) {
+      fields.push(`${column} = $${values.length + 1}`);
+      values.push(value);
     }
   });
-  
+
   if (fields.length === 0) return null;
   
   values.push(id);

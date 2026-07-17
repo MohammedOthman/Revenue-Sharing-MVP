@@ -3,6 +3,15 @@ import legalDocumentService from '../services/legalDocument.service';
 import contractService from '../services/contract.service';
 import '../styles/LegalDocuments.css';
 
+const emptyForm = {
+  contractId: '',
+  documentName: '',
+  documentType: 'agreement',
+  version: '1.0',
+  fileUrl: '',
+  status: 'draft',
+};
+
 const LegalDocuments = () => {
   const [documents, setDocuments] = useState([]);
   const [contracts, setContracts] = useState([]);
@@ -10,14 +19,7 @@ const LegalDocuments = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingDoc, setEditingDoc] = useState(null);
-  const [formData, setFormData] = useState({
-    contractId: '',
-    title: '',
-    type: 'agreement',
-    status: 'draft',
-    expiryDate: '',
-    notes: '',
-  });
+  const [formData, setFormData] = useState(emptyForm);
 
   useEffect(() => {
     loadData();
@@ -42,23 +44,16 @@ const LegalDocuments = () => {
     if (doc) {
       setEditingDoc(doc);
       setFormData({
-        contractId: doc.contractId?._id || doc.contractId,
-        title: doc.title,
-        type: doc.type,
-        status: doc.status,
-        expiryDate: doc.expiryDate?.split('T')[0] || '',
-        notes: doc.notes || '',
+        contractId: doc.contract_id || '',
+        documentName: doc.document_name || '',
+        documentType: doc.document_type || 'agreement',
+        version: doc.version || '1.0',
+        fileUrl: doc.file_url || '',
+        status: doc.status || 'draft',
       });
     } else {
       setEditingDoc(null);
-      setFormData({
-        contractId: contracts[0]?._id || '',
-        title: '',
-        type: 'agreement',
-        status: 'draft',
-        expiryDate: '',
-        notes: '',
-      });
+      setFormData({ ...emptyForm, contractId: contracts[0]?.id || '' });
     }
     setShowModal(true);
   };
@@ -71,15 +66,10 @@ const LegalDocuments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...formData,
-        expiryDate: formData.expiryDate ? new Date(formData.expiryDate).toISOString() : null,
-      };
-      
       if (editingDoc) {
-        await legalDocumentService.update(editingDoc._id, payload);
+        await legalDocumentService.update(editingDoc.id, formData);
       } else {
-        await legalDocumentService.create(payload);
+        await legalDocumentService.create(formData);
       }
       loadData();
       handleCloseModal();
@@ -99,6 +89,8 @@ const LegalDocuments = () => {
     }
   };
 
+  const formatDate = (value) => (value ? new Date(value).toLocaleDateString() : '—');
+
   if (loading) return <div className="loading">Loading documents...</div>;
 
   return (
@@ -116,33 +108,41 @@ const LegalDocuments = () => {
         <table className="data-table">
           <thead>
             <tr>
-              <th>Title</th>
+              <th>Document</th>
               <th>Type</th>
               <th>Contract</th>
+              <th>Version</th>
               <th>Status</th>
-              <th>Created Date</th>
-              <th>Expiry Date</th>
+              <th>Link</th>
+              <th>Created</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {documents.map((doc) => (
-              <tr key={doc._id}>
-                <td>{doc.title}</td>
+              <tr key={doc.id}>
+                <td>{doc.document_name}</td>
                 <td>
-                  <span className={`badge badge-${doc.type}`}>{doc.type}</span>
+                  <span className={`badge badge-${doc.document_type}`}>{doc.document_type}</span>
                 </td>
-                <td>{doc.contractId?.title || 'N/A'}</td>
+                <td>{doc.contract_title || 'N/A'}</td>
+                <td>{doc.version || '—'}</td>
                 <td>
                   <span className={`badge badge-${doc.status}`}>{doc.status}</span>
                 </td>
-                <td>{new Date(doc.createdAt).toLocaleDateString()}</td>
-                <td>{doc.expiryDate ? new Date(doc.expiryDate).toLocaleDateString() : 'N/A'}</td>
+                <td>
+                  {doc.file_url ? (
+                    <a href={doc.file_url} target="_blank" rel="noreferrer">View</a>
+                  ) : (
+                    '—'
+                  )}
+                </td>
+                <td>{formatDate(doc.created_at)}</td>
                 <td className="actions">
                   <button className="btn-sm" onClick={() => handleOpenModal(doc)}>
                     Edit
                   </button>
-                  <button className="btn-sm btn-danger" onClick={() => handleDelete(doc._id)}>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(doc.id)}>
                     Delete
                   </button>
                 </td>
@@ -163,21 +163,22 @@ const LegalDocuments = () => {
                   value={formData.contractId}
                   onChange={(e) => setFormData({ ...formData, contractId: e.target.value })}
                   required
+                  disabled={!!editingDoc}
                 >
                   <option value="">Select Contract</option>
                   {contracts.map((contract) => (
-                    <option key={contract._id} value={contract._id}>
+                    <option key={contract.id} value={contract.id}>
                       {contract.title}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="form-group">
-                <label>Document Title</label>
+                <label>Document Name</label>
                 <input
                   type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  value={formData.documentName}
+                  onChange={(e) => setFormData({ ...formData, documentName: e.target.value })}
                   placeholder="e.g., Revenue Share Agreement"
                   required
                 />
@@ -186,8 +187,8 @@ const LegalDocuments = () => {
                 <div className="form-group">
                   <label>Document Type</label>
                   <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    value={formData.documentType}
+                    onChange={(e) => setFormData({ ...formData, documentType: e.target.value })}
                   >
                     <option value="agreement">Agreement</option>
                     <option value="amendment">Amendment</option>
@@ -198,35 +199,36 @@ const LegalDocuments = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="pending-review">Pending Review</option>
-                    <option value="approved">Approved</option>
-                    <option value="signed">Signed</option>
-                    <option value="expired">Expired</option>
-                  </select>
+                  <label>Version</label>
+                  <input
+                    type="text"
+                    value={formData.version}
+                    onChange={(e) => setFormData({ ...formData, version: e.target.value })}
+                    placeholder="e.g., 1.0"
+                  />
                 </div>
               </div>
               <div className="form-group">
-                <label>Expiry Date (Optional)</label>
+                <label>Document Link (URL)</label>
                 <input
-                  type="date"
-                  value={formData.expiryDate}
-                  onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
+                  type="text"
+                  value={formData.fileUrl}
+                  onChange={(e) => setFormData({ ...formData, fileUrl: e.target.value })}
+                  placeholder="https://… (metadata reference — no upload in Phase 1)"
                 />
               </div>
               <div className="form-group">
-                <label>Notes</label>
-                <textarea
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  rows="3"
-                  placeholder="Additional notes or comments..."
-                />
+                <label>Status</label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                >
+                  <option value="draft">Draft</option>
+                  <option value="pending_review">Pending Review</option>
+                  <option value="approved">Approved</option>
+                  <option value="signed">Signed</option>
+                  <option value="expired">Expired</option>
+                </select>
               </div>
               <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={handleCloseModal}>
