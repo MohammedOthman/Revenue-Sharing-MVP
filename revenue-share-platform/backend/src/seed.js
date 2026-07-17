@@ -41,6 +41,10 @@ const seed = async () => {
     );
     const adminId = adminRes.rows[0].id;
 
+    // All seeded data belongs to the default tenant (created by migration 002),
+    // so it is visible under row-level security enforcement.
+    const tenantId = (await client.query("SELECT id FROM tenants WHERE slug = 'default'")).rows[0].id;
+
     // Partners
     const partnerRows = [
       ['Saudi Digital Payments Co.', 'partners@sdp.com.sa', 'Saudi Digital Payments Co.', 'strategic', 'active', 'Layla Al-Harbi', '+966 11 200 3000', 'Riyadh, Saudi Arabia'],
@@ -50,9 +54,9 @@ const seed = async () => {
     const partnerIds = [];
     for (const [name, email, company, type, status, contact, phone, address] of partnerRows) {
       const r = await client.query(
-        `INSERT INTO partners (name, email, company, type, status, contact_person, phone, address)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
-        [name, email, company, type, status, contact, phone, address]
+        `INSERT INTO partners (name, email, company, type, status, contact_person, phone, address, tenant_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`,
+        [name, email, company, type, status, contact, phone, address, tenantId]
       );
       partnerIds.push(r.rows[0].id);
     }
@@ -66,9 +70,9 @@ const seed = async () => {
     const contractIds = [];
     for (const [pid, title, desc, start, end, share, minPayout, terms, status] of contractRows) {
       const r = await client.query(
-        `INSERT INTO contracts (partner_id, title, description, start_date, end_date, revenue_share_percentage, minimum_payout, payment_terms, status, created_by)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
-        [pid, title, desc, start, end, share, minPayout, terms, status, adminId]
+        `INSERT INTO contracts (partner_id, title, description, start_date, end_date, revenue_share_percentage, minimum_payout, payment_terms, status, created_by, tenant_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`,
+        [pid, title, desc, start, end, share, minPayout, terms, status, adminId, tenantId]
       );
       contractIds.push(r.rows[0].id);
     }
@@ -81,9 +85,9 @@ const seed = async () => {
     ];
     for (const [cid, ps, pe, total, share, amount, status, paidAt] of revenueRows) {
       await client.query(
-        `INSERT INTO revenue_shares (contract_id, period_start, period_end, total_revenue, share_percentage, share_amount, status, paid_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-        [cid, ps, pe, total, share, amount, status, paidAt]
+        `INSERT INTO revenue_shares (contract_id, period_start, period_end, total_revenue, share_percentage, share_amount, status, paid_at, tenant_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [cid, ps, pe, total, share, amount, status, paidAt, tenantId]
       );
     }
 
@@ -95,9 +99,9 @@ const seed = async () => {
     ];
     for (const [cid, name, desc, target, actual, unit, period, status] of kpiRows) {
       await client.query(
-        `INSERT INTO kpis (contract_id, name, description, target_value, actual_value, unit, period_type, status)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-        [cid, name, desc, target, actual, unit, period, status]
+        `INSERT INTO kpis (contract_id, name, description, target_value, actual_value, unit, period_type, status, tenant_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [cid, name, desc, target, actual, unit, period, status, tenantId]
       );
     }
 
@@ -108,9 +112,9 @@ const seed = async () => {
     ];
     for (const [cid, type, name, version, status] of docRows) {
       await client.query(
-        `INSERT INTO legal_documents (contract_id, document_type, document_name, version, status, uploaded_by)
-         VALUES ($1,$2,$3,$4,$5,$6)`,
-        [cid, type, name, version, status, adminId]
+        `INSERT INTO legal_documents (contract_id, document_type, document_name, version, status, uploaded_by, tenant_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+        [cid, type, name, version, status, adminId, tenantId]
       );
     }
 
@@ -122,7 +126,7 @@ const seed = async () => {
          public_interest_basis, necessity_confirmed, no_new_contract_confirmed,
          no_nature_change_confirmed, notice_period_days, authority_source, decision_date,
          effective_date, partner_impact, calculation_method, amendment_letter_reference,
-         notice_channels, notice_message, notice_message_language, status, created_by
+         notice_channels, notice_message, notice_message_language, status, created_by, tenant_id
        ) VALUES (
          $1,'Article 12','value','amendment_letter',
          'Adjust the revenue-share percentage in line with revised processing costs.',
@@ -132,21 +136,21 @@ const seed = async () => {
          'New percentage applied to processed volume from the effective date.',
          'AL-2026-014', $2::jsonb,
          'نُبلغكم بتعديل نسبة المشاركة في الإيرادات وفقاً للمادة 12 من العقد اعتباراً من تاريخ النفاذ.',
-         'ar', 'ready', $3
+         'ar', 'ready', $3, $4
        )`,
-      [contractIds[0], readyChannels, adminId]
+      [contractIds[0], readyChannels, adminId, tenantId]
     );
 
     await client.query(
       `INSERT INTO contract_amendments (
          contract_id, article_reference, amendment_type, amendment_mechanism, reason,
-         notice_period_days, notice_channels, notice_message_language, status, created_by
+         notice_period_days, notice_channels, notice_message_language, status, created_by, tenant_id
        ) VALUES (
          $1, 'Article 5', 'duration', 'addendum',
          'Extend the reseller term by twelve months.',
-         14, '["platform"]'::jsonb, 'ar', 'draft', $2
+         14, '["platform"]'::jsonb, 'ar', 'draft', $2, $3
        )`,
-      [contractIds[1], adminId]
+      [contractIds[1], adminId, tenantId]
     );
 
     await client.query('COMMIT');

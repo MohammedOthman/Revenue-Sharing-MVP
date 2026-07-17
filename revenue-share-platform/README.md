@@ -145,17 +145,30 @@ a valid JWT. This is baseline hardening; the full pilot security program
 (tenant isolation, SSO/MFA, per-operation authorization, audit, pen test) is
 tracked separately in the roadmap.
 
-### Multi-tenancy (foundation in progress)
+### Multi-tenancy (hybrid)
 
-The data model supports a **hybrid** tenancy model: shared multi-tenant by
-default, with dedicated deployments running the same schema as a single tenant.
-Migration `002_multitenancy.sql` adds `tenants` and `memberships` (global users
-join tenants with scoped roles) and a `tenant_id` on every client-owned table,
-backfilled to a default tenant. A `tenantContext` middleware and a unit-tested
-tenant resolver exist. **Enforcement is not yet active** — turning it on means
-scoping every query by `tenant_id` and adding PostgreSQL row-level security with
-a per-request session variable, applied and proven (Tenant A cannot read Tenant
-B) against a live database.
+Shared multi-tenant by default, with dedicated deployments running the same
+schema as a single tenant. `002_multitenancy.sql` adds `tenants` and
+`memberships` (global users join tenants with scoped roles) and a `tenant_id` on
+every client-owned table. `004_row_level_security.sql` adds a non-superuser
+`reven_app` role and **PostgreSQL row-level security** policies keyed to a
+per-request GUC `app.current_tenant_id` (set via the `withTenant` helper);
+`rls.integration.test.js` **proves Tenant A cannot read or write Tenant B's
+rows**.
+
+**Enforcement activation (remaining rollout):** run the API as the `reven_app`
+role (set `DB_USER=reven_app` with a password in production; migrations/seed
+still run as an owner/superuser) and route request queries through `withTenant`
+so every statement carries a tenant context. Until then the policies exist and
+are proven, but the app connects as the owner (which bypasses RLS).
+
+Run the database-backed tests (migrations must be applied through 004):
+
+```bash
+DB_HOST=… DB_PORT=… DB_NAME=… DB_USER=… DB_PASSWORD=… RUN_DB_TESTS=1 npm test
+```
+
+They are skipped unless `RUN_DB_TESTS=1`.
 
 ### Tests
 
