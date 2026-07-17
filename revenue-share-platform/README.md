@@ -1,30 +1,40 @@
-# Revenue Share Platform - B2B SaaS
+# Reven — Revenue Share Platform
 
-A comprehensive B2B SaaS platform for managing revenue sharing initiatives, contracts, partnerships, legal documents, and KPIs.
+A Phase 1 **Capture** workspace for partner revenue and revenue-sharing
+governance: manage partners, revenue-sharing contracts, governed contract
+amendment journeys, revenue-share records, KPIs, and legal-document metadata,
+with a dashboard overview and JWT authentication.
+
+> **Phase boundary — Reven does not move money.** In this phase the platform
+> records and previews revenue-share data (including an estimated share amount)
+> and tracks payout-readiness *status*. It does not initiate transfers, run
+> settlement, hold funds, clear tax, or post to an ERP. Status labels describe
+> what the system actually does (recorded, pending, ready, notified,
+> acknowledged, recorded-as-paid).
 
 ## Features
 
-### Core Functionality
-- **Partner Management**: Onboard and manage referral, affiliate, strategic, and reseller partners
-- **Contract Lifecycle**: Create, track, and manage revenue share contracts with customizable terms
-- **Revenue Tracking**: Record revenue, calculate partner shares, and process payments
-- **KPI Monitoring**: Track performance metrics against targets with visual progress indicators
-- **Legal Documents**: Manage agreements, amendments, NDAs, and other legal documentation
-- **Dashboard Analytics**: Comprehensive overview with real-time metrics and insights
+- **Partners** — CRUD for referral, affiliate, strategic, and reseller partners.
+- **Contracts** — revenue-sharing agreements with dates, share %, minimum
+  payout, payment terms, and status, linked to a partner.
+- **Amendment Journeys** — the flagship governance workflow: turn a legal
+  contract article into a controlled change with legal guardrails (public
+  interest / actual need basis, necessity, no-new-contract, no-change-of-nature),
+  authority and decision/effective dates, partner impact, calculation method,
+  amendment-letter evidence, notice channels, and an Arabic/RTL notice. Sending
+  a notice is blocked until every readiness requirement is met, and a notified
+  journey becomes immutable.
+- **Revenue** — record revenue-share periods and preview the share amount
+  (no payment execution).
+- **KPIs** — contract-linked metrics with target/actual values and progress.
+- **Legal Documents** — document metadata / evidence links (no file upload yet).
+- **Dashboard** — program overview including amendment readiness and notice
+  metrics.
 
-### Technical Stack
+## Technical Stack
 
-**Backend:**
-- Node.js + Express.js
-- MongoDB (Mongoose ODM)
-- JWT Authentication
-- Role-based Access Control
-
-**Frontend:**
-- React 18 + Vite
-- React Router for navigation
-- Axios for API communication
-- Modern CSS with responsive design
+**Backend:** Node.js + Express, PostgreSQL (`pg`), JWT auth, ES modules.
+**Frontend:** React 18 + Vite, React Router, Axios.
 
 ## Project Structure
 
@@ -33,122 +43,102 @@ revenue-share-platform/
 ├── backend/
 │   ├── src/
 │   │   ├── controllers/    # Request handlers
-│   │   ├── models/         # Database schemas
+│   │   ├── models/         # SQL data-access + schema
 │   │   ├── routes/         # API endpoints
-│   │   ├── middleware/     # Auth & validation
-│   │   ├── utils/          # Helper functions
-│   │   ├── config/         # Database config
-│   │   └── server.js       # Entry point
+│   │   ├── middleware/     # Auth
+│   │   ├── utils/          # JWT, password hashing
+│   │   ├── config/         # Database pool
+│   │   └── server.js       # Entry point (creates tables on boot)
 │   └── package.json
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # Reusable UI components
+│   │   ├── components/     # Layout
 │   │   ├── pages/          # Page components
 │   │   ├── services/       # API service layer
-│   │   ├── context/        # React context (Auth)
-│   │   ├── styles/         # CSS stylesheets
-│   │   ├── App.jsx         # Main app component
-│   │   └── main.jsx        # Entry point
-│   ├── index.html
+│   │   ├── context/        # Auth context
+│   │   └── styles/         # CSS
 │   └── package.json
 └── README.md
 ```
 
-## Setup Instructions
+## Setup
 
 ### Prerequisites
-- Node.js 16+ 
-- MongoDB (local or cloud instance)
-- npm or yarn
+- Node.js 18+
+- PostgreSQL 13+ (local or cloud)
 
-### Backend Setup
+### Backend
 
-1. Navigate to backend directory:
 ```bash
 cd backend
-```
-
-2. Install dependencies:
-```bash
 npm install
+cp .env.example .env       # then edit DB_* and JWT_SECRET
+npm run dev                # http://localhost:5000
 ```
 
-3. Configure environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your MongoDB connection string and JWT secret
-```
+On startup the server connects to PostgreSQL and creates any missing tables
+(`CREATE TABLE IF NOT EXISTS`). Create the database named in `DB_NAME` first.
 
-4. Start the development server:
-```bash
-npm run dev
-```
+### Frontend
 
-Backend will run on `http://localhost:5000`
-
-### Frontend Setup
-
-1. Navigate to frontend directory:
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-```bash
 npm install
+npm run dev                # http://localhost:3000
 ```
 
-3. Start the development server:
-```bash
-npm run dev
-```
+The Vite dev server proxies `/api` to `http://localhost:5000`, so run the
+backend alongside it.
 
-Frontend will run on `http://localhost:3000`
+## Environment Variables (backend `.env`)
 
-## API Endpoints
+| Variable      | Description                          | Example              |
+|---------------|--------------------------------------|----------------------|
+| `PORT`        | API port                             | `5000`               |
+| `NODE_ENV`    | environment                          | `development`        |
+| `DB_HOST`     | PostgreSQL host                      | `localhost`          |
+| `DB_PORT`     | PostgreSQL port                      | `5432`               |
+| `DB_NAME`     | database name                        | `revenue_share`      |
+| `DB_USER`     | database user                        | `postgres`           |
+| `DB_PASSWORD` | database password                    | `postgres`           |
+| `JWT_SECRET`  | secret used to sign JWTs             | `change-me`          |
+
+See `backend/.env.example`.
+
+## API
+
+All business routes require a `Bearer` JWT (obtained from login/register).
 
 ### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/profile` - Get user profile
+- `POST /api/auth/register` — register, returns `{ user, token }`
+- `POST /api/auth/login` — login, returns `{ user, token }`
+- `GET  /api/auth/profile` — current user
 
-### Partners
-- `GET /api/partners` - Get all partners
-- `POST /api/partners` - Create partner
-- `PUT /api/partners/:id` - Update partner
-- `DELETE /api/partners/:id` - Delete partner
+### Partners — `/api/partners`
+`GET /` · `POST /` · `GET /stats` · `GET /:id` · `PUT /:id` · `DELETE /:id`
 
-### Contracts
-- `GET /api/contracts` - Get all contracts
-- `POST /api/contracts` - Create contract
-- `PUT /api/contracts/:id` - Update contract
-- `DELETE /api/contracts/:id` - Delete contract
+### Contracts — `/api/contracts`
+`GET /` · `POST /` · `GET /stats` · `GET /:id` · `PUT /:id` · `DELETE /:id`
 
-### Revenue
-- `GET /api/revenue` - Get all revenue records
-- `POST /api/revenue` - Create revenue record
-- `POST /api/revenue/:id/process-payment` - Process payment
+### Amendment Journeys — `/api/amendments`
+`GET /` · `POST /` · `GET /stats` · `GET /:id` · `PUT /:id` · `DELETE /:id`
+· `POST /:id/send-notice` (blocked until readiness is met)
+· `POST /:id/acknowledge`
 
-### KPIs
-- `GET /api/kpis` - Get all KPIs
-- `POST /api/kpis` - Create KPI
-- `PATCH /api/kpis/:id/value` - Update KPI value
+### Revenue — `/api/revenue`
+`GET /` · `POST /` · `GET /stats` · `GET /trends` · `GET /:id` · `PUT /:id`
+· `DELETE /:id`  *(no payment-execution endpoint — Phase 1 records only)*
 
-### Legal Documents
-- `GET /api/legal-documents` - Get all documents
-- `POST /api/legal-documents` - Create document
+### KPIs — `/api/kpis`
+`GET /` · `POST /` · `GET /stats` · `GET /:id` · `PUT /:id` · `DELETE /:id`
 
-### Dashboard
-- `GET /api/dashboard/overview` - Get dashboard overview
-- `GET /api/dashboard/analytics/trends` - Get revenue trends
-- `GET /api/dashboard/analytics/partner-performance` - Get partner performance
+### Legal Documents — `/api/documents`
+`GET /` · `POST /` · `GET /stats` · `GET /:id` · `PUT /:id` · `DELETE /:id`
 
-## Demo Credentials
-
-```
-Email: admin@example.com
-Password: password123
-```
+### Dashboard — `/api/dashboard`
+- `GET /overview` — partners, contracts, revenue, KPIs, documents, amendments
+- `GET /revenue-trends` — revenue by period
+- `GET /top-partners`
 
 ## License
 

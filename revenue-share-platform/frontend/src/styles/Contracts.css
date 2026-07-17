@@ -138,19 +138,3 @@
   font-size: 13px;
 }
 
-.payment-details {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-.payment-details p {
-  margin: 8px 0;
-  font-size: 14px;
-}
-
-.confirmation-text {
-  color: #666;
-  margin-bottom: 20px;
-}
