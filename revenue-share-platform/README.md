@@ -79,6 +79,14 @@ npm run dev                # http://localhost:5000
 On startup the server connects to PostgreSQL and creates any missing tables
 (`CREATE TABLE IF NOT EXISTS`). Create the database named in `DB_NAME` first.
 
+Load (or reset) a coherent Saudi/GCC demo dataset and the demo admin login:
+
+```bash
+npm run seed               # resets domain tables, then seeds demo data
+```
+
+Demo login: `admin@example.com` / `password123`.
+
 ### Frontend
 
 ```bash
