@@ -7,6 +7,7 @@ import { createTables } from './models/schema.js';
 import authRoutes from './routes/auth.routes.js';
 import partnerRoutes from './routes/partner.routes.js';
 import contractRoutes from './routes/contract.routes.js';
+import amendmentRoutes from './routes/amendment.routes.js';
 import revenueRoutes from './routes/revenue.routes.js';
 import kpiRoutes from './routes/kpi.routes.js';
 import legalDocumentRoutes from './routes/legalDocument.routes.js';
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/partners', partnerRoutes);
 app.use('/api/contracts', contractRoutes);
+app.use('/api/amendments', amendmentRoutes);
 app.use('/api/revenue', revenueRoutes);
 app.use('/api/kpis', kpiRoutes);
 app.use('/api/documents', legalDocumentRoutes);

@@ -101,6 +101,38 @@ export const createTables = async () => {
       )
     `);
 
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS contract_amendments (
+        id SERIAL PRIMARY KEY,
+        contract_id INTEGER REFERENCES contracts(id) ON DELETE CASCADE,
+        article_reference VARCHAR(255),
+        amendment_type VARCHAR(100),
+        amendment_mechanism VARCHAR(100),
+        reason TEXT,
+        public_interest_basis TEXT,
+        necessity_confirmed BOOLEAN DEFAULT FALSE,
+        no_new_contract_confirmed BOOLEAN DEFAULT FALSE,
+        no_nature_change_confirmed BOOLEAN DEFAULT FALSE,
+        notice_period_days INTEGER,
+        authority_source VARCHAR(255),
+        decision_date DATE,
+        effective_date DATE,
+        partner_impact TEXT,
+        calculation_method TEXT,
+        amendment_letter_reference VARCHAR(255),
+        notice_channels JSONB DEFAULT '[]'::jsonb,
+        notice_message TEXT,
+        notice_message_language VARCHAR(10) DEFAULT 'ar',
+        status VARCHAR(50) DEFAULT 'draft',
+        notified_at TIMESTAMP,
+        acknowledged_at TIMESTAMP,
+        acknowledgment_note TEXT,
+        created_by INTEGER REFERENCES users(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log('Database tables created successfully');
   } catch (error) {
     console.error('Error creating tables:', error);
