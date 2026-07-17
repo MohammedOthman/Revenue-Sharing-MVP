@@ -6,12 +6,12 @@ import {
   updateEvidencePackController, deleteEvidencePackController, getEvidencePackStatsController,
   listPackItemsController, addItemToPackController, finalizeEvidencePackController,
 } from '../controllers/evidence.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 import { evidenceItemCreateRules, evidencePackCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
-router.use(authMiddleware);
+router.use(protect);
 
 // Evidence items
 router.post('/items', evidenceItemCreateRules, handleValidation, createEvidenceItemController);

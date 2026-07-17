@@ -2,12 +2,12 @@ import express from 'express';
 import { 
   getDashboardOverview, getRevenueTrends, getTopPerformingPartners 
 } from '../controllers/dashboard.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 
 const router = express.Router();
 
 // All routes are protected
-router.use(authMiddleware);
+router.use(protect);
 
 router.get('/overview', getDashboardOverview);
 router.get('/revenue-trends', getRevenueTrends);

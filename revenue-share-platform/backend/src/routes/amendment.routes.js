@@ -4,13 +4,13 @@ import {
   updateAmendmentController, deleteAmendmentController, sendNoticeController,
   acknowledgeNoticeController, getAmendmentStatsController,
 } from '../controllers/amendment.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 import { amendmentCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
 // All routes are protected
-router.use(authMiddleware);
+router.use(protect);
 
 router.post('/', amendmentCreateRules, handleValidation, createAmendmentController);
 router.get('/', getAllAmendmentsController);

@@ -4,12 +4,12 @@ import {
   updateAttributionController, confirmAttributionController, deleteAttributionController,
   getAttributionStatsController,
 } from '../controllers/attribution.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 import { attributionCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
-router.use(authMiddleware);
+router.use(protect);
 
 router.post('/', attributionCreateRules, handleValidation, createAttributionController);
 router.get('/', getAllAttributionsController);

@@ -1,7 +1,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import app from '../src/server.js';
-import pool from '../src/config/database.js';
+import pool, { closePools } from '../src/config/database.js';
 import { generateToken } from '../src/utils/jwt.js';
 import { createUser } from '../src/models/user.model.js';
 import { createPartner } from '../src/models/partner.model.js';
@@ -25,6 +25,15 @@ before(async () => {
   userId = user.id;
   token = generateToken({ id: user.id, email: user.email, role: 'admin' });
 
+  // The evidence endpoints are tenant-scoped; give the test user a membership so
+  // tenant resolution succeeds.
+  const tenantId = (await pool.query("SELECT id FROM tenants WHERE slug = 'default'")).rows[0].id;
+  await pool.query(
+    `INSERT INTO memberships (user_id, tenant_id, role, status) VALUES ($1, $2, 'admin', 'active')
+     ON CONFLICT (user_id, tenant_id) DO NOTHING`,
+    [userId, tenantId]
+  );
+
   const partner = await createPartner({ name: 'Evidence Co', email: `evi-p-${Date.now()}@t.com` });
   partnerId = partner.id;
   const claim = await createClaim({ partnerId, claimedAmount: 500, basis: 'evidence test' });
@@ -44,7 +53,7 @@ after(async () => {
     // reference actor_user_id and must not (cannot) be deleted.
   } finally {
     if (server) await new Promise((resolve) => server.close(resolve));
-    await pool.end();
+    await closePools();
   }
 });
 

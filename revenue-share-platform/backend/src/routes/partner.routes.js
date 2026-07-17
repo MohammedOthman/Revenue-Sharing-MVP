@@ -3,13 +3,13 @@ import {
   createPartnerController, getAllPartnersController, getPartnerController, 
   updatePartnerController, deletePartnerController, getPartnerStatsController 
 } from '../controllers/partner.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 import { partnerCreateRules, partnerUpdateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
 // All routes are protected
-router.use(authMiddleware);
+router.use(protect);
 
 router.post('/', partnerCreateRules, handleValidation, createPartnerController);
 router.get('/', getAllPartnersController);

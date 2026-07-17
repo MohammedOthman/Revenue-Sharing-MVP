@@ -45,6 +45,15 @@ const seed = async () => {
     // so it is visible under row-level security enforcement.
     const tenantId = (await client.query("SELECT id FROM tenants WHERE slug = 'default'")).rows[0].id;
 
+    // The admin must be a member of the default tenant, otherwise tenant
+    // resolution denies every request once enforcement is on.
+    await client.query(
+      `INSERT INTO memberships (user_id, tenant_id, role, status)
+       VALUES ($1, $2, 'admin', 'active')
+       ON CONFLICT (user_id, tenant_id) DO UPDATE SET role = 'admin', status = 'active'`,
+      [adminId, tenantId]
+    );
+
     // Partners
     const partnerRows = [
       ['Saudi Digital Payments Co.', 'partners@sdp.com.sa', 'Saudi Digital Payments Co.', 'strategic', 'active', 'Layla Al-Harbi', '+966 11 200 3000', 'Riyadh, Saudi Arabia'],

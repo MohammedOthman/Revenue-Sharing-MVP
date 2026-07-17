@@ -4,13 +4,13 @@ import {
   updateRevenueShareController, deleteRevenueShareController, 
   getRevenueStatsController, getRevenueByPeriodController 
 } from '../controllers/revenue.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 import { revenueCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
 // All routes are protected
-router.use(authMiddleware);
+router.use(protect);
 
 router.post('/', revenueCreateRules, handleValidation, createRevenueShareController);
 router.get('/', getAllRevenueSharesController);

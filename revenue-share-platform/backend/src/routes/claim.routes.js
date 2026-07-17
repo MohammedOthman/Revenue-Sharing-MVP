@@ -5,12 +5,12 @@ import {
   reviewClaimController, requestClarificationController,
   approveClaimController, rejectClaimController,
 } from '../controllers/claim.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
 import { claimCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
-router.use(authMiddleware);
+router.use(protect);
 
 router.post('/', claimCreateRules, handleValidation, createClaimController);
 router.get('/', getAllClaimsController);
