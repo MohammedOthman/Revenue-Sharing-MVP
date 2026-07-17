@@ -93,3 +93,10 @@ export const attributionCreateRules = [
   body('partnerId').notEmpty().withMessage('Partner is required'),
   body('weight').optional().isFloat({ min: 0, max: 100 }).withMessage('Weight must be 0–100'),
 ];
+
+// --- Protection Windows ---
+export const protectionWindowCreateRules = [
+  body('partnerId').notEmpty().withMessage('Partner is required'),
+  body('startsAt').optional().notEmpty().withMessage('Start date cannot be empty'),
+  body('endsAt').optional().notEmpty().withMessage('End date cannot be empty'),
+];

@@ -25,6 +25,7 @@ tags:
   - name: Dashboard
   - name: Claims
   - name: Attribution
+  - name: Protection
   - name: Audit
   - name: System
 
@@ -879,6 +880,90 @@ paths:
         '200': { $ref: '#/components/responses/Message' }
         '409': { $ref: '#/components/responses/Conflict' }
 
+  /protection-windows:
+    get:
+      tags: [Protection]
+      summary: List protection windows
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: partnerId, schema: { type: integer } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Protection windows (each includes effective_status)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  windows:
+                    type: array
+                    items: { $ref: '#/components/schemas/ProtectionWindow' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Protection]
+      summary: Create a protection window
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProtectionWindowInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  window: { $ref: '#/components/schemas/ProtectionWindow' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /protection-windows/stats:
+    get:
+      tags: [Protection]
+      summary: Protection window statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /protection-windows/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Protection]
+      summary: Get a protection window
+      responses:
+        '200':
+          description: Protection window
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  window: { $ref: '#/components/schemas/ProtectionWindow' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Protection]
+      summary: Update a protection window (blocked once released)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProtectionWindowInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Protection]
+      summary: Delete a protection window
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+  /protection-windows/{id}/release:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Protection]
+      summary: Release a protection window
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
   /audit:
     get:
       tags: [Audit]
@@ -1217,6 +1302,30 @@ components:
         outcome: { type: string }
         weight: { type: number }
         rationale: { type: string }
+    ProtectionWindow:
+      type: object
+      properties:
+        id: { type: integer }
+        tenant_id: { type: integer }
+        partner_id: { type: integer }
+        partner_name: { type: string }
+        contract_id: { type: integer }
+        claim_id: { type: integer }
+        starts_at: { type: string, format: date }
+        ends_at: { type: string, format: date }
+        reason: { type: string }
+        status: { type: string, enum: [active, expired, released] }
+        effective_status: { type: string, enum: [active, expired, released] }
+    ProtectionWindowInput:
+      type: object
+      required: [partnerId]
+      properties:
+        partnerId: { type: integer }
+        contractId: { type: integer }
+        claimId: { type: integer }
+        startsAt: { type: string, format: date }
+        endsAt: { type: string, format: date }
+        reason: { type: string }
     AuditEvent:
       type: object
       properties:
