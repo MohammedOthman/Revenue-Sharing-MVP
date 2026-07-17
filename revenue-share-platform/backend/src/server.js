@@ -22,6 +22,7 @@ import auditRoutes from './routes/audit.routes.js';
 import claimRoutes from './routes/claim.routes.js';
 import attributionRoutes from './routes/attribution.routes.js';
 import protectionWindowRoutes from './routes/protectionWindow.routes.js';
+import evidenceRoutes from './routes/evidence.routes.js';
 
 dotenv.config();
 
@@ -91,6 +92,7 @@ app.use('/api/audit', auditRoutes);
 app.use('/api/claims', claimRoutes);
 app.use('/api/attributions', attributionRoutes);
 app.use('/api/protection-windows', protectionWindowRoutes);
+app.use('/api/evidence', evidenceRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -100,3 +100,13 @@ export const protectionWindowCreateRules = [
   body('startsAt').optional().notEmpty().withMessage('Start date cannot be empty'),
   body('endsAt').optional().notEmpty().withMessage('End date cannot be empty'),
 ];
+
+// --- Evidence ---
+export const evidenceItemCreateRules = [
+  body('name').trim().notEmpty().withMessage('Name is required'),
+  body('fileUrl').optional({ checkFalsy: true }).isURL().withMessage('File URL must be a valid URL'),
+];
+
+export const evidencePackCreateRules = [
+  body('title').trim().notEmpty().withMessage('Title is required'),
+];

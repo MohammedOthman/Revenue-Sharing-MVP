@@ -1,3 +1,4 @@
+import 'dotenv/config'; // load backend/.env so DB_* match the other tests locally (no-op in CI, which sets env directly)
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import pkg from 'pg';

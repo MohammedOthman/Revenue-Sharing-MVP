@@ -26,6 +26,7 @@ tags:
   - name: Claims
   - name: Attribution
   - name: Protection
+  - name: Evidence
   - name: Audit
   - name: System
 
@@ -964,6 +965,208 @@ paths:
         '200': { $ref: '#/components/responses/Message' }
         '409': { $ref: '#/components/responses/Conflict' }
 
+  /evidence/items:
+    get:
+      tags: [Evidence]
+      summary: List evidence items
+      parameters:
+        - { in: query, name: claimId, schema: { type: integer } }
+        - { in: query, name: amendmentId, schema: { type: integer } }
+        - { in: query, name: packId, schema: { type: integer } }
+        - { in: query, name: type, schema: { type: string } }
+      responses:
+        '200':
+          description: Evidence items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/EvidenceItem' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Evidence]
+      summary: Create an evidence item (must attach to a claim, amendment, or pack)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvidenceItemInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item: { $ref: '#/components/schemas/EvidenceItem' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /evidence/items/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Evidence]
+      summary: Get an evidence item
+      responses:
+        '200':
+          description: Evidence item
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item: { $ref: '#/components/schemas/EvidenceItem' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Evidence]
+      summary: Update an evidence item (blocked once inside a finalized pack)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvidenceItemInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Evidence]
+      summary: Delete an evidence item (blocked once inside a finalized pack)
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /evidence/packs:
+    get:
+      tags: [Evidence]
+      summary: List evidence packs
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: claimId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Evidence packs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  packs:
+                    type: array
+                    items: { $ref: '#/components/schemas/EvidencePack' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Evidence]
+      summary: Create an evidence pack (starts as draft)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvidencePackInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pack: { $ref: '#/components/schemas/EvidencePack' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /evidence/packs/stats:
+    get:
+      tags: [Evidence]
+      summary: Evidence pack statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /evidence/packs/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Evidence]
+      summary: Get an evidence pack with its items
+      responses:
+        '200':
+          description: Evidence pack (includes items)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pack: { $ref: '#/components/schemas/EvidencePack' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Evidence]
+      summary: Update an evidence pack (blocked once finalized)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvidencePackInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Evidence]
+      summary: Delete an evidence pack (items are detached, not deleted)
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+  /evidence/packs/{id}/items:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Evidence]
+      summary: List items in an evidence pack
+      responses:
+        '200':
+          description: Items in the pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/EvidenceItem' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      tags: [Evidence]
+      summary: Add an item to a pack (attach by itemId, or create inline); blocked once finalized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId: { type: integer, description: Attach an existing item }
+                name: { type: string, description: Create a new item in the pack }
+                type: { type: string }
+                description: { type: string }
+                fileUrl: { type: string }
+                claimId: { type: integer }
+                amendmentId: { type: integer }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '201':
+          description: Item created in pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item: { $ref: '#/components/schemas/EvidenceItem' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /evidence/packs/{id}/finalize:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Evidence]
+      summary: Finalize an evidence pack (draft -> finalized, read-only afterwards)
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
   /audit:
     get:
       tags: [Audit]
@@ -1326,6 +1529,53 @@ components:
         startsAt: { type: string, format: date }
         endsAt: { type: string, format: date }
         reason: { type: string }
+    EvidenceItem:
+      type: object
+      properties:
+        id: { type: integer }
+        tenant_id: { type: integer }
+        claim_id: { type: integer }
+        amendment_id: { type: integer }
+        pack_id: { type: integer }
+        pack_status: { type: string, enum: [draft, finalized] }
+        pack_title: { type: string }
+        type: { type: string }
+        name: { type: string }
+        description: { type: string }
+        file_url: { type: string }
+        added_by: { type: integer }
+    EvidenceItemInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        type: { type: string }
+        description: { type: string }
+        fileUrl: { type: string, description: Reference link only; the platform stores no files }
+        claimId: { type: integer }
+        amendmentId: { type: integer }
+        packId: { type: integer }
+    EvidencePack:
+      type: object
+      properties:
+        id: { type: integer }
+        tenant_id: { type: integer }
+        claim_id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        status: { type: string, enum: [draft, finalized] }
+        finalized_at: { type: string, format: date-time }
+        item_count: { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/EvidenceItem' }
+    EvidencePackInput:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        claimId: { type: integer }
     AuditEvent:
       type: object
       properties:

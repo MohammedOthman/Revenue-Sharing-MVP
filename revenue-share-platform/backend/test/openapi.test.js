@@ -24,6 +24,8 @@ test('every API group is documented', () => {
     '/claims', '/claims/{id}', '/claims/{id}/approve', '/claims/{id}/reject',
     '/attributions', '/attributions/{id}', '/attributions/{id}/confirm',
     '/protection-windows', '/protection-windows/{id}', '/protection-windows/{id}/release',
+    '/evidence/items', '/evidence/items/{id}',
+    '/evidence/packs', '/evidence/packs/{id}', '/evidence/packs/{id}/items', '/evidence/packs/{id}/finalize',
     '/audit',
   ];
   for (const p of expected) {
