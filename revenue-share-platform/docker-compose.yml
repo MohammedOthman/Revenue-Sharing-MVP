@@ -1,0 +1,46 @@
+# Local / pilot bring-up: Postgres + backend (auto-migrates on start) + frontend.
+#   docker compose up --build
+#   docker compose exec backend npm run seed     # optional demo data
+# App: http://localhost:3000   API: http://localhost:5000/api   Docs: /api/docs
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: revenue_share
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d revenue_share"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: revenue_share
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      # Local default only — supply a real secret via your orchestrator in prod.
+      JWT_SECRET: local-dev-secret-change-me-to-a-long-random-value
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:

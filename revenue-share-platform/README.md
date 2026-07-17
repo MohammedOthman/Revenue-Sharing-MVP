@@ -67,7 +67,22 @@ revenue-share-platform/
 - Node.js 18+
 - PostgreSQL 13+ (local or cloud)
 
-### Backend
+### Run everything with Docker (recommended)
+
+From `revenue-share-platform/`:
+
+```bash
+docker compose up --build            # Postgres + backend (auto-migrates) + frontend
+docker compose exec backend npm run seed   # optional demo data
+```
+
+- App: `http://localhost:3000`
+- API: `http://localhost:5000/api` · Docs: `http://localhost:5000/api/docs`
+
+Set a real `JWT_SECRET` (and, in production, `CORS_ORIGINS`) via your
+orchestrator instead of the local default in `docker-compose.yml`.
+
+### Backend (without Docker)
 
 ```bash
 cd backend
