@@ -130,6 +130,18 @@ a valid JWT. This is baseline hardening; the full pilot security program
 (tenant isolation, SSO/MFA, per-operation authorization, audit, pen test) is
 tracked separately in the roadmap.
 
+### Multi-tenancy (foundation in progress)
+
+The data model supports a **hybrid** tenancy model: shared multi-tenant by
+default, with dedicated deployments running the same schema as a single tenant.
+Migration `002_multitenancy.sql` adds `tenants` and `memberships` (global users
+join tenants with scoped roles) and a `tenant_id` on every client-owned table,
+backfilled to a default tenant. A `tenantContext` middleware and a unit-tested
+tenant resolver exist. **Enforcement is not yet active** — turning it on means
+scoping every query by `tenant_id` and adding PostgreSQL row-level security with
+a per-request session variable, applied and proven (Tenant A cannot read Tenant
+B) against a live database.
+
 ### Tests
 
 ```bash
