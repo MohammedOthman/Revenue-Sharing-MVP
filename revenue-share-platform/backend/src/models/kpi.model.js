@@ -1,9 +1,9 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 export const createKPI = async (data) => {
   const { contractId, name, description, targetValue, unit, periodType } = data;
   
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO kpis (contract_id, name, description, target_value, unit, period_type) 
      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
     [contractId, name, description || null, targetValue, unit || null, periodType || 'monthly']
@@ -12,7 +12,7 @@ export const createKPI = async (data) => {
 };
 
 export const findKPIById = async (id) => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT k.*, c.title as contract_title, p.name as partner_name
     FROM kpis k
     LEFT JOIN contracts c ON k.contract_id = c.id
@@ -47,7 +47,7 @@ export const getAllKPIs = async (filters = {}) => {
 
   query += ' ORDER BY k.created_at DESC';
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -74,16 +74,16 @@ export const updateKPI = async (id, updates) => {
   values.push(id);
   const query = `UPDATE kpis SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`;
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows[0];
 };
 
 export const deleteKPI = async (id) => {
-  await pool.query('DELETE FROM kpis WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM kpis WHERE id = $1', [id]);
 };
 
 export const getKPIStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT 
       COUNT(*) as total_kpis,
       AVG(CASE WHEN target_value > 0 THEN (actual_value / target_value) * 100 ELSE 0 END) as avg_achievement_rate,

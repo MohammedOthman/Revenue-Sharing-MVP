@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Partner Revenue Claim lifecycle. Approved/rejected are terminal.
@@ -20,7 +20,7 @@ export const createClaim = async (data) => {
     basis, claimedAmount, currency, createdBy,
   } = data;
 
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO partner_revenue_claims
        (tenant_id, partner_id, contract_id, period_start, period_end, basis, claimed_amount, currency, created_by)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
@@ -33,7 +33,7 @@ export const createClaim = async (data) => {
 };
 
 export const findClaimById = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT c.*, p.name AS partner_name, ct.title AS contract_title, u.full_name AS reviewer_name
      FROM partner_revenue_claims c
      LEFT JOIN partners p ON c.partner_id = p.id
@@ -59,7 +59,7 @@ export const getAllClaims = async (filters = {}) => {
   if (filters.partnerId) { query += ` AND c.partner_id = $${n++}`; values.push(filters.partnerId); }
   if (filters.contractId) { query += ` AND c.contract_id = $${n++}`; values.push(filters.contractId); }
   query += ' ORDER BY c.created_at DESC';
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -84,7 +84,7 @@ export const updateClaim = async (id, updates) => {
   }
   if (fields.length === 0) return findClaimById(id);
   values.push(id);
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE partner_revenue_claims SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`,
     values
   );
@@ -102,7 +102,7 @@ export const setClaimStatus = async (id, { status, approvedAmount, note, reviewe
     sets.push('reviewed_at = CURRENT_TIMESTAMP');
   }
   values.push(id);
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE partner_revenue_claims SET ${sets.join(', ')} WHERE id = $${values.length} RETURNING *`,
     values
   );
@@ -110,11 +110,11 @@ export const setClaimStatus = async (id, { status, approvedAmount, note, reviewe
 };
 
 export const deleteClaim = async (id) => {
-  await pool.query('DELETE FROM partner_revenue_claims WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM partner_revenue_claims WHERE id = $1', [id]);
 };
 
 export const getClaimStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT
       COUNT(*) AS total_claims,
       COUNT(CASE WHEN status = 'submitted' THEN 1 END) AS submitted_claims,

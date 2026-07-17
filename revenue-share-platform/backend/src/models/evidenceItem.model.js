@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Evidence Item: a metadata record describing why a claim or amendment is
@@ -17,7 +17,7 @@ export const canModifyItem = (packStatus) => packStatus !== 'finalized';
 
 export const createEvidenceItem = async (data) => {
   const { tenantId, claimId, amendmentId, packId, type, name, description, fileUrl, addedBy } = data;
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO evidence_items
        (tenant_id, claim_id, amendment_id, pack_id, type, name, description, file_url, added_by)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
@@ -32,7 +32,7 @@ export const createEvidenceItem = async (data) => {
 // Joins the item's pack (if any) so callers can see whether the item is locked
 // inside a finalized pack.
 export const findEvidenceItemById = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT i.*, p.status AS pack_status, p.title AS pack_title
      FROM evidence_items i
      LEFT JOIN evidence_packs p ON i.pack_id = p.id
@@ -56,12 +56,12 @@ export const getAllEvidenceItems = async (filters = {}) => {
   if (filters.packId) { query += ` AND i.pack_id = $${n++}`; values.push(filters.packId); }
   if (filters.type) { query += ` AND i.type = $${n++}`; values.push(filters.type); }
   query += ' ORDER BY i.created_at DESC';
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
 export const getEvidenceItemsByPack = async (packId) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     'SELECT * FROM evidence_items WHERE pack_id = $1 ORDER BY created_at ASC',
     [packId]
   );
@@ -88,7 +88,7 @@ export const updateEvidenceItem = async (id, updates) => {
   }
   if (fields.length === 0) return findEvidenceItemById(id);
   values.push(id);
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE evidence_items SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`,
     values
   );
@@ -97,7 +97,7 @@ export const updateEvidenceItem = async (id, updates) => {
 
 // Attach an item to a pack (or detach when packId is null).
 export const setEvidenceItemPack = async (id, packId) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE evidence_items SET pack_id = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *`,
     [packId ?? null, id]
   );
@@ -105,5 +105,5 @@ export const setEvidenceItemPack = async (id, packId) => {
 };
 
 export const deleteEvidenceItem = async (id) => {
-  await pool.query('DELETE FROM evidence_items WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM evidence_items WHERE id = $1', [id]);
 };

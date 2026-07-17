@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Contract Amendment Journeys — Phase 1 Capture governance workflow.
@@ -113,7 +113,7 @@ export const createAmendment = async (data) => {
   }
   const channels = normalizeChannels(values.notice_channels) || [];
 
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO contract_amendments (
        contract_id, article_reference, amendment_type, amendment_mechanism,
        reason, public_interest_basis, necessity_confirmed, no_new_contract_confirmed,
@@ -154,7 +154,7 @@ export const createAmendment = async (data) => {
 };
 
 export const findAmendmentById = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT a.*, c.title AS contract_title, p.name AS partner_name, u.full_name AS creator_name
      FROM contract_amendments a
      LEFT JOIN contracts c ON a.contract_id = c.id
@@ -191,7 +191,7 @@ export const getAllAmendments = async (filters = {}) => {
 
   query += ' ORDER BY a.created_at DESC';
 
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -224,7 +224,7 @@ export const updateAmendment = async (id, updates) => {
   values.push(id);
   const query = `UPDATE contract_amendments SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`;
 
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   if (!result.rows[0]) return null;
   return syncStatus(result.rows[0]);
 };
@@ -234,7 +234,7 @@ export const updateAmendment = async (id, updates) => {
 const syncStatus = async (row) => {
   const nextStatus = deriveStatus(row);
   if (nextStatus === row.status) return row;
-  const result = await pool.query(
+  const result = await dbQuery(
     'UPDATE contract_amendments SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
     [nextStatus, row.id]
   );
@@ -242,7 +242,7 @@ const syncStatus = async (row) => {
 };
 
 export const deleteAmendment = async (id) => {
-  await pool.query('DELETE FROM contract_amendments WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM contract_amendments WHERE id = $1', [id]);
 };
 
 /**
@@ -252,7 +252,7 @@ export const deleteAmendment = async (id) => {
  * finance and legal can rely on as evidence.
  */
 export const markNotified = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE contract_amendments
      SET status = 'notified', notified_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
      WHERE id = $1 RETURNING *`,
@@ -262,7 +262,7 @@ export const markNotified = async (id) => {
 };
 
 export const markAcknowledged = async (id, note) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE contract_amendments
      SET status = 'acknowledged', acknowledged_at = CURRENT_TIMESTAMP,
          acknowledgment_note = $2, updated_at = CURRENT_TIMESTAMP
@@ -273,7 +273,7 @@ export const markAcknowledged = async (id, note) => {
 };
 
 export const getAmendmentStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT
       COUNT(*) AS total_amendments,
       COUNT(CASE WHEN status = 'draft' THEN 1 END) AS draft_amendments,

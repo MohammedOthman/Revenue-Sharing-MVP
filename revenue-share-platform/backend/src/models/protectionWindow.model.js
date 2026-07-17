@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Effective status of a protection window. A released window stays released;
@@ -20,7 +20,7 @@ export const withEffectiveStatus = (row) => {
 
 export const createProtectionWindow = async (data) => {
   const { tenantId, partnerId, contractId, claimId, startsAt, endsAt, reason, createdBy } = data;
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO protection_windows
        (tenant_id, partner_id, contract_id, claim_id, starts_at, ends_at, reason, created_by)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
@@ -33,7 +33,7 @@ export const createProtectionWindow = async (data) => {
 };
 
 export const findProtectionWindowById = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT w.*, p.name AS partner_name, c.title AS contract_title
      FROM protection_windows w
      LEFT JOIN partners p ON w.partner_id = p.id
@@ -58,7 +58,7 @@ export const getAllProtectionWindows = async (filters = {}) => {
   if (filters.partnerId) { query += ` AND w.partner_id = $${n++}`; values.push(filters.partnerId); }
   if (filters.contractId) { query += ` AND w.contract_id = $${n++}`; values.push(filters.contractId); }
   query += ' ORDER BY w.created_at DESC';
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -81,7 +81,7 @@ export const updateProtectionWindow = async (id, updates) => {
   }
   if (fields.length === 0) return findProtectionWindowById(id);
   values.push(id);
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE protection_windows SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`,
     values
   );
@@ -89,7 +89,7 @@ export const updateProtectionWindow = async (id, updates) => {
 };
 
 export const releaseProtectionWindow = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE protection_windows SET status = 'released', updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *`,
     [id]
   );
@@ -97,11 +97,11 @@ export const releaseProtectionWindow = async (id) => {
 };
 
 export const deleteProtectionWindow = async (id) => {
-  await pool.query('DELETE FROM protection_windows WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM protection_windows WHERE id = $1', [id]);
 };
 
 export const getProtectionWindowStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT
       COUNT(*) AS total_windows,
       COUNT(CASE WHEN status = 'released' THEN 1 END) AS released_windows,

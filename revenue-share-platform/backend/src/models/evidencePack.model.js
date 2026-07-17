@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Evidence Pack: a bundle of evidence items assembled for finance/legal review.
@@ -12,7 +12,7 @@ export const canFinalizePack = (status) => status === 'draft';
 
 export const createEvidencePack = async (data) => {
   const { tenantId, claimId, title, description, createdBy } = data;
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO evidence_packs (tenant_id, claim_id, title, description, created_by)
      VALUES ($1,$2,$3,$4,$5) RETURNING *`,
     [tenantId ?? null, claimId ?? null, title, description ?? null, createdBy ?? null]
@@ -21,7 +21,7 @@ export const createEvidencePack = async (data) => {
 };
 
 export const findEvidencePackById = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT p.*, c.basis AS claim_basis,
             (SELECT COUNT(*) FROM evidence_items i WHERE i.pack_id = p.id) AS item_count
      FROM evidence_packs p
@@ -36,7 +36,7 @@ export const findEvidencePackById = async (id) => {
 export const findEvidencePackWithItems = async (id) => {
   const pack = await findEvidencePackById(id);
   if (!pack) return undefined;
-  const items = await pool.query(
+  const items = await dbQuery(
     'SELECT * FROM evidence_items WHERE pack_id = $1 ORDER BY created_at ASC',
     [id]
   );
@@ -56,7 +56,7 @@ export const getAllEvidencePacks = async (filters = {}) => {
   if (filters.status) { query += ` AND p.status = $${n++}`; values.push(filters.status); }
   if (filters.claimId) { query += ` AND p.claim_id = $${n++}`; values.push(filters.claimId); }
   query += ' ORDER BY p.created_at DESC';
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -77,7 +77,7 @@ export const updateEvidencePack = async (id, updates) => {
   }
   if (fields.length === 0) return findEvidencePackById(id);
   values.push(id);
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE evidence_packs SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`,
     values
   );
@@ -85,7 +85,7 @@ export const updateEvidencePack = async (id, updates) => {
 };
 
 export const finalizeEvidencePack = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE evidence_packs
      SET status = 'finalized', finalized_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
      WHERE id = $1 RETURNING *`,
@@ -96,11 +96,11 @@ export const finalizeEvidencePack = async (id) => {
 
 export const deleteEvidencePack = async (id) => {
   // Items keep existing; their pack_id is set to NULL by the FK (ON DELETE SET NULL).
-  await pool.query('DELETE FROM evidence_packs WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM evidence_packs WHERE id = $1', [id]);
 };
 
 export const getEvidencePackStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT
       COUNT(*) AS total_packs,
       COUNT(CASE WHEN status = 'draft' THEN 1 END) AS draft_packs,

@@ -1,9 +1,9 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 import { hashPassword, comparePassword } from '../utils/password.js';
 
 export const createUser = async (email, password, fullName, role = 'user') => {
   const passwordHash = await hashPassword(password);
-  const result = await pool.query(
+  const result = await dbQuery(
     'INSERT INTO users (email, password_hash, full_name, role) VALUES ($1, $2, $3, $4) RETURNING *',
     [email, passwordHash, fullName, role]
   );
@@ -11,17 +11,17 @@ export const createUser = async (email, password, fullName, role = 'user') => {
 };
 
 export const findUserByEmail = async (email) => {
-  const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  const result = await dbQuery('SELECT * FROM users WHERE email = $1', [email]);
   return result.rows[0];
 };
 
 export const findUserById = async (id) => {
-  const result = await pool.query('SELECT id, email, full_name, role, created_at FROM users WHERE id = $1', [id]);
+  const result = await dbQuery('SELECT id, email, full_name, role, created_at FROM users WHERE id = $1', [id]);
   return result.rows[0];
 };
 
 export const getAllUsers = async () => {
-  const result = await pool.query('SELECT id, email, full_name, role, created_at FROM users ORDER BY created_at DESC');
+  const result = await dbQuery('SELECT id, email, full_name, role, created_at FROM users ORDER BY created_at DESC');
   return result.rows;
 };
 
@@ -42,10 +42,10 @@ export const updateUser = async (id, updates) => {
   values.push(id);
   const query = `UPDATE users SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING id, email, full_name, role`;
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows[0];
 };
 
 export const deleteUser = async (id) => {
-  await pool.query('DELETE FROM users WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM users WHERE id = $1', [id]);
 };

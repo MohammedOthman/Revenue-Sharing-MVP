@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Attribution Decision: proposed -> confirmed. A confirmed decision is final
@@ -9,7 +9,7 @@ export const isConfirmed = (status) => status === 'confirmed';
 
 export const createAttribution = async (data) => {
   const { tenantId, claimId, partnerId, contractId, outcome, weight, rationale, createdBy } = data;
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO attribution_decisions
        (tenant_id, claim_id, partner_id, contract_id, outcome, weight, rationale, created_by)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
@@ -22,7 +22,7 @@ export const createAttribution = async (data) => {
 };
 
 export const findAttributionById = async (id) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT a.*, p.name AS partner_name, u.full_name AS decider_name
      FROM attribution_decisions a
      LEFT JOIN partners p ON a.partner_id = p.id
@@ -46,7 +46,7 @@ export const getAllAttributions = async (filters = {}) => {
   if (filters.claimId) { query += ` AND a.claim_id = $${n++}`; values.push(filters.claimId); }
   if (filters.partnerId) { query += ` AND a.partner_id = $${n++}`; values.push(filters.partnerId); }
   query += ' ORDER BY a.created_at DESC';
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -70,7 +70,7 @@ export const updateAttribution = async (id, updates) => {
   }
   if (fields.length === 0) return findAttributionById(id);
   values.push(id);
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE attribution_decisions SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`,
     values
   );
@@ -78,7 +78,7 @@ export const updateAttribution = async (id, updates) => {
 };
 
 export const confirmAttribution = async (id, decidedBy) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `UPDATE attribution_decisions
      SET status = 'confirmed', decided_by = $2, decided_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
      WHERE id = $1 RETURNING *`,
@@ -88,11 +88,11 @@ export const confirmAttribution = async (id, decidedBy) => {
 };
 
 export const deleteAttribution = async (id) => {
-  await pool.query('DELETE FROM attribution_decisions WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM attribution_decisions WHERE id = $1', [id]);
 };
 
 export const getAttributionStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT
       COUNT(*) AS total_decisions,
       COUNT(CASE WHEN status = 'proposed' THEN 1 END) AS proposed_decisions,

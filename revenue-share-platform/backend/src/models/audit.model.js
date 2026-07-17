@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Append-only audit trail. Events are inserted, never updated or deleted
@@ -11,7 +11,7 @@ import pool from '../config/database.js';
  * @param queryFn injectable query function (defaults to the shared pool) so the
  *   recorder can be unit-tested without a database.
  */
-export const recordAuditEvent = async (event, queryFn = pool.query.bind(pool)) => {
+export const recordAuditEvent = async (event, queryFn = dbQuery) => {
   const { tenantId, actorUserId, entityType, entityId, action, metadata } = event;
   if (!entityType || !action) {
     throw new Error('audit event requires entityType and action');
@@ -68,6 +68,6 @@ export const getAuditEvents = async (filters = {}) => {
 
   query += ' ORDER BY a.created_at DESC LIMIT 200';
 
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };

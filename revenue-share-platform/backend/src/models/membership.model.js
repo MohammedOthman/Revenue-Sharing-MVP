@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 /**
  * Memberships link a global user to a tenant with a scoped role. This is the
@@ -6,7 +6,7 @@ import pool from '../config/database.js';
  */
 
 export const getMembershipsByUser = async (userId) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `SELECT m.*, t.slug AS tenant_slug, t.name AS tenant_name, t.deployment_type
      FROM memberships m
      JOIN tenants t ON m.tenant_id = t.id
@@ -18,7 +18,7 @@ export const getMembershipsByUser = async (userId) => {
 };
 
 export const getMembership = async (userId, tenantId) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     'SELECT * FROM memberships WHERE user_id = $1 AND tenant_id = $2',
     [userId, tenantId]
   );
@@ -26,7 +26,7 @@ export const getMembership = async (userId, tenantId) => {
 };
 
 export const createMembership = async ({ userId, tenantId, role = 'member', status = 'active' }) => {
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO memberships (user_id, tenant_id, role, status)
      VALUES ($1, $2, $3, $4)
      ON CONFLICT (user_id, tenant_id)

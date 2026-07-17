@@ -1,4 +1,4 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 export const createContract = async (data) => {
   const { 
@@ -6,7 +6,7 @@ export const createContract = async (data) => {
     revenueSharePercentage, minimumPayout, paymentTerms, createdBy 
   } = data;
   
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO contracts (partner_id, title, description, start_date, end_date, 
        revenue_share_percentage, minimum_payout, payment_terms, created_by) 
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
@@ -17,7 +17,7 @@ export const createContract = async (data) => {
 };
 
 export const findContractById = async (id) => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT c.*, p.name as partner_name, p.email as partner_email, u.full_name as creator_name
     FROM contracts c
     LEFT JOIN partners p ON c.partner_id = p.id
@@ -51,7 +51,7 @@ export const getAllContracts = async (filters = {}) => {
 
   query += ' ORDER BY c.created_at DESC';
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -79,16 +79,16 @@ export const updateContract = async (id, updates) => {
   values.push(id);
   const query = `UPDATE contracts SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`;
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows[0];
 };
 
 export const deleteContract = async (id) => {
-  await pool.query('DELETE FROM contracts WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM contracts WHERE id = $1', [id]);
 };
 
 export const getContractStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT 
       COUNT(*) as total_contracts,
       COUNT(CASE WHEN status = 'active' THEN 1 END) as active_contracts,

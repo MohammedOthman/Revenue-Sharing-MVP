@@ -1,9 +1,9 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
 
 export const createLegalDocument = async (data) => {
   const { contractId, documentType, documentName, filePath, fileUrl, version, uploadedBy } = data;
   
-  const result = await pool.query(
+  const result = await dbQuery(
     `INSERT INTO legal_documents (contract_id, document_type, document_name, file_path, file_url, version, uploaded_by) 
      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
     [contractId, documentType, documentName, filePath || null, fileUrl || null, version || '1.0', uploadedBy]
@@ -12,7 +12,7 @@ export const createLegalDocument = async (data) => {
 };
 
 export const findLegalDocumentById = async (id) => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT d.*, c.title as contract_title, p.name as partner_name, u.full_name as uploader_name
     FROM legal_documents d
     LEFT JOIN contracts c ON d.contract_id = c.id
@@ -54,7 +54,7 @@ export const getAllLegalDocuments = async (filters = {}) => {
 
   query += ' ORDER BY d.created_at DESC';
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
@@ -81,16 +81,16 @@ export const updateLegalDocument = async (id, updates) => {
   values.push(id);
   const query = `UPDATE legal_documents SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`;
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows[0];
 };
 
 export const deleteLegalDocument = async (id) => {
-  await pool.query('DELETE FROM legal_documents WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM legal_documents WHERE id = $1', [id]);
 };
 
 export const getLegalDocumentStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT 
       COUNT(*) as total_documents,
       COUNT(CASE WHEN status = 'approved' THEN 1 END) as approved_count,
