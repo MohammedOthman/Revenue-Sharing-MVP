@@ -4,12 +4,13 @@ import {
   getAllUsersController, updateUserController, deleteUserController 
 } from '../controllers/auth.controller.js';
 import { authMiddleware, roleMiddleware } from '../middleware/auth.js';
+import { registerRules, loginRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
 // Public routes
-router.post('/register', register);
-router.post('/login', login);
+router.post('/register', registerRules, handleValidation, register);
+router.post('/login', loginRules, handleValidation, login);
 
 // Protected routes
 router.get('/profile', authMiddleware, getProfile);
