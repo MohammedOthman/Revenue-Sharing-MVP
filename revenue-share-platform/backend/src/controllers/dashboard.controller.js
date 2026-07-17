@@ -10,18 +10,22 @@ import {
 import { 
   getKPIStats 
 } from '../models/kpi.model.js';
-import { 
-  getLegalDocumentStats 
+import {
+  getLegalDocumentStats
 } from '../models/legalDocument.model.js';
+import {
+  getAmendmentStats
+} from '../models/amendment.model.js';
 
 export const getDashboardOverview = async (req, res) => {
   try {
-    const [partnerStats, contractStats, revenueStats, kpiStats, legalDocStats] = await Promise.all([
+    const [partnerStats, contractStats, revenueStats, kpiStats, legalDocStats, amendmentStats] = await Promise.all([
       getPartnerStats(),
       getContractStats(),
       getRevenueStats(),
       getKPIStats(),
-      getLegalDocumentStats()
+      getLegalDocumentStats(),
+      getAmendmentStats()
     ]);
 
     res.json({
@@ -30,7 +34,8 @@ export const getDashboardOverview = async (req, res) => {
         contracts: contractStats,
         revenue: revenueStats,
         kpis: kpiStats,
-        legalDocuments: legalDocStats
+        legalDocuments: legalDocStats,
+        amendments: amendmentStats
       }
     });
   } catch (error) {

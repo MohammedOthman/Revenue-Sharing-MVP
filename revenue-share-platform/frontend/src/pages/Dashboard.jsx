@@ -31,6 +31,7 @@ const Dashboard = () => {
   const partners = overview?.partners || {};
   const contracts = overview?.contracts || {};
   const revenue = overview?.revenue || {};
+  const amendments = overview?.amendments || {};
 
   const totalContracts = num(contracts.total_contracts);
   const pct = (part) => (totalContracts ? Math.round((num(part) / totalContracts) * 100) : 0);
@@ -77,6 +78,14 @@ const Dashboard = () => {
             <p>Pending Revenue Records</p>
           </div>
         </div>
+
+        <div className="stat-card">
+          <div className="stat-icon amendments">📝</div>
+          <div className="stat-info">
+            <h3>{num(amendments.ready_to_notify)}</h3>
+            <p>Amendments Ready to Notify</p>
+          </div>
+        </div>
       </div>
 
       <div className="dashboard-sections">
@@ -111,6 +120,10 @@ const Dashboard = () => {
             <div className="activity-item">
               <span className="activity-icon">📈</span>
               <span>{num(overview?.kpis?.total_kpis)} KPIs tracked</span>
+            </div>
+            <div className="activity-item">
+              <span className="activity-icon">📝</span>
+              <span>{num(amendments.total_amendments)} amendment journeys · {num(amendments.notified_amendments)} notices sent · {num(amendments.acknowledged_amendments)} acknowledged</span>
             </div>
           </div>
         </div>
