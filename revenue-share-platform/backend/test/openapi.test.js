@@ -22,6 +22,7 @@ test('every API group is documented', () => {
     '/documents', '/documents/{id}',
     '/dashboard/overview', '/dashboard/revenue-trends', '/dashboard/top-partners',
     '/claims', '/claims/{id}', '/claims/{id}/approve', '/claims/{id}/reject',
+    '/attributions', '/attributions/{id}', '/attributions/{id}/confirm',
     '/audit',
   ];
   for (const p of expected) {

@@ -20,6 +20,7 @@ import legalDocumentRoutes from './routes/legalDocument.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import auditRoutes from './routes/audit.routes.js';
 import claimRoutes from './routes/claim.routes.js';
+import attributionRoutes from './routes/attribution.routes.js';
 
 dotenv.config();
 
@@ -87,6 +88,7 @@ app.use('/api/documents', legalDocumentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/claims', claimRoutes);
+app.use('/api/attributions', attributionRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

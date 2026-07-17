@@ -24,6 +24,7 @@ tags:
   - name: Documents
   - name: Dashboard
   - name: Claims
+  - name: Attribution
   - name: Audit
   - name: System
 
@@ -794,6 +795,90 @@ paths:
         '200': { $ref: '#/components/responses/Message' }
         '409': { $ref: '#/components/responses/Conflict' }
 
+  /attributions:
+    get:
+      tags: [Attribution]
+      summary: List attribution decisions
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: claimId, schema: { type: integer } }
+        - { in: query, name: partnerId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Attribution decisions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attributions:
+                    type: array
+                    items: { $ref: '#/components/schemas/Attribution' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Attribution]
+      summary: Create an attribution decision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AttributionInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attribution: { $ref: '#/components/schemas/Attribution' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /attributions/stats:
+    get:
+      tags: [Attribution]
+      summary: Attribution statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /attributions/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Attribution]
+      summary: Get an attribution decision
+      responses:
+        '200':
+          description: Attribution decision
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attribution: { $ref: '#/components/schemas/Attribution' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Attribution]
+      summary: Update an attribution decision (blocked once confirmed)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AttributionInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Attribution]
+      summary: Delete an attribution decision
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+  /attributions/{id}/confirm:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Attribution]
+      summary: Confirm an attribution decision (final)
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
   /audit:
     get:
       tags: [Audit]
@@ -1107,6 +1192,31 @@ components:
         basis: { type: string }
         claimedAmount: { type: number }
         currency: { type: string }
+    Attribution:
+      type: object
+      properties:
+        id: { type: integer }
+        tenant_id: { type: integer }
+        claim_id: { type: integer }
+        partner_id: { type: integer }
+        partner_name: { type: string }
+        contract_id: { type: integer }
+        outcome: { type: string, enum: [credited, declined, split] }
+        weight: { type: number }
+        rationale: { type: string }
+        status: { type: string, enum: [proposed, confirmed] }
+        decided_by: { type: integer }
+        decided_at: { type: string, format: date-time }
+    AttributionInput:
+      type: object
+      required: [partnerId]
+      properties:
+        partnerId: { type: integer }
+        claimId: { type: integer }
+        contractId: { type: integer }
+        outcome: { type: string }
+        weight: { type: number }
+        rationale: { type: string }
     AuditEvent:
       type: object
       properties:

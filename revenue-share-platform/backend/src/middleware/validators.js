@@ -87,3 +87,9 @@ export const claimCreateRules = [
   body('partnerId').notEmpty().withMessage('Partner is required'),
   body('claimedAmount').optional().isFloat({ min: 0 }).withMessage('Claimed amount must be a non-negative number'),
 ];
+
+// --- Attribution Decisions ---
+export const attributionCreateRules = [
+  body('partnerId').notEmpty().withMessage('Partner is required'),
+  body('weight').optional().isFloat({ min: 0, max: 100 }).withMessage('Weight must be 0–100'),
+];
