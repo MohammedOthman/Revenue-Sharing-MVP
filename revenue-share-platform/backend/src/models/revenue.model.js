@@ -1,11 +1,25 @@
 import pool from '../config/database.js';
 
+/**
+ * Authoritative, decimal-safe share-amount calculation (FR-12: financial
+ * integrity). The share amount is derived server-side from the total revenue
+ * and share percentage, never trusted from the client. Rounded to 2 decimals.
+ */
+export const calculateShareAmount = (totalRevenue, sharePercentage) => {
+  const total = Number(totalRevenue);
+  const pct = Number(sharePercentage);
+  if (!Number.isFinite(total) || !Number.isFinite(pct)) return 0;
+  return Math.round(total * pct) / 100;
+};
+
 export const createRevenueShare = async (data) => {
-  const { contractId, periodStart, periodEnd, totalRevenue, sharePercentage, shareAmount, notes } = data;
-  
+  const { contractId, periodStart, periodEnd, totalRevenue, sharePercentage, notes } = data;
+  // Derive the share amount server-side; any client-supplied value is ignored.
+  const shareAmount = calculateShareAmount(totalRevenue, sharePercentage);
+
   const result = await pool.query(
-    `INSERT INTO revenue_shares (contract_id, period_start, period_end, total_revenue, 
-       share_percentage, share_amount, notes) 
+    `INSERT INTO revenue_shares (contract_id, period_start, period_end, total_revenue,
+       share_percentage, share_amount, notes)
      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
     [contractId, periodStart, periodEnd, totalRevenue, sharePercentage, shareAmount, notes || null]
   );

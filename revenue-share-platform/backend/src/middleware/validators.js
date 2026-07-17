@@ -60,7 +60,7 @@ export const revenueCreateRules = [
   body('periodEnd').notEmpty().withMessage('Period end is required'),
   body('totalRevenue').isFloat({ min: 0 }).withMessage('Total revenue must be a non-negative number'),
   body('sharePercentage').isFloat({ min: 0, max: 100 }).withMessage('Share percentage must be 0–100'),
-  body('shareAmount').isFloat({ min: 0 }).withMessage('Share amount must be a non-negative number'),
+  // shareAmount is derived server-side (FR-12) and intentionally not required.
 ];
 
 // --- KPIs ---

@@ -890,16 +890,18 @@ components:
         notes: { type: string }
     RevenueShareInput:
       type: object
-      required: [contractId, periodStart, periodEnd, totalRevenue, sharePercentage, shareAmount]
+      required: [contractId, periodStart, periodEnd, totalRevenue, sharePercentage]
       properties:
         contractId: { type: integer }
         periodStart: { type: string, format: date }
         periodEnd: { type: string, format: date }
         totalRevenue: { type: number }
         sharePercentage: { type: number }
-        shareAmount: { type: number }
         status: { type: string }
         notes: { type: string }
+      description: >
+        shareAmount is derived server-side from totalRevenue and
+        sharePercentage; any client-supplied value is ignored.
     KPI:
       type: object
       properties:
