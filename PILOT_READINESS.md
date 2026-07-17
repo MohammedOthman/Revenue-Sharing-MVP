@@ -46,7 +46,7 @@ settlement dependency exists to invoke.
 | Protection window with expiry | Partial | `protection_windows` with derived `expired` status and audited release exist. FR-08's expiry **notification + re-claim event** and "override without reason/approver is blocked and audited" are **not** built (**Needs build**) |
 | Eligibility previewed **with an explanation** | Needs build | Amounts are stored and displayed; there is no eligibility service that returns the rule/explanation behind a figure |
 | Recorded first-payout milestone | Needs build | No milestone object exists; the claim lifecycle ends at approve/reject |
-| Every state change emits an event and is auditable | Partial | Governance objects (claim, attribution, protection, amendment, evidence) audit every transition via `safeAudit`. Basic CRUD (partner, contract, revenue, KPI, legal document) does **not** yet emit audit events (**Needs build**) |
+| Every state change emits an event and is auditable | Done | Governance objects and basic CRUD (partner, contract, revenue, KPI, legal document) both audit create/update/delete via `safeAudit`; `crud.audit.integration.test.js` proves it through the API. The rule/evidence linkage FR-13 describes for a money-affecting decision is not yet captured (see below) |
 | No cross-tenant access | Done | Enforced by RLS as the `reven_app` role; proven through HTTP in `rls-http.integration.test.js` |
 | Payout-bearing claims blocked until bank + tax verified (FR-04) | Needs build | No bank/tax verification state exists; nothing executes payment, so nothing is unsafe today, but the readiness gate object is absent |
 | Evidence pack a finance reviewer can accept | Done | Evidence items + packs; `finalize` locks the pack read-only; `evidence.integration.test.js` proves the finalized-pack guarantee end to end |
@@ -58,7 +58,7 @@ settlement dependency exists to invoke.
 | Requirement | Status | Evidence / what's left |
 |---|---|---|
 | Multi-tenant isolation; cross-tenant access impossible | Done | `tenant_id` on every client table; RLS policies (migrations 004–009); app serves requests as non-superuser `reven_app` via `tenantScope` middleware; proven in `rls.integration.test.js` and `rls-http.integration.test.js` |
-| Full audit trail | Partial | `audit_events` is append-only (DB trigger, migration 003) and tenant-isolated (migration 009). Coverage is complete for governance objects, not for basic CRUD (see above) |
+| Full audit trail | Done | `audit_events` is append-only (DB trigger, migration 003) and tenant-isolated (migration 009); every governance transition and every basic-CRUD create/update/delete records an event |
 | Field-level authorization / partner-vs-internal separation | Needs build | Isolation is per-tenant, not per-role-field. There is no partner user role and no internal-vs-finance field masking; user administration is global |
 | SSO (Entra ID) | Needs infra | JWT login exists; enterprise SSO is a deployment/integration item (`Large_Enterprise_Client_Onboarding_Manual.md` §21.1) |
 | Encryption in transit and at rest | Needs infra | `helmet` and a CORS allowlist are set; TLS termination and disk/field encryption are hosting concerns |
@@ -121,8 +121,8 @@ Ready now: tenant isolation (enforced and proven), server-side financial figures
 audit trail, the five scoped journeys, migrations, CI, Docker, and the OpenAPI contract.
 
 Code gaps still in Phase-1 scope: the append-only ledger with offsetting corrections, the
-payout-readiness (bank/tax) gate, the eligibility-with-explanation preview, audit coverage on
-basic CRUD, and field-level/partner-facing access. None of these move money.
+payout-readiness (bank/tax) gate, the eligibility-with-explanation preview, and
+field-level/partner-facing access. None of these move money.
 
 Outside this repo: hosting and region, encryption at rest, SSO, backups/DR, PDPL/ZATCA
 sign-off, a penetration test, and signed pilot agreements — plus the product/legal decisions

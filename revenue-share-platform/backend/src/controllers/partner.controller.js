@@ -1,7 +1,13 @@
-import { 
-  createPartner, findPartnerById, getAllPartners, 
-  updatePartner, deletePartner, getPartnerStats 
+import {
+  createPartner, findPartnerById, getAllPartners,
+  updatePartner, deletePartner, getPartnerStats
 } from '../models/partner.model.js';
+import { safeAudit } from '../models/audit.model.js';
+
+const audit = (req, entityId, action, metadata = {}) => safeAudit({
+  tenantId: req.tenantId, actorUserId: req.user?.id,
+  entityType: 'partner', entityId, action, metadata,
+});
 
 export const createPartnerController = async (req, res) => {
   try {
@@ -12,6 +18,7 @@ export const createPartnerController = async (req, res) => {
     }
 
     const partner = await createPartner({ name, email, company, type, contactPerson, phone, address, notes });
+    await audit(req, partner.id, 'created');
     res.status(201).json({ message: 'Partner created successfully', partner });
   } catch (error) {
     console.error('Create partner error:', error);
@@ -56,6 +63,7 @@ export const updatePartnerController = async (req, res) => {
       return res.status(404).json({ error: 'Partner not found or no updates provided' });
     }
 
+    await audit(req, partner.id, 'updated');
     res.json({ message: 'Partner updated successfully', partner });
   } catch (error) {
     console.error('Update partner error:', error);
@@ -67,6 +75,7 @@ export const deletePartnerController = async (req, res) => {
   try {
     const { id } = req.params;
     await deletePartner(id);
+    await audit(req, Number(id), 'deleted');
     res.json({ message: 'Partner deleted successfully' });
   } catch (error) {
     console.error('Delete partner error:', error);

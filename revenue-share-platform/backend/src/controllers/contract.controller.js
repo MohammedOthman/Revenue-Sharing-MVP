@@ -1,7 +1,13 @@
-import { 
-  createContract, findContractById, getAllContracts, 
-  updateContract, deleteContract, getContractStats 
+import {
+  createContract, findContractById, getAllContracts,
+  updateContract, deleteContract, getContractStats
 } from '../models/contract.model.js';
+import { safeAudit } from '../models/audit.model.js';
+
+const audit = (req, entityId, action, metadata = {}) => safeAudit({
+  tenantId: req.tenantId, actorUserId: req.user?.id,
+  entityType: 'contract', entityId, action, metadata,
+});
 
 export const createContractController = async (req, res) => {
   try {
@@ -20,6 +26,7 @@ export const createContractController = async (req, res) => {
       createdBy: req.user.id 
     });
     
+    await audit(req, contract.id, 'created');
     res.status(201).json({ message: 'Contract created successfully', contract });
   } catch (error) {
     console.error('Create contract error:', error);
@@ -64,6 +71,7 @@ export const updateContractController = async (req, res) => {
       return res.status(404).json({ error: 'Contract not found or no updates provided' });
     }
 
+    await audit(req, contract.id, 'updated');
     res.json({ message: 'Contract updated successfully', contract });
   } catch (error) {
     console.error('Update contract error:', error);
@@ -75,6 +83,7 @@ export const deleteContractController = async (req, res) => {
   try {
     const { id } = req.params;
     await deleteContract(id);
+    await audit(req, Number(id), 'deleted');
     res.json({ message: 'Contract deleted successfully' });
   } catch (error) {
     console.error('Delete contract error:', error);

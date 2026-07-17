@@ -3,6 +3,12 @@ import {
   updateRevenueShare, deleteRevenueShare, getRevenueStats, getRevenueByPeriod,
   calculateShareAmount,
 } from '../models/revenue.model.js';
+import { safeAudit } from '../models/audit.model.js';
+
+const audit = (req, entityId, action, metadata = {}) => safeAudit({
+  tenantId: req.tenantId, actorUserId: req.user?.id,
+  entityType: 'revenue_share', entityId, action, metadata,
+});
 
 export const createRevenueShareController = async (req, res) => {
   try {
@@ -17,6 +23,7 @@ export const createRevenueShareController = async (req, res) => {
       contractId, periodStart, periodEnd, totalRevenue, sharePercentage, notes,
     });
 
+    await audit(req, revenueShare.id, 'created', { share_amount: revenueShare.share_amount });
     res.status(201).json({ message: 'Revenue share record created successfully', revenueShare });
   } catch (error) {
     console.error('Create revenue share error:', error);
@@ -77,6 +84,7 @@ export const updateRevenueShareController = async (req, res) => {
       return res.status(404).json({ error: 'Revenue share record not found or no updates provided' });
     }
 
+    await audit(req, revenueShare.id, 'updated', { share_amount: revenueShare.share_amount });
     res.json({ message: 'Revenue share record updated successfully', revenueShare });
   } catch (error) {
     console.error('Update revenue share error:', error);
@@ -88,6 +96,7 @@ export const deleteRevenueShareController = async (req, res) => {
   try {
     const { id } = req.params;
     await deleteRevenueShare(id);
+    await audit(req, Number(id), 'deleted');
     res.json({ message: 'Revenue share record deleted successfully' });
   } catch (error) {
     console.error('Delete revenue share error:', error);

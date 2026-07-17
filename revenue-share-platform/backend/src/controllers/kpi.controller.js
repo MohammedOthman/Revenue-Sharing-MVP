@@ -1,7 +1,13 @@
-import { 
-  createKPI, findKPIById, getAllKPIs, 
-  updateKPI, deleteKPI, getKPIStats 
+import {
+  createKPI, findKPIById, getAllKPIs,
+  updateKPI, deleteKPI, getKPIStats
 } from '../models/kpi.model.js';
+import { safeAudit } from '../models/audit.model.js';
+
+const audit = (req, entityId, action, metadata = {}) => safeAudit({
+  tenantId: req.tenantId, actorUserId: req.user?.id,
+  entityType: 'kpi', entityId, action, metadata,
+});
 
 export const createKPIController = async (req, res) => {
   try {
@@ -12,6 +18,7 @@ export const createKPIController = async (req, res) => {
     }
 
     const kpi = await createKPI({ contractId, name, description, targetValue, unit, periodType });
+    await audit(req, kpi.id, 'created');
     res.status(201).json({ message: 'KPI created successfully', kpi });
   } catch (error) {
     console.error('Create KPI error:', error);
@@ -56,6 +63,7 @@ export const updateKPIController = async (req, res) => {
       return res.status(404).json({ error: 'KPI not found or no updates provided' });
     }
 
+    await audit(req, kpi.id, 'updated');
     res.json({ message: 'KPI updated successfully', kpi });
   } catch (error) {
     console.error('Update KPI error:', error);
@@ -67,6 +75,7 @@ export const deleteKPIController = async (req, res) => {
   try {
     const { id } = req.params;
     await deleteKPI(id);
+    await audit(req, Number(id), 'deleted');
     res.json({ message: 'KPI deleted successfully' });
   } catch (error) {
     console.error('Delete KPI error:', error);

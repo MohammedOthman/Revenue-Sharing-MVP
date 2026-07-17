@@ -1,7 +1,13 @@
-import { 
-  createLegalDocument, findLegalDocumentById, getAllLegalDocuments, 
-  updateLegalDocument, deleteLegalDocument, getLegalDocumentStats 
+import {
+  createLegalDocument, findLegalDocumentById, getAllLegalDocuments,
+  updateLegalDocument, deleteLegalDocument, getLegalDocumentStats
 } from '../models/legalDocument.model.js';
+import { safeAudit } from '../models/audit.model.js';
+
+const audit = (req, entityId, action, metadata = {}) => safeAudit({
+  tenantId: req.tenantId, actorUserId: req.user?.id,
+  entityType: 'legal_document', entityId, action, metadata,
+});
 
 export const createLegalDocumentController = async (req, res) => {
   try {
@@ -16,6 +22,7 @@ export const createLegalDocumentController = async (req, res) => {
       uploadedBy: req.user.id 
     });
     
+    await audit(req, document.id, 'created');
     res.status(201).json({ message: 'Legal document created successfully', document });
   } catch (error) {
     console.error('Create legal document error:', error);
@@ -60,6 +67,7 @@ export const updateLegalDocumentController = async (req, res) => {
       return res.status(404).json({ error: 'Legal document not found or no updates provided' });
     }
 
+    await audit(req, document.id, 'updated');
     res.json({ message: 'Legal document updated successfully', document });
   } catch (error) {
     console.error('Update legal document error:', error);
@@ -71,6 +79,7 @@ export const deleteLegalDocumentController = async (req, res) => {
   try {
     const { id } = req.params;
     await deleteLegalDocument(id);
+    await audit(req, Number(id), 'deleted');
     res.json({ message: 'Legal document deleted successfully' });
   } catch (error) {
     console.error('Delete legal document error:', error);
