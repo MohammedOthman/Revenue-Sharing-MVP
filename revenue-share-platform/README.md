@@ -116,8 +116,19 @@ backend alongside it.
 | `DB_USER`     | database user                        | `postgres`           |
 | `DB_PASSWORD` | database password                    | `postgres`           |
 | `JWT_SECRET`  | secret used to sign JWTs             | `change-me`          |
+| `CORS_ORIGINS`| comma-separated allowed origins (prod)| `https://app.example`|
 
-See `backend/.env.example`.
+See `backend/.env.example`. The API validates required variables on startup
+and exits with a clear message if any are missing.
+
+### Security posture
+
+The API sets security headers (`helmet`), enforces a CORS allowlist in
+production (`CORS_ORIGINS`), applies rate limiting (general API plus a stricter
+cap on `/api/auth`), and limits request body size. All business routes require
+a valid JWT. This is baseline hardening; the full pilot security program
+(tenant isolation, SSO/MFA, per-operation authorization, audit, pen test) is
+tracked separately in the roadmap.
 
 ### Tests
 
