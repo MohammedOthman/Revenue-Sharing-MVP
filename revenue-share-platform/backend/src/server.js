@@ -19,6 +19,7 @@ import kpiRoutes from './routes/kpi.routes.js';
 import legalDocumentRoutes from './routes/legalDocument.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import auditRoutes from './routes/audit.routes.js';
+import claimRoutes from './routes/claim.routes.js';
 
 dotenv.config();
 
@@ -85,6 +86,7 @@ app.use('/api/kpis', kpiRoutes);
 app.use('/api/documents', legalDocumentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/claims', claimRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

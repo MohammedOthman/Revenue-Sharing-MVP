@@ -81,3 +81,9 @@ export const documentCreateRules = [
 export const amendmentCreateRules = [
   body('contractId').notEmpty().withMessage('Contract is required'),
 ];
+
+// --- Partner Revenue Claims ---
+export const claimCreateRules = [
+  body('partnerId').notEmpty().withMessage('Partner is required'),
+  body('claimedAmount').optional().isFloat({ min: 0 }).withMessage('Claimed amount must be a non-negative number'),
+];

@@ -23,6 +23,7 @@ tags:
   - name: KPIs
   - name: Documents
   - name: Dashboard
+  - name: Claims
   - name: Audit
   - name: System
 
@@ -667,6 +668,132 @@ paths:
             application/json:
               schema: { type: object }
 
+  /claims:
+    get:
+      tags: [Claims]
+      summary: List partner revenue claims
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: partnerId, schema: { type: integer } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: Claims
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  claims:
+                    type: array
+                    items: { $ref: '#/components/schemas/Claim' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Claims]
+      summary: Submit a partner revenue claim
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ClaimInput' }
+      responses:
+        '201':
+          description: Submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  claim: { $ref: '#/components/schemas/Claim' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /claims/stats:
+    get:
+      tags: [Claims]
+      summary: Claim statistics
+      responses:
+        '200': { $ref: '#/components/responses/Stats' }
+  /claims/{id}:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    get:
+      tags: [Claims]
+      summary: Get a claim
+      responses:
+        '200':
+          description: Claim
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  claim: { $ref: '#/components/schemas/Claim' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Claims]
+      summary: Update a claim (blocked once approved/rejected)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ClaimInput' }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Claims]
+      summary: Delete a claim
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+  /claims/{id}/review:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Move a claim into review
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /claims/{id}/request-clarification:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Request clarification on a claim
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /claims/{id}/approve:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Approve a claim (server records the approved amount)
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                approvedAmount: { type: number }
+                note: { type: string }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /claims/{id}/reject:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Reject a claim
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note: { type: string }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+
   /audit:
     get:
       tags: [Audit]
@@ -950,6 +1077,36 @@ components:
         fileUrl: { type: string }
         version: { type: string }
         status: { type: string }
+    Claim:
+      type: object
+      properties:
+        id: { type: integer }
+        tenant_id: { type: integer }
+        partner_id: { type: integer }
+        partner_name: { type: string }
+        contract_id: { type: integer }
+        contract_title: { type: string }
+        period_start: { type: string, format: date }
+        period_end: { type: string, format: date }
+        basis: { type: string }
+        claimed_amount: { type: number }
+        approved_amount: { type: number }
+        currency: { type: string }
+        status: { type: string, enum: [submitted, under_review, needs_clarification, approved, rejected] }
+        decision_note: { type: string }
+        reviewed_by: { type: integer }
+        reviewed_at: { type: string, format: date-time }
+    ClaimInput:
+      type: object
+      required: [partnerId]
+      properties:
+        partnerId: { type: integer }
+        contractId: { type: integer }
+        periodStart: { type: string, format: date }
+        periodEnd: { type: string, format: date }
+        basis: { type: string }
+        claimedAmount: { type: number }
+        currency: { type: string }
     AuditEvent:
       type: object
       properties:
