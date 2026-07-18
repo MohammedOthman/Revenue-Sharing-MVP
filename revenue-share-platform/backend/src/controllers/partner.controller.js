@@ -3,6 +3,7 @@ import {
   updatePartner, deletePartner, getPartnerStats
 } from '../models/partner.model.js';
 import { safeAudit } from '../models/audit.model.js';
+import { toCsv } from '../utils/csv.js';
 
 const audit = (req, entityId, action, metadata = {}) => safeAudit({
   tenantId: req.tenantId, actorUserId: req.user?.id,
@@ -80,6 +81,23 @@ export const deletePartnerController = async (req, res) => {
   } catch (error) {
     console.error('Delete partner error:', error);
     res.status(500).json({ error: 'Failed to delete partner' });
+  }
+};
+
+export const exportPartnersController = async (req, res) => {
+  try {
+    const { status, type } = req.query;
+    const partners = await getAllPartners({ status, type });
+    const csv = toCsv(partners, [
+      { key: 'id' }, { key: 'name' }, { key: 'email' }, { key: 'company' }, { key: 'type' },
+      { key: 'status' }, { key: 'contact_person' }, { key: 'phone' }, { key: 'created_at' },
+    ]);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="partners.csv"');
+    res.send(csv);
+  } catch (error) {
+    console.error('Export partners error:', error);
+    res.status(500).json({ error: 'Failed to export partners' });
   }
 };
 

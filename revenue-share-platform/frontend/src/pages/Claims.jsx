@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import claimService from '../services/claim.service';
 import partnerService from '../services/partner.service';
 import contractService from '../services/contract.service';
+import { downloadCsv } from '../services/api';
 import '../styles/Domain.css';
 
 const TERMINAL = ['approved', 'rejected'];
@@ -137,7 +138,10 @@ const Claims = () => {
     <div className="claims-page domain-page">
       <div className="page-header">
         <h1>Partner Revenue Claims</h1>
-        <button className="btn-primary" onClick={() => openModal()}>+ New Claim</button>
+        <div className="actions">
+          <button className="btn-secondary" onClick={() => downloadCsv('/claims/export', 'claims.csv').catch(() => setError('Failed to export CSV'))}>Export CSV</button>
+          <button className="btn-primary" onClick={() => openModal()}>+ New Claim</button>
+        </div>
       </div>
       <p className="hint">A partner's claim to a share of revenue. Amounts are recorded and reviewed only — no money moves.</p>
 

@@ -160,6 +160,19 @@ paths:
       responses:
         '200': { $ref: '#/components/responses/Stats' }
         '401': { $ref: '#/components/responses/Unauthorized' }
+  /partners/export:
+    get:
+      tags: [Partners]
+      summary: Export partners as CSV (tenant-scoped)
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: type, schema: { type: string } }
+      responses:
+        '200':
+          description: CSV export
+          content:
+            text/csv:
+              schema: { type: string }
   /partners/{id}:
     parameters: [{ $ref: '#/components/parameters/Id' }]
     get:
@@ -446,6 +459,19 @@ paths:
                 type: object
                 properties:
                   data: { type: array, items: { type: object } }
+  /revenue/export:
+    get:
+      tags: [Revenue]
+      summary: Export revenue-share records as CSV (tenant-scoped)
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: CSV export
+          content:
+            text/csv:
+              schema: { type: string }
   /revenue/{id}:
     parameters: [{ $ref: '#/components/parameters/Id' }]
     get:
@@ -715,6 +741,20 @@ paths:
       summary: Claim statistics
       responses:
         '200': { $ref: '#/components/responses/Stats' }
+  /claims/export:
+    get:
+      tags: [Claims]
+      summary: Export claims as CSV (tenant-scoped)
+      parameters:
+        - { in: query, name: status, schema: { type: string } }
+        - { in: query, name: partnerId, schema: { type: integer } }
+        - { in: query, name: contractId, schema: { type: integer } }
+      responses:
+        '200':
+          description: CSV export
+          content:
+            text/csv:
+              schema: { type: string }
   /claims/{id}:
     parameters: [{ $ref: '#/components/parameters/Id' }]
     get:

@@ -4,6 +4,7 @@ import {
   calculateShareAmount,
 } from '../models/revenue.model.js';
 import { safeAudit } from '../models/audit.model.js';
+import { toCsv } from '../utils/csv.js';
 
 const audit = (req, entityId, action, metadata = {}) => safeAudit({
   tenantId: req.tenantId, actorUserId: req.user?.id,
@@ -101,6 +102,24 @@ export const deleteRevenueShareController = async (req, res) => {
   } catch (error) {
     console.error('Delete revenue share error:', error);
     res.status(500).json({ error: 'Failed to delete revenue share record' });
+  }
+};
+
+export const exportRevenueSharesController = async (req, res) => {
+  try {
+    const { status, contractId } = req.query;
+    const revenueShares = await getAllRevenueShares({ status, contractId });
+    const csv = toCsv(revenueShares, [
+      { key: 'id' }, { key: 'contract_title', header: 'contract' }, { key: 'partner_name', header: 'partner' },
+      { key: 'period_start' }, { key: 'period_end' }, { key: 'total_revenue' }, { key: 'share_percentage' },
+      { key: 'share_amount' }, { key: 'status' }, { key: 'paid_at' },
+    ]);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="revenue-shares.csv"');
+    res.send(csv);
+  } catch (error) {
+    console.error('Export revenue shares error:', error);
+    res.status(500).json({ error: 'Failed to export revenue shares' });
   }
 };
 

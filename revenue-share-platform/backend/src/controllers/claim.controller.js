@@ -5,6 +5,7 @@ import {
   setClaimVerification, setClaimPayoutReady,
 } from '../models/claim.model.js';
 import { safeAudit } from '../models/audit.model.js';
+import { toCsv } from '../utils/csv.js';
 
 const audit = (req, claim, action, metadata = {}) => safeAudit({
   tenantId: req.tenantId,
@@ -186,6 +187,25 @@ export const markPayoutReadyController = async (req, res) => {
   } catch (error) {
     console.error('Mark payout-ready error:', error);
     res.status(500).json({ error: 'Failed to mark claim payout-ready' });
+  }
+};
+
+export const exportClaimsController = async (req, res) => {
+  try {
+    const { status, partnerId, contractId } = req.query;
+    const claims = await getAllClaims({ status, partnerId, contractId });
+    const csv = toCsv(claims, [
+      { key: 'id' }, { key: 'partner_name', header: 'partner' }, { key: 'contract_title', header: 'contract' },
+      { key: 'basis' }, { key: 'claimed_amount' }, { key: 'approved_amount' }, { key: 'currency' },
+      { key: 'status' }, { key: 'bank_verified' }, { key: 'tax_verified' }, { key: 'payout_ready' },
+      { key: 'created_at' },
+    ]);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="claims.csv"');
+    res.send(csv);
+  } catch (error) {
+    console.error('Export claims error:', error);
+    res.status(500).json({ error: 'Failed to export claims' });
   }
 };
 

@@ -51,7 +51,7 @@ settlement dependency exists to invoke.
 | Payout-bearing claims blocked until bank + tax verified (FR-04) | Done | A claim carries `bank_verified` / `tax_verified` state; `mark-payout-ready` returns 422 with the missing requirements until the claim is approved and both are verified, and verification locks once payout-ready. Who is *authorized* to verify or mark is an open org decision (today any tenant member may) |
 | Evidence pack a finance reviewer can accept | Done | Evidence items + packs; `finalize` locks the pack read-only; `evidence.integration.test.js` proves the finalized-pack guarantee end to end |
 | Contract-amendment notice (real, readiness-gated) | Done | Amendment journey; send-notice blocked (422) until 14 readiness checks pass |
-| CSV in/out | Needs build | Not present in the current API surface |
+| CSV in/out | Partial | CSV **out** is done — tenant-scoped `GET /claims/export`, `/partners/export`, `/revenue/export` stream `text/csv`, with an Export button on the Claims page. CSV **in** (import) is **Needs build**; it benefits from a decision on duplicate/validation handling |
 
 ## Security and tenant isolation (`partner-revenue-os-PDR-v5.md` §10, FR-14)
 

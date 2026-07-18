@@ -5,6 +5,7 @@ import {
   reviewClaimController, requestClarificationController,
   approveClaimController, rejectClaimController,
   verifyBankController, verifyTaxController, markPayoutReadyController,
+  exportClaimsController,
 } from '../controllers/claim.controller.js';
 import { protect } from '../middleware/protect.js';
 import { claimCreateRules, handleValidation } from '../middleware/validators.js';
@@ -16,6 +17,7 @@ router.use(protect);
 router.post('/', claimCreateRules, handleValidation, createClaimController);
 router.get('/', getAllClaimsController);
 router.get('/stats', getClaimStatsController);
+router.get('/export', exportClaimsController);
 router.get('/:id', getClaimController);
 router.put('/:id', updateClaimController);
 router.delete('/:id', deleteClaimController);
