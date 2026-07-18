@@ -796,6 +796,56 @@ paths:
       responses:
         '200': { $ref: '#/components/responses/Message' }
         '409': { $ref: '#/components/responses/Conflict' }
+  /claims/{id}/verify-bank:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Record (or clear) bank verification for a claim
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verified: { type: boolean, default: true }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /claims/{id}/verify-tax:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Record (or clear) tax verification for a claim
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verified: { type: boolean, default: true }
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /claims/{id}/mark-payout-ready:
+    parameters: [{ $ref: '#/components/parameters/Id' }]
+    post:
+      tags: [Claims]
+      summary: Record the payout-ready milestone (blocked until approved + bank + tax verified; no money moves)
+      responses:
+        '200': { $ref: '#/components/responses/Message' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422':
+          description: Not payout-ready — lists the missing requirements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: { type: string }
+                  missing: { type: array, items: { type: string } }
+                  readiness: { $ref: '#/components/schemas/Readiness' }
 
   /attributions:
     get:
@@ -1469,6 +1519,13 @@ components:
         decision_note: { type: string }
         reviewed_by: { type: integer }
         reviewed_at: { type: string, format: date-time }
+        bank_verified: { type: boolean }
+        bank_verified_at: { type: string, format: date-time }
+        tax_verified: { type: boolean }
+        tax_verified_at: { type: string, format: date-time }
+        payout_ready: { type: boolean }
+        payout_ready_at: { type: string, format: date-time }
+        payout_readiness: { $ref: '#/components/schemas/Readiness' }
     ClaimInput:
       type: object
       required: [partnerId]

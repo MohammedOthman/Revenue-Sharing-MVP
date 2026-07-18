@@ -22,6 +22,7 @@ test('every API group is documented', () => {
     '/documents', '/documents/{id}',
     '/dashboard/overview', '/dashboard/revenue-trends', '/dashboard/top-partners',
     '/claims', '/claims/{id}', '/claims/{id}/approve', '/claims/{id}/reject',
+    '/claims/{id}/verify-bank', '/claims/{id}/verify-tax', '/claims/{id}/mark-payout-ready',
     '/attributions', '/attributions/{id}', '/attributions/{id}/confirm',
     '/protection-windows', '/protection-windows/{id}', '/protection-windows/{id}/release',
     '/evidence/items', '/evidence/items/{id}',

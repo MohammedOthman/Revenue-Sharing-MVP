@@ -14,6 +14,35 @@ const TRANSITIONS = {
 export const canTransition = (from, to) => (TRANSITIONS[from] || []).includes(to);
 export const isTerminal = (status) => status === 'approved' || status === 'rejected';
 
+/**
+ * Payout-readiness gate (PDR FR-04): a claim is payout-ready only once it has
+ * been approved and both bank and tax are verified. Phase 1 records this
+ * milestone; it never moves money. Pure and unit-testable. Each check maps a
+ * stable key (surfaced to the UI so it can explain why payout-ready is blocked)
+ * to a predicate over the claim row.
+ */
+export const PAYOUT_READINESS_CHECKS = [
+  ['approved', (c) => c.status === 'approved'],
+  ['bank_verified', (c) => c.bank_verified === true],
+  ['tax_verified', (c) => c.tax_verified === true],
+];
+
+export const payoutReadiness = (claim) => {
+  const missing = PAYOUT_READINESS_CHECKS.filter(([, ok]) => !ok(claim)).map(([key]) => key);
+  const total = PAYOUT_READINESS_CHECKS.length;
+  return { ready: missing.length === 0, missing, satisfied: total - missing.length, total };
+};
+
+// Attach the derived payout-readiness for API responses.
+export const withPayoutReadiness = (row) => {
+  if (!row) return row;
+  return { ...row, payout_readiness: payoutReadiness(row) };
+};
+
+// Verification inputs can be recorded or cleared until the claim is marked
+// payout-ready, after which the milestone is stable and its inputs are locked.
+export const canChangeVerification = (claim) => Boolean(claim) && claim.payout_ready !== true;
+
 export const createClaim = async (data) => {
   const {
     tenantId, partnerId, contractId, periodStart, periodEnd,
@@ -109,6 +138,32 @@ export const setClaimStatus = async (id, { status, approvedAmount, note, reviewe
   return result.rows[0];
 };
 
+// Record or clear a bank/tax verification. kind is 'bank' or 'tax'.
+export const setClaimVerification = async (id, kind, verified) => {
+  const column = kind === 'bank' ? 'bank_verified' : 'tax_verified';
+  const atColumn = kind === 'bank' ? 'bank_verified_at' : 'tax_verified_at';
+  const result = await dbQuery(
+    `UPDATE partner_revenue_claims
+       SET ${column} = $1,
+           ${atColumn} = CASE WHEN $1 THEN CURRENT_TIMESTAMP ELSE NULL END,
+           updated_at = CURRENT_TIMESTAMP
+     WHERE id = $2 RETURNING *`,
+    [verified, id]
+  );
+  return result.rows[0];
+};
+
+// Record the payout-ready milestone (no money movement).
+export const setClaimPayoutReady = async (id) => {
+  const result = await dbQuery(
+    `UPDATE partner_revenue_claims
+       SET payout_ready = TRUE, payout_ready_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+     WHERE id = $1 RETURNING *`,
+    [id]
+  );
+  return result.rows[0];
+};
+
 export const deleteClaim = async (id) => {
   await dbQuery('DELETE FROM partner_revenue_claims WHERE id = $1', [id]);
 };
@@ -122,6 +177,7 @@ export const getClaimStats = async () => {
       COUNT(CASE WHEN status = 'needs_clarification' THEN 1 END) AS needs_clarification_claims,
       COUNT(CASE WHEN status = 'approved' THEN 1 END) AS approved_claims,
       COUNT(CASE WHEN status = 'rejected' THEN 1 END) AS rejected_claims,
+      COUNT(CASE WHEN payout_ready THEN 1 END) AS payout_ready_claims,
       COALESCE(SUM(approved_amount), 0) AS total_approved_amount
     FROM partner_revenue_claims
   `);

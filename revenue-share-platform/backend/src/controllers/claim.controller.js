@@ -1,6 +1,8 @@
 import {
   createClaim, findClaimById, getAllClaims, updateClaim,
   setClaimStatus, deleteClaim, getClaimStats, canTransition, isTerminal,
+  payoutReadiness, withPayoutReadiness, canChangeVerification,
+  setClaimVerification, setClaimPayoutReady,
 } from '../models/claim.model.js';
 import { safeAudit } from '../models/audit.model.js';
 
@@ -19,7 +21,7 @@ export const createClaimController = async (req, res) => {
     if (!partnerId) return res.status(400).json({ error: 'Partner is required' });
     const claim = await createClaim({ ...req.body, tenantId: req.tenantId, createdBy: req.user.id });
     await audit(req, claim, 'created');
-    res.status(201).json({ message: 'Claim submitted', claim });
+    res.status(201).json({ message: 'Claim submitted', claim: withPayoutReadiness(claim) });
   } catch (error) {
     console.error('Create claim error:', error);
     res.status(500).json({ error: 'Failed to create claim' });
@@ -30,7 +32,7 @@ export const getAllClaimsController = async (req, res) => {
   try {
     const { status, partnerId, contractId } = req.query;
     const claims = await getAllClaims({ status, partnerId, contractId });
-    res.json({ claims });
+    res.json({ claims: claims.map(withPayoutReadiness) });
   } catch (error) {
     console.error('Get claims error:', error);
     res.status(500).json({ error: 'Failed to get claims' });
@@ -41,7 +43,7 @@ export const getClaimController = async (req, res) => {
   try {
     const claim = await findClaimById(req.params.id);
     if (!claim) return res.status(404).json({ error: 'Claim not found' });
-    res.json({ claim });
+    res.json({ claim: withPayoutReadiness(claim) });
   } catch (error) {
     console.error('Get claim error:', error);
     res.status(500).json({ error: 'Failed to get claim' });
@@ -57,7 +59,7 @@ export const updateClaimController = async (req, res) => {
     }
     const claim = await updateClaim(req.params.id, req.body);
     await audit(req, claim, 'updated');
-    res.json({ message: 'Claim updated', claim });
+    res.json({ message: 'Claim updated', claim: withPayoutReadiness(claim) });
   } catch (error) {
     console.error('Update claim error:', error);
     res.status(500).json({ error: 'Failed to update claim' });
@@ -88,7 +90,7 @@ const transition = (targetStatus, action) => async (req, res) => {
     }
     const claim = await setClaimStatus(req.params.id, { status: targetStatus, note: req.body?.note });
     await audit(req, claim, action);
-    res.json({ message: `Claim ${action}`, claim });
+    res.json({ message: `Claim ${action}`, claim: withPayoutReadiness(claim) });
   } catch (error) {
     console.error(`Claim ${action} error:`, error);
     res.status(500).json({ error: `Failed to ${action} claim` });
@@ -113,7 +115,7 @@ export const approveClaimController = async (req, res) => {
       status: 'approved', approvedAmount, note: req.body?.note, reviewedBy: req.user.id,
     });
     await audit(req, claim, 'approved', { approvedAmount });
-    res.json({ message: 'Claim approved', claim });
+    res.json({ message: 'Claim approved', claim: withPayoutReadiness(claim) });
   } catch (error) {
     console.error('Approve claim error:', error);
     res.status(500).json({ error: 'Failed to approve claim' });
@@ -131,10 +133,59 @@ export const rejectClaimController = async (req, res) => {
       status: 'rejected', note: req.body?.note, reviewedBy: req.user.id,
     });
     await audit(req, claim, 'rejected');
-    res.json({ message: 'Claim rejected', claim });
+    res.json({ message: 'Claim rejected', claim: withPayoutReadiness(claim) });
   } catch (error) {
     console.error('Reject claim error:', error);
     res.status(500).json({ error: 'Failed to reject claim' });
+  }
+};
+
+// --- Payout-readiness (FR-04). Records verification + a payout-ready milestone.
+// No money movement. Which roles may verify bank/tax or mark payout-ready is an
+// open org decision; today any authenticated tenant member may. ---
+
+const verify = (kind) => async (req, res) => {
+  try {
+    const existing = await findClaimById(req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Claim not found' });
+    if (!canChangeVerification(existing)) {
+      return res.status(409).json({ error: 'Verification is locked once the claim is payout-ready' });
+    }
+    const verified = req.body?.verified === undefined ? true : req.body.verified === true;
+    const claim = await setClaimVerification(req.params.id, kind, verified);
+    await audit(req, claim, verified ? `${kind}_verified` : `${kind}_unverified`);
+    res.json({ message: `Claim ${kind} verification recorded`, claim: withPayoutReadiness(claim) });
+  } catch (error) {
+    console.error(`Claim ${kind} verification error:`, error);
+    res.status(500).json({ error: `Failed to record ${kind} verification` });
+  }
+};
+
+export const verifyBankController = verify('bank');
+export const verifyTaxController = verify('tax');
+
+export const markPayoutReadyController = async (req, res) => {
+  try {
+    const existing = await findClaimById(req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Claim not found' });
+    if (existing.payout_ready) {
+      return res.status(409).json({ error: 'Claim is already payout-ready' });
+    }
+    const readiness = payoutReadiness(existing);
+    if (!readiness.ready) {
+      // Blocked, not faked — mirror the amendment send-notice gate.
+      return res.status(422).json({
+        error: 'Claim is not payout-ready',
+        missing: readiness.missing,
+        readiness,
+      });
+    }
+    const claim = await setClaimPayoutReady(req.params.id);
+    await audit(req, claim, 'payout_ready');
+    res.json({ message: 'Claim marked payout-ready', claim: withPayoutReadiness(claim) });
+  } catch (error) {
+    console.error('Mark payout-ready error:', error);
+    res.status(500).json({ error: 'Failed to mark claim payout-ready' });
   }
 };
 

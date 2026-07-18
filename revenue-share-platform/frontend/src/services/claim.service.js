@@ -42,6 +42,23 @@ const claimService = {
     const response = await api.post(`/claims/${id}/reject`, { note });
     return response.data.claim;
   },
+
+  // Payout-readiness (FR-04): record verification and the payout-ready milestone.
+  // No money moves; mark-payout-ready is blocked (422) until approved + verified.
+  verifyBank: async (id, verified = true) => {
+    const response = await api.post(`/claims/${id}/verify-bank`, { verified });
+    return response.data.claim;
+  },
+
+  verifyTax: async (id, verified = true) => {
+    const response = await api.post(`/claims/${id}/verify-tax`, { verified });
+    return response.data.claim;
+  },
+
+  markPayoutReady: async (id) => {
+    const response = await api.post(`/claims/${id}/mark-payout-ready`);
+    return response.data.claim;
+  },
 };
 
 export default claimService;

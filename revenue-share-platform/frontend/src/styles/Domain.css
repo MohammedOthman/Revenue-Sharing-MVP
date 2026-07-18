@@ -23,6 +23,10 @@
 
 .hint { font-size: 0.85rem; color: #888; margin: 0 0 12px; }
 
+.readiness { font-weight: 600; font-variant-numeric: tabular-nums; }
+.readiness.ready { color: #2e7d32; }
+.readiness.incomplete { color: #e65100; }
+
 /* Status badges not already defined in index.css. */
 .badge-submitted { background: #e3f2fd; color: #1565c0; }
 .badge-under_review { background: #fff3e0; color: #e65100; }

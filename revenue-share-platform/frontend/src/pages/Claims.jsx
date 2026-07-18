@@ -5,6 +5,7 @@ import contractService from '../services/contract.service';
 import '../styles/Domain.css';
 
 const TERMINAL = ['approved', 'rejected'];
+const PAYOUT_LABELS = { approved: 'Approved', bank_verified: 'Bank verified', tax_verified: 'Tax verified' };
 
 const emptyForm = {
   partnerId: '',
@@ -103,7 +104,32 @@ const Claims = () => {
     if (window.confirm('Delete this claim?')) act(claimService.delete, c.id);
   };
 
+  const markReady = async (c) => {
+    try {
+      await claimService.markPayoutReady(c.id);
+      loadData();
+    } catch (err) {
+      const missing = err.response?.data?.missing;
+      if (missing?.length) {
+        setError(`Not payout-ready — still missing: ${missing.map((k) => PAYOUT_LABELS[k] || k).join(', ')}`);
+      } else {
+        setError(err.response?.data?.error || 'Failed to mark payout-ready');
+      }
+    }
+  };
+
   const money = (v, ccy) => (v == null ? '—' : `${Number(v).toLocaleString()} ${ccy || ''}`.trim());
+
+  const renderPayout = (c) => {
+    if (c.payout_ready) return <span className="badge badge-confirmed">payout-ready</span>;
+    const r = c.payout_readiness || { satisfied: 0, total: 3, missing: [] };
+    const title = r.missing?.length ? `Missing: ${r.missing.map((k) => PAYOUT_LABELS[k] || k).join(', ')}` : 'Ready';
+    return (
+      <span className={`readiness ${r.ready ? 'ready' : 'incomplete'}`} title={title}>
+        {r.satisfied}/{r.total}{!r.ready && r.missing?.length ? ' ⚠' : ''}
+      </span>
+    );
+  };
 
   if (loading) return <div className="loading">Loading claims...</div>;
 
@@ -122,12 +148,12 @@ const Claims = () => {
           <thead>
             <tr>
               <th>Partner</th><th>Contract</th><th>Basis</th>
-              <th>Claimed</th><th>Approved</th><th>Status</th><th>Actions</th>
+              <th>Claimed</th><th>Approved</th><th>Status</th><th>Payout</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {claims.length === 0 && (
-              <tr><td colSpan="7" className="empty-row">No claims yet.</td></tr>
+              <tr><td colSpan="8" className="empty-row">No claims yet.</td></tr>
             )}
             {claims.map((c) => {
               const terminal = TERMINAL.includes(c.status);
@@ -140,12 +166,31 @@ const Claims = () => {
                   <td className="amount">{money(c.claimed_amount, c.currency)}</td>
                   <td className="amount">{money(c.approved_amount, c.currency)}</td>
                   <td><span className={`badge badge-${c.status}`}>{c.status}</span></td>
+                  <td>{renderPayout(c)}</td>
                   <td className="actions">
                     {!terminal && <button className="btn-sm" onClick={() => openModal(c)}>Edit</button>}
                     {reviewable && (
                       <>
                         <button className="btn-sm btn-success" onClick={() => handleApprove(c)}>Approve</button>
                         <button className="btn-sm btn-danger" onClick={() => handleReject(c)}>Reject</button>
+                      </>
+                    )}
+                    {c.status === 'approved' && !c.payout_ready && (
+                      <>
+                        <button className="btn-sm" onClick={() => act(claimService.verifyBank, c.id, !c.bank_verified)}>
+                          {c.bank_verified ? 'Unverify Bank' : 'Verify Bank'}
+                        </button>
+                        <button className="btn-sm" onClick={() => act(claimService.verifyTax, c.id, !c.tax_verified)}>
+                          {c.tax_verified ? 'Unverify Tax' : 'Verify Tax'}
+                        </button>
+                        <button
+                          className="btn-sm btn-success"
+                          disabled={!c.payout_readiness?.ready}
+                          title={c.payout_readiness?.ready ? 'Record the payout-ready milestone' : 'Approve and verify bank + tax first'}
+                          onClick={() => markReady(c)}
+                        >
+                          Mark Payout-Ready
+                        </button>
                       </>
                     )}
                     {!terminal && <button className="btn-sm btn-danger" onClick={() => handleDelete(c)}>Delete</button>}

@@ -45,10 +45,10 @@ settlement dependency exists to invoke.
 | Human attribution of record | Done | `attribution.model.js`; proposed → confirmed; edits blocked after confirm |
 | Protection window with expiry | Partial | `protection_windows` with derived `expired` status and audited release exist. FR-08's expiry **notification + re-claim event** and "override without reason/approver is blocked and audited" are **not** built (**Needs build**) |
 | Eligibility previewed **with an explanation** | Needs build | Amounts are stored and displayed; there is no eligibility service that returns the rule/explanation behind a figure |
-| Recorded first-payout milestone | Needs build | No milestone object exists; the claim lifecycle ends at approve/reject |
+| Recorded first-payout milestone | Done | `POST /claims/{id}/mark-payout-ready` records a `payout_ready` milestone (migration 010), gated by the readiness check below; `claim.payout.integration.test.js` proves the flow. It records a fact only — no money moves |
 | Every state change emits an event and is auditable | Done | Governance objects and basic CRUD (partner, contract, revenue, KPI, legal document) both audit create/update/delete via `safeAudit`; `crud.audit.integration.test.js` proves it through the API. The rule/evidence linkage FR-13 describes for a money-affecting decision is not yet captured (see below) |
 | No cross-tenant access | Done | Enforced by RLS as the `reven_app` role; proven through HTTP in `rls-http.integration.test.js` |
-| Payout-bearing claims blocked until bank + tax verified (FR-04) | Needs build | No bank/tax verification state exists; nothing executes payment, so nothing is unsafe today, but the readiness gate object is absent |
+| Payout-bearing claims blocked until bank + tax verified (FR-04) | Done | A claim carries `bank_verified` / `tax_verified` state; `mark-payout-ready` returns 422 with the missing requirements until the claim is approved and both are verified, and verification locks once payout-ready. Who is *authorized* to verify or mark is an open org decision (today any tenant member may) |
 | Evidence pack a finance reviewer can accept | Done | Evidence items + packs; `finalize` locks the pack read-only; `evidence.integration.test.js` proves the finalized-pack guarantee end to end |
 | Contract-amendment notice (real, readiness-gated) | Done | Amendment journey; send-notice blocked (422) until 14 readiness checks pass |
 | CSV in/out | Needs build | Not present in the current API surface |
@@ -121,7 +121,7 @@ Ready now: tenant isolation (enforced and proven), server-side financial figures
 audit trail, the five scoped journeys, migrations, CI, Docker, and the OpenAPI contract.
 
 Code gaps still in Phase-1 scope: the append-only ledger with offsetting corrections, the
-payout-readiness (bank/tax) gate, the eligibility-with-explanation preview, and
+eligibility-with-explanation preview, the activation / time-to-first-value clock, and
 field-level/partner-facing access. None of these move money.
 
 Outside this repo: hosting and region, encryption at rest, SSO, backups/DR, PDPL/ZATCA
