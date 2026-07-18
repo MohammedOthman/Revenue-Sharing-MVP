@@ -44,19 +44,19 @@ const Contracts = () => {
     if (contract) {
       setEditingContract(contract);
       setFormData({
-        partnerId: contract.partnerId?._id || contract.partnerId,
-        title: contract.title,
-        startDate: contract.startDate?.split('T')[0],
-        endDate: contract.endDate?.split('T')[0],
-        revenueSharePercentage: contract.revenueSharePercentage,
-        minimumPayout: contract.minimumPayout,
-        paymentTerms: contract.paymentTerms,
-        status: contract.status,
+        partnerId: contract.partner_id || '',
+        title: contract.title || '',
+        startDate: contract.start_date?.split('T')[0] || '',
+        endDate: contract.end_date?.split('T')[0] || '',
+        revenueSharePercentage: contract.revenue_share_percentage,
+        minimumPayout: contract.minimum_payout,
+        paymentTerms: contract.payment_terms || 'monthly',
+        status: contract.status || 'draft',
       });
     } else {
       setEditingContract(null);
       setFormData({
-        partnerId: partners[0]?._id || '',
+        partnerId: partners[0]?.id || '',
         title: '',
         startDate: '',
         endDate: '',
@@ -79,12 +79,12 @@ const Contracts = () => {
     try {
       const payload = {
         ...formData,
-        startDate: new Date(formData.startDate).toISOString(),
-        endDate: new Date(formData.endDate).toISOString(),
+        startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
+        endDate: formData.endDate ? new Date(formData.endDate).toISOString() : null,
       };
-      
+
       if (editingContract) {
-        await contractService.update(editingContract._id, payload);
+        await contractService.update(editingContract.id, payload);
       } else {
         await contractService.create(payload);
       }
@@ -105,6 +105,8 @@ const Contracts = () => {
       }
     }
   };
+
+  const formatDate = (value) => (value ? new Date(value).toLocaleDateString() : '—');
 
   if (loading) return <div className="loading">Loading contracts...</div>;
 
@@ -135,13 +137,13 @@ const Contracts = () => {
           </thead>
           <tbody>
             {contracts.map((contract) => (
-              <tr key={contract._id}>
+              <tr key={contract.id}>
                 <td>{contract.title}</td>
-                <td>{contract.partnerId?.name || 'N/A'}</td>
-                <td>{new Date(contract.startDate).toLocaleDateString()}</td>
-                <td>{new Date(contract.endDate).toLocaleDateString()}</td>
-                <td>{contract.revenueSharePercentage}%</td>
-                <td>${contract.minimumPayout}</td>
+                <td>{contract.partner_name || 'N/A'}</td>
+                <td>{formatDate(contract.start_date)}</td>
+                <td>{formatDate(contract.end_date)}</td>
+                <td>{contract.revenue_share_percentage}%</td>
+                <td>${contract.minimum_payout}</td>
                 <td>
                   <span className={`badge badge-${contract.status}`}>{contract.status}</span>
                 </td>
@@ -149,7 +151,7 @@ const Contracts = () => {
                   <button className="btn-sm" onClick={() => handleOpenModal(contract)}>
                     Edit
                   </button>
-                  <button className="btn-sm btn-danger" onClick={() => handleDelete(contract._id)}>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(contract.id)}>
                     Delete
                   </button>
                 </td>
@@ -170,10 +172,11 @@ const Contracts = () => {
                   value={formData.partnerId}
                   onChange={(e) => setFormData({ ...formData, partnerId: e.target.value })}
                   required
+                  disabled={!!editingContract}
                 >
                   <option value="">Select Partner</option>
                   {partners.map((partner) => (
-                    <option key={partner._id} value={partner._id}>
+                    <option key={partner.id} value={partner.id}>
                       {partner.name} - {partner.company}
                     </option>
                   ))}
@@ -204,7 +207,6 @@ const Contracts = () => {
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    required
                   />
                 </div>
               </div>

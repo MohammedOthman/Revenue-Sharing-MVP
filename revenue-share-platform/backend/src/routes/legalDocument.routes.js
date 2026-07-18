@@ -3,14 +3,15 @@ import {
   createLegalDocumentController, getAllLegalDocumentsController, getLegalDocumentController, 
   updateLegalDocumentController, deleteLegalDocumentController, getLegalDocumentStatsController 
 } from '../controllers/legalDocument.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
+import { documentCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
 // All routes are protected
-router.use(authMiddleware);
+router.use(protect);
 
-router.post('/', createLegalDocumentController);
+router.post('/', documentCreateRules, handleValidation, createLegalDocumentController);
 router.get('/', getAllLegalDocumentsController);
 router.get('/stats', getLegalDocumentStatsController);
 router.get('/:id', getLegalDocumentController);

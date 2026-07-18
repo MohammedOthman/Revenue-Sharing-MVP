@@ -3,14 +3,15 @@ import {
   createKPIController, getAllKPIsController, getKPIController, 
   updateKPIController, deleteKPIController, getKPIStatsController 
 } from '../controllers/kpi.controller.js';
-import { authMiddleware } from '../middleware/auth.js';
+import { protect } from '../middleware/protect.js';
+import { kpiCreateRules, handleValidation } from '../middleware/validators.js';
 
 const router = express.Router();
 
 // All routes are protected
-router.use(authMiddleware);
+router.use(protect);
 
-router.post('/', createKPIController);
+router.post('/', kpiCreateRules, handleValidation, createKPIController);
 router.get('/', getAllKPIsController);
 router.get('/stats', getKPIStatsController);
 router.get('/:id', getKPIController);

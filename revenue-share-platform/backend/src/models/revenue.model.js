@@ -1,11 +1,25 @@
-import pool from '../config/database.js';
+import { dbQuery } from '../config/database.js';
+
+/**
+ * Authoritative, decimal-safe share-amount calculation (FR-12: financial
+ * integrity). The share amount is derived server-side from the total revenue
+ * and share percentage, never trusted from the client. Rounded to 2 decimals.
+ */
+export const calculateShareAmount = (totalRevenue, sharePercentage) => {
+  const total = Number(totalRevenue);
+  const pct = Number(sharePercentage);
+  if (!Number.isFinite(total) || !Number.isFinite(pct)) return 0;
+  return Math.round(total * pct) / 100;
+};
 
 export const createRevenueShare = async (data) => {
-  const { contractId, periodStart, periodEnd, totalRevenue, sharePercentage, shareAmount, notes } = data;
-  
-  const result = await pool.query(
-    `INSERT INTO revenue_shares (contract_id, period_start, period_end, total_revenue, 
-       share_percentage, share_amount, notes) 
+  const { contractId, periodStart, periodEnd, totalRevenue, sharePercentage, notes } = data;
+  // Derive the share amount server-side; any client-supplied value is ignored.
+  const shareAmount = calculateShareAmount(totalRevenue, sharePercentage);
+
+  const result = await dbQuery(
+    `INSERT INTO revenue_shares (contract_id, period_start, period_end, total_revenue,
+       share_percentage, share_amount, notes)
      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
     [contractId, periodStart, periodEnd, totalRevenue, sharePercentage, shareAmount, notes || null]
   );
@@ -13,7 +27,7 @@ export const createRevenueShare = async (data) => {
 };
 
 export const findRevenueShareById = async (id) => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT r.*, c.title as contract_title, p.name as partner_name
     FROM revenue_shares r
     LEFT JOIN contracts c ON r.contract_id = c.id
@@ -48,37 +62,44 @@ export const getAllRevenueShares = async (filters = {}) => {
 
   query += ' ORDER BY r.period_end DESC';
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows;
 };
 
 export const updateRevenueShare = async (id, updates) => {
-  const allowedFields = ['total_revenue', 'share_percentage', 'share_amount', 'status', 'paid_at', 'notes'];
+  // [column, camelCase alias] — updates may arrive in either form.
+  const fieldMap = [
+    ['period_start', 'periodStart'], ['period_end', 'periodEnd'],
+    ['total_revenue', 'totalRevenue'], ['share_percentage', 'sharePercentage'],
+    ['share_amount', 'shareAmount'], ['status', 'status'], ['paid_at', 'paidAt'],
+    ['notes', 'notes'],
+  ];
   const fields = [];
   const values = [];
-  
-  allowedFields.forEach((field) => {
-    if (updates[field] !== undefined) {
-      fields.push(`${field} = $${values.length + 1}`);
-      values.push(updates[field]);
+
+  fieldMap.forEach(([column, camel]) => {
+    const value = updates[camel] !== undefined ? updates[camel] : updates[column];
+    if (value !== undefined) {
+      fields.push(`${column} = $${values.length + 1}`);
+      values.push(value);
     }
   });
-  
+
   if (fields.length === 0) return null;
   
   values.push(id);
   const query = `UPDATE revenue_shares SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = $${values.length} RETURNING *`;
   
-  const result = await pool.query(query, values);
+  const result = await dbQuery(query, values);
   return result.rows[0];
 };
 
 export const deleteRevenueShare = async (id) => {
-  await pool.query('DELETE FROM revenue_shares WHERE id = $1', [id]);
+  await dbQuery('DELETE FROM revenue_shares WHERE id = $1', [id]);
 };
 
 export const getRevenueStats = async () => {
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT 
       COUNT(*) as total_records,
       SUM(total_revenue) as total_revenue,
@@ -102,7 +123,7 @@ export const getRevenueByPeriod = async (periodType = 'month') => {
     dateFormat = 'YYYY';
   }
 
-  const result = await pool.query(`
+  const result = await dbQuery(`
     SELECT 
       TO_CHAR(period_start, '${dateFormat}') as period,
       SUM(total_revenue) as total_revenue,

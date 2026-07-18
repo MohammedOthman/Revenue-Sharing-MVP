@@ -66,6 +66,10 @@
   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
 }
 
+.stat-icon.amendments {
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+}
+
 .stat-info h3 {
   font-size: 28px;
   color: #333;

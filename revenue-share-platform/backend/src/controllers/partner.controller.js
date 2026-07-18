@@ -1,7 +1,14 @@
-import { 
-  createPartner, findPartnerById, getAllPartners, 
-  updatePartner, deletePartner, getPartnerStats 
+import {
+  createPartner, findPartnerById, getAllPartners,
+  updatePartner, deletePartner, getPartnerStats
 } from '../models/partner.model.js';
+import { safeAudit } from '../models/audit.model.js';
+import { toCsv } from '../utils/csv.js';
+
+const audit = (req, entityId, action, metadata = {}) => safeAudit({
+  tenantId: req.tenantId, actorUserId: req.user?.id,
+  entityType: 'partner', entityId, action, metadata,
+});
 
 export const createPartnerController = async (req, res) => {
   try {
@@ -12,6 +19,7 @@ export const createPartnerController = async (req, res) => {
     }
 
     const partner = await createPartner({ name, email, company, type, contactPerson, phone, address, notes });
+    await audit(req, partner.id, 'created');
     res.status(201).json({ message: 'Partner created successfully', partner });
   } catch (error) {
     console.error('Create partner error:', error);
@@ -56,6 +64,7 @@ export const updatePartnerController = async (req, res) => {
       return res.status(404).json({ error: 'Partner not found or no updates provided' });
     }
 
+    await audit(req, partner.id, 'updated');
     res.json({ message: 'Partner updated successfully', partner });
   } catch (error) {
     console.error('Update partner error:', error);
@@ -67,10 +76,28 @@ export const deletePartnerController = async (req, res) => {
   try {
     const { id } = req.params;
     await deletePartner(id);
+    await audit(req, Number(id), 'deleted');
     res.json({ message: 'Partner deleted successfully' });
   } catch (error) {
     console.error('Delete partner error:', error);
     res.status(500).json({ error: 'Failed to delete partner' });
+  }
+};
+
+export const exportPartnersController = async (req, res) => {
+  try {
+    const { status, type } = req.query;
+    const partners = await getAllPartners({ status, type });
+    const csv = toCsv(partners, [
+      { key: 'id' }, { key: 'name' }, { key: 'email' }, { key: 'company' }, { key: 'type' },
+      { key: 'status' }, { key: 'contact_person' }, { key: 'phone' }, { key: 'created_at' },
+    ]);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="partners.csv"');
+    res.send(csv);
+  } catch (error) {
+    console.error('Export partners error:', error);
+    res.status(500).json({ error: 'Failed to export partners' });
   }
 };
 

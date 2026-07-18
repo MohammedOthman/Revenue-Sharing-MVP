@@ -1,26 +1,67 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
-import { createTables } from './models/schema.js';
+import { pathToFileURL } from 'url';
+import { runMigrations } from './migrate.js';
+import { assertEnv } from './config/env.js';
+import { openApiSpec } from './openapi.js';
 
 // Import routes
 import authRoutes from './routes/auth.routes.js';
 import partnerRoutes from './routes/partner.routes.js';
 import contractRoutes from './routes/contract.routes.js';
+import amendmentRoutes from './routes/amendment.routes.js';
 import revenueRoutes from './routes/revenue.routes.js';
 import kpiRoutes from './routes/kpi.routes.js';
 import legalDocumentRoutes from './routes/legalDocument.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
+import auditRoutes from './routes/audit.routes.js';
+import claimRoutes from './routes/claim.routes.js';
+import attributionRoutes from './routes/attribution.routes.js';
+import protectionWindowRoutes from './routes/protectionWindow.routes.js';
+import evidenceRoutes from './routes/evidence.routes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Security headers
+app.use(helmet());
+
+// CORS allowlist. In production, restrict to the origins in CORS_ORIGINS
+// (comma-separated). Elsewhere (and when unset) allow all for local dev,
+// where the Vite proxy serves the SPA same-origin.
+const corsOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+if (process.env.NODE_ENV === 'production' && corsOrigins.length > 0) {
+  app.use(cors({ origin: corsOrigins }));
+} else {
+  app.use(cors());
+}
+
+// Body parsing with a sane size limit
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+// Rate limiting: a general API cap, plus a stricter cap on auth endpoints
+// to slow credential-stuffing / brute force.
+const rateLimitOptions = {
+  windowMs: 15 * 60 * 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => res.status(429).json({ error: 'Too many requests, please try again later.' }),
+};
+const apiLimiter = rateLimit({ ...rateLimitOptions, limit: 300 });
+const authLimiter = rateLimit({ ...rateLimitOptions, limit: 20 });
+
+app.use('/api', apiLimiter);
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -28,14 +69,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// API contract: raw spec + interactive docs (public). Swagger UI needs inline
+// assets, so relax the CSP for the docs HTML only.
+app.get('/api/openapi.json', (req, res) => res.json(openApiSpec));
+app.use(
+  '/api/docs',
+  (req, res, next) => { res.removeHeader('Content-Security-Policy'); next(); },
+  swaggerUi.serve,
+  swaggerUi.setup(openApiSpec, { customSiteTitle: 'Reven API' })
+);
+
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/partners', partnerRoutes);
 app.use('/api/contracts', contractRoutes);
+app.use('/api/amendments', amendmentRoutes);
 app.use('/api/revenue', revenueRoutes);
 app.use('/api/kpis', kpiRoutes);
 app.use('/api/documents', legalDocumentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/audit', auditRoutes);
+app.use('/api/claims', claimRoutes);
+app.use('/api/attributions', attributionRoutes);
+app.use('/api/protection-windows', protectionWindowRoutes);
+app.use('/api/evidence', evidenceRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -45,7 +102,7 @@ app.get('/api/health', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
@@ -57,11 +114,14 @@ app.use((req, res) => {
 });
 
 // Start server and initialize database
-const startServer = async () => {
+export const startServer = async () => {
   try {
-    // Initialize database tables
-    await createTables();
-    
+    // Validate configuration before doing anything that depends on it
+    assertEnv();
+
+    // Apply any pending database migrations
+    await runMigrations();
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -73,6 +133,10 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Only start when run directly (so tests can import `app` without booting).
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
+  startServer();
+}
 
 export default app;

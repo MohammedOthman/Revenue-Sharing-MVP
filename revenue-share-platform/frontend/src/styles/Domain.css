@@ -1,0 +1,41 @@
+/* Shared styling for the Phase-1 domain pages (claims, attribution, protection
+   windows, evidence). Base components — buttons, tables, modals, and most
+   badges — come from index.css; this file adds only the extras those pages need
+   and the status badges index.css does not already define. */
+
+.domain-page { width: 100%; }
+
+.empty-row { text-align: center; color: #888; padding: 24px 0; }
+
+.checkbox { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 0.9rem; }
+.checkbox.inline { display: inline-flex; margin-right: 16px; }
+
+.modal-wide { max-width: 720px; width: 92%; }
+
+.muted { color: #888; }
+.amount { font-variant-numeric: tabular-nums; }
+
+.section-subhead { display: flex; justify-content: space-between; align-items: center; margin: 28px 0 8px; }
+.section-subhead h2 { font-size: 1.05rem; margin: 0; }
+
+.pack-items { margin: 4px 0 0; padding-left: 18px; font-size: 0.85rem; color: #555; }
+.pack-items li { margin: 2px 0; }
+
+.hint { font-size: 0.85rem; color: #888; margin: 0 0 12px; }
+
+.readiness { font-weight: 600; font-variant-numeric: tabular-nums; }
+.readiness.ready { color: #2e7d32; }
+.readiness.incomplete { color: #e65100; }
+
+/* Status badges not already defined in index.css. */
+.badge-submitted { background: #e3f2fd; color: #1565c0; }
+.badge-under_review { background: #fff3e0; color: #e65100; }
+.badge-needs_clarification { background: #fdecea; color: #b71c1c; }
+.badge-rejected { background: #fdecea; color: #c62828; }
+.badge-proposed { background: #ede7f6; color: #5e35b1; }
+.badge-confirmed { background: #e8f5e9; color: #2e7d32; }
+.badge-released { background: #eceff1; color: #455a64; }
+.badge-finalized { background: #e8f5e9; color: #2e7d32; }
+.badge-credited { background: #e8f5e9; color: #2e7d32; }
+.badge-declined { background: #fdecea; color: #c62828; }
+.badge-split { background: #fff8e1; color: #f9a825; }
