@@ -1,10 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import dashboardService from '../services/dashboard.service';
+import { getApiError } from '../services/api';
 import '../styles/Dashboard.css';
+
+const formatMoney = (value) => Number(value || 0).toLocaleString();
+
+const describeActivity = (item) => {
+  const verbs = { POST: 'Created', PUT: 'Updated', PATCH: 'Updated', DELETE: 'Deleted' };
+  const entities = {
+    partners: 'partner',
+    contracts: 'contract',
+    revenue: 'revenue share',
+    kpis: 'KPI',
+    'legal-documents': 'legal document',
+    documents: 'legal document',
+    auth: 'user account',
+  };
+  const verb = verbs[item.method] || item.method;
+  const entity = entities[item.entity] || item.entity || 'record';
+  const who = item.user_email ? ` by ${item.user_email}` : '';
+  return `${verb} ${entity}${item.entity_id ? ` #${item.entity_id}` : ''}${who}`;
+};
+
+const timeAgo = (dateString) => {
+  const seconds = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+};
 
 const Dashboard = () => {
   const [overview, setOverview] = useState(null);
+  const [activity, setActivity] = useState([]);
+  const [expiring, setExpiring] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -14,10 +46,16 @@ const Dashboard = () => {
 
   const loadDashboardData = async () => {
     try {
-      const data = await dashboardService.getOverview();
-      setOverview(data);
+      const [overviewData, activityData, expiringData] = await Promise.all([
+        dashboardService.getOverview(),
+        dashboardService.getRecentActivity(5).catch(() => []),
+        dashboardService.getExpiring(30).catch(() => null),
+      ]);
+      setOverview(overviewData);
+      setActivity(activityData);
+      setExpiring(expiringData);
     } catch (err) {
-      setError('Failed to load dashboard data');
+      setError(getApiError(err, 'Failed to load dashboard data'));
     } finally {
       setLoading(false);
     }
@@ -37,7 +75,7 @@ const Dashboard = () => {
         <div className="stat-card">
           <div className="stat-icon partners">🤝</div>
           <div className="stat-info">
-            <h3>{overview?.totalPartners || 0}</h3>
+            <h3>{overview?.totalPartners ?? 0}</h3>
             <p>Total Partners</p>
           </div>
         </div>
@@ -45,7 +83,7 @@ const Dashboard = () => {
         <div className="stat-card">
           <div className="stat-icon contracts">📄</div>
           <div className="stat-info">
-            <h3>{overview?.totalContracts || 0}</h3>
+            <h3>{overview?.activeContracts ?? 0}</h3>
             <p>Active Contracts</p>
           </div>
         </div>
@@ -53,15 +91,15 @@ const Dashboard = () => {
         <div className="stat-card">
           <div className="stat-icon revenue">💰</div>
           <div className="stat-info">
-            <h3>${overview?.totalRevenue?.toLocaleString() || '0'}</h3>
-            <p>Total Revenue (MTD)</p>
+            <h3>${formatMoney(overview?.totalRevenue)}</h3>
+            <p>Total Revenue</p>
           </div>
         </div>
 
         <div className="stat-card">
           <div className="stat-icon pending">⏳</div>
           <div className="stat-info">
-            <h3>${overview?.pendingPayments?.toLocaleString() || '0'}</h3>
+            <h3>${formatMoney(overview?.pendingPayments)}</h3>
             <p>Pending Payments</p>
           </div>
         </div>
@@ -71,41 +109,72 @@ const Dashboard = () => {
         <div className="section">
           <h2>Contract Status Distribution</h2>
           <div className="chart-placeholder">
-            <div className="status-bar">
-              <div className="status-segment active" style={{ width: `${overview?.contractStatus?.active || 0}%` }}>
-                Active ({overview?.contractStatus?.active || 0}%)
+            {overview?.totalContracts > 0 ? (
+              <div className="status-bar">
+                {overview?.contractStatus?.active > 0 && (
+                  <div className="status-segment active" style={{ width: `${overview.contractStatus.active}%` }}>
+                    Active ({overview.contractStatus.active}%)
+                  </div>
+                )}
+                {overview?.contractStatus?.pending > 0 && (
+                  <div className="status-segment pending" style={{ width: `${overview.contractStatus.pending}%` }}>
+                    Draft ({overview.contractStatus.pending}%)
+                  </div>
+                )}
+                {overview?.contractStatus?.expired > 0 && (
+                  <div className="status-segment expired" style={{ width: `${overview.contractStatus.expired}%` }}>
+                    Expired ({overview.contractStatus.expired}%)
+                  </div>
+                )}
               </div>
-              <div className="status-segment pending" style={{ width: `${overview?.contractStatus?.pending || 0}%` }}>
-                Pending ({overview?.contractStatus?.pending || 0}%)
-              </div>
-              <div className="status-segment expired" style={{ width: `${overview?.contractStatus?.expired || 0}%` }}>
-                Expired ({overview?.contractStatus?.expired || 0}%)
-              </div>
-            </div>
+            ) : (
+              <p className="empty-state">No contracts yet. <Link to="/contracts">Create your first contract</Link>.</p>
+            )}
           </div>
         </div>
 
         <div className="section">
           <h2>Recent Activity</h2>
           <div className="activity-list">
-            <div className="activity-item">
-              <span className="activity-icon">➕</span>
-              <span>New partner onboarded</span>
-              <span className="activity-time">2 hours ago</span>
-            </div>
-            <div className="activity-item">
-              <span className="activity-icon">💵</span>
-              <span>Revenue share calculated</span>
-              <span className="activity-time">5 hours ago</span>
-            </div>
-            <div className="activity-item">
-              <span className="activity-icon">✅</span>
-              <span>Payment processed</span>
-              <span className="activity-time">1 day ago</span>
-            </div>
+            {activity.length === 0 && <p className="empty-state">No activity recorded yet.</p>}
+            {activity.map((item) => (
+              <div className="activity-item" key={item.id}>
+                <span className="activity-icon">
+                  {item.method === 'DELETE' ? '🗑️' : item.method === 'POST' ? '➕' : '✏️'}
+                </span>
+                <span>{describeActivity(item)}</span>
+                <span className="activity-time">{timeAgo(item.created_at)}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {(expiring?.contracts?.length > 0 || expiring?.documents?.length > 0) && (
+        <div className="section renewal-radar">
+          <h2>⏰ Renewals &amp; Expirations (next {expiring.days} days)</h2>
+          <div className="activity-list">
+            {expiring.contracts.map((c) => (
+              <div className="activity-item" key={`c-${c.id}`}>
+                <span className="activity-icon">📄</span>
+                <span>
+                  Contract <Link to="/contracts">{c.title}</Link> with {c.partner_name || 'N/A'} ends{' '}
+                  {new Date(c.end_date).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+            {expiring.documents.map((d) => (
+              <div className="activity-item" key={`d-${d.id}`}>
+                <span className="activity-icon">⚖️</span>
+                <span>
+                  Document <Link to="/legal">{d.document_name}</Link> ({d.contract_title || 'N/A'}) expires{' '}
+                  {new Date(d.expiry_date).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="quick-actions">
         <h2>Quick Actions</h2>

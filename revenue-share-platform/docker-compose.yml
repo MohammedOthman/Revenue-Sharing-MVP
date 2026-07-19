@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: revenue_share
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d revenue_share"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: postgres://postgres:${DB_PASSWORD:-postgres}@db:5432/revenue_share
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (generate with openssl rand -hex 32)}
+      ALLOW_OPEN_REGISTRATION: ${ALLOW_OPEN_REGISTRATION:-false}
+    ports:
+      - "${APP_PORT:-5000}:5000"
+    restart: unless-stopped
+
+volumes:
+  pgdata:

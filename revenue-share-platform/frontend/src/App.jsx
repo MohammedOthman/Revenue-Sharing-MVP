@@ -1,8 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import Team from './pages/Team';
 import Dashboard from './pages/Dashboard';
 import Partners from './pages/Partners';
 import Contracts from './pages/Contracts';
@@ -12,34 +16,43 @@ import LegalDocuments from './pages/LegalDocuments';
 import './styles/index.css';
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  // Wait for the stored session to load before deciding — otherwise a
+  // page refresh bounces logged-in users to /login.
+  if (loading) return <div className="loading">Loading...</div>;
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="partners" element={<Partners />} />
-            <Route path="contracts" element={<Contracts />} />
-            <Route path="revenue" element={<Revenue />} />
-            <Route path="kpis" element={<KPIs />} />
-            <Route path="legal" element={<LegalDocuments />} />
-          </Route>
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="partners" element={<Partners />} />
+              <Route path="contracts" element={<Contracts />} />
+              <Route path="revenue" element={<Revenue />} />
+              <Route path="kpis" element={<KPIs />} />
+              <Route path="legal" element={<LegalDocuments />} />
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

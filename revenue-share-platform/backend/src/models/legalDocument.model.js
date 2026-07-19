@@ -1,12 +1,16 @@
 import pool from '../config/database.js';
 
 export const createLegalDocument = async (data) => {
-  const { contractId, documentType, documentName, filePath, fileUrl, version, uploadedBy } = data;
-  
+  const {
+    contractId, documentType, documentName, filePath, fileUrl,
+    version, expiryDate, notes, status, uploadedBy,
+  } = data;
+
   const result = await pool.query(
-    `INSERT INTO legal_documents (contract_id, document_type, document_name, file_path, file_url, version, uploaded_by) 
-     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-    [contractId, documentType, documentName, filePath || null, fileUrl || null, version || '1.0', uploadedBy]
+    `INSERT INTO legal_documents (contract_id, document_type, document_name, file_path, file_url, version, expiry_date, notes, status, uploaded_by)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+    [contractId, documentType, documentName, filePath || null, fileUrl || null,
+     version || '1.0', expiryDate || null, notes || null, status || 'draft', uploadedBy]
   );
   return result.rows[0];
 };
@@ -59,7 +63,7 @@ export const getAllLegalDocuments = async (filters = {}) => {
 };
 
 export const updateLegalDocument = async (id, updates) => {
-  const allowedFields = ['document_type', 'document_name', 'file_path', 'file_url', 'version', 'status'];
+  const allowedFields = ['document_type', 'document_name', 'file_path', 'file_url', 'version', 'status', 'expiry_date', 'notes'];
   const fields = [];
   const values = [];
   
@@ -81,6 +85,19 @@ export const updateLegalDocument = async (id, updates) => {
 
 export const deleteLegalDocument = async (id) => {
   await pool.query('DELETE FROM legal_documents WHERE id = $1', [id]);
+};
+
+export const getExpiringDocuments = async (days = 30) => {
+  const result = await pool.query(`
+    SELECT d.id, d.document_name, d.document_type, d.expiry_date, d.status, c.title as contract_title
+    FROM legal_documents d
+    LEFT JOIN contracts c ON d.contract_id = c.id
+    WHERE d.expiry_date IS NOT NULL
+      AND d.status <> 'expired'
+      AND d.expiry_date BETWEEN CURRENT_DATE AND CURRENT_DATE + ($1 || ' days')::interval
+    ORDER BY d.expiry_date ASC
+  `, [String(days)]);
+  return result.rows;
 };
 
 export const getLegalDocumentStats = async () => {

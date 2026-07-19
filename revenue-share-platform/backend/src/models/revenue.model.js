@@ -46,6 +46,24 @@ export const getAllRevenueShares = async (filters = {}) => {
     paramCount++;
   }
 
+  if (filters.partnerId) {
+    query += ` AND c.partner_id = $${paramCount}`;
+    values.push(filters.partnerId);
+    paramCount++;
+  }
+
+  if (filters.from) {
+    query += ` AND r.period_start >= $${paramCount}`;
+    values.push(filters.from);
+    paramCount++;
+  }
+
+  if (filters.to) {
+    query += ` AND r.period_end <= $${paramCount}`;
+    values.push(filters.to);
+    paramCount++;
+  }
+
   query += ' ORDER BY r.period_end DESC';
   
   const result = await pool.query(query, values);
@@ -86,10 +104,28 @@ export const getRevenueStats = async () => {
       AVG(share_amount) as avg_share_amount,
       COUNT(CASE WHEN status = 'paid' THEN 1 END) as paid_count,
       COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_count,
-      SUM(CASE WHEN status = 'paid' THEN share_amount ELSE 0 END) as total_paid_amount
+      SUM(CASE WHEN status = 'paid' THEN share_amount ELSE 0 END) as total_paid_amount,
+      SUM(CASE WHEN status = 'pending' THEN share_amount ELSE 0 END) as total_pending_amount
     FROM revenue_shares
   `);
   return result.rows[0];
+};
+
+export const getTopPartners = async (limit = 5) => {
+  const result = await pool.query(`
+    SELECT
+      p.id, p.name, p.company,
+      SUM(r.total_revenue) as total_revenue,
+      SUM(r.share_amount) as total_share_amount,
+      COUNT(r.id) as record_count
+    FROM revenue_shares r
+    JOIN contracts c ON r.contract_id = c.id
+    JOIN partners p ON c.partner_id = p.id
+    GROUP BY p.id, p.name, p.company
+    ORDER BY SUM(r.share_amount) DESC
+    LIMIT $1
+  `, [limit]);
+  return result.rows;
 };
 
 export const getRevenueByPeriod = async (periodType = 'month') => {

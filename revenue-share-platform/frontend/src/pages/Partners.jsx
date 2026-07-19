@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import partnerService from '../services/partner.service';
+import { getApiError } from '../services/api';
 import '../styles/Partners.css';
+
+const emptyForm = {
+  name: '',
+  email: '',
+  company: '',
+  type: 'referral',
+  contactPerson: '',
+  phone: '',
+  status: 'active',
+};
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
@@ -8,14 +19,7 @@ const Partners = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingPartner, setEditingPartner] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    type: 'referral',
-    sharePercentage: 10,
-    status: 'active',
-  });
+  const [formData, setFormData] = useState(emptyForm);
 
   useEffect(() => {
     loadPartners();
@@ -24,9 +28,10 @@ const Partners = () => {
   const loadPartners = async () => {
     try {
       const data = await partnerService.getAll();
-      setPartners(data);
+      setPartners(data || []);
+      setError('');
     } catch (err) {
-      setError('Failed to load partners');
+      setError(getApiError(err, 'Failed to load partners'));
     } finally {
       setLoading(false);
     }
@@ -36,23 +41,17 @@ const Partners = () => {
     if (partner) {
       setEditingPartner(partner);
       setFormData({
-        name: partner.name,
-        email: partner.email,
-        company: partner.company,
-        type: partner.type,
-        sharePercentage: partner.sharePercentage,
-        status: partner.status,
+        name: partner.name || '',
+        email: partner.email || '',
+        company: partner.company || '',
+        type: partner.type || 'referral',
+        contactPerson: partner.contact_person || '',
+        phone: partner.phone || '',
+        status: partner.status || 'active',
       });
     } else {
       setEditingPartner(null);
-      setFormData({
-        name: '',
-        email: '',
-        company: '',
-        type: 'referral',
-        sharePercentage: 10,
-        status: 'active',
-      });
+      setFormData(emptyForm);
     }
     setShowModal(true);
   };
@@ -66,24 +65,24 @@ const Partners = () => {
     e.preventDefault();
     try {
       if (editingPartner) {
-        await partnerService.update(editingPartner._id, formData);
+        await partnerService.update(editingPartner.id, formData);
       } else {
         await partnerService.create(formData);
       }
-      loadPartners();
+      await loadPartners();
       handleCloseModal();
     } catch (err) {
-      setError('Failed to save partner');
+      setError(getApiError(err, 'Failed to save partner'));
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this partner?')) {
+    if (window.confirm('Are you sure you want to delete this partner? All their contracts and revenue records will be removed too.')) {
       try {
         await partnerService.delete(id);
-        loadPartners();
+        await loadPartners();
       } catch (err) {
-        setError('Failed to delete partner');
+        setError(getApiError(err, 'Failed to delete partner'));
       }
     }
   };
@@ -109,21 +108,26 @@ const Partners = () => {
               <th>Company</th>
               <th>Email</th>
               <th>Type</th>
-              <th>Share %</th>
+              <th>Contact</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
+            {partners.length === 0 && (
+              <tr>
+                <td colSpan="7" className="empty-state">No partners yet. Add your first partner to get started.</td>
+              </tr>
+            )}
             {partners.map((partner) => (
-              <tr key={partner._id}>
+              <tr key={partner.id}>
                 <td>{partner.name}</td>
-                <td>{partner.company}</td>
+                <td>{partner.company || '—'}</td>
                 <td>{partner.email}</td>
                 <td>
-                  <span className={`badge badge-${partner.type}`}>{partner.type}</span>
+                  <span className={`badge badge-${partner.type}`}>{partner.type || 'n/a'}</span>
                 </td>
-                <td>{partner.sharePercentage}%</td>
+                <td>{partner.contact_person || '—'}</td>
                 <td>
                   <span className={`badge badge-${partner.status}`}>{partner.status}</span>
                 </td>
@@ -131,7 +135,7 @@ const Partners = () => {
                   <button className="btn-sm" onClick={() => handleOpenModal(partner)}>
                     Edit
                   </button>
-                  <button className="btn-sm btn-danger" onClick={() => handleDelete(partner._id)}>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(partner.id)}>
                     Delete
                   </button>
                 </td>
@@ -161,7 +165,6 @@ const Partners = () => {
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  required
                 />
               </div>
               <div className="form-group">
@@ -172,6 +175,24 @@ const Partners = () => {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                 />
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Contact Person</label>
+                  <input
+                    type="text"
+                    value={formData.contactPerson}
+                    onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="form-group">
                 <label>Type</label>
@@ -184,17 +205,6 @@ const Partners = () => {
                   <option value="strategic">Strategic</option>
                   <option value="reseller">Reseller</option>
                 </select>
-              </div>
-              <div className="form-group">
-                <label>Share Percentage</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={formData.sharePercentage}
-                  onChange={(e) => setFormData({ ...formData, sharePercentage: Number(e.target.value) })}
-                  required
-                />
               </div>
               <div className="form-group">
                 <label>Status</label>

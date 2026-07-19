@@ -1,21 +1,24 @@
-import { 
-  createLegalDocument, findLegalDocumentById, getAllLegalDocuments, 
-  updateLegalDocument, deleteLegalDocument, getLegalDocumentStats 
+import {
+  createLegalDocument, findLegalDocumentById, getAllLegalDocuments,
+  updateLegalDocument, deleteLegalDocument, getLegalDocumentStats,
 } from '../models/legalDocument.model.js';
+import { toSnakeCaseKeys } from '../utils/normalize.js';
 
 export const createLegalDocumentController = async (req, res) => {
   try {
-    const { contractId, documentType, documentName, filePath, fileUrl, version } = req.body;
+    // The web client sends {title, type}; API clients send {documentName, documentType}.
+    const {
+      contractId, filePath, fileUrl, version, expiryDate, notes, status,
+    } = req.body;
+    const documentName = req.body.documentName ?? req.body.title;
+    const documentType = req.body.documentType ?? req.body.type ?? 'agreement';
 
-    if (!contractId || !documentType || !documentName) {
-      return res.status(400).json({ error: 'Contract ID, document type, and document name are required' });
-    }
-
-    const document = await createLegalDocument({ 
-      contractId, documentType, documentName, filePath, fileUrl, version, 
-      uploadedBy: req.user.id 
+    const document = await createLegalDocument({
+      contractId, documentType, documentName, filePath, fileUrl, version,
+      expiryDate, notes, status,
+      uploadedBy: req.user.id,
     });
-    
+
     res.status(201).json({ message: 'Legal document created successfully', document });
   } catch (error) {
     console.error('Create legal document error:', error);
@@ -34,15 +37,25 @@ export const getAllLegalDocumentsController = async (req, res) => {
   }
 };
 
+export const getLegalDocumentsByContractController = async (req, res) => {
+  try {
+    const documents = await getAllLegalDocuments({ contractId: req.params.contractId });
+    res.json({ documents });
+  } catch (error) {
+    console.error('Get legal documents by contract error:', error);
+    res.status(500).json({ error: 'Failed to get legal documents' });
+  }
+};
+
 export const getLegalDocumentController = async (req, res) => {
   try {
     const { id } = req.params;
     const document = await findLegalDocumentById(id);
-    
+
     if (!document) {
       return res.status(404).json({ error: 'Legal document not found' });
     }
-    
+
     res.json({ document });
   } catch (error) {
     console.error('Get legal document error:', error);
@@ -53,7 +66,13 @@ export const getLegalDocumentController = async (req, res) => {
 export const updateLegalDocumentController = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const body = { ...req.body };
+    // Map web-client aliases onto the real columns.
+    if (body.title !== undefined && body.documentName === undefined) body.documentName = body.title;
+    if (body.type !== undefined && body.documentType === undefined) body.documentType = body.type;
+    delete body.title;
+    delete body.type;
+    const updates = toSnakeCaseKeys(body);
 
     const document = await updateLegalDocument(id, updates);
     if (!document) {

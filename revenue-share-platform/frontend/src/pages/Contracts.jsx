@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import contractService from '../services/contract.service';
 import partnerService from '../services/partner.service';
+import { getApiError } from '../services/api';
 import '../styles/Contracts.css';
+
+const emptyForm = {
+  partnerId: '',
+  title: '',
+  startDate: '',
+  endDate: '',
+  revenueSharePercentage: 10,
+  minimumPayout: 100,
+  paymentTerms: 'monthly',
+  status: 'draft',
+};
+
+const toDateInput = (value) => (value ? String(value).slice(0, 10) : '');
 
 const Contracts = () => {
   const [contracts, setContracts] = useState([]);
@@ -10,16 +24,7 @@ const Contracts = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingContract, setEditingContract] = useState(null);
-  const [formData, setFormData] = useState({
-    partnerId: '',
-    title: '',
-    startDate: '',
-    endDate: '',
-    revenueSharePercentage: 10,
-    minimumPayout: 100,
-    paymentTerms: 'monthly',
-    status: 'draft',
-  });
+  const [formData, setFormData] = useState(emptyForm);
 
   useEffect(() => {
     loadData();
@@ -31,10 +36,11 @@ const Contracts = () => {
         contractService.getAll(),
         partnerService.getAll(),
       ]);
-      setContracts(contractsData);
-      setPartners(partnersData);
+      setContracts(contractsData || []);
+      setPartners(partnersData || []);
+      setError('');
     } catch (err) {
-      setError('Failed to load data');
+      setError(getApiError(err, 'Failed to load data'));
     } finally {
       setLoading(false);
     }
@@ -44,27 +50,18 @@ const Contracts = () => {
     if (contract) {
       setEditingContract(contract);
       setFormData({
-        partnerId: contract.partnerId?._id || contract.partnerId,
-        title: contract.title,
-        startDate: contract.startDate?.split('T')[0],
-        endDate: contract.endDate?.split('T')[0],
-        revenueSharePercentage: contract.revenueSharePercentage,
-        minimumPayout: contract.minimumPayout,
-        paymentTerms: contract.paymentTerms,
-        status: contract.status,
+        partnerId: contract.partner_id || '',
+        title: contract.title || '',
+        startDate: toDateInput(contract.start_date),
+        endDate: toDateInput(contract.end_date),
+        revenueSharePercentage: Number(contract.revenue_share_percentage) || 0,
+        minimumPayout: Number(contract.minimum_payout) || 0,
+        paymentTerms: contract.payment_terms || 'monthly',
+        status: contract.status || 'draft',
       });
     } else {
       setEditingContract(null);
-      setFormData({
-        partnerId: partners[0]?._id || '',
-        title: '',
-        startDate: '',
-        endDate: '',
-        revenueSharePercentage: 10,
-        minimumPayout: 100,
-        paymentTerms: 'monthly',
-        status: 'draft',
-      });
+      setFormData({ ...emptyForm, partnerId: partners[0]?.id || '' });
     }
     setShowModal(true);
   };
@@ -78,30 +75,35 @@ const Contracts = () => {
     e.preventDefault();
     try {
       const payload = {
-        ...formData,
-        startDate: new Date(formData.startDate).toISOString(),
-        endDate: new Date(formData.endDate).toISOString(),
+        partnerId: Number(formData.partnerId),
+        title: formData.title,
+        startDate: formData.startDate,
+        endDate: formData.endDate || null,
+        revenueSharePercentage: Number(formData.revenueSharePercentage),
+        minimumPayout: Number(formData.minimumPayout),
+        paymentTerms: formData.paymentTerms,
+        status: formData.status,
       };
-      
+
       if (editingContract) {
-        await contractService.update(editingContract._id, payload);
+        await contractService.update(editingContract.id, payload);
       } else {
         await contractService.create(payload);
       }
-      loadData();
+      await loadData();
       handleCloseModal();
     } catch (err) {
-      setError('Failed to save contract');
+      setError(getApiError(err, 'Failed to save contract'));
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this contract?')) {
+    if (window.confirm('Are you sure you want to delete this contract? Its revenue records, KPIs, and documents will be removed too.')) {
       try {
         await contractService.delete(id);
-        loadData();
+        await loadData();
       } catch (err) {
-        setError('Failed to delete contract');
+        setError(getApiError(err, 'Failed to delete contract'));
       }
     }
   };
@@ -112,12 +114,15 @@ const Contracts = () => {
     <div className="contracts-page">
       <div className="page-header">
         <h1>Contract Management</h1>
-        <button className="btn-primary" onClick={() => handleOpenModal()}>
+        <button className="btn-primary" onClick={() => handleOpenModal()} disabled={partners.length === 0}>
           + Create Contract
         </button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {partners.length === 0 && (
+        <div className="error-message">Add a partner first — contracts are always linked to a partner.</div>
+      )}
 
       <div className="table-container">
         <table className="data-table">
@@ -134,14 +139,19 @@ const Contracts = () => {
             </tr>
           </thead>
           <tbody>
+            {contracts.length === 0 && (
+              <tr>
+                <td colSpan="8" className="empty-state">No contracts yet.</td>
+              </tr>
+            )}
             {contracts.map((contract) => (
-              <tr key={contract._id}>
+              <tr key={contract.id}>
                 <td>{contract.title}</td>
-                <td>{contract.partnerId?.name || 'N/A'}</td>
-                <td>{new Date(contract.startDate).toLocaleDateString()}</td>
-                <td>{new Date(contract.endDate).toLocaleDateString()}</td>
-                <td>{contract.revenueSharePercentage}%</td>
-                <td>${contract.minimumPayout}</td>
+                <td>{contract.partner_name || 'N/A'}</td>
+                <td>{contract.start_date ? new Date(contract.start_date).toLocaleDateString() : '—'}</td>
+                <td>{contract.end_date ? new Date(contract.end_date).toLocaleDateString() : '—'}</td>
+                <td>{Number(contract.revenue_share_percentage)}%</td>
+                <td>${Number(contract.minimum_payout || 0).toLocaleString()}</td>
                 <td>
                   <span className={`badge badge-${contract.status}`}>{contract.status}</span>
                 </td>
@@ -149,7 +159,7 @@ const Contracts = () => {
                   <button className="btn-sm" onClick={() => handleOpenModal(contract)}>
                     Edit
                   </button>
-                  <button className="btn-sm btn-danger" onClick={() => handleDelete(contract._id)}>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(contract.id)}>
                     Delete
                   </button>
                 </td>
@@ -170,11 +180,12 @@ const Contracts = () => {
                   value={formData.partnerId}
                   onChange={(e) => setFormData({ ...formData, partnerId: e.target.value })}
                   required
+                  disabled={!!editingContract}
                 >
                   <option value="">Select Partner</option>
                   {partners.map((partner) => (
-                    <option key={partner._id} value={partner._id}>
-                      {partner.name} - {partner.company}
+                    <option key={partner.id} value={partner.id}>
+                      {partner.name}{partner.company ? ` - ${partner.company}` : ''}
                     </option>
                   ))}
                 </select>
@@ -199,12 +210,11 @@ const Contracts = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>End Date</label>
+                  <label>End Date (optional)</label>
                   <input
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    required
                   />
                 </div>
               </div>
@@ -215,8 +225,9 @@ const Contracts = () => {
                     type="number"
                     min="0"
                     max="100"
+                    step="0.01"
                     value={formData.revenueSharePercentage}
-                    onChange={(e) => setFormData({ ...formData, revenueSharePercentage: Number(e.target.value) })}
+                    onChange={(e) => setFormData({ ...formData, revenueSharePercentage: e.target.value })}
                     required
                   />
                 </div>
@@ -225,8 +236,9 @@ const Contracts = () => {
                   <input
                     type="number"
                     min="0"
+                    step="0.01"
                     value={formData.minimumPayout}
-                    onChange={(e) => setFormData({ ...formData, minimumPayout: Number(e.target.value) })}
+                    onChange={(e) => setFormData({ ...formData, minimumPayout: e.target.value })}
                     required
                   />
                 </div>

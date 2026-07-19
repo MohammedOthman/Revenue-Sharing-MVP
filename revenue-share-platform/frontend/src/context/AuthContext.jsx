@@ -11,16 +11,26 @@ export const useAuth = () => {
   return context;
 };
 
+const readStoredUser = () => {
+  try {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      return JSON.parse(userData);
+    }
+  } catch (err) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+  return null;
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
+    setUser(readStoredUser());
     setLoading(false);
   }, []);
 

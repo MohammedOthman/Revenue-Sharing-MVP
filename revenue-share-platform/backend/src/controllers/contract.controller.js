@@ -1,25 +1,28 @@
-import { 
-  createContract, findContractById, getAllContracts, 
-  updateContract, deleteContract, getContractStats 
+import {
+  createContract, findContractById, getAllContracts,
+  updateContract, deleteContract, getContractStats,
 } from '../models/contract.model.js';
+import { findPartnerById } from '../models/partner.model.js';
+import { toSnakeCaseKeys } from '../utils/normalize.js';
 
 export const createContractController = async (req, res) => {
   try {
-    const { 
-      partnerId, title, description, startDate, endDate, 
-      revenueSharePercentage, minimumPayout, paymentTerms 
+    const {
+      partnerId, title, description, startDate, endDate,
+      revenueSharePercentage, minimumPayout, paymentTerms, status,
     } = req.body;
 
-    if (!partnerId || !title || !startDate || !revenueSharePercentage) {
-      return res.status(400).json({ error: 'Partner ID, title, start date, and revenue share percentage are required' });
+    const partner = await findPartnerById(partnerId);
+    if (!partner) {
+      return res.status(404).json({ error: 'Partner not found' });
     }
 
-    const contract = await createContract({ 
-      partnerId, title, description, startDate, endDate, 
-      revenueSharePercentage, minimumPayout, paymentTerms, 
-      createdBy: req.user.id 
+    const contract = await createContract({
+      partnerId, title, description, startDate, endDate,
+      revenueSharePercentage, minimumPayout, paymentTerms, status,
+      createdBy: req.user.id,
     });
-    
+
     res.status(201).json({ message: 'Contract created successfully', contract });
   } catch (error) {
     console.error('Create contract error:', error);
@@ -38,15 +41,25 @@ export const getAllContractsController = async (req, res) => {
   }
 };
 
+export const getContractsByPartnerController = async (req, res) => {
+  try {
+    const contracts = await getAllContracts({ partnerId: req.params.partnerId });
+    res.json({ contracts });
+  } catch (error) {
+    console.error('Get contracts by partner error:', error);
+    res.status(500).json({ error: 'Failed to get contracts' });
+  }
+};
+
 export const getContractController = async (req, res) => {
   try {
     const { id } = req.params;
     const contract = await findContractById(id);
-    
+
     if (!contract) {
       return res.status(404).json({ error: 'Contract not found' });
     }
-    
+
     res.json({ contract });
   } catch (error) {
     console.error('Get contract error:', error);
@@ -57,7 +70,7 @@ export const getContractController = async (req, res) => {
 export const updateContractController = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = toSnakeCaseKeys(req.body);
 
     const contract = await updateContract(id, updates);
     if (!contract) {
