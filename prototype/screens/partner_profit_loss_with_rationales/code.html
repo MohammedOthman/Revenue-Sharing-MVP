@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Partner Revenue OS - Acme Global Solutions P&amp;L</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Public+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-primary-container": "#7c839b",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "surface-container-high": "#dce9ff",
+                    "inverse-surface": "#213145",
+                    "surface-base": "#F8FAFC",
+                    "surface-tint": "#565e74",
+                    "on-background": "#0b1c30",
+                    "on-secondary-fixed": "#002113",
+                    "on-tertiary-container": "#7073ff",
+                    "on-primary-fixed": "#131b2e",
+                    "background": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-low": "#eff4ff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-tertiary-fixed": "#07006c",
+                    "status-amber": "#F59E0B",
+                    "on-surface-variant": "#45464d",
+                    "surface-variant": "#d3e4fe",
+                    "surface-dim": "#cbdbf5",
+                    "tertiary-container": "#07006c",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "inverse-primary": "#bec6e0",
+                    "primary": "#000000",
+                    "inverse-on-surface": "#eaf1ff",
+                    "primary-container": "#131b2e",
+                    "on-primary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "secondary": "#006c49",
+                    "tertiary-fixed": "#e1e0ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "surface-container": "#e5eeff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "primary-fixed": "#dae2fd",
+                    "status-red": "#EF4444",
+                    "on-surface": "#0b1c30",
+                    "outline-variant": "#c6c6cd",
+                    "on-secondary-container": "#00714d",
+                    "secondary-container": "#6cf8bb",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "outline": "#76777d",
+                    "surface-bright": "#f8f9ff",
+                    "border-subtle": "#E2E8F0",
+                    "tertiary": "#000000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "unit": "4px",
+                    "sidebar-width": "260px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "data-mono": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Public Sans"],
+                    "headline-lg": ["Public Sans"],
+                    "label-caps": ["Inter"],
+                    "headline-md": ["Public Sans"],
+                    "display-metrics": ["Public Sans"]
+            },
+            "fontSize": {
+                    "data-mono": ["13px", {"lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "fontWeight": "600"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-metrics": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F8FAFC;
+        }
+        .ledger-stripe:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- SideNavBar (Persistent) -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width flex flex-col py-6 bg-surface-container-low border-r border-border-subtle z-50">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-white text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">Partner Revenue OS</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Revenue Control Layer</div>
+</div>
+</div>
+<nav class="flex-1">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-6 py-3 text-primary font-bold border-r-2 border-primary bg-surface-container transition-transform translate-x-1" href="#">
+<span class="material-symbols-outlined mr-4 filled-icon" data-icon="handshake" style="font-variation-settings: 'FILL' 1;">handshake</span>
+<span class="font-body-md text-body-md">Partners</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="receipt_long">receipt_long</span>
+<span class="font-body-md text-body-md">Claims</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="verified">verified</span>
+<span class="font-body-md text-body-md">Approvals</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="px-6 py-4 border-t border-border-subtle">
+<div class="flex items-center gap-3">
+<img alt="User Profile Avatar" class="w-10 h-10 rounded-full border border-border-subtle" data-alt="A professional headshot of a senior financial executive in a modern, brightly lit office environment. The lighting is crisp and high-key, conveying a sense of authority and clarity. The style is clean and corporate, utilizing a light mode aesthetic with soft background bokeh showing a glass-walled conference room." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8LLCfz2rb35fsA-tW9uzI4k_NG4D5FQvnLo_0p5iEvDIUCuU3A0lVy7ZPzLB67117RHTB01lGFFPaBNQBp4XsmLR_nWmipWKUyoqsw6opZAB2_T_n2to-8GxNDNbYidVDjgsvGqCLeeua4Wy_sQNIJtiRmUAtKqBwtk0YuAihyvQ1_-AysZ9E5KhwBtfoE00LekasLTTTuizsjm6OSY0DYPRbcJd4uqAqWK_ANPgvC-5WnMog6JHZMjevaP1_m7yhPN_w2PpsUQ"/>
+<div>
+<div class="font-body-md text-body-md font-bold">Admin User</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Global RevOps</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-sidebar-width min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full h-16 px-margin-desktop bg-surface-container-lowest border-b border-border-subtle sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<div class="flex items-center px-3 py-1.5 bg-surface-container border border-outline-variant rounded">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 font-body-md text-body-md w-64 p-0" placeholder="Search partners, claims..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container transition-colors rounded">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md font-medium">Jan 2024 - Dec 2024</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</header>
+<!-- Canvas Area -->
+<div class="p-margin-desktop flex-1">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="font-headline-lg text-headline-lg text-on-background">Acme Global Solutions</h1><p class="font-body-sm text-body-sm text-on-surface-variant/70 mt-1">Analyzes the net financial contribution of each partner after accounting for payouts and program costs.</p>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded font-label-caps text-label-caps uppercase tracking-wider">Strategic Partner</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Comprehensive Partner P&amp;L Dashboard • Fiscal Year 2024</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 border border-border-subtle bg-white hover:bg-surface-container-low transition-all rounded shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+<span class="font-label-caps text-label-caps uppercase">Export Report</span>
+<span class="hidden lg:block font-body-sm text-[10px] text-on-surface-variant/50 ml-2 border-l border-border-subtle pl-2">Generates a detailed financial report for internal budget reviews.</span></button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary hover:opacity-90 transition-all rounded shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+<span class="font-label-caps text-label-caps uppercase">Adjust Payout Rules</span>
+</button>
+</div>
+</div>
+<!-- Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-8">
+<div class="bg-white border border-border-subtle p-6 rounded relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-[48px]" data-icon="trending_up">trending_up</span>
+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-2 uppercase">Gross Partner Revenue</div>
+<div class="font-display-metrics text-display-metrics text-on-surface">$4.28M</div>
+<div class="mt-4 flex items-center gap-1 text-on-secondary-container font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span>
+                        14.2% vs LY
+                    </div>
+</div>
+<div class="bg-white border border-border-subtle p-6 rounded relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-error">
+<span class="material-symbols-outlined text-[48px]" data-icon="payments">payments</span>
+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-2 uppercase">Total Partner Costs</div>
+<div class="font-display-metrics text-display-metrics text-on-surface">$1.12M</div>
+<div class="mt-4 flex items-center gap-1 text-on-surface-variant font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[16px]" data-icon="remove">remove</span>
+                        Within Budget (94%)
+                    </div>
+</div>
+<div class="bg-white border border-border-subtle p-6 rounded relative overflow-hidden ring-1 ring-secondary/20">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-secondary">
+<span class="material-symbols-outlined text-[48px]" data-icon="account_balance">account_balance</span>
+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-2 uppercase">Net Contribution</div>
+<div class="font-display-metrics text-display-metrics text-secondary">$3.16M</div><p class="font-body-sm text-body-sm text-on-surface-variant/60 mt-1">Calculates the return on investment for each partner to identify high-value contributors.</p>
+<div class="mt-4 flex items-center gap-1 text-on-secondary-container font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span>
+                        21.5% Profit Margin
+                    </div>
+</div>
+<div class="bg-white border border-border-subtle p-6 rounded relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 text-status-amber">
+<span class="material-symbols-outlined text-[48px]" data-icon="insights">insights</span>
+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-2 uppercase">Partner ROI</div>
+<div class="font-display-metrics text-display-metrics text-on-surface">3.82x</div>
+<div class="mt-4 flex items-center gap-1 text-on-secondary-container font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span>
+                        Efficient Growth
+                    </div>
+</div>
+</div>
+<!-- Bento Layout for Detailed Data -->
+<div class="bento-grid">
+<!-- Profitability Trend Line Chart (7 Columns) -->
+<div class="col-span-12 lg:col-span-8 bg-white border border-border-subtle p-6 rounded flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Profitability Trends (Net Contribution)</h3>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-secondary rounded-full"></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Net Contribution</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-surface-container-highest rounded-full"></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Previous Year</span>
+</div>
+</div>
+</div>
+<div class="flex-1 min-h-[300px] relative flex items-end justify-between pb-8 pt-4 px-2">
+<!-- Simulated Chart -->
+<div class="absolute inset-0 flex items-end justify-between px-2 pb-8 opacity-20 border-b border-border-subtle">
+<div class="w-full h-1/4 border-t border-dashed border-outline"></div>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[40%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">JAN</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[45%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">FEB</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[55%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">MAR</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[50%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">APR</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[65%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">MAY</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[75%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">JUN</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[70%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">JUL</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[85%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">AUG</span>
+</div>
+<div class="h-full flex-1 flex flex-col justify-end items-center gap-2">
+<div class="w-12 bg-secondary/80 rounded-t h-[95%] hover:bg-secondary transition-all"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">SEP</span>
+</div>
+</div>
+</div>
+<!-- Strategic Value Score (5 Columns) -->
+<div class="col-span-12 lg:col-span-4 bg-white border border-border-subtle p-6 rounded">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6">Strategic Value Matrix</h3>
+<div class="aspect-square w-full bg-surface-container-low relative border border-border-subtle rounded p-4">
+<!-- Quadrant Labels -->
+<div class="absolute top-2 left-2 font-label-caps text-[10px] text-on-surface-variant/60 uppercase">Strategic Growth</div>
+<div class="absolute top-2 right-2 font-label-caps text-[10px] text-on-surface-variant/60 uppercase">Maximum Efficiency</div>
+<div class="absolute bottom-2 left-2 font-label-caps text-[10px] text-on-surface-variant/60 uppercase">Underperforming</div>
+<div class="absolute bottom-2 right-2 font-label-caps text-[10px] text-on-surface-variant/60 uppercase">Scale Ready</div>
+<!-- Axis -->
+<div class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-outline-variant/40"></div>
+<div class="absolute top-1/2 left-0 right-0 h-[1px] bg-outline-variant/40"></div>
+<!-- The Marker -->
+<div class="absolute top-[25%] left-[75%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-10 h-10 bg-secondary flex items-center justify-center rounded-full shadow-lg ring-4 ring-secondary/20">
+<span class="material-symbols-outlined text-white" data-icon="star">star</span>
+</div>
+<div class="mt-2 bg-white px-2 py-1 border border-border-subtle rounded shadow-sm">
+<span class="font-label-caps text-[10px] font-bold">ACME GS (Score: 88)</span>
+</div>
+</div>
+<!-- Labels for axes -->
+<div class="absolute -left-12 top-1/2 -rotate-90 font-label-caps text-label-caps text-on-surface-variant uppercase">Strategic Fit</div>
+<div class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-on-surface-variant uppercase">Profitability</div>
+</div>
+<div class="mt-6 space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Network Influence</span>
+<span class="font-data-mono text-data-mono font-bold text-secondary">High</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Churn Risk</span>
+<span class="font-data-mono text-data-mono font-bold text-on-surface">Very Low</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Certifications</span>
+<span class="font-data-mono text-data-mono font-bold text-on-surface">12 Active</span>
+</div>
+</div>
+</div>
+<!-- Cost Attribution Table (Full Width) -->
+<div class="col-span-12 bg-white border border-border-subtle rounded overflow-hidden">
+<div class="px-6 py-4 border-b border-border-subtle bg-white">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Cost Attribution Ledger</h3>
+</div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-border-subtle">
+<tr>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase">Line Item</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase">Category</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Budgeted</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Actual YTD</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Variance</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase text-center">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr class="ledger-stripe hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold">Commission Payouts</td>
+<td class="px-6 py-4">Financial Obligations</td>
+<td class="px-6 py-4 text-right font-data-mono">$850,000</td>
+<td class="px-6 py-4 text-right font-data-mono">$812,450</td>
+<td class="px-6 py-4 text-right font-data-mono text-secondary">-$37,550</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-[11px] font-bold">NORMAL</span>
+</td>
+</tr>
+<tr class="ledger-stripe hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold">Co-marketing (MDF)</td>
+<td class="px-6 py-4">GTM Enablement</td>
+<td class="px-6 py-4 text-right font-data-mono">$120,000</td>
+<td class="px-6 py-4 text-right font-data-mono">$135,000</td>
+<td class="px-6 py-4 text-right font-data-mono text-error">+$15,000</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-[11px] font-bold">OVER</span>
+</td>
+</tr>
+<tr class="ledger-stripe hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold">Technical Enablement</td>
+<td class="px-6 py-4">Education &amp; Training</td>
+<td class="px-6 py-4 text-right font-data-mono">$60,000</td>
+<td class="px-6 py-4 text-right font-data-mono">$58,200</td>
+<td class="px-6 py-4 text-right font-data-mono text-secondary">-$1,800</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-[11px] font-bold">NORMAL</span>
+</td>
+</tr>
+<tr class="ledger-stripe hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold">Dedicated Support Hours</td>
+<td class="px-6 py-4">Cost-to-Serve</td>
+<td class="px-6 py-4 text-right font-data-mono">$90,000</td>
+<td class="px-6 py-4 text-right font-data-mono">$114,350</td>
+<td class="px-6 py-4 text-right font-data-mono text-error">+$24,350</td>
+<td class="px-6 py-4 text-center">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-[11px] font-bold">HIGH</span>
+</td>
+</tr>
+</tbody>
+<tfoot class="bg-surface-container border-t-2 border-primary">
+<tr>
+<td class="px-6 py-4 font-bold uppercase font-label-caps" colspan="3">Total Partner Expenditure</td>
+<td class="px-6 py-4 text-right font-display-metrics text-headline-sm">$1,120,000</td>
+<td colspan="2"></td>
+</tr>
+</tfoot>
+</table>
+</div>
+<!-- Revenue Breakdown (6 Columns) -->
+<div class="col-span-12 lg:col-span-6 bg-white border border-border-subtle p-6 rounded">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6">Revenue Breakdown by Channel</h3><p class="font-body-sm text-body-sm text-on-surface-variant/70 -mt-5 mb-6">Visualizes the split between sourced and influenced revenue relative to program investment.</p>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-body-md text-body-md font-bold">Resell Model (Direct)</span>
+<span class="font-data-mono text-data-mono">$2.85M (66%)</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 66%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-body-md text-body-md font-bold">Referral &amp; Influence</span>
+<span class="font-data-mono text-data-mono">$1.15M (27%)</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 27%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-body-md text-body-md font-bold">Professional Services Hook</span>
+<span class="font-data-mono text-data-mono">$0.28M (7%)</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-status-amber" style="width: 7%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Profitability Forecast (6 Columns) -->
+<div class="col-span-12 lg:col-span-6 bg-surface-container-low border border-border-subtle p-6 rounded relative">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Q4 Performance Forecast</h3><p class="font-body-sm text-body-sm text-on-surface-variant/70 mb-4">AI-driven suggestions for tier adjustments or incentive changes based on P&amp;L performance.</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Predictive modeling based on current pipeline velocity and historical payout ratios.</p>
+</div>
+<div class="bg-white p-2 rounded border border-border-subtle shadow-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="auto_graph">auto_graph</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white p-4 rounded border border-border-subtle">
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Forecasted Revenue</div>
+<div class="font-headline-md text-headline-md">$1.45M</div>
+</div>
+<div class="bg-white p-4 rounded border border-border-subtle">
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Expected Payout</div>
+<div class="font-headline-md text-headline-md">$285k</div>
+</div>
+</div>
+<div class="mt-6 flex items-center gap-2 p-3 bg-white border border-border-subtle rounded">
+<span class="material-symbols-outlined text-status-amber" data-icon="lightbulb">lightbulb</span>
+<p class="font-body-sm text-body-sm italic text-on-surface-variant">Recommended Action: Increase MDF allocation by 15% to capture projected $400k overflow in Enterprise segment.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto px-margin-desktop py-6 border-t border-border-subtle bg-white">
+<div class="flex justify-between items-center text-on-surface-variant font-label-caps text-label-caps">
+<span>© 2024 Partner Revenue OS • Revenue Control Layer v4.2.1</span>
+<div class="flex gap-4">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Audit Logs</a>
+<a class="hover:text-primary transition-colors" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for dashboard elements
+        document.querySelectorAll('.ledger-stripe').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'translateX(4px)';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'translateX(0)';
+            });
+        });
+
+        // Simple observer for metric reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('translate-y-4');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.bg-white.rounded').forEach(card => {
+            card.classList.add('transition-all', 'duration-500');
+            observer.observe(card);
+        });
+    </script>
+</body></html>
