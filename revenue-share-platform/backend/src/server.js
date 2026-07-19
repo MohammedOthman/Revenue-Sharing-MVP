@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { createTables } from './models/schema.js';
+import { runMigrations } from './reven/migrate.js';
 
 // Import routes
 import authRoutes from './routes/auth.routes.js';
@@ -97,6 +98,7 @@ const initDatabase = async (attempts = 5) => {
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
       await createTables();
+      await runMigrations();
       return;
     } catch (error) {
       console.error(`Database init attempt ${attempt}/${attempts} failed: ${error.message}`);
