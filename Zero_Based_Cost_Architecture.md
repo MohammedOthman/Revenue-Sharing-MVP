@@ -43,18 +43,16 @@
 
 ## 1. Executive thesis — the CFO one-pager
 
-**Reven sells finance-grade control over other companies' partner revenue. It must run its own cost with the
-same discipline it promises its customers.** A company whose entire value proposition is *"every riyal of
-partner revenue is attributable, defensible, and owned"* cannot run a cost base where riyals are inherited,
-unexamined, and un-owned. The Zero-Based Cost Architecture (ZBC) is how Reven makes its **internal cost base
-as auditable as the ledger it sells.**
+Reven sells finance-grade control over other companies' partner revenue, so it has to run its own cost with
+the discipline it promises customers. A product built on the claim that every riyal of partner revenue is
+attributable and owned cannot sit on a cost base where riyals are inherited and unexamined. The Zero-Based
+Cost Architecture (ZBC) makes Reven's internal cost base as auditable as the ledger it sells.
 
-**The binding commercial constraint is the multiple.** The pricing strategy is explicit: Reven is to be
-**valued like software** — a **≥70% blended gross-margin floor**, with the settlement/percentage layer
-**capped, fenced, and reported separately** so it never contaminates the software multiple
-(`Reven_Pricing_Executive_Summary.md` §4–5). ZBC is the operational guarantee behind that promise: it is the
-mechanism that keeps cost-of-revenue *structurally* below 30 points of revenue and keeps low-margin
-activities (services, rails, AI inference) fenced, capped, and visible rather than silently eroding gross
+The binding commercial constraint is the multiple. The pricing strategy requires Reven to be valued like
+software: a ≥70% blended gross-margin floor, with the settlement/percentage layer capped, fenced, and
+reported separately so it never contaminates the software multiple (`Reven_Pricing_Executive_Summary.md`
+§4–5). ZBC is what holds that line. It keeps cost-of-revenue below 30 points of revenue and keeps the
+low-margin activities (services, rails, AI inference) fenced and visible instead of quietly eroding gross
 margin.
 
 **Seven governing principles:**
@@ -66,7 +64,7 @@ margin.
    definition, candidates for elimination.
 3. **Protect the numerator, attack the denominator's waste.** ZBB in a growth-stage SaaS destroys value when
    it cuts R&D velocity or quota-carrying capacity, and creates value when it attacks G&A sprawl, tool
-   redundancy, cloud waste, and undifferentiated heavy-lifting. Reven's ZBC is **growth-protective by design.**
+   redundancy, cloud waste, and undifferentiated heavy-lifting. Reven's ZBC is growth-protective by design.
 4. **Should-cost, not last-cost.** Every material pool is benchmarked to what it *should* cost (unit
    economics, market rates, right-sized cloud), not to what it *did* cost.
 5. **Cost geography is IPO-legible from day one.** Every internal package maps to the exact line it will
@@ -74,9 +72,9 @@ margin.
    while private, so diligence and, later, segment reporting are a re-label, not a rebuild.
 6. **Fence the dilutive, celebrate the accretive.** Services, settlement, and AI inference are fenced and
    capped so they can be *sold* without dragging the blended margin the equity story depends on.
-7. **The cadence is permanent.** ZBC is an annual rebuild + quarterly challenge + monthly variance loop — an
-   operating system, not a project. The day it becomes a one-time slash exercise is the day it starts
-   destroying enterprise value.
+7. **The cadence is permanent.** ZBC is an annual rebuild, quarterly challenge, and monthly variance loop —
+   an operating system, not a project. If it hardens into a one-time slash exercise, it starts destroying
+   value instead of protecting it.
 
 **Three-horizon cost posture, aligned to the governing phase model:**
 
