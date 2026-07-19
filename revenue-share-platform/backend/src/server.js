@@ -15,6 +15,7 @@ import revenueRoutes from './routes/revenue.routes.js';
 import kpiRoutes from './routes/kpi.routes.js';
 import legalDocumentRoutes from './routes/legalDocument.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
+import revenRoutes from './reven/routes.js';
 
 dotenv.config();
 
@@ -59,6 +60,9 @@ app.use('/api/revenue', revenueRoutes);
 app.use('/api/kpis', kpiRoutes);
 app.use('/api/documents', legalDocumentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+
+// Reven Phase-1 "Capture" PRM (multi-tenant, claim-centric, no money movement)
+app.use('/api/reven', revenRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
