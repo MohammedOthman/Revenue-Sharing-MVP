@@ -23,7 +23,25 @@ Every path below needs accounts and, past free tiers, a payment method. That par
 
 ---
 
-## Path A — Render + Neon (recommended, has free tiers)
+## Database: Supabase (already provisioned)
+
+The database is a Supabase project named **Reven** (`lstbxcynaraigwreeqjg`, region `ap-southeast-1`). The full Reven Phase-1 schema is already applied there (21 tables) and secured: Row Level Security is enabled deny-by-default on every table, and the append-only event/ledger/audit triggers are active. Migration history is seeded, so the app will not re-run migrations against it.
+
+To point the backend at it, get the connection string from the Supabase dashboard → **Project Settings → Database → Connection string → URI**. Use the **Transaction pooler** URI for a serverless/PaaS host:
+```
+postgresql://postgres.lstbxcynaraigwreeqjg:[YOUR-DB-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+```
+Set it as the backend's `DATABASE_URL` and set `DB_SSL=true`. The backend connects as `postgres` (which bypasses RLS), so it reads/writes normally while the public anon key stays denied.
+
+Note on residency: `ap-southeast-1` is Singapore, not KSA. If PDPL data residency applies to real customer data, that region choice needs review before go-live (see TOOLS_AND_FRICTIONS.md §5).
+
+---
+
+## Path A — Render + Supabase (recommended)
+
+Use the Supabase `DATABASE_URL` above in place of the Neon step.
+
+## Path A (alt) — Render + Neon (has free tiers)
 
 **1. Create the database (Neon).**
 - Sign up at neon.tech, create a project. Copy the connection string. It looks like
