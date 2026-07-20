@@ -1,155 +1,71 @@
-# Revenue Share Platform - B2B SaaS
+# Revenue Share Platform
 
-A comprehensive B2B SaaS platform for managing revenue sharing initiatives, contracts, partnerships, legal documents, and KPIs.
+A B2B web app for managing partners, revenue-share contracts, revenue records, KPIs, and legal documents. Node/Express API, React/Vite frontend, PostgreSQL database, JWT auth.
 
-## Features
+This is a working CRUD application. Before treating it as the "Reven / Partner Revenue OS" product described in the strategy docs at the repo root, read `../DEPLOYMENT.md` §"What this code is and is not" — the coded features and the strategy product are not the same thing yet.
 
-### Core Functionality
-- **Partner Management**: Onboard and manage referral, affiliate, strategic, and reseller partners
-- **Contract Lifecycle**: Create, track, and manage revenue share contracts with customizable terms
-- **Revenue Tracking**: Record revenue, calculate partner shares, and process payments
-- **KPI Monitoring**: Track performance metrics against targets with visual progress indicators
-- **Legal Documents**: Manage agreements, amendments, NDAs, and other legal documentation
-- **Dashboard Analytics**: Comprehensive overview with real-time metrics and insights
+## Stack
 
-### Technical Stack
+**Backend:** Node.js 18+, Express 4, PostgreSQL (via `pg`), JWT auth (`jsonwebtoken`), bcrypt password hashing.
+**Frontend:** React 18, Vite 5, React Router 6, Axios.
 
-**Backend:**
-- Node.js + Express.js
-- MongoDB (Mongoose ODM)
-- JWT Authentication
-- Role-based Access Control
+## Run it locally
 
-**Frontend:**
-- React 18 + Vite
-- React Router for navigation
-- Axios for API communication
-- Modern CSS with responsive design
+You need Node 18+ and a PostgreSQL database (local install, Docker, or a free managed instance from Neon/Supabase).
 
-## Project Structure
+### 1. Backend
 
-```
-revenue-share-platform/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/    # Request handlers
-│   │   ├── models/         # Database schemas
-│   │   ├── routes/         # API endpoints
-│   │   ├── middleware/     # Auth & validation
-│   │   ├── utils/          # Helper functions
-│   │   ├── config/         # Database config
-│   │   └── server.js       # Entry point
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API service layer
-│   │   ├── context/        # React context (Auth)
-│   │   ├── styles/         # CSS stylesheets
-│   │   ├── App.jsx         # Main app component
-│   │   └── main.jsx        # Entry point
-│   ├── index.html
-│   └── package.json
-└── README.md
-```
-
-## Setup Instructions
-
-### Prerequisites
-- Node.js 16+ 
-- MongoDB (local or cloud instance)
-- npm or yarn
-
-### Backend Setup
-
-1. Navigate to backend directory:
 ```bash
 cd backend
-```
-
-2. Install dependencies:
-```bash
 npm install
+cp .env.example .env       # then edit .env — set JWT_SECRET and your DB connection
+npm run dev                # starts on http://localhost:5000, auto-creates tables
 ```
 
-3. Configure environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your MongoDB connection string and JWT secret
-```
+Required environment variables (see `backend/.env.example`):
+- `JWT_SECRET` — any long random string. The server refuses to start without it.
+- Database — either `DATABASE_URL` (managed Postgres) **or** `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASSWORD` (local).
 
-4. Start the development server:
-```bash
-npm run dev
-```
+### 2. Frontend
 
-Backend will run on `http://localhost:5000`
-
-### Frontend Setup
-
-1. Navigate to frontend directory:
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-```bash
 npm install
+npm run dev                # starts on http://localhost:3000, proxies /api to :5000
 ```
 
-3. Start the development server:
+Open http://localhost:3000 and register the first user at `/login` (there is no seeded account).
+
+## Deploy
+
+The app runs as a single service: the backend serves the built frontend, so one URL hosts everything. See **`../DEPLOYMENT.md`** for a step-by-step runbook (managed Postgres + Render/Railway, or Docker).
+
+Quick version:
 ```bash
-npm run dev
+cd frontend && npm install && npm run build   # produces frontend/dist
+cd ../backend && npm install && NODE_ENV=production node src/server.js
 ```
+When `frontend/dist` exists, the backend serves it at `/` and the API at `/api`.
 
-Frontend will run on `http://localhost:3000`
+## API endpoints
 
-## API Endpoints
+Auth: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/profile`
+Partners: `GET|POST /api/partners`, `PUT|DELETE /api/partners/:id`
+Contracts: `GET|POST /api/contracts`, `PUT|DELETE /api/contracts/:id`
+Revenue: `GET|POST /api/revenue`, `POST /api/revenue/:id/process-payment`
+KPIs: `GET|POST /api/kpis`, `PATCH /api/kpis/:id/value`
+Documents: `GET|POST /api/documents`
+Dashboard: `GET /api/dashboard/overview`, `GET /api/dashboard/analytics/trends`
+Health: `GET /api/health`
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/profile` - Get user profile
+## Known gaps
 
-### Partners
-- `GET /api/partners` - Get all partners
-- `POST /api/partners` - Create partner
-- `PUT /api/partners/:id` - Update partner
-- `DELETE /api/partners/:id` - Delete partner
-
-### Contracts
-- `GET /api/contracts` - Get all contracts
-- `POST /api/contracts` - Create contract
-- `PUT /api/contracts/:id` - Update contract
-- `DELETE /api/contracts/:id` - Delete contract
-
-### Revenue
-- `GET /api/revenue` - Get all revenue records
-- `POST /api/revenue` - Create revenue record
-- `POST /api/revenue/:id/process-payment` - Process payment
-
-### KPIs
-- `GET /api/kpis` - Get all KPIs
-- `POST /api/kpis` - Create KPI
-- `PATCH /api/kpis/:id/value` - Update KPI value
-
-### Legal Documents
-- `GET /api/legal-documents` - Get all documents
-- `POST /api/legal-documents` - Create document
-
-### Dashboard
-- `GET /api/dashboard/overview` - Get dashboard overview
-- `GET /api/dashboard/analytics/trends` - Get revenue trends
-- `GET /api/dashboard/analytics/partner-performance` - Get partner performance
-
-## Demo Credentials
-
-```
-Email: admin@example.com
-Password: password123
-```
+These are real and listed so nobody ships assuming they work:
+- **Dashboard stat cards read the wrong response fields** (`overview.totalPartners` vs the API's `overview.partners.total_partners`), so they always show 0. "Recent Activity" is hardcoded placeholder rows.
+- **Revenue share amount is sent by the client**, not computed server-side from revenue × percentage.
+- **No automated tests, no CI.**
+- **Minimal input validation** (`express-validator` is a dependency but unused), no rate limiting, no password-strength rules.
 
 ## License
 
-MIT License
+MIT

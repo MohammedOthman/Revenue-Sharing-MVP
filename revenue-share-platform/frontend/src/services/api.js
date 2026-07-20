@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api';
+// Same-origin '/api' works for the single-service deploy and the Vite dev proxy.
+// Set VITE_API_URL at build time (e.g. https://api.example.com/api) when the
+// frontend and backend are hosted separately.
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Partner Revenue OS - Claim Preflight & Exception Queue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f8f9ff",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#07006c",
+                      "background": "#f8f9ff",
+                      "surface-container-lowest": "#ffffff",
+                      "status-amber": "#F59E0B",
+                      "on-secondary-fixed-variant": "#005236",
+                      "secondary-fixed": "#6ffbbe",
+                      "inverse-primary": "#bec6e0",
+                      "status-red": "#EF4444",
+                      "inverse-on-surface": "#eaf1ff",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#dce9ff",
+                      "on-tertiary-fixed-variant": "#2f2ebe",
+                      "on-primary-container": "#7c839b",
+                      "on-background": "#0b1c30",
+                      "surface-container-low": "#eff4ff",
+                      "on-tertiary-fixed": "#07006c",
+                      "on-tertiary-container": "#7073ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#cbdbf5",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#e5eeff",
+                      "border-subtle": "#E2E8F0",
+                      "tertiary": "#000000",
+                      "on-secondary-container": "#00714d",
+                      "surface-variant": "#d3e4fe",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "primary": "#000000",
+                      "on-surface": "#0b1c30",
+                      "on-secondary-fixed": "#002113",
+                      "surface-tint": "#565e74",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#4edea3",
+                      "surface": "#f8f9ff",
+                      "tertiary-fixed": "#e1e0ff",
+                      "inverse-surface": "#213145",
+                      "outline": "#76777d",
+                      "primary-fixed": "#dae2fd",
+                      "tertiary-fixed-dim": "#c0c1ff",
+                      "primary-fixed-dim": "#bec6e0",
+                      "outline-variant": "#c6c6cd",
+                      "error-container": "#ffdad6",
+                      "on-surface-variant": "#45464d",
+                      "secondary": "#006c49",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#131b2e",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-base": "#F8FAFC",
+                      "secondary-container": "#6cf8bb"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px",
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "sidebar-width": "260px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Public Sans"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-metrics": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "38px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-metrics": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-base text-on-background font-body-md min-h-screen flex flex-col md:flex-row">
+<nav class="hidden md:flex flex-col h-full py-6 bg-surface-container-low fixed left-0 top-0 w-sidebar-width border-r border-border-subtle z-40">
+<div class="px-6 mb-8">
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface">Partner Revenue OS</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">Revenue Control Layer</p>
+</div>
+<ul class="flex flex-col gap-2 px-4 flex-grow"><li><a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span></a></li><li><a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-body-md text-body-md">Partners</span></a></li><li><a class="flex items-center gap-3 px-4 py-3 rounded text-primary font-bold bg-surface-container translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-body-md text-body-md">Claims</span></a></li><li><a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-body-md text-body-md">Approvals</span></a></li><li><a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant font-medium hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span></a></li></ul>
+<div class="px-6 mt-auto"><div class="flex items-center gap-3 p-3 rounded-lg border border-border-subtle bg-surface-container-lowest">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-sm">person</span></div>
+<div><p class="font-body-sm text-body-sm font-bold">Admin User</p><p class="font-label-caps text-label-caps text-on-surface-variant">Head of Partnerships</p></div>
+</div></div></nav>
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile h-16 bg-surface-container-lowest border-b border-border-subtle fixed top-0 z-50">
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-background">Partner Revenue OS</h1>
+<button class="text-on-surface-variant p-2"><span class="material-symbols-outlined ">menu</span></button></header>
+<main class="flex-1 md:ml-[260px] pt-16 md:pt-0 pb-24 md:pb-8 px-margin-mobile md:px-margin-desktop w-full max-w-[1600px] mx-auto">
+<div class="py-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div><h2 class="font-headline-lg text-headline-lg font-bold text-on-background">Claim Preflight & Exception Queue</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Check completeness, duplicates, agreement coverage, and protection conflicts before attribution.</p><div class="flex flex-wrap items-center gap-2 mt-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-surface-container-high text-tertiary-container border border-[#bcd0ff]">Phase 11 of 22</span><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-surface-container-high text-tertiary-container border border-[#bcd0ff]">MVP</span><span class="font-label-caps text-label-caps text-on-surface-variant"><span class="material-symbols-outlined text-[14px] align-middle mr-1">badge</span>Partner Managers</span></div></div>
+<div class="flex gap-3 flex-wrap"><button class="px-4 py-2 border border-border-subtle text-on-surface hover:bg-surface-container rounded font-body-md text-body-md transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-sm">play_arrow</span>Run Preflight</button><button class="px-4 py-2 border border-border-subtle text-on-surface hover:bg-surface-container rounded font-body-md text-body-md transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-sm">undo</span>Send Back for Info</button><button class="px-4 py-2 bg-primary text-on-primary rounded font-body-md text-body-md transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-sm">arrow_forward</span>Pass to Attribution</button></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"><div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 flex flex-col relative overflow-hidden">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Preflight Pass Rate</p>
+<span class="font-display-metrics text-display-metrics text-primary font-bold">82%</span>
+
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-4 overflow-hidden"><div class="bg-primary h-full" style="width:82%"></div></div>
+</div><div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 flex flex-col relative overflow-hidden">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Duplicate Claim Rate</p>
+<span class="font-display-metrics text-display-metrics text-status-amber font-bold">6%</span>
+
+
+</div><div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 flex flex-col relative overflow-hidden">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Missing Evidence Rate</p>
+<span class="font-display-metrics text-display-metrics text-status-amber font-bold">14%</span>
+
+
+</div><div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 flex flex-col relative overflow-hidden">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Avg Time In Preflight</p>
+<span class="font-display-metrics text-display-metrics text-primary font-bold">5.1 hrs</span>
+
+
+</div></div><div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 mb-6">
+<div class="flex items-center justify-between mb-4 "><h3 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">rule</span>Preflight — CLM-8924-B · Project Apex (Nexus Technologies)</h3></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div><ul class="flex flex-col gap-3"><li class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">check_circle</span><div><span class="font-body-md text-body-md text-on-surface">Partner status active</span></div></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">check_circle</span><div><span class="font-body-md text-body-md text-on-surface">Claim type eligible for role</span></div></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-status-amber text-[20px] mt-0.5">warning</span><div><span class="font-body-md text-body-md text-on-surface">Account / contact matched to CRM</span><span class="block font-body-sm text-body-sm text-on-surface-variant">Match confidence 71% — review</span></div></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">check_circle</span><div><span class="font-body-md text-body-md text-on-surface">Duplicate claim check</span><span class="block font-body-sm text-body-sm text-on-surface-variant">No duplicate partner claims</span></div></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">check_circle</span><div><span class="font-body-md text-body-md text-on-surface">Existing protection window</span><span class="block font-body-sm text-body-sm text-on-surface-variant">No conflict</span></div></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-status-red text-[20px] mt-0.5">cancel</span><div><span class="font-body-md text-body-md text-on-surface">Agreement rule coverage</span><span class="block font-body-sm text-body-sm text-on-surface-variant">No active agreement rule — payout blocked, attribution allowed</span></div></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-status-amber text-[20px] mt-0.5">warning</span><div><span class="font-body-md text-body-md text-on-surface">Required evidence complete</span><span class="block font-body-sm text-body-sm text-on-surface-variant">1 of 2 artifacts uploaded</span></div></li></ul></div>
+<div class="bg-surface-base border border-border-subtle rounded-lg p-4">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Preflight Outcome</p>
+<p class="font-headline-sm text-headline-sm font-bold text-status-amber">Manual Review</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Agreement gap blocks payout eligibility but not strategic attribution. Routed to exception queue.</p></div></div></div><div class="bg-surface-container-lowest border border-border-subtle rounded-lg p-6 mb-6">
+<div class="flex items-center justify-between mb-4 "><h3 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">inventory_2</span>Exception Queue</h3></div>
+<div class="overflow-x-auto"><table class="w-full min-w-[640px]"><thead><tr class="bg-surface-base"><th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-left">Claim</th><th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-left">Partner</th><th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-left">Flag</th><th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-left">Routing</th><th class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-left">Status</th></tr></thead><tbody><tr class="border-t border-border-subtle hover:bg-surface-base transition-colors"><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">CLM-8924-B</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">Nexus Technologies</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">Agreement Gap</span></td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">Partner Manager</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">Manual Review</span></td></tr><tr class="border-t border-border-subtle hover:bg-surface-base transition-colors"><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">CLM-8902-A</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">Acme Corp</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#fee2e2] text-[#991b1b] border border-[#fecaca]">Duplicate Risk</span></td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">RevOps</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">Manual Review</span></td></tr><tr class="border-t border-border-subtle hover:bg-surface-base transition-colors"><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">CLM-8898-C</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">TechFlow Inc</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">Missing Evidence</span></td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">Partner</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-surface-container text-on-surface-variant border border-border-subtle">Needs Info</span></td></tr><tr class="border-t border-border-subtle hover:bg-surface-base transition-colors"><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">CLM-8890-D</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">Global Systems</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]">Pass</span></td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface">—</td><td class="px-4 py-3 font-body-sm text-body-sm text-on-surface"><span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]">Ready</span></td></tr></tbody></table></div></div>
+</main>
+</body></html>
