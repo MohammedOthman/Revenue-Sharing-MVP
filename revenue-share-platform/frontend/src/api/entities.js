@@ -20,5 +20,13 @@ export const Customer = base44.entities.Customer;
 export const Deal = base44.entities.Deal;
 export const Activity = base44.entities.Activity;
 
+/* Finance-spine entities (added per the PRD data-layer audit). */
+export const LedgerEntry = base44.entities.LedgerEntry;
+export const RevenueEvent = base44.entities.RevenueEvent;
+export const RuleVersion = base44.entities.RuleVersion;
+export const Evidence = base44.entities.Evidence;
+export const Approval = base44.entities.Approval;
+export const FXRate = base44.entities.FXRate;
+
 /** Built-in auth / user module. */
 export const User = base44.auth;

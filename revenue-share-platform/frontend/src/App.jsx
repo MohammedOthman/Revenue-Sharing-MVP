@@ -4,13 +4,13 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Partners from './pages/Partners';
+import Claims from './pages/Claims';
 import SurfaceStub from './pages/SurfaceStub';
 import { Brandmark } from './components/brand/Brandmark';
 import {
-  Partner,
   PartnerProgram,
   Agreement,
-  PartnerClaim,
   EcosystemTouchpoint,
   PartnerStatement,
   Dispute,
@@ -40,15 +40,6 @@ function ProtectedRoute({ children }) {
 
 const SURFACES = [
   {
-    path: 'partners',
-    kicker: 'Capture · Partners',
-    title: 'Partner lifecycle',
-    entity: Partner,
-    statusField: 'lifecycle_status',
-    description:
-      'Intake, qualification, approval and onboarding — with payout-readiness tracked apart from activation.',
-  },
-  {
     path: 'programs',
     kicker: 'Capture · Programs',
     title: 'Partner programs',
@@ -65,15 +56,6 @@ const SURFACES = [
     statusField: 'status',
     description:
       'Terms turned into executable, versioned rules: rates, triggers, protection windows, caps and clawback conditions.',
-  },
-  {
-    path: 'claims',
-    kicker: 'Capture → Settle · Claims',
-    title: 'The claim ledger',
-    entity: PartnerClaim,
-    statusField: 'claim_status',
-    description:
-      'The canonical claim: submission, preflight, one attribution of record, protection, eligibility and payout.',
   },
   {
     path: 'attribution',
@@ -137,6 +119,8 @@ export default function App() {
             }
           >
             <Route index element={<Dashboard />} />
+            <Route path="partners" element={<Partners />} />
+            <Route path="claims" element={<Claims />} />
             {SURFACES.map((s) => (
               <Route key={s.path} path={s.path} element={<SurfaceStub {...s} />} />
             ))}

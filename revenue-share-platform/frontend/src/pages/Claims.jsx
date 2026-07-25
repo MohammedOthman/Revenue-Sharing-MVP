@@ -1,0 +1,301 @@
+import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { PartnerClaim } from '../api/entities';
+import { useCollection } from '../hooks/useCollection';
+import { Panel, Kicker, StatusTag, Money, Button, humanize } from '../components/ui/kit';
+import '../styles/Claims.css';
+
+const EASE = [0.22, 1, 0.36, 1];
+const isTerminal = (c) => ['paid', 'rejected', 'expired', 'duplicate'].includes(c.claim_status);
+const isException = (c) =>
+  ['needs_information', 'duplicate_risk', 'agreement_gap', 'protection_conflict', 'manual_review'].includes(
+    c.preflight_status
+  ) ||
+  ['needs_information', 'needs_evidence', 'finance_review_required'].includes(c.claim_status);
+
+const FILTERS = [
+  { key: 'all', label: 'All', test: () => true },
+  { key: 'attention', label: 'Needs attention', test: isException },
+  {
+    key: 'attribution',
+    label: 'In attribution',
+    test: (c) => ['pending', 'needs_evidence', 'disputed'].includes(c.attribution_status) && !isTerminal(c),
+  },
+  { key: 'eligible', label: 'Eligible', test: (c) => c.payout_eligibility_status === 'eligible' },
+  { key: 'paid', label: 'Paid', test: (c) => c.payment_status === 'paid' },
+];
+
+const pct = (v) => (v == null || v === '' ? '—' : `${Math.round(Number(v))}%`);
+
+function DefRow({ label, children }) {
+  return (
+    <div className="def">
+      <span className="def__k label">{label}</span>
+      <span className="def__v">{children}</span>
+    </div>
+  );
+}
+
+function ClaimDrawer({ claim, onClose }) {
+  const c = claim;
+  const ccy = c.currency || 'USD';
+  return (
+    <>
+      <motion.div
+        className="drawer__scrim"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={onClose}
+      />
+      <motion.aside
+        className="drawer"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', stiffness: 320, damping: 38 }}
+        role="dialog"
+        aria-label="Claim detail"
+      >
+        <header className="drawer__head">
+          <div className="cellstack">
+            <span className="drawer__partner serif">{c.partner_name || 'Unassigned'}</span>
+            <span className="drawer__cust">
+              → {c.customer_account || '—'} · {humanize(c.claim_type)}
+            </span>
+          </div>
+          <button className="drawer__close" onClick={onClose} aria-label="Close">
+            ✕
+          </button>
+        </header>
+
+        <div className="drawer__body">
+          <div className="drawer__topline">
+            <div className="drawer__value">
+              <span className="label">Deal value</span>
+              <Money amount={c.estimated_value} currency={ccy} className="drawer__valuenum" />
+            </div>
+            <StatusTag status={c.claim_status} />
+          </div>
+
+          {/* Attribution of Record */}
+          <section className="drawer__sec">
+            <Kicker>Attribution of record</Kicker>
+            <div className="attrib">
+              <div className="attrib__col">
+                <span className="attrib__num mono">{pct(c.attribution_recommended_percentage)}</span>
+                <span className="label">Model · advisory</span>
+              </div>
+              <span className="attrib__arrow" aria-hidden="true">→</span>
+              <div className="attrib__col attrib__col--decided">
+                <span className="attrib__num mono">{pct(c.attribution_percentage)}</span>
+                <span className="label">Human · decided</span>
+              </div>
+              <div className="attrib__meta">
+                <StatusTag status={c.attribution_status} />
+                {c.attribution_version ? (
+                  <span className="attrib__ver mono">v{c.attribution_version}</span>
+                ) : null}
+              </div>
+            </div>
+            {c.attribution_recommendation_basis && (
+              <p className="drawer__note">{c.attribution_recommendation_basis}</p>
+            )}
+            {c.attribution_rejection_reason && (
+              <p className="drawer__note drawer__note--stop">{c.attribution_rejection_reason}</p>
+            )}
+          </section>
+
+          {/* Eligibility — verdict + explanation + missing conditions (FR-10) */}
+          <section className="drawer__sec">
+            <div className="drawer__sechead">
+              <Kicker>Payout eligibility</Kicker>
+              <StatusTag status={c.payout_eligibility_status} />
+            </div>
+            {c.eligibility_explanation ? (
+              <p className="drawer__explain">{c.eligibility_explanation}</p>
+            ) : (
+              <p className="drawer__note">No eligibility explanation recorded yet.</p>
+            )}
+            {Array.isArray(c.eligibility_missing_conditions) &&
+              c.eligibility_missing_conditions.length > 0 && (
+                <ul className="missing">
+                  {c.eligibility_missing_conditions.map((m, i) => (
+                    <li key={i} className="missing__item">
+                      <span className="missing__dot" aria-hidden="true" />
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            <div className="drawer__grid">
+              <DefRow label="Estimated payout">
+                <Money amount={c.estimated_payout} currency={ccy} brass />
+              </DefRow>
+              <DefRow label="Approved">
+                <Money amount={c.approved_payout} currency={ccy} />
+              </DefRow>
+              <DefRow label="Paid">
+                <Money amount={c.paid_amount} currency={ccy} />
+              </DefRow>
+              <DefRow label="Payment">
+                <StatusTag status={c.payment_status} />
+              </DefRow>
+            </div>
+          </section>
+
+          {/* Protection */}
+          {(c.protection_window_active || c.protection_start_date) && (
+            <section className="drawer__sec">
+              <Kicker>Protection window</Kicker>
+              <div className="drawer__grid">
+                <DefRow label="Scope">{c.protection_scope || 'account'}</DefRow>
+                <DefRow label="Active">{c.protection_window_active ? 'Yes' : 'No'}</DefRow>
+                <DefRow label="From">{c.protection_start_date || '—'}</DefRow>
+                <DefRow label="Until">{c.protection_end_date || '—'}</DefRow>
+              </div>
+              {c.protection_override_reason && (
+                <p className="drawer__note drawer__note--stop">
+                  Override: {c.protection_override_reason}
+                  {c.protection_override_approver ? ` — ${c.protection_override_approver}` : ''}
+                </p>
+              )}
+            </section>
+          )}
+
+          {/* Revenue + provenance */}
+          <section className="drawer__sec">
+            <Kicker>Revenue &amp; provenance</Kicker>
+            <div className="drawer__grid">
+              <DefRow label="Revenue status">
+                <StatusTag status={c.revenue_status} />
+              </DefRow>
+              <DefRow label="Actual revenue">
+                <Money amount={c.actual_revenue} currency={ccy} />
+              </DefRow>
+              <DefRow label="CRM match">{c.crm_match_confidence || 'unmatched'}</DefRow>
+              <DefRow label="Preflight">
+                <StatusTag status={c.preflight_status} />
+              </DefRow>
+            </div>
+            {c.evidence_description && (
+              <p className="drawer__note">Evidence: {c.evidence_description}</p>
+            )}
+          </section>
+        </div>
+      </motion.aside>
+    </>
+  );
+}
+
+export default function Claims() {
+  const { data: claims, loading } = useCollection(PartnerClaim);
+  const [filter, setFilter] = useState('all');
+  const [selected, setSelected] = useState(null);
+
+  const counts = useMemo(() => {
+    const c = {};
+    for (const f of FILTERS) c[f.key] = claims.filter(f.test).length;
+    return c;
+  }, [claims]);
+
+  const rows = useMemo(() => {
+    const f = FILTERS.find((x) => x.key === filter) || FILTERS[0];
+    return claims.filter(f.test);
+  }, [claims, filter]);
+
+  return (
+    <div className="screen">
+      <header className="screen__head">
+        <div>
+          <Kicker>Capture → Settle · Claims</Kicker>
+          <h1 className="screen__title serif">
+            The claim <em>ledger</em>
+          </h1>
+          <p className="screen__sub">
+            One canonical claim per contribution — submission, preflight, attribution of record,
+            eligibility with an explanation, and payout.
+          </p>
+        </div>
+        <span className="screen__count">{claims.length} claims</span>
+      </header>
+
+      <div className="filters">
+        {FILTERS.map((f) => (
+          <button
+            key={f.key}
+            className="chip"
+            data-active={filter === f.key}
+            onClick={() => setFilter(f.key)}
+          >
+            {f.label}
+            <span className="chip__n">{counts[f.key]}</span>
+          </button>
+        ))}
+      </div>
+
+      <Panel className="tablewrap">
+        {loading ? (
+          <div className="skerows rv-pad">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <span key={i} className="rv-shimmer" />
+            ))}
+          </div>
+        ) : rows.length === 0 ? (
+          <div className="rv-empty">
+            <span className="serif">No claims here.</span>
+            <span className="label">Registered claims will appear in the ledger.</span>
+          </div>
+        ) : (
+          <table className="rv-table claims-table">
+            <thead>
+              <tr>
+                <th>Claim</th>
+                <th>Value</th>
+                <th>Attribution</th>
+                <th>Eligibility</th>
+                <th>Payout</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((c) => (
+                <tr key={c._id} onClick={() => setSelected(c)} className="claims-row">
+                  <td>
+                    <div className="cellstack">
+                      <span className="cellname">{c.partner_name || 'Unassigned'}</span>
+                      <span className="cellsub">→ {c.customer_account || '—'}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <Money amount={c.estimated_value} compact currency={c.currency || 'USD'} />
+                  </td>
+                  <td>
+                    <div className="claims-attrib">
+                      <span className="mono">{pct(c.attribution_percentage)}</span>
+                      <StatusTag status={c.attribution_status} />
+                    </div>
+                  </td>
+                  <td>
+                    <StatusTag status={c.payout_eligibility_status} />
+                  </td>
+                  <td>
+                    <Money amount={c.estimated_payout} compact brass currency={c.currency || 'USD'} />
+                  </td>
+                  <td>
+                    <StatusTag status={c.claim_status} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Panel>
+
+      <AnimatePresence>
+        {selected && <ClaimDrawer claim={selected} onClose={() => setSelected(null)} />}
+      </AnimatePresence>
+    </div>
+  );
+}
