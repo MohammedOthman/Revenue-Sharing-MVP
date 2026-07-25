@@ -1,84 +1,76 @@
 /* ============================================================================
    REVEN — design tokens
-   The world: an audited ledger. A finance-grade system of record for
-   partner-sourced revenue. Warm green-black ink, archival paper, a scarce
-   brass for money, verdigris for what is verified and settled.
+   Brand truth: the Reven logo — a geometric "Reven" wordmark in deep navy with
+   two electric-blue square accents. Palette derived directly from it.
 
-   Deliberate anti-slop choices:
-   - Palette is a CHOSEN warm green-black — not cool blue-charcoal, not cream,
-     not UI-kit gray, not a blue→purple gradient anywhere.
-   - Accents are tonal (value-shifted, desaturated), never poster-bright.
-   - Signature type is a bespoke SVG wordmark + a native serif; the workhorse
-     is genuinely-neutral system-ui; mono appears only on real data.
+   The user's brand overrides the design-default aversion to blue. Executed with
+   craft so it does not read as generic: the SPECIFIC logo navy and electric
+   blue, blue used as a controlled accent (never a blue→purple gradient), and a
+   warm brass reserved only for monetary values as a deliberate counterpoint.
    ========================================================================== */
 
 :root {
   color-scheme: dark;
 
-  /* ---- Ink: the warm green-black substrate (tonal ramp) ------------------ */
-  --ink-990: #090C0A;
-  --ink-950: #0B0F0C;
-  --ink-900: #0E1310; /* page base */
-  --ink-870: #111815; /* sunk wells */
-  --ink-850: #141B17; /* raised panel */
-  --ink-820: #17201B; /* card */
-  --ink-780: #1C2721; /* card hover */
-  --ink-720: #24322A; /* interactive raised */
+  /* ---- Ink: the deep navy substrate (from the logo) --------------------- */
+  --ink-990: #05090F;
+  --ink-950: #070C17;
+  --ink-900: #0A1122; /* page base — deep navy */
+  --ink-870: #0D1528; /* sunk wells */
+  --ink-850: #101A32; /* raised panel */
+  --ink-820: #14203C; /* card */
+  --ink-780: #1B2A4C; /* card hover */
+  --ink-720: #24345E; /* interactive raised */
 
-  /* ---- Archival paper: for document/evidence/statement surfaces ---------- */
-  /* A specific warm parchment with a faint green-grey undertone. Used
-     sparingly and on purpose (a statement is literally a document), never as
-     a default page fill. */
-  --paper-50: #ECE9DC;
-  --paper-100: #E4E1D1;
-  --paper-ink: #20261F; /* ink used when we are on paper */
-  --paper-ink-mid: #4C5347;
+  /* ---- Archival paper: document / evidence / statement surfaces ---------- */
+  --paper-50: #EEF0F5;
+  --paper-100: #E2E7F0;
+  --paper-ink: #0C1B3C; /* the brand navy, used when on paper */
+  --paper-ink-mid: #47516B;
 
-  /* ---- Text on ink (warm green-grey, cohesive with the substrate) -------- */
-  --text-hi: #EDEFE7; /* primary */
-  --text-mid: #A6B1A8; /* secondary */
-  --text-lo: #717D74; /* tertiary / quiet labels */
-  --text-faint: #4C564E; /* hairline text, disabled */
+  /* ---- Text on ink (cool off-white / blue-grey) ------------------------- */
+  --text-hi: #EAEEF7; /* primary */
+  --text-mid: #A6B2CA; /* secondary */
+  --text-lo: #6E7A94; /* tertiary / quiet labels */
+  --text-faint: #48526E; /* hairline text, disabled */
 
-  /* ---- Verdigris: the brand hue. Verified · eligible · settled ----------- */
-  /* Deep and desaturated; used tonally. */
-  --brand-700: #164E3A;
-  --brand-600: #1C6047;
-  --brand-500: #257A5A;
-  --brand-400: #3E9A73;
-  --brand-300: #6FBF9B; /* on-dark accent text */
-  --brand-200: #9BD6BC;
-  --brand-tint: rgba(62, 154, 115, 0.12); /* wells / fills */
-  --brand-tint-soft: rgba(62, 154, 115, 0.07);
+  /* ---- Reven electric blue: the brand accent --------------------------- */
+  --brand-700: #1A3AA8;
+  --brand-600: #2149CE;
+  --brand-500: #2A5BF5; /* the logo's electric blue */
+  --brand-400: #4E78FF;
+  --brand-300: #86A2FF; /* on-dark accent text */
+  --brand-200: #B3C4FF;
+  --brand-tint: rgba(42, 91, 245, 0.15); /* wells / fills */
+  --brand-tint-soft: rgba(42, 91, 245, 0.08);
 
-  /* ---- Brass: scarce money accent. Only on genuine currency/value -------- */
+  /* ---- Brass: scarce money accent, a warm counterpoint to the blue ------ */
   --brass-500: #B98F3C;
   --brass-400: #CBA254;
-  --brass-300: #DDBB72; /* on-dark value figures */
-  --brass-tint: rgba(203, 162, 84, 0.12);
+  --brass-300: #E0BE74; /* on-dark value figures */
+  --brass-tint: rgba(203, 162, 84, 0.13);
 
-  /* ---- Status tones — all warm, all in-family (cohesion over signal) ----- */
-  --ok: #6FBF9B; /* eligible / accepted / settled  (verdigris) */
-  --ok-tint: rgba(111, 191, 155, 0.12);
-  --wait: #DDBB72; /* pending / needs-info           (brass)     */
-  --wait-tint: rgba(221, 187, 114, 0.12);
-  --warn: #D08A5E; /* at-risk / protection-expiring  (amber-terracotta) */
-  --warn-tint: rgba(208, 138, 94, 0.12);
-  --stop: #CF6F55; /* rejected / error / dispute     (oxblood)   */
-  --stop-tint: rgba(207, 111, 85, 0.13);
-  --hold: #7FA6C4; /* protected / in-review          (cool slate, used rarely) */
-  --hold-tint: rgba(127, 166, 196, 0.12);
+  /* ---- Status tones ----------------------------------------------------- */
+  --ok: #4FC088; /* eligible / accepted / settled (green = go)  */
+  --ok-tint: rgba(79, 192, 136, 0.13);
+  --wait: #E0BE74; /* pending / needs-info          (brass)      */
+  --wait-tint: rgba(224, 190, 116, 0.12);
+  --warn: #E0955E; /* at-risk / protection-expiring (amber)      */
+  --warn-tint: rgba(224, 149, 94, 0.12);
+  --stop: #E4695A; /* rejected / error / dispute    (coral-red)  */
+  --stop-tint: rgba(228, 105, 90, 0.13);
+  --hold: #8C97B2; /* protected / in-review         (neutral blue-grey) */
+  --hold-tint: rgba(140, 151, 178, 0.13);
 
   /* ---- Edges: self-colored, felt-not-drawn (tonal elevation) ------------- */
-  --edge: rgba(237, 239, 231, 0.09);
-  --edge-soft: rgba(237, 239, 231, 0.06);
-  --edge-strong: rgba(237, 239, 231, 0.14);
-  --edge-top: rgba(237, 239, 231, 0.07); /* top-lip highlight */
-  --edge-brand: rgba(62, 154, 115, 0.34);
+  --edge: rgba(234, 238, 247, 0.1);
+  --edge-soft: rgba(234, 238, 247, 0.06);
+  --edge-strong: rgba(234, 238, 247, 0.16);
+  --edge-top: rgba(234, 238, 247, 0.08); /* top-lip highlight */
+  --edge-brand: rgba(42, 91, 245, 0.4);
 
   /* ---- Type ------------------------------------------------------------- */
-  /* Display: a native serif with real character. NOT the Google slop shelf;
-     these ship with the OS and read editorial when set with intent. */
+  /* Display: a native serif with real character. NOT the Google slop shelf. */
   --font-display: "Iowan Old Style", "Hoefler Text", "Palatino Linotype",
     Palatino, Charter, Georgia, "Times New Roman", serif;
   /* Workhorse: genuinely neutral system UI. */
@@ -105,7 +97,7 @@
 
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
-  --tracking-label: 0.14em; /* small caps labels — one of the few tracked roles */
+  --tracking-label: 0.14em;
   --tracking-wide: 0.24em;
 
   /* ---- Space (4px base) ------------------------------------------------- */
@@ -120,7 +112,7 @@
   --sp-9: 6rem;
   --sp-10: 8rem;
 
-  /* ---- Radii — quiet; the signature geometry is bespoke, not a big radius */
+  /* ---- Radii ------------------------------------------------------------ */
   --r-xs: 3px;
   --r-sm: 6px;
   --r-md: 9px;
@@ -131,8 +123,8 @@
   /* ---- Elevation — tight, directional, tinted. No fat black blooms. ------ */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 24px 60px -28px rgba(0, 0, 0, 0.6);
-  --shadow-brand: 0 12px 30px -16px rgba(20, 60, 44, 0.55);
+  --shadow-lg: 0 24px 60px -28px rgba(0, 0, 0, 0.62);
+  --shadow-brand: 0 12px 30px -16px rgba(22, 44, 120, 0.6);
 
   /* ---- Motion ----------------------------------------------------------- */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -151,16 +143,16 @@
   --maxw-read: 720px;
 }
 
-/* Light "document" context — opt-in via .on-paper for statements / evidence
-   packs, where a literal paper surface is the on-brand, meaningful choice. */
+/* Light "document" context — statements / evidence packs, where a literal
+   paper surface is the on-brand, meaningful choice. */
 .on-paper {
   color-scheme: light;
   --text-hi: var(--paper-ink);
   --text-mid: var(--paper-ink-mid);
-  --text-lo: #6d7466;
-  --edge: rgba(32, 38, 31, 0.12);
-  --edge-soft: rgba(32, 38, 31, 0.08);
-  --edge-strong: rgba(32, 38, 31, 0.2);
+  --text-lo: #6a7288;
+  --edge: rgba(12, 27, 60, 0.14);
+  --edge-soft: rgba(12, 27, 60, 0.09);
+  --edge-strong: rgba(12, 27, 60, 0.22);
   background: var(--paper-50);
   color: var(--text-hi);
 }

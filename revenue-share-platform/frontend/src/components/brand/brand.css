@@ -1,17 +1,4 @@
-.rv-wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.rv-wordmark__text {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  color: var(--text-hi);
-  line-height: 1;
-}
-/* A single quiet detail: the "e" pair sits in verdigris — one considered
-   accent inside the wordmark, not a gradient poured over the type. */
-.rv-wordmark__text::first-letter {
+.rv-logo {
+  display: block;
   color: var(--text-hi);
 }

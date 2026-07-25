@@ -201,6 +201,18 @@
     order: -1;
   }
 }
+@media (max-width: 600px) {
+  .tape__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "who amt"
+      "status pct";
+    row-gap: 0.5rem;
+  }
+  .tape__pct {
+    text-align: end;
+  }
+}
 @media (max-width: 520px) {
   .entry__foot,
   .entry__top {

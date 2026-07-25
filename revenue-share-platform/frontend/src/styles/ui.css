@@ -73,16 +73,16 @@
 /* Primary: a solid verdigris surface — the one confident action. The label
    clears the fill by a wide value gap (legibility on fill is non-negotiable). */
 .rv-btn--primary {
-  color: #06120D;
-  background: linear-gradient(180deg, var(--brand-400), var(--brand-500));
+  color: #ffffff;
+  background: linear-gradient(180deg, var(--brand-500), var(--brand-600));
   border-color: transparent;
   box-shadow: var(--shadow-brand);
 }
 .rv-btn--primary:hover {
-  background: linear-gradient(180deg, var(--brand-300), var(--brand-400));
+  background: linear-gradient(180deg, var(--brand-400), var(--brand-500));
 }
 .rv-btn--primary:active {
-  background: var(--brand-500);
+  background: var(--brand-600);
 }
 
 .rv-btn--ghost {

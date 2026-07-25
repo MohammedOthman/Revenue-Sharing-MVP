@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 342 96" width="342" height="96" role="img" aria-label="Reven">
+  <title>Reven</title>
+  <g fill="none" stroke="#0C1B3C" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 22 V74"/>
+    <path d="M32 22 H58 a18 18 0 0 1 0 36 H32"/>
+    <path d="M40 56 L80 74"/>
+    <path d="M96 52 H144"/>
+    <path d="M144 52 A24 24 0 1 0 132 73"/>
+    <path d="M150 50 L172 74 L194 50"/>
+    <path d="M196 52 H244"/>
+    <path d="M244 52 A24 24 0 1 0 232 73"/>
+    <path d="M264 74 V52 a20 20 0 0 1 40 0 V74"/>
+  </g>
+  <rect x="41" y="29" width="12" height="12" rx="1.5" fill="#2A5BF5"/>
+  <rect x="304" y="61" width="13" height="13" rx="1.5" fill="#2A5BF5"/>
+</svg>
