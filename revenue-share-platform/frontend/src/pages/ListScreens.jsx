@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import DataScreen, { NameCell } from '../components/DataScreen';
 import {
   PartnerProgram,
@@ -6,7 +7,8 @@ import {
   Dispute,
   EcosystemTouchpoint,
 } from '../api/entities';
-import { StatusTag, Money, humanize } from '../components/ui/kit';
+import { StatusTag, Money, Button, humanize } from '../components/ui/kit';
+import { AgreementForm } from '../components/RecordForms';
 
 const mono = (v) => <span className="mono tnum">{v ?? 0}</span>;
 const dash = (v) => (v == null || v === '' ? '—' : v);
@@ -63,17 +65,32 @@ export function Agreements() {
     { header: 'Expiry', render: (a) => <span className="mono">{dash(a.expiry_date)}</span> },
     { header: 'Status', render: (a) => <StatusTag status={a.status} /> },
   ];
+  const [showForm, setShowForm] = useState(false);
+  const [reload, setReload] = useState(0);
   return (
-    <DataScreen
-      kicker="Capture · Agreements"
-      title="Agreements &"
-      titleAccent="rules"
-      sub="Terms turned into executable, versioned rules — rates, triggers, protection windows, caps and clawback conditions."
-      entity={Agreement}
-      filters={filters}
-      columns={columns}
-      minWidth={880}
-    />
+    <>
+      <DataScreen
+        kicker="Capture · Agreements"
+        title="Agreements &"
+        titleAccent="rules"
+        sub="Terms turned into executable, versioned rules — rates, triggers, protection windows, caps and clawback conditions."
+        entity={Agreement}
+        filters={filters}
+        columns={columns}
+        minWidth={880}
+        reloadKey={reload}
+        headerAction={
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            New agreement
+          </Button>
+        }
+      />
+      <AgreementForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onCreated={() => setReload((r) => r + 1)}
+      />
+    </>
   );
 }
 

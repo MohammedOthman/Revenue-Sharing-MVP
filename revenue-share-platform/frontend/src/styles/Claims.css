@@ -180,6 +180,17 @@
   color: var(--stop);
 }
 
+.decide {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+}
+.decide__pct {
+  width: 84px;
+  flex: none;
+}
+
 .drawer__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

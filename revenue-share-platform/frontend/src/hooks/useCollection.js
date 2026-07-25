@@ -3,12 +3,14 @@ import { normalizeList } from '../services/normalize';
 
 /**
  * Load a Base44 entity collection with loading/error state. Data is always an
- * array (never undefined), so screens can render empty states without guards.
+ * array. Returns `refetch()` to reload after a write, and accepts `reloadKey`
+ * so a parent can trigger a reload by changing it.
  */
-export function useCollection(entity, { sort = '-created_date', limit = 200 } = {}) {
+export function useCollection(entity, { sort = '-created_date', limit = 200, reloadKey = 0 } = {}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [nonce, setNonce] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -32,7 +34,7 @@ export function useCollection(entity, { sort = '-created_date', limit = 200 } = 
     return () => {
       active = false;
     };
-  }, [entity, sort, limit]);
+  }, [entity, sort, limit, reloadKey, nonce]);
 
-  return { data, loading, error };
+  return { data, loading, error, refetch: () => setNonce((n) => n + 1) };
 }

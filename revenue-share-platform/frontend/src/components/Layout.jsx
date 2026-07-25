@@ -138,7 +138,7 @@ export default function Layout() {
           </button>
           <div className="topbar__spacer" />
           <span className="topbar__tenant label">Reven · Demo tenant</span>
-          <Button to="/claims" variant="primary" size="sm" arrow>
+          <Button to="/claims?new=1" variant="primary" size="sm" arrow>
             Register claim
           </Button>
         </header>

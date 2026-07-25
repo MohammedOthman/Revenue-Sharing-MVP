@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Partner } from '../api/entities';
 import { useCollection } from '../hooks/useCollection';
-import { Panel, Kicker, StatusTag, Money, humanize } from '../components/ui/kit';
+import { Panel, Kicker, StatusTag, Money, Button, humanize } from '../components/ui/kit';
+import { PartnerForm } from '../components/RecordForms';
 
 const STAGES = ['intake', 'qualifying', 'approved', 'onboarding', 'active', 'at_risk', 'dormant'];
 const EASE = [0.22, 1, 0.36, 1];
@@ -25,8 +26,9 @@ function ScoreCell({ value }) {
 }
 
 export default function Partners() {
-  const { data: partners, loading } = useCollection(Partner);
+  const { data: partners, loading, refetch } = useCollection(Partner);
   const [stage, setStage] = useState('all');
+  const [showForm, setShowForm] = useState(false);
 
   const counts = useMemo(() => {
     const c = Object.fromEntries(STAGES.map((s) => [s, 0]));
@@ -51,7 +53,12 @@ export default function Partners() {
             Intake through activation — with payout-readiness tracked apart from onboarding.
           </p>
         </div>
-        <span className="screen__count">{partners.length} partners</span>
+        <div className="screen__headright">
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            Add partner
+          </Button>
+          <span className="screen__count">{partners.length} partners</span>
+        </div>
       </header>
 
       <div className="stagestrip">
@@ -134,6 +141,8 @@ export default function Partners() {
           </table>
         )}
       </Panel>
+
+      <PartnerForm open={showForm} onClose={() => setShowForm(false)} onCreated={refetch} />
     </div>
   );
 }

@@ -19,8 +19,10 @@ export default function DataScreen({
   rowKey = (r) => r._id,
   onRowClick,
   minWidth = 760,
+  headerAction,
+  reloadKey = 0,
 }) {
-  const { data, loading } = useCollection(entity, sort ? { sort } : undefined);
+  const { data, loading } = useCollection(entity, { ...(sort ? { sort } : {}), reloadKey });
   const [active, setActive] = useState(filters[0]?.key || 'all');
 
   const counts = useMemo(() => {
@@ -54,7 +56,10 @@ export default function DataScreen({
           </h1>
           {sub && <p className="screen__sub">{sub}</p>}
         </div>
-        <span className="screen__count">{data.length} total</span>
+        <div className="screen__headright">
+          {headerAction}
+          <span className="screen__count">{data.length} total</span>
+        </div>
       </header>
 
       {statList && (

@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useSearchParams } from 'react-router-dom';
 import { PartnerClaim } from '../api/entities';
 import { useCollection } from '../hooks/useCollection';
 import { Panel, Kicker, StatusTag, Money, Button, humanize } from '../components/ui/kit';
+import { ClaimForm } from '../components/RecordForms';
 import '../styles/Claims.css';
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -36,9 +38,33 @@ function DefRow({ label, children }) {
   );
 }
 
-function ClaimDrawer({ claim, onClose }) {
+function ClaimDrawer({ claim, onClose, onUpdated }) {
   const c = claim;
   const ccy = c.currency || 'USD';
+  const [pct, setPct] = useState(c.attribution_percentage ?? '');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+
+  const decide = async (status) => {
+    setErr('');
+    setBusy(true);
+    try {
+      await PartnerClaim.update(c._id, {
+        attribution_status: status,
+        attribution_percentage: status === 'rejected' ? 0 : Number(pct || 0),
+        attribution_decision_date: new Date().toISOString().slice(0, 10),
+        attribution_version: c.attribution_version || 1,
+        claim_status:
+          status === 'accepted' ? 'accepted' : status === 'rejected' ? 'rejected' : c.claim_status,
+      });
+      onUpdated?.();
+    } catch (e) {
+      setErr(e?.message || 'Could not save the decision.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <>
       <motion.div
@@ -99,6 +125,25 @@ function ClaimDrawer({ claim, onClose }) {
                 ) : null}
               </div>
             </div>
+            <div className="decide">
+              <input
+                className="rv-field decide__pct"
+                type="number"
+                min="0"
+                max="100"
+                value={pct}
+                onChange={(e) => setPct(e.target.value)}
+                placeholder="%"
+                aria-label="Attribution percent"
+              />
+              <Button variant="primary" size="sm" disabled={busy} onClick={() => decide('accepted')}>
+                {busy ? 'Saving…' : 'Accept'}
+              </Button>
+              <Button variant="quiet" size="sm" disabled={busy} onClick={() => decide('rejected')}>
+                Reject
+              </Button>
+            </div>
+            {err && <p className="drawer__note drawer__note--stop">{err}</p>}
             {c.attribution_recommendation_basis && (
               <p className="drawer__note">{c.attribution_recommendation_basis}</p>
             )}
@@ -190,9 +235,20 @@ function ClaimDrawer({ claim, onClose }) {
 }
 
 export default function Claims() {
-  const { data: claims, loading } = useCollection(PartnerClaim);
+  const { data: claims, loading, refetch } = useCollection(PartnerClaim);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [params, setParams] = useSearchParams();
+
+  useEffect(() => {
+    if (params.get('new') !== null) {
+      setShowForm(true);
+      params.delete('new');
+      setParams(params, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const counts = useMemo(() => {
     const c = {};
@@ -218,7 +274,12 @@ export default function Claims() {
             eligibility with an explanation, and payout.
           </p>
         </div>
-        <span className="screen__count">{claims.length} claims</span>
+        <div className="screen__headright">
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            Register claim
+          </Button>
+          <span className="screen__count">{claims.length} claims</span>
+        </div>
       </header>
 
       <div className="filters">
@@ -294,8 +355,19 @@ export default function Claims() {
       </Panel>
 
       <AnimatePresence>
-        {selected && <ClaimDrawer claim={selected} onClose={() => setSelected(null)} />}
+        {selected && (
+          <ClaimDrawer
+            claim={selected}
+            onClose={() => setSelected(null)}
+            onUpdated={() => {
+              refetch();
+              setSelected(null);
+            }}
+          />
+        )}
       </AnimatePresence>
+
+      <ClaimForm open={showForm} onClose={() => setShowForm(false)} onCreated={refetch} />
     </div>
   );
 }
