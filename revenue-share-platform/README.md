@@ -1,155 +1,76 @@
-# Revenue Share Platform - B2B SaaS
+# Reven — Partner Revenue OS
 
-A comprehensive B2B SaaS platform for managing revenue sharing initiatives, contracts, partnerships, legal documents, and KPIs.
+The system of record and control layer for partner-sourced revenue. This folder
+holds the **Reven web app**: a React + Vite frontend that runs on a **Base44**
+backend (entities, auth, integrations). Brand truth lives in
+[`../BRAND.md`](../BRAND.md).
 
-## Features
+- **`frontend/`** — the Reven app (React 18 + Vite + Motion), connected to the
+  Base44 `RevenueOS` app via `@base44/sdk`. **This is what you run and deploy.**
+- **`backend/`** — a legacy Express + Postgres prototype from the original MVP.
+  It is **not used** by the app (kept only as reference) and is not deployed.
 
-### Core Functionality
-- **Partner Management**: Onboard and manage referral, affiliate, strategic, and reseller partners
-- **Contract Lifecycle**: Create, track, and manage revenue share contracts with customizable terms
-- **Revenue Tracking**: Record revenue, calculate partner shares, and process payments
-- **KPI Monitoring**: Track performance metrics against targets with visual progress indicators
-- **Legal Documents**: Manage agreements, amendments, NDAs, and other legal documentation
-- **Dashboard Analytics**: Comprehensive overview with real-time metrics and insights
+## What it does
 
-### Technical Stack
+The PRD's core loop, end to end: register a partner-revenue **claim** → a human
+decides the **Attribution of Record** (credit %, accept/reject) → **eligibility**
+is previewed *with an explanation* and missing-condition list → the **first-payout
+milestone** is recorded (Phase 1 records, never executes — no money moves).
+Surfaces: Command Center, Partners, Programs, Agreements, Claims, Attribution,
+Statements, Disputes, Cadence, Audit.
 
-**Backend:**
-- Node.js + Express.js
-- MongoDB (Mongoose ODM)
-- JWT Authentication
-- Role-based Access Control
+## Run locally
 
-**Frontend:**
-- React 18 + Vite
-- React Router for navigation
-- Axios for API communication
-- Modern CSS with responsive design
-
-## Project Structure
-
-```
-revenue-share-platform/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/    # Request handlers
-│   │   ├── models/         # Database schemas
-│   │   ├── routes/         # API endpoints
-│   │   ├── middleware/     # Auth & validation
-│   │   ├── utils/          # Helper functions
-│   │   ├── config/         # Database config
-│   │   └── server.js       # Entry point
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API service layer
-│   │   ├── context/        # React context (Auth)
-│   │   ├── styles/         # CSS stylesheets
-│   │   ├── App.jsx         # Main app component
-│   │   └── main.jsx        # Entry point
-│   ├── index.html
-│   └── package.json
-└── README.md
-```
-
-## Setup Instructions
-
-### Prerequisites
-- Node.js 16+ 
-- MongoDB (local or cloud instance)
-- npm or yarn
-
-### Backend Setup
-
-1. Navigate to backend directory:
-```bash
-cd backend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Configure environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your MongoDB connection string and JWT secret
-```
-
-4. Start the development server:
-```bash
-npm run dev
-```
-
-Backend will run on `http://localhost:5000`
-
-### Frontend Setup
-
-1. Navigate to frontend directory:
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-```bash
 npm install
+npm run dev        # http://localhost:3000
 ```
 
-3. Start the development server:
+The app points at the Base44 `RevenueOS` app by default, so it loads live data.
+Sign in with **Continue with single sign-on** (your Base44 / Google identity).
+
+## Configuration
+
+Environment (Vite — prefix `VITE_`). Copy `frontend/.env.example` to
+`frontend/.env` to override:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `VITE_BASE44_APP_ID` | `6a1bb5b45bd19dd135d3d57e` | The Base44 app (public client id) |
+
+## Build
+
 ```bash
-npm run dev
+cd frontend
+npm run build      # outputs frontend/dist/
+npm run preview    # serve the production build locally
 ```
 
-Frontend will run on `http://localhost:3000`
+## Deploy (Netlify)
 
-## API Endpoints
+The repo includes [`../netlify.toml`](../netlify.toml) and
+`frontend/public/_redirects`, so a Git-connected Netlify site deploys with no
+manual settings:
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/profile` - Get user profile
+- **Base directory:** `revenue-share-platform/frontend`
+- **Build command:** `npm run build`
+- **Publish directory:** `dist` (relative to base)
+- **SPA fallback:** `/* → /index.html 200` (already configured — without it,
+  refreshing a route like `/claims` 404s)
 
-### Partners
-- `GET /api/partners` - Get all partners
-- `POST /api/partners` - Create partner
-- `PUT /api/partners/:id` - Update partner
-- `DELETE /api/partners/:id` - Delete partner
+Other static hosts (Vercel, Cloudflare Pages) work the same way: build the
+`frontend/` subfolder, publish `dist/`, and add an SPA rewrite.
 
-### Contracts
-- `GET /api/contracts` - Get all contracts
-- `POST /api/contracts` - Create contract
-- `PUT /api/contracts/:id` - Update contract
-- `DELETE /api/contracts/:id` - Delete contract
+### One required step in Base44 (not in this repo)
 
-### Revenue
-- `GET /api/revenue` - Get all revenue records
-- `POST /api/revenue` - Create revenue record
-- `POST /api/revenue/:id/process-payment` - Process payment
+After deploying, **add your deployed domain to the Base44 `RevenueOS` app's
+allowed origins / redirect URLs**. Until you do, the SDK's requests and the SSO
+sign-in redirect are blocked from your custom domain, so login and data loading
+will fail on the live site (they work on `localhost` during development).
 
-### KPIs
-- `GET /api/kpis` - Get all KPIs
-- `POST /api/kpis` - Create KPI
-- `PATCH /api/kpis/:id/value` - Update KPI value
+## Tech
 
-### Legal Documents
-- `GET /api/legal-documents` - Get all documents
-- `POST /api/legal-documents` - Create document
-
-### Dashboard
-- `GET /api/dashboard/overview` - Get dashboard overview
-- `GET /api/dashboard/analytics/trends` - Get revenue trends
-- `GET /api/dashboard/analytics/partner-performance` - Get partner performance
-
-## Demo Credentials
-
-```
-Email: admin@example.com
-Password: password123
-```
-
-## License
-
-MIT License
+React 18, Vite 5, React Router 6, Motion (framer-motion), `@base44/sdk`.
+No Tailwind — a hand-authored design system in `frontend/src/styles/` governed
+by the anti-slop design law.

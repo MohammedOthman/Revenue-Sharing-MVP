@@ -1,0 +1,3 @@
+# SPA fallback — every client-side route resolves to index.html so deep links
+# (/claims, /partners, …) and page refreshes don't 404 on Netlify.
+/*    /index.html   200
