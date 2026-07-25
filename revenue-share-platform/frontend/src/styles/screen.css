@@ -159,6 +159,128 @@
   white-space: nowrap;
 }
 
+.rowlink {
+  cursor: pointer;
+}
+
+/* ---- Decision (cadence) cards ------------------------------------------ */
+.deccards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--sp-4);
+}
+.deccard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+}
+.deccard__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.deccard__title {
+  color: var(--text-hi);
+  font-weight: 600;
+  font-size: var(--fs-lg);
+  line-height: 1.3;
+}
+.deccard__rationale {
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.deccard__outcomes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  padding-top: var(--sp-4);
+  margin-top: auto;
+  border-top: 1px solid var(--edge-soft);
+}
+.deccard__o {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+.deccard__ovalue {
+  color: var(--text-hi);
+  font-size: var(--fs-sm);
+}
+
+/* ---- Audit timeline ---------------------------------------------------- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+.tevent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--edge-soft);
+}
+.tevent:last-child {
+  border-bottom: none;
+}
+.tevent__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--brand-400);
+  margin-top: 0.4rem;
+}
+.tevent__dot[data-sev="warning"] {
+  background: var(--warn);
+}
+.tevent__dot[data-sev="error"] {
+  background: var(--stop);
+}
+.tevent__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.tevent__top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.tevent__type {
+  color: var(--text-hi);
+  font-weight: 550;
+  font-size: var(--fs-sm);
+}
+.tevent__meta {
+  color: var(--text-lo);
+  font-size: var(--fs-xs);
+}
+.tevent__details {
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.tevent__flags {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.tevent__when {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-lo);
+  white-space: nowrap;
+}
+
 /* ---- Score meter cell -------------------------------------------------- */
 .scorecell {
   display: flex;
