@@ -65,6 +65,69 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
     }
   };
 
+  // Single eligibility evaluation with an explanation (read/calculate/display —
+  // Phase 1 moves no money). The verdict + explanation is the FR-10 core.
+  const evaluate = async () => {
+    setErr('');
+    setBusy(true);
+    try {
+      let status;
+      let explanation;
+      let missing = [];
+      let estPay = c.estimated_payout;
+      if (!['accepted', 'partially_accepted'].includes(c.attribution_status)) {
+        status = 'not_eligible';
+        explanation = 'Attribution of record is not yet accepted, so no payout can be made eligible.';
+        missing = ['Accept the attribution of record'];
+      } else if (!['closed_won', 'invoiced', 'collected', 'recognized'].includes(c.revenue_status)) {
+        status = 'missing_evidence';
+        explanation =
+          'Attribution is accepted, but no closed-won (or later) revenue event has been recorded yet.';
+        missing = ['A closed-won, invoiced, collected or recognized revenue event'];
+      } else {
+        status = 'eligible';
+        estPay = Math.round((Number(c.estimated_value) || 0) * (Number(c.attribution_percentage) || 0) / 100);
+        explanation = `Attribution accepted at ${c.attribution_percentage || 0}% and revenue ${String(
+          c.revenue_status
+        ).replace(/_/g, ' ')}; eligible for payout on the attributed basis.`;
+      }
+      await PartnerClaim.update(c._id, {
+        payout_eligibility_status: status,
+        payout_eligible: status === 'eligible',
+        eligibility_explanation: explanation,
+        eligibility_missing_conditions: missing,
+        eligibility_evaluated_date: new Date().toISOString(),
+        estimated_payout: estPay,
+        claim_status: status === 'eligible' ? 'payout_eligible' : c.claim_status,
+      });
+      onUpdated?.();
+    } catch (e) {
+      setErr(e?.message || 'Could not evaluate eligibility.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  // Record (not execute) the first-payout milestone.
+  const recordPayout = async () => {
+    setErr('');
+    setBusy(true);
+    try {
+      const amt = Number(c.approved_payout || c.estimated_payout || 0);
+      await PartnerClaim.update(c._id, {
+        approved_payout: amt,
+        paid_amount: amt,
+        payment_status: 'paid',
+        claim_status: 'paid',
+      });
+      onUpdated?.();
+    } catch (e) {
+      setErr(e?.message || 'Could not record the payout.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <>
       <motion.div
@@ -187,6 +250,16 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
               <DefRow label="Payment">
                 <StatusTag status={c.payment_status} />
               </DefRow>
+            </div>
+            <div className="decide">
+              <Button variant="ghost" size="sm" disabled={busy} onClick={evaluate}>
+                Evaluate eligibility
+              </Button>
+              {c.payout_eligibility_status === 'eligible' && c.payment_status !== 'paid' && (
+                <Button variant="primary" size="sm" disabled={busy} onClick={recordPayout}>
+                  Record payout
+                </Button>
+              )}
             </div>
           </section>
 
