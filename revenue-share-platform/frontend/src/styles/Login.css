@@ -1,101 +1,223 @@
-.login-container {
+.entry {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: clamp(1.25rem, 1rem + 2.4vw, 2.75rem) clamp(1.25rem, 0.5rem + 3.4vw, 4rem);
+  overflow-x: clip;
+}
+
+.entry__top {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.entry__meta {
+  color: var(--text-lo);
 }
 
-.login-box {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  width: 100%;
+.entry__stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(2rem, 1rem + 5vw, 6rem);
+  padding-block: var(--sp-6);
+}
+
+.entry__headline {
+  font-size: var(--fs-display);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  color: var(--text-hi);
+  margin-bottom: var(--sp-5);
+}
+.entry__headline em {
+  font-style: italic;
+  color: var(--brand-300);
+}
+
+.entry__sub {
+  max-width: 44ch;
+  color: var(--text-mid);
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  margin-bottom: var(--sp-6);
+}
+
+.entry__form {
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.entry__field {
+  display: flex;
+  flex-direction: column;
+}
+.entry__error {
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--r-sm);
+  background: var(--stop-tint);
+  border: 1px solid color-mix(in oklab, var(--stop) 30%, transparent);
+  color: var(--stop);
+  font-size: var(--fs-sm);
 }
 
-.login-box h1 {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 8px;
-  text-align: center;
+.entry__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+  flex-wrap: wrap;
+}
+/* A quiet secondary — a text action, not an outlined twin of the primary. */
+.entry__sso {
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+  transition: color var(--dur-2) var(--ease-out);
+}
+.entry__sso:hover {
+  color: var(--text-hi);
 }
 
-.subtitle {
-  color: #666;
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 14px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #555;
-  font-size: 14px;
-}
-
-.form-group input {
+/* ---- The ledger artifact ---------------------------------------------- */
+.entry__artifact {
+  justify-self: end;
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.2s;
+  max-width: 480px;
 }
-
-.form-group input:focus {
-  outline: none;
-  border-color: #667eea;
+.tape {
+  padding: var(--sp-5);
 }
-
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
+.tape__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--sp-4);
+  margin-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--edge);
+}
+.tape__period {
+  font-size: var(--fs-xs);
+  color: var(--text-lo);
+}
+.tape__rows {
+  display: flex;
+  flex-direction: column;
+}
+.tape__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas: "who pct amt" "who status amt";
+  align-items: center;
+  column-gap: var(--sp-4);
+  row-gap: 0.15rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--edge-soft);
+}
+.tape__row:last-child {
+  border-bottom: none;
+}
+.tape__who {
+  grid-area: who;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+.tape__partner {
+  color: var(--text-hi);
+  font-weight: 550;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tape__cust {
+  color: var(--text-lo);
+  font-size: var(--fs-xs);
+}
+.tape__pct {
+  grid-area: pct;
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+  text-align: end;
+}
+.tape__amt {
+  grid-area: amt;
+  text-align: end;
+  font-size: var(--fs-sm);
+}
+.tape__row .rv-tag {
+  grid-area: status;
+  justify-self: start;
+}
+.tape__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--edge);
+}
+.tape__total {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+.tape__totalnum {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.35rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  color: var(--brass-300);
+  letter-spacing: -0.02em;
 }
 
-.login-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+.entry__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--edge-soft);
+}
+.entry__foot-right {
+  color: var(--text-faint);
 }
 
-.login-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+@media (max-width: 900px) {
+  .entry__stage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+    align-items: start;
+  }
+  .entry__artifact {
+    justify-self: stretch;
+    max-width: 480px;
+    order: -1;
+  }
 }
-
-.error-message {
-  background: #ffebee;
-  color: #c62828;
-  padding: 10px 15px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  font-size: 14px;
+@media (max-width: 600px) {
+  .tape__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "who amt"
+      "status pct";
+    row-gap: 0.5rem;
+  }
+  .tape__pct {
+    text-align: end;
+  }
 }
-
-.demo-credentials {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-  text-align: center;
-  font-size: 13px;
-  color: #666;
-}
-
-.demo-credentials p {
-  margin: 5px 0;
+@media (max-width: 520px) {
+  .entry__foot,
+  .entry__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+  }
 }

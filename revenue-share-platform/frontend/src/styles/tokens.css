@@ -1,0 +1,158 @@
+/* ============================================================================
+   REVEN — design tokens
+   Brand truth: the Reven logo — a geometric "Reven" wordmark in deep navy with
+   two electric-blue square accents. Palette derived directly from it.
+
+   The user's brand overrides the design-default aversion to blue. Executed with
+   craft so it does not read as generic: the SPECIFIC logo navy and electric
+   blue, blue used as a controlled accent (never a blue→purple gradient), and a
+   warm brass reserved only for monetary values as a deliberate counterpoint.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Ink: the deep navy substrate (from the logo) --------------------- */
+  --ink-990: #05090F;
+  --ink-950: #070C17;
+  --ink-900: #0A1122; /* page base — deep navy */
+  --ink-870: #0D1528; /* sunk wells */
+  --ink-850: #101A32; /* raised panel */
+  --ink-820: #14203C; /* card */
+  --ink-780: #1B2A4C; /* card hover */
+  --ink-720: #24345E; /* interactive raised */
+
+  /* ---- Archival paper: document / evidence / statement surfaces ---------- */
+  --paper-50: #EEF0F5;
+  --paper-100: #E2E7F0;
+  --paper-ink: #0C1B3C; /* the brand navy, used when on paper */
+  --paper-ink-mid: #47516B;
+
+  /* ---- Text on ink (cool off-white / blue-grey) ------------------------- */
+  --text-hi: #EAEEF7; /* primary */
+  --text-mid: #A6B2CA; /* secondary */
+  --text-lo: #6E7A94; /* tertiary / quiet labels */
+  --text-faint: #48526E; /* hairline text, disabled */
+
+  /* ---- Reven electric blue: the brand accent --------------------------- */
+  --brand-700: #1A3AA8;
+  --brand-600: #2149CE;
+  --brand-500: #2A5BF5; /* the logo's electric blue */
+  --brand-400: #4E78FF;
+  --brand-300: #86A2FF; /* on-dark accent text */
+  --brand-200: #B3C4FF;
+  --brand-tint: rgba(42, 91, 245, 0.15); /* wells / fills */
+  --brand-tint-soft: rgba(42, 91, 245, 0.08);
+
+  /* ---- Brass: scarce money accent, a warm counterpoint to the blue ------ */
+  --brass-500: #B98F3C;
+  --brass-400: #CBA254;
+  --brass-300: #E0BE74; /* on-dark value figures */
+  --brass-tint: rgba(203, 162, 84, 0.13);
+
+  /* ---- Status tones ----------------------------------------------------- */
+  --ok: #4FC088; /* eligible / accepted / settled (green = go)  */
+  --ok-tint: rgba(79, 192, 136, 0.13);
+  --wait: #E0BE74; /* pending / needs-info          (brass)      */
+  --wait-tint: rgba(224, 190, 116, 0.12);
+  --warn: #E0955E; /* at-risk / protection-expiring (amber)      */
+  --warn-tint: rgba(224, 149, 94, 0.12);
+  --stop: #E4695A; /* rejected / error / dispute    (coral-red)  */
+  --stop-tint: rgba(228, 105, 90, 0.13);
+  --hold: #8C97B2; /* protected / in-review         (neutral blue-grey) */
+  --hold-tint: rgba(140, 151, 178, 0.13);
+
+  /* ---- Edges: self-colored, felt-not-drawn (tonal elevation) ------------- */
+  --edge: rgba(234, 238, 247, 0.1);
+  --edge-soft: rgba(234, 238, 247, 0.06);
+  --edge-strong: rgba(234, 238, 247, 0.16);
+  --edge-top: rgba(234, 238, 247, 0.08); /* top-lip highlight */
+  --edge-brand: rgba(42, 91, 245, 0.4);
+
+  /* ---- Type ------------------------------------------------------------- */
+  /* Display: a native serif with real character. NOT the Google slop shelf. */
+  --font-display: "Iowan Old Style", "Hoefler Text", "Palatino Linotype",
+    Palatino, Charter, Georgia, "Times New Roman", serif;
+  /* Workhorse: genuinely neutral system UI. */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  /* Data only: amounts, IDs, timestamps, percentages. Never labels/prose. */
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas,
+    monospace;
+
+  /* Fluid type scale */
+  --fs-display: clamp(2.7rem, 1.6rem + 4.6vw, 5.25rem);
+  --fs-h1: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  --fs-h2: clamp(1.5rem, 1.2rem + 1.2vw, 2.05rem);
+  --fs-h3: 1.3125rem;
+  --fs-lg: 1.0625rem;
+  --fs-body: 0.9375rem;
+  --fs-sm: 0.8125rem;
+  --fs-xs: 0.72rem;
+  --fs-micro: 0.66rem;
+
+  --lh-tight: 1.06;
+  --lh-snug: 1.28;
+  --lh-body: 1.55;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-label: 0.14em;
+  --tracking-wide: 0.24em;
+
+  /* ---- Space (4px base) ------------------------------------------------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+  --sp-10: 8rem;
+
+  /* ---- Radii ------------------------------------------------------------ */
+  --r-xs: 3px;
+  --r-sm: 6px;
+  --r-md: 9px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-pill: 999px;
+
+  /* ---- Elevation — tight, directional, tinted. No fat black blooms. ------ */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 60px -28px rgba(0, 0, 0, 0.62);
+  --shadow-brand: 0 12px 30px -16px rgba(22, 44, 120, 0.6);
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-1: 0.12s;
+  --dur-2: 0.2s;
+  --dur-3: 0.32s;
+  --dur-4: 0.5s;
+  --dur-5: 0.8s;
+
+  /* ---- Layout ----------------------------------------------------------- */
+  --shell-nav: 264px;
+  --shell-nav-collapsed: 76px;
+  --maxw: 1320px;
+  --maxw-read: 720px;
+}
+
+/* Light "document" context — statements / evidence packs, where a literal
+   paper surface is the on-brand, meaningful choice. */
+.on-paper {
+  color-scheme: light;
+  --text-hi: var(--paper-ink);
+  --text-mid: var(--paper-ink-mid);
+  --text-lo: #6a7288;
+  --edge: rgba(12, 27, 60, 0.14);
+  --edge-soft: rgba(12, 27, 60, 0.09);
+  --edge-strong: rgba(12, 27, 60, 0.22);
+  background: var(--paper-50);
+  color: var(--text-hi);
+}

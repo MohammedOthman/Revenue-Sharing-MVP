@@ -1,123 +1,243 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import dashboardService from '../services/dashboard.service';
+import { useMemo } from 'react';
+import { motion } from 'motion/react';
+import { Partner, PartnerClaim, PartnerStatement, Decision } from '../api/entities';
+import { useCollection } from '../hooks/useCollection';
+import {
+  Panel,
+  Metric,
+  Money,
+  StatusTag,
+  Kicker,
+  Button,
+  humanize,
+} from '../components/ui/kit';
 import '../styles/Dashboard.css';
 
-const Dashboard = () => {
-  const [overview, setOverview] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+const EASE = [0.22, 1, 0.36, 1];
+const num = (v) => Number(v) || 0;
+const isPaid = (c) => c.payment_status === 'paid';
+const isEligible = (c) =>
+  c.payout_eligibility_status === 'eligible' || c.payout_eligible === true;
+const isAttributed = (c) =>
+  ['accepted', 'partially_accepted'].includes(c.attribution_status);
+const isException = (c) =>
+  ['needs_information', 'duplicate_risk', 'agreement_gap', 'protection_conflict', 'manual_review'].includes(
+    c.preflight_status
+  ) ||
+  ['needs_information', 'needs_evidence', 'finance_review_required'].includes(c.claim_status);
 
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
+function DriverTile({ label, children, sub }) {
+  return (
+    <Panel className="driver">
+      <span className="driver__label label">{label}</span>
+      <div className="driver__value">{children}</div>
+      {sub && <span className="driver__sub">{sub}</span>}
+    </Panel>
+  );
+}
 
-  const loadDashboardData = async () => {
-    try {
-      const data = await dashboardService.getOverview();
-      setOverview(data);
-    } catch (err) {
-      setError('Failed to load dashboard data');
-    } finally {
-      setLoading(false);
-    }
-  };
+export default function Dashboard() {
+  const { data: partners, loading: lp } = useCollection(Partner);
+  const { data: claims, loading: lc } = useCollection(PartnerClaim);
+  const { data: statements } = useCollection(PartnerStatement, { limit: 100 });
+  const { data: decisions } = useCollection(Decision, { limit: 6 });
+  const loading = lp || lc;
 
-  if (loading) return <div className="loading">Loading dashboard...</div>;
-  if (error) return <div className="error">{error}</div>;
+  const m = useMemo(() => {
+    const realized = claims
+      .filter(isPaid)
+      .reduce((s, c) => s + num(c.paid_amount || c.approved_payout || c.estimated_payout), 0);
+    const eligible = claims
+      .filter(isEligible)
+      .reduce((s, c) => s + num(c.estimated_payout), 0);
+    const credited = claims
+      .filter(isAttributed)
+      .reduce((s, c) => s + num(c.actual_revenue || c.estimated_value), 0);
+    const activePartners = partners.filter((p) => p.lifecycle_status === 'active').length;
+    const openClaims = claims.filter(
+      (c) => !['paid', 'rejected', 'expired', 'duplicate'].includes(c.claim_status)
+    ).length;
+    const exceptions = claims.filter(isException);
+    const funnel = [
+      { label: 'Submitted', n: claims.length },
+      {
+        label: 'Preflight',
+        n: claims.filter((c) => c.preflight_status === 'pass' || c.claim_status !== 'submitted').length,
+      },
+      { label: 'Attributed', n: claims.filter(isAttributed).length },
+      { label: 'Eligible', n: claims.filter(isEligible).length },
+      { label: 'Paid', n: claims.filter(isPaid).length },
+    ];
+    return { realized, eligible, credited, activePartners, openClaims, exceptions, funnel };
+  }, [partners, claims]);
+
+  const funnelMax = Math.max(1, m.funnel[0].n);
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Dashboard Overview</h1>
-        <p>Welcome to your Revenue Share Management Platform</p>
-      </div>
-
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon partners">🤝</div>
-          <div className="stat-info">
-            <h3>{overview?.totalPartners || 0}</h3>
-            <p>Total Partners</p>
-          </div>
+    <div className="cc">
+      <header className="cc__head">
+        <div>
+          <Kicker>Command Center</Kicker>
+          <h1 className="cc__title serif">
+            The partner P&amp;L, <em>on the record</em>
+          </h1>
         </div>
-
-        <div className="stat-card">
-          <div className="stat-icon contracts">📄</div>
-          <div className="stat-info">
-            <h3>{overview?.totalContracts || 0}</h3>
-            <p>Active Contracts</p>
-          </div>
+        <div className="cc__headmeta">
+          <span className="label">Period</span>
+          <span className="mono cc__period">2026 · Q3</span>
         </div>
+      </header>
 
-        <div className="stat-card">
-          <div className="stat-icon revenue">💰</div>
-          <div className="stat-info">
-            <h3>${overview?.totalRevenue?.toLocaleString() || '0'}</h3>
-            <p>Total Revenue (MTD)</p>
+      {/* North Star */}
+      <motion.div
+        initial={{ y: 12 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.55, ease: EASE }}
+      >
+        <Panel className="north" variant="flush">
+          <div className="north__main">
+            <Kicker>North Star · trusted partner-attributed revenue realized</Kicker>
+            <div className="north__figure">
+              <span className="north__ccy">USD</span>
+              <Metric
+                value={m.realized}
+                format={(n) => Math.round(n).toLocaleString()}
+                className="north__num"
+              />
+            </div>
+            <p className="north__note">
+              Credited via a canonical attribution, made eligible with an explanation, and
+              realized without dispute reversal.
+            </p>
           </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon pending">⏳</div>
-          <div className="stat-info">
-            <h3>${overview?.pendingPayments?.toLocaleString() || '0'}</h3>
-            <p>Pending Payments</p>
+          <div className="north__split">
+            <div className="north__stat">
+              <span className="label">Credited</span>
+              <Money amount={m.credited} compact className="north__statnum" />
+            </div>
+            <div className="north__stat">
+              <span className="label">Eligible</span>
+              <Money amount={m.eligible} compact brass className="north__statnum" />
+            </div>
+            <div className="north__stat">
+              <span className="label">Realized</span>
+              <Money amount={m.realized} compact className="north__statnum" />
+            </div>
           </div>
-        </div>
-      </div>
+        </Panel>
+      </motion.div>
 
-      <div className="dashboard-sections">
-        <div className="section">
-          <h2>Contract Status Distribution</h2>
-          <div className="chart-placeholder">
-            <div className="status-bar">
-              <div className="status-segment active" style={{ width: `${overview?.contractStatus?.active || 0}%` }}>
-                Active ({overview?.contractStatus?.active || 0}%)
+      {/* Drivers */}
+      <section className="cc__drivers">
+        <DriverTile label="Active partners">
+          <Metric value={m.activePartners} className="mono" />
+        </DriverTile>
+        <DriverTile label="Open claims">
+          <Metric value={m.openClaims} className="mono" />
+        </DriverTile>
+        <DriverTile label="Eligible now" sub="awaiting settlement">
+          <Money amount={m.eligible} compact brass />
+        </DriverTile>
+        <DriverTile label="Exception queue" sub="needs a human">
+          <Metric value={m.exceptions.length} className="mono" />
+        </DriverTile>
+      </section>
+
+      {/* Funnel */}
+      <Panel className="funnel rv-pad">
+        <div className="funnel__head">
+          <Kicker>Claim ledger · capture to settle</Kicker>
+          <Button to="/claims" variant="quiet" size="sm" arrow>
+            Open ledger
+          </Button>
+        </div>
+        <div className="funnel__stages">
+          {m.funnel.map((s, i) => (
+            <div className="stage" key={s.label}>
+              <div className="stage__top">
+                <span className="stage__label">{s.label}</span>
+                <span className="stage__n mono tnum">{s.n}</span>
               </div>
-              <div className="status-segment pending" style={{ width: `${overview?.contractStatus?.pending || 0}%` }}>
-                Pending ({overview?.contractStatus?.pending || 0}%)
+              <div className="rv-meter stage__meter">
+                <motion.div
+                  className="rv-meter__fill"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(s.n / funnelMax) * 100}%` }}
+                  transition={{ duration: 0.7, delay: i * 0.06, ease: EASE }}
+                />
               </div>
-              <div className="status-segment expired" style={{ width: `${overview?.contractStatus?.expired || 0}%` }}>
-                Expired ({overview?.contractStatus?.expired || 0}%)
-              </div>
             </div>
-          </div>
+          ))}
         </div>
+      </Panel>
 
-        <div className="section">
-          <h2>Recent Activity</h2>
-          <div className="activity-list">
-            <div className="activity-item">
-              <span className="activity-icon">➕</span>
-              <span>New partner onboarded</span>
-              <span className="activity-time">2 hours ago</span>
-            </div>
-            <div className="activity-item">
-              <span className="activity-icon">💵</span>
-              <span>Revenue share calculated</span>
-              <span className="activity-time">5 hours ago</span>
-            </div>
-            <div className="activity-item">
-              <span className="activity-icon">✅</span>
-              <span>Payment processed</span>
-              <span className="activity-time">1 day ago</span>
-            </div>
+      {/* Lower split */}
+      <div className="cc__lower">
+        <Panel className="rv-pad attn">
+          <div className="attn__head">
+            <Kicker>Needs attention</Kicker>
+            <span className="label attn__count">{m.exceptions.length}</span>
           </div>
-        </div>
-      </div>
+          {loading ? (
+            <div className="attn__loading">
+              <span className="rv-shimmer" />
+              <span className="rv-shimmer" />
+              <span className="rv-shimmer" />
+            </div>
+          ) : m.exceptions.length === 0 ? (
+            <div className="rv-empty">
+              <span className="serif attn__empty">The queue is clear.</span>
+              <span className="label">No claims are waiting on a human.</span>
+            </div>
+          ) : (
+            <ul className="attn__list">
+              {m.exceptions.slice(0, 6).map((c) => (
+                <li className="attn__row" key={c._id}>
+                  <div className="attn__who">
+                    <span className="attn__partner">{c.partner_name || 'Unassigned'}</span>
+                    <span className="attn__cust">{c.customer_account || '—'}</span>
+                  </div>
+                  <Money amount={c.estimated_value} compact className="attn__val" />
+                  <StatusTag
+                    status={c.preflight_status !== 'pass' ? c.preflight_status : c.claim_status}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
 
-      <div className="quick-actions">
-        <h2>Quick Actions</h2>
-        <div className="action-buttons">
-          <Link to="/partners" className="action-btn">Manage Partners</Link>
-          <Link to="/contracts" className="action-btn">View Contracts</Link>
-          <Link to="/revenue" className="action-btn">Process Revenue</Link>
-          <Link to="/kpis" className="action-btn">Track KPIs</Link>
-        </div>
+        <Panel className="rv-pad decisions">
+          <div className="attn__head">
+            <Kicker>Cadence · recent decisions</Kicker>
+            <Button to="/cadence" variant="quiet" size="sm" arrow>
+              All
+            </Button>
+          </div>
+          {decisions.length === 0 ? (
+            <div className="rv-empty">
+              <span className="serif attn__empty">No decisions logged yet.</span>
+              <span className="label">Investment calls appear here with their outcomes.</span>
+            </div>
+          ) : (
+            <ul className="dec__list">
+              {decisions.slice(0, 5).map((d) => (
+                <li className="dec__row" key={d._id}>
+                  <span className="dec__dot" data-status={d.outcome_status || 'pending'} />
+                  <div className="dec__body">
+                    <span className="dec__title">{d.title || humanize(d.decision_type)}</span>
+                    <span className="dec__meta">
+                      {humanize(d.decision_type)}
+                      {d.partner_name ? ` · ${d.partner_name}` : ''}
+                    </span>
+                  </div>
+                  <StatusTag status={d.outcome_status || 'pending'} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

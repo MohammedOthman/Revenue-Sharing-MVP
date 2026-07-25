@@ -1,0 +1,309 @@
+/* ============================================================================
+   REVEN — shared UI primitives
+   One cohesive language: self-colored edges felt not drawn, tight directional
+   shadows, in-family status tones, buttons that change state cleanly (no lift,
+   no underline-fill), mono only on data. Every class is .rv-* namespaced.
+   ========================================================================== */
+
+/* ---- Surface / panel --------------------------------------------------- */
+.rv-panel {
+  position: relative;
+  background: color-mix(in oklab, var(--ink-820) 92%, transparent);
+  border: 1px solid var(--edge);
+  border-radius: var(--r-lg);
+  /* felt top-lip highlight + tight directional shadow */
+  box-shadow: inset 0 1px 0 var(--edge-top), var(--shadow-md);
+}
+.rv-panel--sunk {
+  background: var(--ink-870);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.rv-panel--flush {
+  box-shadow: inset 0 1px 0 var(--edge-top);
+}
+
+.rv-pad {
+  padding: var(--sp-5);
+}
+.rv-pad-lg {
+  padding: var(--sp-6);
+}
+
+/* ---- Kicker / label (one deliberate tracked-caps role) ------------------ */
+.rv-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+/* ---- Buttons: considered, single-purpose, no lift, no underline-fill ---- */
+.rv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 0.62rem 1.05rem;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  font-weight: 550;
+  letter-spacing: 0.005em;
+  color: var(--text-hi);
+  background: var(--ink-780);
+  border: 1px solid var(--edge);
+  transition: background var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+}
+.rv-btn:hover {
+  background: var(--ink-720);
+  border-color: var(--edge-strong);
+}
+.rv-btn:active {
+  background: var(--ink-820);
+}
+.rv-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primary: a solid verdigris surface — the one confident action. The label
+   clears the fill by a wide value gap (legibility on fill is non-negotiable). */
+.rv-btn--primary {
+  color: #ffffff;
+  background: linear-gradient(180deg, var(--brand-500), var(--brand-600));
+  border-color: transparent;
+  box-shadow: var(--shadow-brand);
+}
+.rv-btn--primary:hover {
+  background: linear-gradient(180deg, var(--brand-400), var(--brand-500));
+}
+.rv-btn--primary:active {
+  background: var(--brand-600);
+}
+
+.rv-btn--ghost {
+  background: transparent;
+  border-color: var(--edge);
+}
+.rv-btn--ghost:hover {
+  background: color-mix(in oklab, var(--text-hi) 6%, transparent);
+}
+
+.rv-btn--quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-mid);
+  padding: 0.4rem 0.6rem;
+}
+.rv-btn--quiet:hover {
+  background: color-mix(in oklab, var(--text-hi) 6%, transparent);
+  color: var(--text-hi);
+}
+
+.rv-btn--sm {
+  padding: 0.4rem 0.72rem;
+  font-size: var(--fs-xs);
+}
+
+/* The considered icon: an up-right arrow that slides on hover (no boop). */
+.rv-btn__arrow {
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.rv-btn:hover .rv-btn__arrow {
+  transform: translate(2px, -2px);
+}
+
+/* ---- Status tag: in-family tones, honest surfaces (no inner glow) ------- */
+.rv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+  padding: 0.2em 0.62em;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-xs);
+  font-weight: 550;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--text-mid);
+  background: color-mix(in oklab, var(--text-hi) 5%, transparent);
+  border: 1px solid var(--edge);
+}
+.rv-tag__dot {
+  width: 0.42em;
+  height: 0.42em;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+.rv-tag[data-tone="ok"] {
+  color: var(--ok);
+  background: var(--ok-tint);
+  border-color: color-mix(in oklab, var(--ok) 22%, transparent);
+}
+.rv-tag[data-tone="wait"] {
+  color: var(--wait);
+  background: var(--wait-tint);
+  border-color: color-mix(in oklab, var(--wait) 22%, transparent);
+}
+.rv-tag[data-tone="warn"] {
+  color: var(--warn);
+  background: var(--warn-tint);
+  border-color: color-mix(in oklab, var(--warn) 22%, transparent);
+}
+.rv-tag[data-tone="stop"] {
+  color: var(--stop);
+  background: var(--stop-tint);
+  border-color: color-mix(in oklab, var(--stop) 24%, transparent);
+}
+.rv-tag[data-tone="hold"] {
+  color: var(--hold);
+  background: var(--hold-tint);
+  border-color: color-mix(in oklab, var(--hold) 22%, transparent);
+}
+
+/* ---- Money / data value ------------------------------------------------ */
+.rv-money {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.01em;
+  color: var(--text-hi);
+}
+.rv-money--brass {
+  color: var(--brass-300);
+}
+.rv-money__ccy {
+  font-size: 0.7em;
+  color: var(--text-lo);
+  margin-inline-end: 0.35em;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ---- Fields ------------------------------------------------------------ */
+.rv-field {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  background: var(--ink-870);
+  border: 1px solid var(--edge);
+  border-radius: var(--r-sm);
+  color: var(--text-hi);
+  font-size: var(--fs-body);
+  transition: border-color var(--dur-2) var(--ease-out),
+    background var(--dur-2) var(--ease-out);
+}
+.rv-field::placeholder {
+  color: var(--text-faint);
+}
+.rv-field:focus {
+  outline: none;
+  border-color: var(--brand-400);
+  background: var(--ink-850);
+}
+.rv-field-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+}
+
+/* ---- Divider with intent (rounded caps, not a bare hairline) ------------ */
+.rv-rule {
+  height: 2px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: linear-gradient(
+    90deg,
+    var(--edge-strong),
+    var(--edge) 40%,
+    transparent
+  );
+}
+
+/* ---- Meter / progress (fills full track, stable caps) ------------------- */
+.rv-meter {
+  position: relative;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--ink-720);
+  overflow: hidden;
+}
+.rv-meter__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brand-500), var(--brand-300));
+}
+
+/* ---- Table (data grid) ------------------------------------------------- */
+.rv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.rv-table thead th {
+  text-align: start;
+  padding: 0.7rem 1rem;
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-lo);
+  border-bottom: 1px solid var(--edge);
+  white-space: nowrap;
+}
+.rv-table tbody td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--edge-soft);
+  color: var(--text-mid);
+  vertical-align: middle;
+}
+.rv-table tbody tr {
+  transition: background var(--dur-1) var(--ease-out);
+}
+.rv-table tbody tr:hover {
+  background: color-mix(in oklab, var(--text-hi) 3%, transparent);
+}
+.rv-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.rv-table__primary {
+  color: var(--text-hi);
+  font-weight: 500;
+}
+
+/* ---- Empty / loading states ------------------------------------------- */
+.rv-empty {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-8) var(--sp-5);
+  text-align: center;
+  color: var(--text-lo);
+}
+.rv-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--ink-820) 0%,
+    var(--ink-780) 50%,
+    var(--ink-820) 100%
+  );
+  background-size: 200% 100%;
+  animation: rv-shimmer 1.3s var(--ease-in-out) infinite;
+  border-radius: var(--r-sm);
+}
+@keyframes rv-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Scroll region for wide content (never let the page scroll x) ------- */
+.rv-scroll-x {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}

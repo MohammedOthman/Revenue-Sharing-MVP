@@ -15,27 +15,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Establish session from Base44 on mount. me() rejects when unauthenticated;
+  // that simply means "signed out", not an error to surface.
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
-    setLoading(false);
+    let active = true;
+    (async () => {
+      try {
+        const current = await authService.me();
+        if (active) setUser(current);
+      } catch {
+        if (active) setUser(null);
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const login = async (email, password) => {
-    const response = await authService.login(email, password);
-    localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    setUser(response.user);
-    return response;
+    const { user: current } = await authService.login(email, password);
+    setUser(current);
+    return current;
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } finally {
+      setUser(null);
+    }
   };
 
   const value = {
