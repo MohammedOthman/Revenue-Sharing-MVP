@@ -1,4 +1,4 @@
-# Revenue-Sharing-MVP
+# Reven
 
 **Product:** Partner Revenue OS (commercial brand: **Reven**)
 **Strategy in one sentence:** Enter the market as a **claim-centric PRM**, earn the right to become the **bilateral revenue-sharing system of record**, and expand — over gated phases — into **Revenue-Sharing Infrastructure for B2B entities**.
