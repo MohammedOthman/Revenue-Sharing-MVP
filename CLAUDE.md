@@ -13,6 +13,12 @@ Project context + handoff so any future session can continue without rediscovery
 - **`revenue-share-platform/`** — a full-stack B2B revenue-share application:
   **Node.js + Express + PostgreSQL** backend and **React + Vite** frontend, with
   partner, contract, revenue, KPI, and legal-document modules plus JWT auth.
+- **`brand/`** — the **source of truth for the Reven brand & design system**: the
+  master guidelines PDF (`brand/source/`), a full verbatim transcription
+  (`brand/BRAND_GUIDELINES.md`), and machine-readable design tokens
+  (`brand/tokens/` — JSON, CSS custom properties, ESM). Any visual/brand work
+  (deck, product UI, one-pagers) must conform to it; extend the guidelines there
+  first, then propagate to tokens and code.
 
 ## Governing phase model
 - Capture (PRM) → Settle (revenue system-of-record) → Orchestrate (partnership

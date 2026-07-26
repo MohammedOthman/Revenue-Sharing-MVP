@@ -1,0 +1,74 @@
+/* ============================================================================
+ * Reven Brand System — CSS custom properties
+ * Source of truth: brand/source/Reven_Brand_Guidelines.pdf (v1.0, July 2026)
+ * Full spec: brand/BRAND_GUIDELINES.md
+ *
+ * Rule: Blue is the only saturated hue in the system.
+ *       Everything else is navy, cream, or gray.
+ *
+ * To adopt in the frontend, @import this file (or link the fonts + copy the
+ * :root block) and reference the variables, e.g. color: var(--reven-ink);
+ * ========================================================================= */
+
+/* Typefaces — self-host or load from a font service.
+   Display: Sora · Body: Manrope · Label: IBM Plex Mono */
+
+:root {
+  /* --- Color · Primary ------------------------------------------------ */
+  --reven-ink:          #0F1629; /* Primary text & logo                    */
+  --reven-canvas:       #FBFAF7; /* Default bg, never pure white           */
+  --reven-card-white:   #FFFFFF; /* Elevated surfaces on canvas            */
+  --reven-accent-blue:  #2C5BFF; /* The only saturated hue — signal        */
+  --reven-accent-deep:  #1E47E0; /* Gradient partner for Accent Blue       */
+  --reven-accent-pale:  #8DA4FF; /* Headline highlights on dark panels     */
+  --reven-accent-pale-2:#AEC5FF; /* Accent Pale, lighter alternate         */
+
+  /* --- Color · Muted / supporting ------------------------------------- */
+  --reven-body:         #5B6172; /* Body copy                              */
+  --reven-caption:      #6B7180; /* Captions                               */
+  --reven-tertiary:     #8A8F9C; /* Tertiary / mono labels                 */
+  --reven-micro:        #9AA3B5; /* Micro-labels                           */
+
+  /* --- Color · Status (use sparingly, never primary) ------------------ */
+  --reven-caution:      #C98A1B; /* Caution / measure                      */
+  --reven-alert:        #C0392B; /* Alert / dispute                        */
+  --reven-positive:     #1F8A5B; /* Positive / live                        */
+
+  /* --- Backgrounds · exactly three surfaces --------------------------- */
+  --reven-bg-flat:      #FBFAF7; /* Flat Canvas — default, ~80%            */
+  --reven-bg-wash:      radial-gradient(circle at 50% 40%, #F0EAFF, #FBFAF7); /* Radial Wash — ~15% */
+  --reven-bg-navy:      #0F1629; /* Deep Navy — ~5% (gravity slides)       */
+  --reven-bg-navy-grad: linear-gradient(180deg, #1F1740, #0F1629); /* Deep Navy gradient variant */
+
+  /* --- Typography ----------------------------------------------------- */
+  --reven-font-display: "Sora", system-ui, sans-serif;
+  --reven-font-body:    "Manrope", system-ui, sans-serif;
+  --reven-font-label:   "IBM Plex Mono", ui-monospace, monospace;
+
+  --reven-display-weight-regular: 700;
+  --reven-display-weight-bold:    800;
+  --reven-display-tracking:       -0.03em;  /* range: -0.02em to -0.035em  */
+
+  --reven-body-tracking:          0;
+
+  --reven-label-weight:           500;       /* range: 400–600             */
+  --reven-label-tracking:         0.16em;    /* range: 0.08em to 0.24em    */
+  --reven-label-transform:        uppercase;
+
+  /* --- Layout --------------------------------------------------------- */
+  --reven-margin-top:     84px;   /* range: 78–84px                        */
+  --reven-margin-bottom:  108px;  /* range: 104–112px                      */
+  --reven-margin-side:    104px;
+  --reven-footer-inset:   46px;
+
+  /* --- Radius (implementation convenience, observed from components) --- */
+  --reven-radius-card:  16px;
+  --reven-radius-panel: 20px;
+  --reven-radius-pill:  999px;
+  --reven-radius-chip:  8px;
+
+  /* --- Motif ---------------------------------------------------------- */
+  --reven-motif-stroke:  1.2px;    /* range: 1–1.4px                       */
+  --reven-motif-opacity: 0.35;     /* range: 0.15–0.55                     */
+  --reven-motif-color:   #2C5BFF;  /* Accent Blue only                     */
+}
