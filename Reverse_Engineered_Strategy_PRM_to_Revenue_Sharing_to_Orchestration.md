@@ -258,7 +258,9 @@ Value is post-sale; "no recurring impact, no recurring revenue." **Steps:** inst
 Category kings capture **~76% of category *market cap*** — but that's measured among **surviving, VC-funded post-2000 tech kings** (survivorship bias; it's not a 76% chance of winning). **Steps:** develop the POV now (name the "old way"); don't launch a category banner until you have proof; own the narrower **money/settlement** category, not "orchestration" (Crossbeam owns ELG).
 
 ### G8. Pricing power (through-line)
-Price on value governed, not seats. **Steps:** Phase 1 — per active partner / partner-attributed revenue; Phase 2 — add value-based % (~1–3%) of revenue-under-management; Phase 3 — add basis points on settled flow. Never anchor to the ~$299 PRM floor.
+**Land on seats; expand on value governed.** *(Revised 2026-08-17 — this supersedes the prior "price on value governed, not seats" prescription.)* **Steps:** Phase 1 — **SAR 50 per seat per month**, published and self-serve, deliberately beneath any business-case threshold, to buy distribution rather than margin; Phase 2 — expand the landed account into **enterprise contracts on the partnership intelligence layers** (price not yet set; modelled band SAR 128k–757k internal-only); Phase 3 — flat per-payout fees on settled flow, capped, fenced and separately reported. **Never a visible percentage of the counterparty's money at any phase.**
+
+The prior model deliberately refused the PRM price anchor by pricing *above* it. The current model refuses it by pricing *far below* it and taking the value on expansion instead — the anchor is escaped either way, but the seat entry also removes the procurement cycle that was the binding constraint on a pre-seed company's sales velocity. The binding risk moves accordingly: **it is now the land-to-expand conversion rate.** Canonical model: [`Reven_Pricing_Executive_Summary.md`](Reven_Pricing_Executive_Summary.md); sizing: [`Reven_Market_Sizing_TAM_SAM_SOM.md`](Reven_Market_Sizing_TAM_SAM_SOM.md).
 
 ---
 

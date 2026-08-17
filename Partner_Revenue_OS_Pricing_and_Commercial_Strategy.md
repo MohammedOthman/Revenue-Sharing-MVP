@@ -5,6 +5,13 @@
 **Companion to:** `Partner_Revenue_OS_Venture_Scale_Narrative.md`, `Partner_Revenue_OS_Master_Strategy_Dossier.md`, `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md`, `partner-revenue-os-PDR-v5.md`, `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md`, `GTM_Operating_Manual.md`, `Integration_Layer_and_API_Data_Flows_Manual.md`
 **Stage reality:** pre-revenue · pre-MVP/early-build · no signed customers, pilots, or bookings · pre-seed · SAR/GCC operating base.
 
+> ### ⚠️ Superseded pricing model (2026-08-17)
+> The pricing structures catalogued here assume **per-active-partner banding with unlimited internal seats**. **Reven now prices at SAR 50 per seat, per month** — one published, self-serve, land-and-expand price — expanding into **enterprise contracts on the partnership intelligence layers, which are not yet priced.**
+>
+> Canonical model: [`Reven_Pricing_Executive_Summary.md`](Reven_Pricing_Executive_Summary.md) · Sizing: [`Reven_Market_Sizing_TAM_SAM_SOM.md`](Reven_Market_Sizing_TAM_SAM_SOM.md).
+>
+> The **strategic reasoning** in this document — expansion-dimension design, the take-rate refusal, GCC procurement fit, margin protection, and the venture-scale journey — remains valid and is what the new model was built from. The **specific prices, bands and tier structures** do not. Where this conflicts with the executive summary, **the executive summary governs.**
+
 ---
 
 ## 0. How to read this document (evidence discipline)

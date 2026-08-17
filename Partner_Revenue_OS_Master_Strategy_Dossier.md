@@ -23,7 +23,7 @@
 2. **Make the moat a *neutral, two-sided* bilateral settlement system-of-record** — confirmed unowned at the core (~75%, two independent research tracks). Be the ledger-of-record *without moving money* first (dodge the licensing trap); add basis-points-on-flow later.
 3. **There is a competitive clock: AppDirect** (bought Tackle.io Dec 2025 + PartnerStack Apr 2026) is the #1 threat and could ship bilateral settlement in 2–4 quarters — but it's the marketplace taking a cut, so it is **structurally non-neutral**. Neutrality is the one thing it can't claim. Move.
 4. **Own "Partner Revenue / settlement," not "partnership orchestration"** (a crowded, adoption-fatigued descriptor). Position adjacent to Ecosystem-Led Growth.
-5. **Architect the Phase-3 network into Phase 1** via cross-tenant identity; price per-active-partner → per-payout+bps → bps-on-revenue-under-management as each phase earns the next.
+5. **Architect the Phase-3 network into Phase 1** via cross-tenant identity; price **SAR 50/seat/month (published, self-serve) → enterprise intelligence-layer contracts (price TBD) → flat per-payout fees (capped, separately reported)** as each phase earns the next. *(Pricing revised 2026-08-17; see [`Reven_Pricing_Executive_Summary.md`](Reven_Pricing_Executive_Summary.md).)*
 
 **The independent anchors to build the case on** (everything else is color): Canalys/Omdia — **partner-delivered IT ≈ 70% of IT spend (2025)**; Omdia — **cloud-marketplace software $30B→$163B by 2030**; Forrester — **~67% expect >30% YoY indirect-revenue growth**; HubSpot×Canalys — **50% of orgs attribute 26%+ of revenue to partners; 40% have no partner-ops FTE**; Gartner — the category is **transitioning to PERM** (2025 Market Guide).
 

@@ -9,6 +9,12 @@ The 10x expansion of `Reven_100_Strategic_Implications.md`. The five parent impl
 >
 > **Read every "Wave 24 / 30 Jun 2026 / SAR 375k" reference below as "Wave 25 / 1 Feb 2027 / SAR 187,500."** The strategic logic of each item is unchanged — and in fact strengthened: at SAR 187,500 the mandate reaches the small agents, resellers and consultancies that larger firms *pay*, so for the first time **both sides** of a partner payment are e-invoiced, which is what makes invoice-anchored bilateral reconciliation possible. Full analysis: [`Reven_Economic_Trends_and_Why_Now.md`](Reven_Economic_Trends_and_Why_Now.md) §2 Trend 7.
 
+> ### ⚠️ Pricing-model correction (2026-08-17) — also applies atlas-wide
+> Items below that prescribe **per-active-partner pricing, unlimited seats, or basis points on revenue-under-management** describe a superseded model. **Reven prices at SAR 50 per seat per month** — published, self-serve, land-and-expand — expanding into **enterprise contracts on the partnership intelligence layers (price not yet set)**. The take-rate refusal is unchanged and absolute. Canonical model: [`Reven_Pricing_Executive_Summary.md`](Reven_Pricing_Executive_Summary.md); sizing: [`Reven_Market_Sizing_TAM_SAM_SOM.md`](Reven_Market_Sizing_TAM_SAM_SOM.md).
+>
+> ### ⚠️ Scope correction (2026-08-17)
+> This atlas is written **ICT/channel-first**. Reven operates across **every industry with partnership and revenue-share economics** — insurance, franchising, travel, logistics, construction, healthcare, retail, telecom and more. Read "partner" as "counterparty," and "channel" as "intermediary network." On published Saudi figures the ICT channel is **not** the largest revenue-share pool in the Kingdom.
+
 **One-line thesis (the spine of all 1,000).** The partner-software market (Gartner's 2025 rename: PRM → **Partner & Ecosystem Relationship Management / PERM**) is consolidating into ~5 horizontal winners (Forrester's "~159 → ~5"; AppDirect's roll-up of Tackle + PartnerStack). Reven should **not** enter head-on as a broad "orchestrator" (a label incumbents own) but on the open **seam** the consolidators form *around* rather than *into*: a bilateral, compliance-native **partner-revenue settlement system-of-record** (append-only claim ledger + server-side attribution + ZATCA/WHT compliance) — then *earn* orchestration by owning the heaviest data-gravity record. The window is quarters.
 
 ---
