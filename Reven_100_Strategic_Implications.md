@@ -176,7 +176,7 @@ Evidence base: the audit + PERM deep dive, plus fresh research on category desig
 
 **32. If GCC: position as "the only ZATCA-clean partner-revenue settlement."**
 - *Strategic:* Hyper-specific, regulation-anchored positioning is uncopyable by global horizontals.
-- *Tactical:* Lead Saudi GTM with the Wave-24 (30 Jun 2026) compliance deadline as the hook.
+- *Tactical:* Lead Saudi GTM with the **Wave-25 (> SAR 187,500, 1 Feb 2027)** compliance deadline as the hook. *(Wave 24 / 30 Jun 2026 has passed — do not cite it as a live deadline.)*
 - *Rationale:* Specificity converts; "global partner platform" competes with everyone, "ZATCA-clean partner settlement" competes with no one.
 
 **33. Start analyst relations as category-seeding, not vanity.**
@@ -441,9 +441,9 @@ Evidence base: the audit + PERM deep dive, plus fresh research on category desig
 - *Tactical:* Set up competitive monitoring on their releases, job posts, and docs for settlement/compliance signals.
 - *Rationale:* They're the most likely party to close your seam; early warning lets you out-localize them (compliance) before they arrive.
 
-**83. Use ZATCA Wave 24 (30 Jun 2026) as a GTM forcing function.**
-- *Strategic:* A hard regulatory deadline manufactures urgency in the buyer.
-- *Tactical:* Build a KSA campaign around "be Wave-24 compliant on partner payouts."
+**83. Use ZATCA Wave 25 (> SAR 187,500, 1 Feb 2027) as a GTM forcing function.**
+- *Strategic:* A hard regulatory deadline manufactures urgency in the buyer. Wave 25 is the *stronger* hook than the expired Wave 24: at SAR 187,500 it pulls the small agents, resellers and consultancies that get **paid** into clearance — so for the first time **both sides** of a partner payment are e-invoiced.
+- *Tactical:* Build a KSA campaign around "be Wave-25 compliant on partner payouts."
 - *Rationale:* Regulatory deadlines compress sales cycles; you ride a mandate instead of manufacturing demand.
 
 **84. Stand up a 3–5 lighthouse design-partner program now.**

@@ -227,7 +227,7 @@ KSA VC **$750M FY2024** (non-mega +34%, seed +64%); **$860M H1 2025 (+116%)**, 5
 # PART IX — DEMAND, BUYER BEHAVIOR & ICP (reconciled)
 
 **The reconciled wedge message (this supersedes any attribution-first framing elsewhere): lead with payout accuracy + reconciliation + ZATCA/audit compliance; treat attribution as the *defensible supporting* layer, not the opening line.** Verification deflated the leakage narrative — the "EY 1–5% of EBITDA" figure is untraceable, a "42% of CFOs" stat appears fabricated, and "Partner Attribution Leak" is confirmed unquantified. The hard, least-vendor-biased demand drivers, ranked:
-1. **Regulatory — ZATCA Phase 2** (dated, penalty-backed; Wave 24 > SAR 375K by 30 Jun 2026). *Strongest.*
+1. **Regulatory — ZATCA Phase 2** (dated, penalty-backed; **Wave 25 > SAR 187,500 by 1 Feb 2027** — Wave 24 / 30 Jun 2026 has passed). *Strongest.*
 2. **Audit / rev-rec — ASC 606 / SOX** (agent-vs-principal, commission capitalization, clawbacks).
 3. Channel conflict / payout disputes; failed reconciliation/overpayment; new program / marketplace pressure.
 

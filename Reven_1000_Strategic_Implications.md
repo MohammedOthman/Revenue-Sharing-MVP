@@ -4,6 +4,11 @@ The 10x expansion of `Reven_100_Strategic_Implications.md`. The five parent impl
 
 **How to use this.** This is an *atlas / operating checklist*, not 1,000 equally-novel epiphanies — at this resolution the value is coverage and navigability: a sweep across every surface (category, positioning, product, compliance, moat, GTM, capital, risk) so nothing is unconsidered, indexable by sub-cluster. Read by section, not front-to-back. Pair it with the curated top-tier in `Reven_100_Strategic_Implications.md` and the analysis in `Reven_PERM_Category_Deep_Dive.md` / `Reven_Product_Architecture_Audit.md`.
 
+> ### ⚠️ Dated-fact correction (2026-08-17) — applies to every item in this atlas
+> This atlas was written against **ZATCA Wave 24** (> SAR 375,000, integrate by **30 Jun 2026**). **That deadline has passed.** On **24 Jul 2026** ZATCA announced **Wave 25**: threshold halved to **> SAR 187,500** of VAT-subject revenue in *any* of 2022–2025, integration deadline **1 February 2027**.
+>
+> **Read every "Wave 24 / 30 Jun 2026 / SAR 375k" reference below as "Wave 25 / 1 Feb 2027 / SAR 187,500."** The strategic logic of each item is unchanged — and in fact strengthened: at SAR 187,500 the mandate reaches the small agents, resellers and consultancies that larger firms *pay*, so for the first time **both sides** of a partner payment are e-invoiced, which is what makes invoice-anchored bilateral reconciliation possible. Full analysis: [`Reven_Economic_Trends_and_Why_Now.md`](Reven_Economic_Trends_and_Why_Now.md) §2 Trend 7.
+
 **One-line thesis (the spine of all 1,000).** The partner-software market (Gartner's 2025 rename: PRM → **Partner & Ecosystem Relationship Management / PERM**) is consolidating into ~5 horizontal winners (Forrester's "~159 → ~5"; AppDirect's roll-up of Tackle + PartnerStack). Reven should **not** enter head-on as a broad "orchestrator" (a label incumbents own) but on the open **seam** the consolidators form *around* rather than *into*: a bilateral, compliance-native **partner-revenue settlement system-of-record** (append-only claim ledger + server-side attribution + ZATCA/WHT compliance) — then *earn* orchestration by owning the heaviest data-gravity record. The window is quarters.
 
 ---

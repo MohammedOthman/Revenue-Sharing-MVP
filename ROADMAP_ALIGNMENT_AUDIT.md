@@ -130,3 +130,25 @@ The misalignments found are **language and gating-clarity problems, not architec
 - [x] `Large_Enterprise_Client_Onboarding_Manual.md` — F-4 customer-journey vs product-phase note (header + §6); F-6 sentence (§0, §3.2); payout-eligibility preview annotation.
 - [x] `Partner_Revenue_OS_Venture_Scale_Narrative.md` — F-6 sentence (§1); "~24%" stat removed in all 4 locations (replaced with HubSpot×Canalys 2022 + Forrester 2025); stale "$87B→$133B" TAM retired (replaced with MCIT/GASTAT 2024 actuals + IDC ICT-spend anchor) in §3 and Sources; venture-stage-to-phase concordance header.
 - [x] `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md` — F-6 sentence in Business context; 12-month operational phases mapped to Product Phase 1 Capture.
+
+### 5.1 ZATCA wave correction (applied 2026-08-17)
+
+**Finding F-7 — expired compliance clock.** The corpus ran its GTM forcing function on **ZATCA Wave 24** (> SAR 375,000, integrate by **30 Jun 2026**), which **passed on 30 June 2026**. **Wave 25** (> SAR 187,500 in any of 2022–2025, integrate by **1 Feb 2027**) was announced **24 Jul 2026** and is the live deadline. Wave 25 is the stronger hook: it e-invoices the *payee* side of partner payments. Analysis and full rationale in [`Reven_Economic_Trends_and_Why_Now.md`](Reven_Economic_Trends_and_Why_Now.md) §2 Trend 7 and §3.2 (dated calendar).
+
+Corrected in place:
+
+- [x] `Reven_Execution_Plan_Next_2_Quarters.md` — beachhead forcing function, build-order item 5, ZATCA/WHT readiness clock, Q3 GTM campaign name, and the Q4 dated-proof hook.
+- [x] `Integration_Layer_and_API_Data_Flows_Manual.md` — §13 rollout ladder extended with Wave 25 + the both-sides-e-invoiced consequence.
+- [x] `Reven_100_Strategic_Implications.md` — items 32 (tactical hook) and 83 (retitled to Wave 25, with the payee-side rationale).
+- [x] `Reven_1000_Strategic_Implications.md` — atlas-wide dated-fact correction banner at the head (covers all 39 in-body references without churning each item).
+- [x] `Reverse_Engineered_Strategy_PRM_to_Revenue_Sharing_to_Orchestration.md` — compliance-wedge paragraph.
+- [x] `Partner_Revenue_OS_Master_Strategy_Dossier.md` / `Reverse_Engineered_Strategy_Deep_Dive_Companion.md` — the ranked demand-driver lists.
+- [x] `Saudi_Value_Pool_and_ICP_Strategic_Analysis.md` — the "compliance manufactures the beachhead" finding.
+- [x] `Saudi_Riyal_Map_Market_Sizing_and_Value_Capture.md` — compliance add-ons unlock condition.
+- [x] `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md` / `Pre_Seed_12M_Model_Founder_Questionnaire.md` — J4 + KSA fact tables (note: at the Wave-25 threshold **Reven itself** falls in scope once invoicing — budget ASP/integration cost in year one).
+
+**Left deliberately uncorrected** (Wave 24 is cited there as *historical* fact or as an argument that survives the change, not as a live deadline) — review if these are reused externally:
+
+- [ ] `Partner_Revenue_OS_Pricing_Strategy_Red_Team.md` (6 refs) — the "compliance is a time-boxed wedge that narrows as the mandate universalizes" argument. Wave 25 **strengthens** it; the dates should still be refreshed before any external reuse.
+- [ ] `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md` (5 refs) and `Reven_Pricing_Architecture_Deep_Research.md` (3 refs) — compliance-ladder L1 timing assumptions ("expect to rebundle toward table-stakes by 2026"). Re-baseline the rebundling year against the Wave-25/Wave-26 ladder when pricing is next revisited.
+- [ ] **Deck / investor materials** (`Reven_Pitch_Deck.pdf`) — not machine-editable here. **If any slide cites Wave 24 or 30 Jun 2026, it is selling against an expired deadline and must be updated before the next investor conversation.**

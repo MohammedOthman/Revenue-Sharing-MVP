@@ -151,7 +151,7 @@ Revenue-share document mapping: commission = standard invoice (388/01, 15% VAT);
 ### 5.1 The messaging shift (important): lead with payout accuracy + reconciliation + compliance, not "attribution leakage"
 
 Verification deflated the leakage narrative: the **"EY 1–5% of EBITDA leakage" figure is untraceable** to a primary EY document; a **"42% of CFOs / 2024 EY Revenue Assurance study" appears fabricated**; **"Partner Attribution Leak" is confirmed unquantified.** The hard, least-vendor-biased demand drivers are:
-1. **Regulatory — ZATCA Phase 2** (dated, penalty-backed; Wave 24 >SAR 375K by 30 Jun 2026). *Strongest, hardest evidence.*
+1. **Regulatory — ZATCA Phase 2** (dated, penalty-backed; **Wave 25 > SAR 187,500 by 1 Feb 2027** — Wave 24 / 30 Jun 2026 has passed). *Strongest, hardest evidence.*
 2. **Audit / rev-rec — ASC 606 / SOX** (agent-vs-principal, commission capitalization, clawbacks; manual reconciliation = audit risk).
 3. Channel conflict / payout disputes; failed reconciliation/overpayment; new program / marketplace pressure (in descending evidential strength).
 

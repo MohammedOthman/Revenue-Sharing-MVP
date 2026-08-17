@@ -173,7 +173,7 @@
 | J1 | Zakat vs CIT vs mixed (from A7)? Model **Zakat on net assets even pre-revenue**? |  | 📊 yes — **2.5%** on net-asset floor, owed even at a loss (Saudi/GCC-owned share) |
 | J2 | VAT registration month + filing cadence? |  | 📊 register at SAR 375k turnover; quarterly if ≤ SAR 40M (else monthly); remit ≤30 days of period-end |
 | J3 | Top foreign SaaS/AI/contractor vendors + WHT classification (royalty 15% vs technical service 5%)? |  | 📊 ZATCA tends to treat SaaS/API as **royalty 15%** — *disputed; model at 15% and verify* |
-| J4 | ZATCA Fatoorah Phase-2 wave/deadline applicable? |  | 📊 Wave 24 (> SAR 375k) → ~30 Jun 2026 API integration |
+| J4 | ZATCA Fatoorah Phase-2 wave/deadline applicable? |  | 📊 **Wave 25** (> SAR 187,500 in any of 2022–2025) → **1 Feb 2027** API integration. Wave 24 / 30 Jun 2026 has passed; at the Wave-25 threshold Reven itself falls in scope once invoicing |
 | J5 | Include the draft Income-Tax-Law scenario (services WHT 5%→10%) as a downside flag? |  | 📊 not enacted as of mid-2026 |
 
 ---
@@ -243,7 +243,7 @@
 | Zakat | 2.5% of Zakat base; **Apr-2024 regs floor base at net assets → owed even pre-revenue**; file ≤120 d after FY-end | Apr 2024 | High |
 | CIT (foreign-owned) | 20% of net adjusted profit; losses carry forward | 2025 | High |
 | WHT | Royalties 15%; technical/consulting 5%; management fees 20%; others 15%; due by 10th of next month; **foreign SaaS/AI often classed royalty 15% (disputed)** | 2024–25 | High (rates) / Med (SaaS class) |
-| ZATCA e-invoicing | Phase-2 Wave 24 (> SAR 375k) → integrate by ~30 Jun 2026 | 2025 · ZATCA | High |
+| ZATCA e-invoicing | Phase-2 **Wave 25** (> SAR 187,500 in any of 2022–2025) → integrate by **1 Feb 2027** (Wave 24 > SAR 375k / 30 Jun 2026 has passed) | 2026 · ZATCA | High |
 | MISA license (if foreign-owned) | Required for foreign ownership; fees vary — get a current quote | Mar 2025 · MISA | Verify |
 | RHQ 0% CIT/WHT (30y) | MNCs with ≥2 foreign markets only — **not** applicable to native pre-seed | 2024 | High |
 | Draft Income-Tax-Law | Proposes services WHT 5%→10% — **not enacted** (model as scenario flag); tax amnesty to 30 Jun 2026 | mid-2026 | High (status) |

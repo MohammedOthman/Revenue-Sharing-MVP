@@ -10,7 +10,7 @@ The sharp front door to the analysis stack (`Reven_Product_Architecture_Audit.md
 ---
 
 ## Decide this week (3 forks that gate everything else)
-1. **Beachhead: GCC-compliance, or global.** Recommendation: **GCC/Saudi**. It's the only lane where you get a non-copyable wedge (ZATCA/WHT) *and* a regulatory forcing function (Wave 24, 30 Jun 2026). This unblocks the data model, the compliance build, and the ICP. `[#121–140, #941–960]`
+1. **Beachhead: GCC-compliance, or global.** Recommendation: **GCC/Saudi**. It's the only lane where you get a non-copyable wedge (ZATCA/WHT) *and* a regulatory forcing function (**Wave 25, > SAR 187,500, integrate by 1 Feb 2027**). This unblocks the data model, the compliance build, and the ICP. `[#121–140, #941–960]`
 2. **GTM label: keep "orchestrator" internal; lead externally with "partner-revenue & settlement system of record."** Naming your own category beats fighting Crossbeam/Impartner/WorkSpan on a word they own. `[#201–260]`
 3. **The current app is throwaway.** Quarantine or delete it; do not "extend" it. Rebuild at the data spine. `[#58, #861–880]`
 
@@ -21,7 +21,7 @@ Each step is gated on the prior. Resist building anything below your current lin
 1. **Append-only Partner Revenue Claim ledger** — immutable, double-entry, idempotent; server-side amounts (never client-supplied). `[#401–440]`
 2. **Cross-tenant partner identity** — ship in the MVP; impossible to retrofit; the seed of the network. `[#53, #581–590]`
 3. **One visible loop** — claim → attribution → eligibility → audited statement, demoable in days. `[#60, #461–500]`
-4. **ZATCA/WHT — *capture* in the MVP, *clearance* in Settle** — in Phase 1/MVP only *capture* ZATCA/WHT fields and emit eligibility evidence (no money moved, no auto-clearance — per the PDR's "Do Not Build Yet" list). The automated clearance-model e-invoice (XML/PDF-A3, ECDSA stamp, TLV QR) + WHT engine (15%/10%) is the **first Phase-2/Settle build**, timed to the 30 Jun 2026 Wave-24 *readiness* clock. Proof sentence: *"payouts come out ZATCA-clean and both sides reconcile."* `[#501–540]`
+4. **ZATCA/WHT — *capture* in the MVP, *clearance* in Settle** — in Phase 1/MVP only *capture* ZATCA/WHT fields and emit eligibility evidence (no money moved, no auto-clearance — per the PDR's "Do Not Build Yet" list). The automated clearance-model e-invoice (XML/PDF-A3, ECDSA stamp, TLV QR) + WHT engine (15%/10%) is the **first Phase-2/Settle build**, timed to the **1 Feb 2027 Wave-25** *readiness* clock. Proof sentence: *"payouts come out ZATCA-clean and both sides reconcile."* `[#501–540]`
 5. **Integrations** — Salesforce/HubSpot + one billing/ERP + reliable webhooks. `[#561–580]`
 **Defer:** AI/forecasting, Partner P&L, money rails, breadth. `[#75, #80]`
 
@@ -43,7 +43,7 @@ Do not raise a Settle round or build Phase 2 until **all** are true:
 2. **Append-only ledger + idempotency** from commit one; ban in-place money UPDATEs. `[#421–440]`
 3. **Cross-tenant identity** in the MVP. `[#53]`
 4. **Bilateral reconciliation**: both counterparties settle against one mutually-approved ruleset. `[#441–460, #490]`
-5. **ZATCA + WHT engine** as the wedge feature, shipped before 30 Jun 2026. `[#501–540]`
+5. **ZATCA + WHT engine** as the wedge feature, shipped before **1 Feb 2027**. `[#501–540]`
 6. Sell the **CFO as economic buyer**; demo *"show me the reconciliation."* `[#301–340]`
 7. Stand up the **3–5 design-partner program** now; trade white-glove for data + references. `[#821–840]`
 8. Hire the wedge: **ledger/fintech-infra engineer + KSA tax SME**. `[#881–900]`
@@ -84,10 +84,10 @@ Stop or pivot if, in design-partner discovery, you find:
 |---|---|---|
 | **Decisions** | Beachhead, label, kill-the-CRUD; ICP filter live | — |
 | **Product** | Ledger + cross-tenant identity + one loop | ZATCA/WHT hook + first integration |
-| **GTM** | Recruit 3–5 design partners; "Wave 24 readiness" campaign | Convert pilots (6–10wk each); first CFO reference |
+| **GTM** | Recruit 3–5 design partners; **"Wave 25 readiness"** campaign | Convert pilots (6–10wk each); first CFO reference |
 | **Team** | Ledger eng + KSA tax SME hired | — |
 | **Proof** | First reconciled period in the ledger | **Hit the Phase-1 exit gate** → open Settle/Series-A motion |
-| **Hook** | — | Land before the **30 Jun 2026 ZATCA Wave 24** deadline as dated proof |
+| **Hook** | — | Land before the **1 Feb 2027 ZATCA Wave 25** deadline as dated proof |
 
 ---
 

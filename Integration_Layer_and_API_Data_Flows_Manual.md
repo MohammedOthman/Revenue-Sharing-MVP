@@ -338,7 +338,7 @@ This is the execution core of revenue-sharing. (Saudi rails detailed in §15; he
 - **Hash chaining:** every invoice carries the **Previous Invoice Hash (PIH)** + an **Invoice Counter Value (ICV)** — an unbroken chain so no invoice can be inserted/deleted/altered retroactively.
 - **QR:** Base64 **TLV** (Tag-Length-Value), Phase-2 carries 9 tags (seller, VAT no., timestamp, totals, VAT amount, hash, stamp/public key).
 
-**Rollout (2025–2026):** waves by turnover, notified ≥6 months ahead. **Wave 23** (> SAR 750k) go-live by **31 Mar 2026**; **Wave 24** (> SAR 375k) **1 Apr–30 Jun 2026**. Thresholds descend each wave → effectively the whole VAT-registered base. **Assume your enterprise buyers are already live.**
+**Rollout (2025–2027):** waves by turnover, notified ≥6 months ahead. **Wave 23** (> SAR 750k) go-live by **31 Mar 2026**; **Wave 24** (> SAR 375k) **1 Apr–30 Jun 2026**; **Wave 25** (> SAR 187,500 in *any* of 2022–2025), announced **24 Jul 2026**, integrate by **1 Feb 2027**. Thresholds halve each wave → Wave 25 reaches effectively the whole ~600k-firm VAT-registered base. **Assume your enterprise buyers are already live — and that from Wave 25 their *small partners* are too, which is what makes invoice-anchored bilateral reconciliation possible.**
 
 **Why it matters (plain):** the invoice behind a payout is not finance-valid until ZATCA clears it. Your "finance evidence pack" must store the **cleared XML + ZATCA stamp/UUID + the PIH chain** as the canonical record. This is the single hardest integration and the one that most differentiates a serious KSA finance product. **[verify]** exact endpoint paths, CSID validity, sandbox URLs against ZATCA's *Detailed Technical Guideline* / Developer Portal manual before build.
 
