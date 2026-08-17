@@ -6,6 +6,13 @@
 
 **Date:** 2026-06-11.
 
+> ### ⚠️ Superseded pricing model (2026-08-17)
+> This document prices on **active (transacting) partners with unlimited internal seats**, in banded Good-Better-Best tiers. **That model is no longer Reven's pricing.**
+>
+> **Reven prices at SAR 50 per seat, per month** — a single published, self-serve, land-and-expand price — expanding into **enterprise contracts sold on the partnership intelligence layers, which are not yet priced.** Canonical model: [`Reven_Pricing_Executive_Summary.md`](Reven_Pricing_Executive_Summary.md). Market sizing built on it: [`Reven_Market_Sizing_TAM_SAM_SOM.md`](Reven_Market_Sizing_TAM_SAM_SOM.md).
+>
+> **What in here still governs:** the competitor benchmarks, the packaging and fencing research, the willingness-to-pay method, the refusal of the visible take-rate, the compliance-ladder construct, the discount and gross-margin guardrails, and the ROI modelling. **What does not:** every per-active-partner band, tier price and ACV figure. Where this document conflicts with the executive summary, **the executive summary governs.**
+
 **What this document adds to the repo.** The repository already contains a sophisticated pricing corpus — `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md` (52 structures, a Capture→Settle→Orchestrate journey) and its own adversarial `..._Pricing_Strategy_Red_Team.md`. This document does **three** things those do not: (1) it restructures the strategy into the **exact 15-deliverable commercial format** requested; (2) it grounds every benchmark in **fresh 2024–2026 competitor pricing** gathered through adversarial web research; and (3) it adds the **five-segment design the brief requires — including a fully-priced semi-government tier** the repo had not yet built out — with indicative numbers in **SAR and USD**.
 
 ---

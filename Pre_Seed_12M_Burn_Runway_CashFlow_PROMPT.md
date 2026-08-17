@@ -146,7 +146,7 @@ Also: **pilot price** + **pilot duration** + **pilot→paid conversion %** (no r
 - **J1** Zakat vs CIT vs mixed (from A7)? Model **Zakat on net assets even pre-revenue**? 📊 yes — 2.5% on net-asset floor, owed even at a loss (Saudi/GCC-owned share).
 - **J2** VAT registration month + filing cadence? 📊 register at SAR 375k turnover; quarterly if ≤ SAR 40M (else monthly); remit within 30 days of period-end.
 - **J3** List top foreign SaaS/AI/contractor vendors + WHT classification (royalty 15% vs technical service 5%)? 📊 ZATCA tends to treat SaaS/API as **royalty 15%** — *disputed; model conservatively at 15% and verify.*
-- **J4** ZATCA Fatoorah Phase-2 wave/deadline applicable? 📊 Wave 24 (> SAR 375k) → ~30 Jun 2026 API integration.
+- **J4** ZATCA Fatoorah Phase-2 wave/deadline applicable? 📊 **Wave 25** (> SAR 187,500 in any of 2022–2025) → **1 Feb 2027** API integration. At this threshold Reven itself is in scope once it invoices — budget the ASP/integration cost in year one.
 - **J5** Include the draft Income-Tax-Law scenario (services WHT 5%→10%) as a downside flag? 📊 not enacted as of mid-2026.
 
 ## K. Churn, retention & expansion
@@ -185,7 +185,7 @@ External, cited figures (as of 2025/2026) offered as guidance for Parts D/I/J. F
 | Zakat | 2.5% of Zakat base; **Apr-2024 regs floor base at net assets → owed even pre-revenue**; file ≤120d after FY-end | Apr 2024 · PwC/EY/Dhruva | High |
 | CIT (foreign-owned) | 20% of net adjusted profit; losses carry forward | 2025 · PwC | High |
 | WHT | Royalties 15%; technical/consulting services 5%; management fees 20%; others 15%; due by 10th of next month; **foreign SaaS/AI often classed as royalty 15% (disputed)** | 2024–25 · PwC/DLA Piper | High (rates) / Med (SaaS class) |
-| ZATCA e-invoicing | Phase-2 Wave 24 (> SAR 375k) → integrate by ~30 Jun 2026 | 2025 · ZATCA/EY | High |
+| ZATCA e-invoicing | Phase-2 **Wave 25** (> SAR 187,500 in any of 2022–2025) → integrate by **1 Feb 2027** (Wave 24 > SAR 375k / 30 Jun 2026 has passed) | 2026 · ZATCA | High |
 | MISA license (if foreign-owned) | Required for foreign ownership; fees vary widely by activity/size — get a current quote | Mar 2025 · MISA Guide | Verify |
 | RHQ 0% CIT/WHT (30y) | MNCs with ≥2 foreign markets only — **not** applicable to native pre-seed | 2024 · KPMG/EY | High |
 | Draft Income-Tax-Law | Proposes services WHT 5%→10% — **not enacted** (model as scenario flag); tax amnesty to 30 Jun 2026 | mid-2026 · EY/KPMG | High (status) |

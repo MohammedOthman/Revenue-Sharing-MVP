@@ -164,10 +164,10 @@ Evidence base: the audit + PERM deep dive, plus fresh research on category desig
 - *Tactical:* Demo a real reconciliation: claims → attribution → eligibility → an audited, compliant statement both sides agree on.
 - *Rationale:* Reconciliation is the visceral pain; showing it solved is the fastest path to a CFO's trust.
 
-**30. Refuse the PRM price anchor (~$299/seat) — price on value governed.**
-- *Strategic:* Anchoring to PRM pricing caps you at PRM economics.
-- *Tactical:* Price on active (transacting) partners / value reconciled, with unlimited seats; high-touch floor for enterprise.
-- *Rationale:* The transparent-hybrid pricing trend rewards value-based models and avoids the resented visible take-rate.
+**30. Escape the PRM price anchor by going under it, then expanding past it.** *(Revised 2026-08-17.)*
+- *Strategic:* Anchoring *at* PRM pricing caps you at PRM economics. Pricing far below it — **SAR 50/seat/month** — removes the evaluation entirely and buys distribution; the value is then captured on the enterprise intelligence layers, which are not PRM features and carry no PRM anchor.
+- *Tactical:* Land at SAR 50/seat/month, published and self-serve, no floor and no discount. Expand into enterprise contracts for the intelligence layers (price TBD). **Instrument land-to-expand from customer one — it is the number the model rests on.**
+- *Rationale:* A price beneath the business-case threshold converts without procurement, which is the binding constraint on a pre-seed company. The take-rate remains refused at every stage.
 
 **31. Resolve the beachhead (GCC vs global) before finalizing positioning.**
 - *Strategic:* Positioning, data model, and compliance build all fork on this decision.
@@ -176,7 +176,7 @@ Evidence base: the audit + PERM deep dive, plus fresh research on category desig
 
 **32. If GCC: position as "the only ZATCA-clean partner-revenue settlement."**
 - *Strategic:* Hyper-specific, regulation-anchored positioning is uncopyable by global horizontals.
-- *Tactical:* Lead Saudi GTM with the Wave-24 (30 Jun 2026) compliance deadline as the hook.
+- *Tactical:* Lead Saudi GTM with the **Wave-25 (> SAR 187,500, 1 Feb 2027)** compliance deadline as the hook. *(Wave 24 / 30 Jun 2026 has passed — do not cite it as a live deadline.)*
 - *Rationale:* Specificity converts; "global partner platform" competes with everyone, "ZATCA-clean partner settlement" competes with no one.
 
 **33. Start analyst relations as category-seeding, not vanity.**
@@ -374,7 +374,7 @@ Evidence base: the audit + PERM deep dive, plus fresh research on category desig
 
 **70. Pricing is a moat — value-based, never a visible % of the partner's money.**
 - *Strategic:* Resented take-rates drive churn and invite displacement.
-- *Tactical:* Capture ~10–20% of measured value (sub-30 bps of attributed revenue) as subscription/active-partner pricing.
+- *Tactical:* Capture ~1% of the customer's coordination cost base at the seat stage and ~10–15% at the enterprise stage — as **fixed subscription**, never as a share of the counterparty's money.
 - *Rationale:* Transparent value-based pricing retains; a visible percentage skim is the first line item a CFO cuts.
 
 **71. Set the standard — publish the "partner revenue claim" schema.**
@@ -441,9 +441,9 @@ Evidence base: the audit + PERM deep dive, plus fresh research on category desig
 - *Tactical:* Set up competitive monitoring on their releases, job posts, and docs for settlement/compliance signals.
 - *Rationale:* They're the most likely party to close your seam; early warning lets you out-localize them (compliance) before they arrive.
 
-**83. Use ZATCA Wave 24 (30 Jun 2026) as a GTM forcing function.**
-- *Strategic:* A hard regulatory deadline manufactures urgency in the buyer.
-- *Tactical:* Build a KSA campaign around "be Wave-24 compliant on partner payouts."
+**83. Use ZATCA Wave 25 (> SAR 187,500, 1 Feb 2027) as a GTM forcing function.**
+- *Strategic:* A hard regulatory deadline manufactures urgency in the buyer. Wave 25 is the *stronger* hook than the expired Wave 24: at SAR 187,500 it pulls the small agents, resellers and consultancies that get **paid** into clearance — so for the first time **both sides** of a partner payment are e-invoiced.
+- *Tactical:* Build a KSA campaign around "be Wave-25 compliant on partner payouts."
 - *Rationale:* Regulatory deadlines compress sales cycles; you ride a mandate instead of manufacturing demand.
 
 **84. Stand up a 3–5 lighthouse design-partner program now.**

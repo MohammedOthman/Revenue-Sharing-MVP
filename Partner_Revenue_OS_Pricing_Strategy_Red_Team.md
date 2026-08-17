@@ -4,7 +4,12 @@
 **Target of critique:** `Partner_Revenue_OS_Pricing_and_Commercial_Strategy.md` (the 52-structure pricing & commercial strategy) and the underlying venture thesis it serves.
 **Posture:** This document's job is to **try to kill the strategy**, then hand back the **best-fit fix for every wound**. It is deliberately hostile in the diagnosis and constructive in the prescription. Read it as the investment-committee bear case written by someone who wants the company to live.
 
----
+> ### ⚠️ Pricing model has changed since this critique (2026-08-17)
+> This red team attacks a **per-active-partner, banded-tier** pricing model. **Reven now prices at SAR 50 per seat, per month** — one published, self-serve, land-and-expand price — expanding into **enterprise contracts on the partnership intelligence layers, which are not yet priced.** Canonical model: [`Reven_Pricing_Executive_Summary.md`](Reven_Pricing_Executive_Summary.md).
+>
+> **Several attacks in here are answered by the new model** — notably the "ninth-tool rejection," the high-ACV-without-evidence problem, and the WTP-assumption critique, all of which a SAR 50 self-serve entry largely sidesteps. **Others now bite harder and should be re-read as live**: the compliance-wedge-is-time-boxed argument, and the concentration and services-leakage risks.
+>
+> **One new attack this document should absorb:** at SAR 600/seat/year, the entire Saudi market for today's product is ~SAR 13m/yr. **The whole thesis therefore rests on the enterprise conversion rate and on enterprise prices that do not yet exist.** That is the sharpest available bear case and it is stated in `Reven_Market_Sizing_TAM_SAM_SOM.md` §9 (gates 4 and 5) rather than hidden.
 
 ## 0. How to read this (method, lenses, evidence grading)
 
