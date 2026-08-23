@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useAuth } from '../context/AuthContext';
-import authService from '../services/auth.service';
 import { Wordmark } from '../components/brand/Brandmark';
 import { Button, Money, StatusTag, Metric, Kicker } from '../components/ui/kit';
 import '../styles/Login.css';
@@ -92,15 +91,6 @@ export default function Login() {
     }
   };
 
-  const sso = async () => {
-    setError('');
-    try {
-      await authService.loginWithSSO();
-    } catch {
-      setError('Single sign-on is unavailable right now.');
-    }
-  };
-
   return (
     <div className="entry">
       <header className="entry__top">
@@ -166,9 +156,7 @@ export default function Login() {
               <Button type="submit" variant="primary" arrow disabled={loading}>
                 {loading ? 'Signing in…' : 'Enter Reven'}
               </Button>
-              <button type="button" className="entry__sso" onClick={sso}>
-                Continue with single sign-on
-              </button>
+              <span className="entry__sso">Access is managed by your Reven administrator.</span>
             </div>
           </form>
         </motion.section>

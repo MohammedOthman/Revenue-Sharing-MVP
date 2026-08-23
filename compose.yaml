@@ -1,0 +1,34 @@
+services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: reven
+      POSTGRES_USER: reven
+      POSTGRES_PASSWORD: local-development-only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reven -d reven"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - reven-postgres:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://reven:local-development-only@database:5432/reven
+      DB_SSL: disable
+      ADMIN_EMAIL: admin@reven.local
+      ADMIN_PASSWORD: change-this-local-password
+      ADMIN_NAME: Local Administrator
+      ORGANIZATION_NAME: Local Reven Workspace
+    ports:
+      - "3000:3000"
+
+volumes:
+  reven-postgres:

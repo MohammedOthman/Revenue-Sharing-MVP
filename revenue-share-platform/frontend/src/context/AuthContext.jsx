@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Establish session from Base44 on mount. me() rejects when unauthenticated;
+  // Establish the server-side session on mount. me() rejects when unauthenticated;
   // that simply means "signed out", not an error to surface.
   useEffect(() => {
     let active = true;
@@ -32,6 +32,12 @@ export const AuthProvider = ({ children }) => {
     return () => {
       active = false;
     };
+  }, []);
+
+  useEffect(() => {
+    const expire = () => setUser(null);
+    window.addEventListener('reven:session-expired', expire);
+    return () => window.removeEventListener('reven:session-expired', expire);
   }, []);
 
   const login = async (email, password) => {

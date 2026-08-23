@@ -15,6 +15,7 @@ import {
   IconDispute,
   IconLoop,
   IconAudit,
+  IconSettings,
   IconMenu,
   IconLogout,
 } from './ui/icons';
@@ -47,6 +48,7 @@ const NAV = [
     items: [
       { to: '/cadence', label: 'Cadence', Icon: IconLoop },
       { to: '/audit', label: 'Audit log', Icon: IconAudit },
+      { to: '/settings', label: 'Settings', Icon: IconSettings },
     ],
   },
 ];
@@ -137,7 +139,9 @@ export default function Layout() {
             <IconMenu />
           </button>
           <div className="topbar__spacer" />
-          <span className="topbar__tenant label">Reven · Demo tenant</span>
+          <span className="topbar__tenant label">
+            Reven · {user?.organization?.name || 'Workspace'}
+          </span>
           <Button to="/claims?new=1" variant="primary" size="sm" arrow>
             Register claim
           </Button>

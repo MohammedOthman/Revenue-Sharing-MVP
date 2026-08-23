@@ -308,7 +308,7 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
 }
 
 export default function Claims() {
-  const { data: claims, loading, refetch } = useCollection(PartnerClaim);
+  const { data: claims, loading, error, refetch } = useCollection(PartnerClaim);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -375,6 +375,12 @@ export default function Claims() {
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={i} className="rv-shimmer" />
             ))}
+          </div>
+        ) : error ? (
+          <div className="rv-empty" role="alert">
+            <span className="serif">Could not load claims.</span>
+            <span className="label">{error.message}</span>
+            <Button variant="quiet" size="sm" onClick={refetch}>Try again</Button>
           </div>
         ) : rows.length === 0 ? (
           <div className="rv-empty">

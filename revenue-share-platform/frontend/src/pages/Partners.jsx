@@ -26,7 +26,7 @@ function ScoreCell({ value }) {
 }
 
 export default function Partners() {
-  const { data: partners, loading, refetch } = useCollection(Partner);
+  const { data: partners, loading, error, refetch } = useCollection(Partner);
   const [stage, setStage] = useState('all');
   const [showForm, setShowForm] = useState(false);
 
@@ -89,6 +89,12 @@ export default function Partners() {
             {Array.from({ length: 5 }).map((_, i) => (
               <span key={i} className="rv-shimmer" />
             ))}
+          </div>
+        ) : error ? (
+          <div className="rv-empty" role="alert">
+            <span className="serif">Could not load partners.</span>
+            <span className="label">{error.message}</span>
+            <Button variant="quiet" size="sm" onClick={refetch}>Try again</Button>
           </div>
         ) : rows.length === 0 ? (
           <div className="rv-empty">

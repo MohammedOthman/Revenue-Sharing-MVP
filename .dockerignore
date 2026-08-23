@@ -1,0 +1,13 @@
+.git
+.github
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+*.pdf
+*.md
+brand
+revenue-share-platform/backend/coverage
+revenue-share-platform/backend/src/controllers
+revenue-share-platform/backend/src/models

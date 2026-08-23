@@ -1,6 +1,6 @@
-import { base44 } from '../api/base44Client';
+import { api } from '../api/client';
 
-/** Shape the Base44 user for the UI (name for the shell, _id for keys). */
+/** Shape the authenticated user for the UI (name for the shell, _id for keys). */
 export const normalizeUser = (u) => {
   if (!u) return u;
   const name =
@@ -9,22 +9,21 @@ export const normalizeUser = (u) => {
 };
 
 const authService = {
-  /**
-   * Email/password sign-in for an external Base44 app. The SDK stores the
-   * session token internally on success; me() then returns the user.
-   */
   login: async (email, password) => {
-    await base44.auth.loginViaEmailPassword(email, password);
-    const user = normalizeUser(await base44.auth.me());
-    return { user };
+    const { data } = await api.post('/auth/login', { email, password });
+    return { user: normalizeUser(data.user) };
   },
-
-  /** Redirect-based SSO (Google, etc.) hosted by Base44. */
-  loginWithSSO: async () => base44.auth.login(),
-
-  me: async () => normalizeUser(await base44.auth.me()),
-  getProfile: async () => normalizeUser(await base44.auth.me()),
-  logout: async () => base44.auth.logout(),
+  me: async () => {
+    const { data } = await api.get('/auth/me');
+    return normalizeUser(data.user);
+  },
+  getProfile: async () => {
+    const { data } = await api.get('/auth/me');
+    return normalizeUser(data.user);
+  },
+  logout: async () => api.post('/auth/logout'),
+  changePassword: async (currentPassword, newPassword) =>
+    api.post('/auth/change-password', { currentPassword, newPassword }),
 };
 
 export default authService;

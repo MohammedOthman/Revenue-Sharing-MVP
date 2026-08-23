@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { AuditEvent } from '../api/entities';
 import { useCollection } from '../hooks/useCollection';
-import { Panel, Kicker, StatusTag, humanize } from '../components/ui/kit';
+import { Panel, Kicker, StatusTag, Button, humanize } from '../components/ui/kit';
 
 const fmtWhen = (s) => {
   if (!s) return '—';
@@ -16,7 +16,7 @@ const fmtWhen = (s) => {
 };
 
 export default function Audit() {
-  const { data, loading } = useCollection(AuditEvent, { sort: '-event_date' });
+  const { data, loading, error, refetch } = useCollection(AuditEvent, { sort: '-event_date' });
   const anomalies = useMemo(
     () => data.filter((e) => e.is_out_of_order || e.is_late).length,
     [data]
@@ -46,6 +46,12 @@ export default function Audit() {
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={i} className="rv-shimmer" />
             ))}
+          </div>
+        ) : error ? (
+          <div className="rv-empty" role="alert">
+            <span className="serif">Could not load the audit log.</span>
+            <span className="label">{error.message}</span>
+            <Button variant="quiet" size="sm" onClick={refetch}>Try again</Button>
           </div>
         ) : data.length === 0 ? (
           <div className="rv-empty">

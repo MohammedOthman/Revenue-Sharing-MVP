@@ -22,7 +22,10 @@ export default function DataScreen({
   headerAction,
   reloadKey = 0,
 }) {
-  const { data, loading } = useCollection(entity, { ...(sort ? { sort } : {}), reloadKey });
+  const { data, loading, error, refetch } = useCollection(entity, {
+    ...(sort ? { sort } : {}),
+    reloadKey,
+  });
   const [active, setActive] = useState(filters[0]?.key || 'all');
 
   const counts = useMemo(() => {
@@ -96,10 +99,16 @@ export default function DataScreen({
               <span key={i} className="rv-shimmer" />
             ))}
           </div>
+        ) : error ? (
+          <div className="rv-empty" role="alert">
+            <span className="serif">Could not load this view.</span>
+            <span className="label">{error.message}</span>
+            <button type="button" className="chip" onClick={refetch}>Try again</button>
+          </div>
         ) : rows.length === 0 ? (
           <div className="rv-empty">
             <span className="serif">Nothing here yet.</span>
-            <span className="label">Records appear as they're created in Base44.</span>
+            <span className="label">Records appear here as your team creates them.</span>
           </div>
         ) : (
           <table className="rv-table" style={{ minWidth }}>

@@ -1,4 +1,3 @@
-```
 # Dependencies
 node_modules/
 
@@ -36,11 +35,6 @@ coverage/
 htmlcov/
 .coverage
 
-# Package lock files (already in source control but often ignored)
-package-lock.json
-yarn.lock
-
 # Temporary files
 *.tmp
 *.temp
-```

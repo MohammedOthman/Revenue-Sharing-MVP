@@ -1,22 +1,25 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Layout from './components/Layout';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Partners from './pages/Partners';
-import Claims from './pages/Claims';
-import Cadence from './pages/Cadence';
-import Audit from './pages/Audit';
-import {
-  Programs,
-  Agreements,
-  Statements,
-  Disputes,
-  Attribution,
-} from './pages/ListScreens';
 import { Brandmark } from './components/brand/Brandmark';
 import './styles/index.css';
+
+const Layout = lazy(() => import('./components/Layout'));
+const Login = lazy(() => import('./pages/Login'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Partners = lazy(() => import('./pages/Partners'));
+const Claims = lazy(() => import('./pages/Claims'));
+const Cadence = lazy(() => import('./pages/Cadence'));
+const Audit = lazy(() => import('./pages/Audit'));
+const Settings = lazy(() => import('./pages/Settings'));
+const listScreen = (name) =>
+  lazy(() => import('./pages/ListScreens').then((module) => ({ default: module[name] })));
+const Programs = listScreen('Programs');
+const Agreements = listScreen('Agreements');
+const Statements = listScreen('Statements');
+const Disputes = listScreen('Disputes');
+const Attribution = listScreen('Attribution');
 
 function BrandLoader() {
   return (
@@ -32,38 +35,46 @@ function BrandLoader() {
 }
 
 function ProtectedRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
+  const location = useLocation();
   if (loading) return <BrandLoader />;
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.mustChangePassword && location.pathname !== '/settings') {
+    return <Navigate to="/settings" replace />;
+  }
+  return children;
 }
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="partners" element={<Partners />} />
-            <Route path="programs" element={<Programs />} />
-            <Route path="agreements" element={<Agreements />} />
-            <Route path="claims" element={<Claims />} />
-            <Route path="attribution" element={<Attribution />} />
-            <Route path="statements" element={<Statements />} />
-            <Route path="disputes" element={<Disputes />} />
-            <Route path="cadence" element={<Cadence />} />
-            <Route path="audit" element={<Audit />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<BrandLoader />}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="partners" element={<Partners />} />
+              <Route path="programs" element={<Programs />} />
+              <Route path="agreements" element={<Agreements />} />
+              <Route path="claims" element={<Claims />} />
+              <Route path="attribution" element={<Attribution />} />
+              <Route path="statements" element={<Statements />} />
+              <Route path="disputes" element={<Disputes />} />
+              <Route path="cadence" element={<Cadence />} />
+              <Route path="audit" element={<Audit />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </Router>
     </AuthProvider>
   );

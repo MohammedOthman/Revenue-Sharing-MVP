@@ -83,6 +83,12 @@ export const IconAudit = (p) => (
     <path d="M12 13.3l1.5 1.5 2.6-2.9" />
   </S>
 );
+export const IconSettings = (p) => (
+  <S {...p}>
+    <circle cx="10" cy="10" r="2.5" />
+    <path d="M10 3.5v2M10 14.5v2M3.5 10h2M14.5 10h2M5.4 5.4l1.4 1.4M13.2 13.2l1.4 1.4M14.6 5.4l-1.4 1.4M6.8 13.2l-1.4 1.4" />
+  </S>
+);
 export const IconMenu = (p) => (
   <S {...p}>
     <path d="M4 6.5h12M4 10h12M4 13.5h8" />

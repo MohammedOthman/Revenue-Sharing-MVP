@@ -1,78 +1,50 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { createTables } from './models/schema.js';
+import { createApp } from './app.js';
+import pool from './config/database.js';
+import { env } from './config/env.js';
+import { logger } from './config/logger.js';
+import { runMigrations } from './config/migrations.js';
+import { bootstrapAdmin } from './services/auth.service.js';
 
-// Import routes
-import authRoutes from './routes/auth.routes.js';
-import partnerRoutes from './routes/partner.routes.js';
-import contractRoutes from './routes/contract.routes.js';
-import revenueRoutes from './routes/revenue.routes.js';
-import kpiRoutes from './routes/kpi.routes.js';
-import legalDocumentRoutes from './routes/legalDocument.routes.js';
-import dashboardRoutes from './routes/dashboard.routes.js';
+let server;
 
-dotenv.config();
+async function start() {
+  await runMigrations();
+  const bootstrap = await bootstrapAdmin();
+  if (bootstrap.created) logger.info({ email: bootstrap.email }, 'Initial administrator created');
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Request logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-});
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/partners', partnerRoutes);
-app.use('/api/contracts', contractRoutes);
-app.use('/api/revenue', revenueRoutes);
-app.use('/api/kpis', kpiRoutes);
-app.use('/api/documents', legalDocumentRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Revenue Share Platform API is running' });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).json({ 
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  const app = createApp();
+  server = app.listen(env.PORT, '0.0.0.0', () => {
+    logger.info({ port: env.PORT }, 'Reven is ready');
   });
-});
+}
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
-
-// Start server and initialize database
-const startServer = async () => {
-  try {
-    // Initialize database tables
-    await createTables();
-    
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`API available at http://localhost:${PORT}/api`);
-    });
-  } catch (error) {
-    console.error('Failed to start server:', error);
+async function shutdown(signal) {
+  logger.info({ signal }, 'Graceful shutdown started');
+  const forceExit = setTimeout(() => {
+    logger.error('Graceful shutdown timed out');
     process.exit(1);
-  }
-};
+  }, 10000);
+  forceExit.unref();
 
-startServer();
+  if (server) await new Promise((resolve) => server.close(resolve));
+  await pool.end();
+  clearTimeout(forceExit);
+  process.exit(0);
+}
 
-export default app;
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('unhandledRejection', (error) => {
+  logger.fatal({ err: error }, 'Unhandled promise rejection');
+  shutdown('unhandledRejection');
+});
+process.on('uncaughtException', (error) => {
+  logger.fatal({ err: error }, 'Uncaught exception');
+  shutdown('uncaughtException');
+});
+
+start().catch(async (error) => {
+  logger.fatal({ err: error }, 'Server failed to start');
+  await pool.end().catch(() => {});
+  process.exit(1);
+});

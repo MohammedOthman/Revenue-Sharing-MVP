@@ -1,27 +1,40 @@
 import pkg from 'pg';
-const { Pool } = pkg;
-import dotenv from 'dotenv';
+import { env } from './env.js';
 
-dotenv.config();
+const { Pool } = pkg;
 
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  max: 20,
+  connectionString: env.DATABASE_URL,
+  ssl: env.DB_SSL === 'require' ? { rejectUnauthorized: false } : undefined,
+  max: 10,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
-pool.on('connect', () => {
-  console.log('Database connected successfully');
+  connectionTimeoutMillis: 5000,
+  statement_timeout: 15000,
+  application_name: 'reven-api',
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
+  console.error(JSON.stringify({ level: 'error', event: 'database_pool_error', message: err.message }));
 });
+
+export async function withTransaction(work) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const result = await work(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+export async function checkDatabase() {
+  const result = await pool.query('SELECT 1 AS ok');
+  return result.rows[0]?.ok === 1;
+}
 
 export default pool;

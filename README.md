@@ -28,3 +28,15 @@ All documents in this repository conform to this sequencing. Where a document us
 | **Narrative & finance model** | `Partner_Revenue_OS_Venture_Scale_Narrative.md`, `Pre_Seed_12M_Burn_Runway_CashFlow_PROMPT.md`, [`Pre_Seed_2M_SAR_Financial_Model_Blueprint.md`](Pre_Seed_2M_SAR_Financial_Model_Blueprint.md) — the canonical 2,000,000 SAR pre-seed ask & use-of-funds (10% equity, 12-month zero-revenue) |
 | **Pitch deck** | `Reven_Pitch_Deck.pdf` — the definitive investor pitch deck |
 | **Audit & alignment** | [`ROADMAP_ALIGNMENT_AUDIT.md`](ROADMAP_ALIGNMENT_AUDIT.md) — doc-by-doc verification against the phase model, with the outstanding edit checklist |
+
+## Product application
+
+The deployable product lives in [`revenue-share-platform/`](revenue-share-platform/README.md).
+It is a self-hosted React and Express application backed by PostgreSQL, with no
+external application-backend dependency. Production entry points are provided
+at the repository root:
+
+- `Dockerfile` — reproducible production image.
+- `package.json` — automatic Node-platform build and start commands.
+- `DEPLOYMENT.md` — environment, backup, monitoring, smoke-test, and rollback runbook.
+- `compose.yaml` — complete local environment for application testing.

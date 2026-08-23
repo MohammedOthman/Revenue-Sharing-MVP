@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { normalizeList } from '../services/normalize';
 
 /**
- * Load a Base44 entity collection with loading/error state. Data is always an
+ * Load a Reven API entity collection with loading/error state. Data is always an
  * array. Returns `refetch()` to reload after a write, and accepts `reloadKey`
  * so a parent can trigger a reload by changing it.
  */

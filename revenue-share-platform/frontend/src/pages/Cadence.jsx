@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { Decision } from '../api/entities';
 import { useCollection } from '../hooks/useCollection';
-import { Panel, Kicker, StatusTag, Money, humanize } from '../components/ui/kit';
+import { Panel, Kicker, StatusTag, Money, Button, humanize } from '../components/ui/kit';
 
 export default function Cadence() {
-  const { data, loading } = useCollection(Decision, { sort: '-created_date' });
+  const { data, loading, error, refetch } = useCollection(Decision, { sort: '-created_date' });
 
   const stats = useMemo(() => {
     const by = (s) => data.filter((d) => (d.outcome_status || 'pending') === s).length;
@@ -49,6 +49,14 @@ export default function Cadence() {
             </Panel>
           ))}
         </div>
+      ) : error ? (
+        <Panel className="rv-pad">
+          <div className="rv-empty" role="alert">
+            <span className="serif">Could not load decisions.</span>
+            <span className="label">{error.message}</span>
+            <Button variant="quiet" size="sm" onClick={refetch}>Try again</Button>
+          </div>
+        </Panel>
       ) : data.length === 0 ? (
         <Panel className="rv-pad">
           <div className="rv-empty">

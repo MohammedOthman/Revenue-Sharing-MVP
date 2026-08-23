@@ -37,8 +37,8 @@ function DriverTile({ label, children, sub }) {
 }
 
 export default function Dashboard() {
-  const { data: partners, loading: lp } = useCollection(Partner);
-  const { data: claims, loading: lc } = useCollection(PartnerClaim);
+  const { data: partners, loading: lp, error: partnersError, refetch: refetchPartners } = useCollection(Partner);
+  const { data: claims, loading: lc, error: claimsError, refetch: refetchClaims } = useCollection(PartnerClaim);
   const { data: statements } = useCollection(PartnerStatement, { limit: 100 });
   const { data: decisions } = useCollection(Decision, { limit: 6 });
   const loading = lp || lc;
@@ -72,6 +72,27 @@ export default function Dashboard() {
   }, [partners, claims]);
 
   const funnelMax = Math.max(1, m.funnel[0].n);
+  const coreError = partnersError || claimsError;
+
+  if (coreError) {
+    return (
+      <div className="screen">
+        <header className="screen__head">
+          <div>
+            <Kicker>Command Center</Kicker>
+            <h1 className="screen__title serif">The partner P&amp;L, <em>on the record</em></h1>
+          </div>
+        </header>
+        <Panel className="rv-pad">
+          <div className="rv-empty" role="alert">
+            <span className="serif">Could not load the command center.</span>
+            <span className="label">{coreError.message}</span>
+            <Button variant="quiet" onClick={() => { refetchPartners(); refetchClaims(); }}>Try again</Button>
+          </div>
+        </Panel>
+      </div>
+    );
+  }
 
   return (
     <div className="cc">
