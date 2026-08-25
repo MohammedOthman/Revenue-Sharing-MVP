@@ -60,7 +60,7 @@ The product should make partnerships behave like a managed revenue function. Tha
 
 ### 2.4 Product Category
 
-The product should be positioned as a **Partner Revenue OS**.
+The product should be positioned as a **Partner Revenue OS** — a **horizontal, single-function platform** that owns one business function (partner revenue) across *every* industry and geography where B2B entities share revenue (the comparable shape is Stripe/Salesforce/Ramp owning one function across all industries), **not** an industry-specific, vertical-SaaS suite.
 
 It should not be positioned narrowly as:
 

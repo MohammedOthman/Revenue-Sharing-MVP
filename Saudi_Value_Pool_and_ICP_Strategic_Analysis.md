@@ -25,7 +25,7 @@ You asked for the strategic rationale behind *each thing I do*. Four method choi
 
 ## 1. Executive summary
 
-**The bet, in one line.** In KSA, the *software* you can sell is a low-hundreds-of-millions pool; the *partner revenue you can govern* is tens of billions and compounding at 14–23%/yr — and the only way to win the small pool durably is to own the control layer over the large one, led by a compliance wedge (ZATCA/WHT/RHQ) that no global incumbent can retrofit.
+**The bet, in one line.** In KSA, the *software* you can sell is a low-hundreds-of-millions pool; the *partner revenue you can govern* is tens of billions and compounding at 14–23%/yr — and the only way to win the small pool durably is to own the control layer over the large one, led by a compliance wedge (ZATCA/WHT/RHQ) that no global incumbent can retrofit. *(KSA-tech is the **beachhead** for a horizontal partner-revenue function that extends across B2B sectors and GCC→beyond — the first market, not the ceiling.)*
 
 **The value-pool stack (KSA, annual, derived estimates):**
 
