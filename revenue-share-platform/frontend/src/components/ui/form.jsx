@@ -1,9 +1,35 @@
 import { motion, AnimatePresence } from 'motion/react';
+import { useEffect, useId, useRef } from 'react';
 import { Kicker, humanize } from './kit';
 
 const EASE = [0.22, 1, 0.36, 1];
 
 export function Modal({ open, onClose, title, kicker, children, footer, wide = false }) {
+  const dialogRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  const titleId = useId();
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const previouslyFocused = document.activeElement;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onCloseRef.current();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    requestAnimationFrame(() => {
+      const firstControl = dialogRef.current?.querySelector('input, select, textarea, button');
+      (firstControl || dialogRef.current)?.focus();
+    });
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      previouslyFocused?.focus?.();
+    };
+  }, [open]);
+
   return (
     <AnimatePresence>
       {open && (
@@ -23,14 +49,17 @@ export function Modal({ open, onClose, title, kicker, children, footer, wide = f
             transition={{ type: 'spring', stiffness: 340, damping: 34 }}
             role="dialog"
             aria-modal="true"
+            aria-labelledby={titleId}
+            ref={dialogRef}
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="modal__head">
               <div className="cellstack">
                 {kicker && <Kicker>{kicker}</Kicker>}
-                <h2 className="modal__title serif">{title}</h2>
+                <h2 className="modal__title serif" id={titleId}>{title}</h2>
               </div>
-              <button className="modal__close" onClick={onClose} aria-label="Close">
+              <button type="button" className="modal__close" onClick={onClose} aria-label="Close">
                 ✕
               </button>
             </div>

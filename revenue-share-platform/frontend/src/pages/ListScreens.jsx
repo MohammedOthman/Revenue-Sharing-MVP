@@ -8,7 +8,14 @@ import {
   EcosystemTouchpoint,
 } from '../api/entities';
 import { StatusTag, Money, Button, humanize } from '../components/ui/kit';
-import { AgreementForm } from '../components/RecordForms';
+import {
+  AgreementForm,
+  ProgramForm,
+  StatementForm,
+  DisputeForm,
+  TouchpointForm,
+} from '../components/RecordForms';
+import { useAuth } from '../context/AuthContext';
 
 const mono = (v) => <span className="mono tnum">{v ?? 0}</span>;
 const dash = (v) => (v == null || v === '' ? '—' : v);
@@ -16,6 +23,10 @@ const asText = (v) => (v ? humanize(v) : '—');
 
 /* ----------------------------------------------------------------- Programs */
 export function Programs() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
+  const [showForm, setShowForm] = useState(false);
+  const [reload, setReload] = useState(0);
   const filters = [
     { key: 'all', label: 'All', test: () => true },
     { key: 'active', label: 'Active', test: (p) => p.status === 'active' },
@@ -31,21 +42,38 @@ export function Programs() {
     { header: 'Status', render: (p) => <StatusTag status={p.status} /> },
   ];
   return (
-    <DataScreen
-      kicker="Capture · Programs"
-      title="Partner"
-      titleAccent="programs"
-      sub="The programs partner economics run inside — objective, commercial model, attribution model and review cadence."
-      entity={PartnerProgram}
-      filters={filters}
-      columns={columns}
-      minWidth={820}
-    />
+    <>
+      <DataScreen
+        kicker="Capture · Programs"
+        title="Partner"
+        titleAccent="programs"
+        sub="The programs partner economics run inside — objective, commercial model, attribution model and review cadence."
+        entity={PartnerProgram}
+        filters={filters}
+        columns={columns}
+        minWidth={820}
+        reloadKey={reload}
+        headerAction={canWrite ? (
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            New program
+          </Button>
+        ) : null}
+      />
+      {canWrite && (
+        <ProgramForm
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          onCreated={() => setReload((value) => value + 1)}
+        />
+      )}
+    </>
   );
 }
 
 /* --------------------------------------------------------------- Agreements */
 export function Agreements() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
   const rate = (a) => {
     const r = a.revenue_share_rate ?? a.commission_rate;
     return r != null ? `${r}%` : '—';
@@ -79,23 +107,29 @@ export function Agreements() {
         columns={columns}
         minWidth={880}
         reloadKey={reload}
-        headerAction={
+        headerAction={canWrite ? (
           <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
             New agreement
           </Button>
-        }
+        ) : null}
       />
-      <AgreementForm
-        open={showForm}
-        onClose={() => setShowForm(false)}
-        onCreated={() => setReload((r) => r + 1)}
-      />
+      {canWrite && (
+        <AgreementForm
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          onCreated={() => setReload((r) => r + 1)}
+        />
+      )}
     </>
   );
 }
 
 /* --------------------------------------------------------------- Statements */
 export function Statements() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
+  const [showForm, setShowForm] = useState(false);
+  const [reload, setReload] = useState(0);
   const filters = [
     { key: 'all', label: 'All', test: () => true },
     { key: 'draft', label: 'Draft', test: (s) => s.status === 'draft' },
@@ -122,21 +156,40 @@ export function Statements() {
     { header: 'Status', render: (s) => <StatusTag status={s.status} /> },
   ];
   return (
-    <DataScreen
-      kicker="Settle · Statements"
-      title="Partner"
-      titleAccent="statements"
-      sub="Per-partner statements — accepted claims, eligible and paid payout, adjustments and open disputes, finance-reviewable."
-      entity={PartnerStatement}
-      filters={filters}
-      columns={columns}
-      minWidth={900}
-    />
+    <>
+      <DataScreen
+        kicker="Settle · Statements"
+        title="Partner"
+        titleAccent="statements"
+        sub="Per-partner statements — accepted claims, eligible and paid payout, adjustments and open disputes, finance-reviewable."
+        entity={PartnerStatement}
+        filters={filters}
+        columns={columns}
+        minWidth={900}
+        reloadKey={reload}
+        headerAction={canWrite ? (
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            New statement
+          </Button>
+        ) : null}
+      />
+      {canWrite && (
+        <StatementForm
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          onCreated={() => setReload((value) => value + 1)}
+        />
+      )}
+    </>
   );
 }
 
 /* ----------------------------------------------------------------- Disputes */
 export function Disputes() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
+  const [showForm, setShowForm] = useState(false);
+  const [reload, setReload] = useState(0);
   const filters = [
     { key: 'all', label: 'All', test: () => true },
     { key: 'open', label: 'Open', test: (d) => d.status === 'open' },
@@ -152,20 +205,39 @@ export function Disputes() {
     { header: 'Status', render: (d) => <StatusTag status={d.status} /> },
   ];
   return (
-    <DataScreen
-      kicker="Attribute · Disputes"
-      title="Disputes"
-      sub="Contested attribution, payout and protection — routed, tracked to an SLA, and resolved with a rationale."
-      entity={Dispute}
-      filters={filters}
-      columns={columns}
-      minWidth={780}
-    />
+    <>
+      <DataScreen
+        kicker="Attribute · Disputes"
+        title="Disputes"
+        sub="Contested attribution, payout and protection — routed, tracked to an SLA, and resolved with a rationale."
+        entity={Dispute}
+        filters={filters}
+        columns={columns}
+        minWidth={780}
+        reloadKey={reload}
+        headerAction={canWrite ? (
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            Open dispute
+          </Button>
+        ) : null}
+      />
+      {canWrite && (
+        <DisputeForm
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          onCreated={() => setReload((value) => value + 1)}
+        />
+      )}
+    </>
   );
 }
 
 /* -------------------------------------------------------------- Attribution */
 export function Attribution() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
+  const [showForm, setShowForm] = useState(false);
+  const [reload, setReload] = useState(0);
   const filters = [
     { key: 'all', label: 'All', test: () => true },
     { key: 'captured', label: 'Captured', test: (t) => t.status === 'captured' },
@@ -182,15 +254,30 @@ export function Attribution() {
     { header: 'Status', render: (t) => <StatusTag status={t.status} /> },
   ];
   return (
-    <DataScreen
-      kicker="Attribute · Ecosystem"
-      title="Attribution"
-      titleAccent="hub"
-      sub="The touchpoint graph behind the credit — contribution, journey stage, shadow influence and matching confidence."
-      entity={EcosystemTouchpoint}
-      filters={filters}
-      columns={columns}
-      minWidth={860}
-    />
+    <>
+      <DataScreen
+        kicker="Attribute · Ecosystem"
+        title="Attribution"
+        titleAccent="hub"
+        sub="The touchpoint graph behind the credit — contribution, journey stage, shadow influence and matching confidence."
+        entity={EcosystemTouchpoint}
+        filters={filters}
+        columns={columns}
+        minWidth={860}
+        reloadKey={reload}
+        headerAction={canWrite ? (
+          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+            Capture touchpoint
+          </Button>
+        ) : null}
+      />
+      {canWrite && (
+        <TouchpointForm
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          onCreated={() => setReload((value) => value + 1)}
+        />
+      )}
+    </>
   );
 }

@@ -54,8 +54,8 @@ export async function bootstrapAdmin() {
     );
     await client.query(
       `INSERT INTO reven_users
-        (id, organization_id, email, password_hash, full_name, role)
-       VALUES ($1, $2, lower($3), $4, $5, 'admin')`,
+        (id, organization_id, email, password_hash, full_name, role, must_change_password)
+       VALUES ($1, $2, lower($3), $4, $5, 'admin', TRUE)`,
       [userId, organizationId, env.ADMIN_EMAIL, passwordHash, env.ADMIN_NAME],
     );
     await client.query(
@@ -133,7 +133,14 @@ export async function logout(token) {
   await pool.query('DELETE FROM reven_sessions WHERE token_hash = $1', [tokenHash(token)]);
 }
 
-export async function changePassword({ userId, currentPassword, newPassword }) {
+export async function changePassword({
+  userId,
+  organizationId,
+  actorName,
+  requestId,
+  currentPassword,
+  newPassword,
+}) {
   const result = await pool.query('SELECT password_hash FROM reven_users WHERE id = $1', [userId]);
   const user = result.rows[0];
   if (!user || !(await comparePassword(currentPassword, user.password_hash))) {
@@ -148,5 +155,15 @@ export async function changePassword({ userId, currentPassword, newPassword }) {
       [passwordHash, userId],
     );
     await client.query('DELETE FROM reven_sessions WHERE user_id = $1', [userId]);
+    await client.query(
+      `INSERT INTO reven_audit_log
+        (id, organization_id, actor_id, actor_name, action, entity_type, record_id,
+         record_label, details, changed_fields, request_id)
+       SELECT $1, $2, $3, $4, 'update', 'User', $3, email,
+              'User changed their password', '["password_hash"]'::jsonb, $5
+         FROM reven_users
+        WHERE id = $3 AND organization_id = $2`,
+      [randomUUID(), organizationId, userId, actorName, requestId],
+    );
   });
 }

@@ -95,7 +95,7 @@ export default function Login() {
     <div className="entry">
       <header className="entry__top">
         <Wordmark />
-        <span className="entry__meta label">Capture · Settle · Orchestrate</span>
+        <span className="entry__meta label">Capture · Attribute · Prepare</span>
       </header>
 
       <main className="entry__stage">

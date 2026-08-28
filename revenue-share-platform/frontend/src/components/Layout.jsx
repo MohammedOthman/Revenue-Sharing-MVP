@@ -36,7 +36,7 @@ const NAV = [
     ],
   },
   {
-    group: 'Attribute & settle',
+    group: 'Attribute & prepare',
     items: [
       { to: '/attribution', label: 'Attribution', Icon: IconGraph },
       { to: '/statements', label: 'Statements', Icon: IconStatement },
@@ -64,6 +64,7 @@ export default function Layout() {
   };
 
   const initial = (user?.name || user?.email || 'U').charAt(0).toUpperCase();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
 
   return (
     <div className={`shell ${open ? 'shell--open' : 'shell--rail'}`}>
@@ -142,9 +143,11 @@ export default function Layout() {
           <span className="topbar__tenant label">
             Reven · {user?.organization?.name || 'Workspace'}
           </span>
-          <Button to="/claims?new=1" variant="primary" size="sm" arrow>
-            Register claim
-          </Button>
+          {canWrite && (
+            <Button to="/claims?new=1" variant="primary" size="sm" arrow>
+              Register claim
+            </Button>
+          )}
         </header>
 
         <main className="content">

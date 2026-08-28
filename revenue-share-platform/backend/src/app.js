@@ -13,13 +13,14 @@ import { logger } from './config/logger.js';
 import { errorHandler, HttpError } from './lib/http.js';
 import { requireSameOrigin } from './middleware/auth.js';
 import authRoutes from './routes/auth.routes.js';
+import claimRoutes from './routes/claim.routes.js';
 import entityRoutes from './routes/entity.routes.js';
 import userRoutes from './routes/user.routes.js';
 
 const frontendDist = fileURLToPath(new URL('../../frontend/dist', import.meta.url));
 const indexFile = fileURLToPath(new URL('../../frontend/dist/index.html', import.meta.url));
 
-export function createApp() {
+export function createApp(runtimeState = { ready: true }) {
   const app = express();
   app.disable('x-powered-by');
   if (isProduction) app.set('trust proxy', env.TRUST_PROXY_HOPS);
@@ -69,13 +70,25 @@ export function createApp() {
     res.json({ status: 'ok', service: 'reven-api' });
   });
   app.get('/api/health/ready', async (req, res) => {
+    if (!runtimeState.ready) {
+      return res.status(503).json({ status: 'not_ready', database: 'initializing' });
+    }
     try {
       await checkDatabase();
-      res.json({ status: 'ready', database: 'connected' });
+      return res.json({ status: 'ready', database: 'connected' });
     } catch (error) {
       req.log.warn({ err: error }, 'Readiness check failed');
-      res.status(503).json({ status: 'not_ready', database: 'unavailable' });
+      return res.status(503).json({ status: 'not_ready', database: 'unavailable' });
     }
+  });
+
+  app.use('/api', (_req, _res, next) => {
+    if (!runtimeState.ready) {
+      return next(
+        new HttpError(503, 'SERVICE_INITIALIZING', 'Reven is waiting for its database connection.'),
+      );
+    }
+    return next();
   });
 
   const apiLimiter = rateLimit({
@@ -90,6 +103,7 @@ export function createApp() {
     next();
   });
   app.use('/api/auth', authRoutes);
+  app.use('/api/claims', claimRoutes);
   app.use('/api/entities', entityRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api', (req, _res, next) => {

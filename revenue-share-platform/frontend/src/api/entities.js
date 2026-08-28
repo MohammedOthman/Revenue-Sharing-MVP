@@ -34,7 +34,22 @@ const entity = (type) => ({
 export const Partner = entity('Partner');
 export const PartnerProgram = entity('PartnerProgram');
 export const Agreement = entity('Agreement');
-export const PartnerClaim = entity('PartnerClaim');
+const partnerClaim = entity('PartnerClaim');
+export const PartnerClaim = {
+  ...partnerClaim,
+  decideAttribution: async (id, decision) => {
+    const { data } = await api.post(`/claims/${id}/attribution`, decision);
+    return data.record;
+  },
+  evaluateEligibility: async (id, version) => {
+    const { data } = await api.post(`/claims/${id}/eligibility`, { version });
+    return data.record;
+  },
+  recordPayout: async (id, payout) => {
+    const { data } = await api.post(`/claims/${id}/payout`, payout);
+    return data.record;
+  },
+};
 export const EcosystemTouchpoint = entity('EcosystemTouchpoint');
 export const PartnerStatement = entity('PartnerStatement');
 export const Dispute = entity('Dispute');

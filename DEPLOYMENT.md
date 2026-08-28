@@ -18,7 +18,25 @@ session cookies remain same-origin.
 | `ORGANIZATION_NAME` | First boot | Initial tenant name. |
 
 The four administrator values are consumed only when the user table is empty.
-Changing them later does not reset the administrator.
+Changing them later does not reset the administrator. The first administrator
+is required to replace the bootstrap password on first sign-in.
+
+## Product lifecycle
+
+The production workflow is deliberately claim-centric:
+
+1. Capture the partner, program, and governing agreement.
+2. Register a claim and its supporting ecosystem touchpoints.
+3. Accept or reject attribution of record with an explicit percentage.
+4. Evaluate payout readiness on the server against attribution and confirmed
+   revenue evidence.
+5. Draft a partner statement, route exceptions through disputes, and record a
+   payout only after eligibility. Recording a payout is an auditable ledger
+   milestone; Reven does not move money.
+
+Viewers have read-only access. Operators can capture records and perform
+attribution and eligibility reviews. Administrators additionally manage team
+access and record payout milestones.
 
 ## Release process
 
@@ -31,6 +49,9 @@ Changing them later does not reset the administrator.
 
 Database migrations run transactionally at process startup under a PostgreSQL
 advisory lock. Multiple instances can start without racing the migration.
+The HTTP process exposes liveness and the login interface while the database is
+initializing, retries the connection with bounded exponential backoff, and
+keeps all state-changing APIs unavailable until initialization succeeds.
 
 ## Backups and recovery
 

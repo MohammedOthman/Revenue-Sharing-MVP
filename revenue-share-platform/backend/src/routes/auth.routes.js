@@ -67,7 +67,13 @@ router.post(
         newPassword: z.string().min(14).max(200),
       })
       .parse(req.body);
-    await changePassword({ userId: req.user.id, ...body });
+    await changePassword({
+      userId: req.user.id,
+      organizationId: req.user.organization_id,
+      actorName: req.user.full_name,
+      requestId: req.id,
+      ...body,
+    });
     res.clearCookie(env.SESSION_COOKIE_NAME, sessionCookieOptions);
     res.status(204).end();
   }),

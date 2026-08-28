@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { PartnerClaim, Partner, Agreement } from '../api/entities';
+import {
+  PartnerClaim,
+  Partner,
+  Agreement,
+  PartnerProgram,
+  EcosystemTouchpoint,
+  PartnerStatement,
+  Dispute,
+  Decision,
+} from '../api/entities';
 import {
   Modal,
   FormGrid,
@@ -355,5 +364,261 @@ export function AgreementForm({ open, onClose, onCreated }) {
         </FormField>
       </FormGrid>
     </Modal>
+  );
+}
+
+function WorkflowRecordForm({
+  open,
+  onClose,
+  onCreated,
+  entity,
+  initial,
+  fields,
+  required,
+  kicker,
+  title,
+  submitLabel,
+}) {
+  const [form, setForm] = useState(initial);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const submit = async () => {
+    setError('');
+    const missing = required.filter((key) => form[key] === '' || form[key] == null);
+    if (missing.length) {
+      setError('Complete all required fields before saving.');
+      return;
+    }
+    setSaving(true);
+    try {
+      const payload = Object.fromEntries(
+        fields.map((field) => {
+          const raw = form[field.key];
+          if (field.type === 'number') return [field.key, raw === '' ? undefined : Number(raw)];
+          if (field.type === 'boolean') return [field.key, raw === 'true'];
+          return [field.key, raw];
+        }),
+      );
+      await entity.create(payload);
+      setForm(initial);
+      onCreated?.();
+      onClose();
+    } catch (caught) {
+      setError(caught?.message || 'Could not save this record.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const control = (field) => {
+    const props = {
+      value: form[field.key],
+      onChange: (event) => setForm((current) => ({ ...current, [field.key]: event.target.value })),
+    };
+    if (field.type === 'select' || field.type === 'boolean') {
+      return <Select {...props} options={field.options} />;
+    }
+    if (field.type === 'number') {
+      return <NumberInput {...props} min={field.min ?? '0'} max={field.max} />;
+    }
+    if (field.type === 'date') return <DateInput {...props} />;
+    if (field.type === 'textarea') return <Textarea {...props} />;
+    return <TextInput {...props} type={field.type || 'text'} />;
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      kicker={kicker}
+      title={title}
+      footer={
+        <FormFooter
+          onClose={onClose}
+          saving={saving}
+          label={{ submit, saving: 'Saving…', idle: submitLabel }}
+        />
+      }
+    >
+      <FormGrid>
+        <FormError>{error}</FormError>
+        {fields.map((field) => (
+          <FormField
+            key={field.key}
+            label={field.label}
+            required={required.includes(field.key)}
+            full={field.full}
+          >
+            {control(field)}
+          </FormField>
+        ))}
+      </FormGrid>
+    </Modal>
+  );
+}
+
+export function ProgramForm(props) {
+  return (
+    <WorkflowRecordForm
+      {...props}
+      entity={PartnerProgram}
+      kicker="Capture"
+      title="New partner program"
+      submitLabel="Create program"
+      required={['name']}
+      initial={{
+        name: '',
+        program_type: 'referral',
+        commercial_model: 'percentage',
+        attribution_model: 'sourced',
+        review_cadence: 'quarterly',
+        status: 'draft',
+        description: '',
+      }}
+      fields={[
+        { key: 'name', label: 'Program name' },
+        { key: 'program_type', label: 'Program type', type: 'select', options: ['referral', 'reseller', 'co_sell', 'implementation', 'strategic_alliance'] },
+        { key: 'commercial_model', label: 'Commercial model', type: 'select', options: ['percentage', 'fixed_fee', 'tiered', 'hybrid'] },
+        { key: 'attribution_model', label: 'Attribution model', type: 'select', options: ['sourced', 'influenced', 'multi_touch', 'custom'] },
+        { key: 'review_cadence', label: 'Review cadence', type: 'select', options: ['monthly', 'quarterly', 'semiannual', 'annual'] },
+        { key: 'status', label: 'Status', type: 'select', options: ['draft', 'active', 'paused'] },
+        { key: 'description', label: 'Description', type: 'textarea', full: true },
+      ]}
+    />
+  );
+}
+
+export function TouchpointForm(props) {
+  return (
+    <WorkflowRecordForm
+      {...props}
+      entity={EcosystemTouchpoint}
+      kicker="Attribute"
+      title="Capture a touchpoint"
+      submitLabel="Capture touchpoint"
+      required={['partner_name', 'customer_account', 'touchpoint_type']}
+      initial={{
+        partner_name: '',
+        customer_account: '',
+        touchpoint_type: 'introduction',
+        journey_stage: 'consideration',
+        contribution_category: 'influenced',
+        matching_confidence: 'medium',
+        status: 'captured',
+        touchpoint_date: today(),
+        notes: '',
+      }}
+      fields={[
+        { key: 'partner_name', label: 'Partner' },
+        { key: 'customer_account', label: 'Customer account' },
+        { key: 'touchpoint_type', label: 'Touchpoint', type: 'select', options: ['introduction', 'meeting', 'demo', 'proposal', 'implementation', 'renewal', 'expansion'] },
+        { key: 'journey_stage', label: 'Journey stage', type: 'select', options: ['awareness', 'consideration', 'evaluation', 'purchase', 'adoption', 'renewal', 'expansion'] },
+        { key: 'contribution_category', label: 'Contribution', type: 'select', options: ['sourced', 'influenced', 'co_sell', 'delivery'] },
+        { key: 'matching_confidence', label: 'Matching confidence', type: 'select', options: ['low', 'medium', 'high'] },
+        { key: 'touchpoint_date', label: 'Date', type: 'date' },
+        { key: 'status', label: 'Status', type: 'select', options: ['captured', 'review_needed', 'linked_to_claim', 'strategic_influence'] },
+        { key: 'notes', label: 'Notes', type: 'textarea', full: true },
+      ]}
+    />
+  );
+}
+
+export function StatementForm(props) {
+  return (
+    <WorkflowRecordForm
+      {...props}
+      entity={PartnerStatement}
+      kicker="Settle"
+      title="Draft a partner statement"
+      submitLabel="Create statement"
+      required={['partner_name', 'statement_period']}
+      initial={{
+        partner_name: '',
+        statement_period: new Date().toISOString().slice(0, 7),
+        currency: 'SAR',
+        pending_payout: '',
+        approved_payout: '',
+        paid_payout: '',
+        open_disputes: '0',
+        finance_approved: 'false',
+        status: 'draft',
+      }}
+      fields={[
+        { key: 'partner_name', label: 'Partner' },
+        { key: 'statement_period', label: 'Statement period' },
+        { key: 'currency', label: 'Currency', type: 'select', options: CURRENCIES },
+        { key: 'pending_payout', label: 'Eligible payout', type: 'number' },
+        { key: 'approved_payout', label: 'Approved payout', type: 'number' },
+        { key: 'paid_payout', label: 'Paid payout', type: 'number' },
+        { key: 'open_disputes', label: 'Open disputes', type: 'number' },
+        { key: 'finance_approved', label: 'Finance approved', type: 'boolean', options: [{ value: 'false', label: 'Pending' }, { value: 'true', label: 'Approved' }] },
+        { key: 'status', label: 'Status', type: 'select', options: ['draft', 'issued', 'acknowledged', 'finalized'] },
+      ]}
+    />
+  );
+}
+
+export function DisputeForm(props) {
+  return (
+    <WorkflowRecordForm
+      {...props}
+      entity={Dispute}
+      kicker="Operate"
+      title="Open a dispute"
+      submitLabel="Open dispute"
+      required={['partner_name', 'dispute_type']}
+      initial={{
+        partner_name: '',
+        dispute_type: 'attribution',
+        disputed_object: 'claim',
+        priority: 'medium',
+        sla_due_date: '',
+        status: 'open',
+        rationale: '',
+      }}
+      fields={[
+        { key: 'partner_name', label: 'Partner' },
+        { key: 'dispute_type', label: 'Dispute type', type: 'select', options: ['attribution', 'payout', 'protection', 'agreement', 'evidence'] },
+        { key: 'disputed_object', label: 'Contested object', type: 'select', options: ['claim', 'touchpoint', 'statement', 'agreement'] },
+        { key: 'priority', label: 'Priority', type: 'select', options: ['low', 'medium', 'high', 'urgent'] },
+        { key: 'sla_due_date', label: 'SLA due', type: 'date' },
+        { key: 'status', label: 'Status', type: 'select', options: ['open', 'under_review', 'escalated', 'resolved'] },
+        { key: 'rationale', label: 'Rationale', type: 'textarea', full: true },
+      ]}
+    />
+  );
+}
+
+export function DecisionForm(props) {
+  return (
+    <WorkflowRecordForm
+      {...props}
+      entity={Decision}
+      kicker="Operate"
+      title="Log an operating decision"
+      submitLabel="Log decision"
+      required={['title']}
+      initial={{
+        title: '',
+        decision_type: 'partner_investment',
+        partner_name: '',
+        expected_outcome: '',
+        actual_outcome: '',
+        outcome_status: 'pending',
+        financial_impact: '',
+        rationale: '',
+      }}
+      fields={[
+        { key: 'title', label: 'Decision title', full: true },
+        { key: 'decision_type', label: 'Decision type', type: 'select', options: ['partner_investment', 'claim_exception', 'program_change', 'commercial_policy', 'risk_response'] },
+        { key: 'partner_name', label: 'Partner' },
+        { key: 'outcome_status', label: 'Outcome status', type: 'select', options: ['pending', 'on_track', 'achieved', 'missed'] },
+        { key: 'expected_outcome', label: 'Expected outcome', type: 'textarea', full: true },
+        { key: 'actual_outcome', label: 'Actual outcome', type: 'textarea', full: true },
+        { key: 'financial_impact', label: 'Financial impact', type: 'number', min: '-999999999999' },
+        { key: 'rationale', label: 'Rationale', type: 'textarea', full: true },
+      ]}
+    />
   );
 }

@@ -5,6 +5,7 @@ import { PartnerClaim } from '../api/entities';
 import { useCollection } from '../hooks/useCollection';
 import { Panel, Kicker, StatusTag, Money, Button, humanize } from '../components/ui/kit';
 import { ClaimForm } from '../components/RecordForms';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Claims.css';
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -27,7 +28,7 @@ const FILTERS = [
   { key: 'paid', label: 'Paid', test: (c) => c.payment_status === 'paid' },
 ];
 
-const pct = (v) => (v == null || v === '' ? '—' : `${Math.round(Number(v))}%`);
+const formatPct = (v) => (v == null || v === '' ? '—' : `${Math.round(Number(v))}%`);
 
 function DefRow({ label, children }) {
   return (
@@ -38,10 +39,10 @@ function DefRow({ label, children }) {
   );
 }
 
-function ClaimDrawer({ claim, onClose, onUpdated }) {
+function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
   const c = claim;
   const ccy = c.currency || 'USD';
-  const [pct, setPct] = useState(c.attribution_percentage ?? '');
+  const [decisionPct, setDecisionPct] = useState(c.attribution_percentage ?? '');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
 
@@ -49,13 +50,10 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
     setErr('');
     setBusy(true);
     try {
-      await PartnerClaim.update(c._id, {
-        attribution_status: status,
-        attribution_percentage: status === 'rejected' ? 0 : Number(pct || 0),
-        attribution_decision_date: new Date().toISOString().slice(0, 10),
-        attribution_version: c.attribution_version || 1,
-        claim_status:
-          status === 'accepted' ? 'accepted' : status === 'rejected' ? 'rejected' : c.claim_status,
+      await PartnerClaim.decideAttribution(c._id, {
+        status,
+        percentage: status === 'rejected' ? 0 : Number(decisionPct),
+        version: c.version,
       });
       onUpdated?.();
     } catch (e) {
@@ -71,35 +69,7 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
     setErr('');
     setBusy(true);
     try {
-      let status;
-      let explanation;
-      let missing = [];
-      let estPay = c.estimated_payout;
-      if (!['accepted', 'partially_accepted'].includes(c.attribution_status)) {
-        status = 'not_eligible';
-        explanation = 'Attribution of record is not yet accepted, so no payout can be made eligible.';
-        missing = ['Accept the attribution of record'];
-      } else if (!['closed_won', 'invoiced', 'collected', 'recognized'].includes(c.revenue_status)) {
-        status = 'missing_evidence';
-        explanation =
-          'Attribution is accepted, but no closed-won (or later) revenue event has been recorded yet.';
-        missing = ['A closed-won, invoiced, collected or recognized revenue event'];
-      } else {
-        status = 'eligible';
-        estPay = Math.round((Number(c.estimated_value) || 0) * (Number(c.attribution_percentage) || 0) / 100);
-        explanation = `Attribution accepted at ${c.attribution_percentage || 0}% and revenue ${String(
-          c.revenue_status
-        ).replace(/_/g, ' ')}; eligible for payout on the attributed basis.`;
-      }
-      await PartnerClaim.update(c._id, {
-        payout_eligibility_status: status,
-        payout_eligible: status === 'eligible',
-        eligibility_explanation: explanation,
-        eligibility_missing_conditions: missing,
-        eligibility_evaluated_date: new Date().toISOString(),
-        estimated_payout: estPay,
-        claim_status: status === 'eligible' ? 'payout_eligible' : c.claim_status,
-      });
+      await PartnerClaim.evaluateEligibility(c._id, c.version);
       onUpdated?.();
     } catch (e) {
       setErr(e?.message || 'Could not evaluate eligibility.');
@@ -110,15 +80,16 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
 
   // Record (not execute) the first-payout milestone.
   const recordPayout = async () => {
+    const amt = Number(c.approved_payout || c.estimated_payout || 0);
+    if (!window.confirm(`Record ${ccy} ${amt.toLocaleString()} as paid? This updates the audit record but does not move money.`)) {
+      return;
+    }
     setErr('');
     setBusy(true);
     try {
-      const amt = Number(c.approved_payout || c.estimated_payout || 0);
-      await PartnerClaim.update(c._id, {
-        approved_payout: amt,
-        paid_amount: amt,
-        payment_status: 'paid',
-        claim_status: 'paid',
+      await PartnerClaim.recordPayout(c._id, {
+        amount: amt,
+        version: c.version,
       });
       onUpdated?.();
     } catch (e) {
@@ -173,12 +144,12 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
             <Kicker>Attribution of record</Kicker>
             <div className="attrib">
               <div className="attrib__col">
-                <span className="attrib__num mono">{pct(c.attribution_recommended_percentage)}</span>
+                <span className="attrib__num mono">{formatPct(c.attribution_recommended_percentage)}</span>
                 <span className="label">Model · advisory</span>
               </div>
               <span className="attrib__arrow" aria-hidden="true">→</span>
               <div className="attrib__col attrib__col--decided">
-                <span className="attrib__num mono">{pct(c.attribution_percentage)}</span>
+                <span className="attrib__num mono">{formatPct(c.attribution_percentage)}</span>
                 <span className="label">Human · decided</span>
               </div>
               <div className="attrib__meta">
@@ -188,24 +159,26 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
                 ) : null}
               </div>
             </div>
-            <div className="decide">
-              <input
-                className="rv-field decide__pct"
-                type="number"
-                min="0"
-                max="100"
-                value={pct}
-                onChange={(e) => setPct(e.target.value)}
-                placeholder="%"
-                aria-label="Attribution percent"
-              />
-              <Button variant="primary" size="sm" disabled={busy} onClick={() => decide('accepted')}>
-                {busy ? 'Saving…' : 'Accept'}
-              </Button>
-              <Button variant="quiet" size="sm" disabled={busy} onClick={() => decide('rejected')}>
-                Reject
-              </Button>
-            </div>
+            {canWrite && (
+              <div className="decide">
+                <input
+                  className="rv-field decide__pct"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={decisionPct}
+                  onChange={(e) => setDecisionPct(e.target.value)}
+                  placeholder="%"
+                  aria-label="Attribution percent"
+                />
+                <Button variant="primary" size="sm" disabled={busy} onClick={() => decide('accepted')}>
+                  {busy ? 'Saving…' : 'Accept'}
+                </Button>
+                <Button variant="quiet" size="sm" disabled={busy} onClick={() => decide('rejected')}>
+                  Reject
+                </Button>
+              </div>
+            )}
             {err && <p className="drawer__note drawer__note--stop">{err}</p>}
             {c.attribution_recommendation_basis && (
               <p className="drawer__note">{c.attribution_recommendation_basis}</p>
@@ -251,16 +224,18 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
                 <StatusTag status={c.payment_status} />
               </DefRow>
             </div>
-            <div className="decide">
-              <Button variant="ghost" size="sm" disabled={busy} onClick={evaluate}>
-                Evaluate eligibility
-              </Button>
-              {c.payout_eligibility_status === 'eligible' && c.payment_status !== 'paid' && (
+            {canWrite && (
+              <div className="decide">
+                <Button variant="ghost" size="sm" disabled={busy} onClick={evaluate}>
+                  Evaluate eligibility
+                </Button>
+              {isAdmin && c.payout_eligibility_status === 'eligible' && c.payment_status !== 'paid' && (
                 <Button variant="primary" size="sm" disabled={busy} onClick={recordPayout}>
                   Record payout
                 </Button>
               )}
-            </div>
+              </div>
+            )}
           </section>
 
           {/* Protection */}
@@ -308,6 +283,9 @@ function ClaimDrawer({ claim, onClose, onUpdated }) {
 }
 
 export default function Claims() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
+  const isAdmin = user?.role === 'admin';
   const { data: claims, loading, error, refetch } = useCollection(PartnerClaim);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
@@ -315,13 +293,13 @@ export default function Claims() {
   const [params, setParams] = useSearchParams();
 
   useEffect(() => {
-    if (params.get('new') !== null) {
+    if (canWrite && params.get('new') !== null) {
       setShowForm(true);
       params.delete('new');
       setParams(params, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [canWrite]);
 
   const counts = useMemo(() => {
     const c = {};
@@ -338,7 +316,7 @@ export default function Claims() {
     <div className="screen">
       <header className="screen__head">
         <div>
-          <Kicker>Capture → Settle · Claims</Kicker>
+          <Kicker>Capture → Prepare · Claims</Kicker>
           <h1 className="screen__title serif">
             The claim <em>ledger</em>
           </h1>
@@ -348,9 +326,11 @@ export default function Claims() {
           </p>
         </div>
         <div className="screen__headright">
-          <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
-            Register claim
-          </Button>
+          {canWrite && (
+            <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+              Register claim
+            </Button>
+          )}
           <span className="screen__count">{claims.length} claims</span>
         </div>
       </header>
@@ -413,7 +393,7 @@ export default function Claims() {
                   </td>
                   <td>
                     <div className="claims-attrib">
-                      <span className="mono">{pct(c.attribution_percentage)}</span>
+                      <span className="mono">{formatPct(c.attribution_percentage)}</span>
                       <StatusTag status={c.attribution_status} />
                     </div>
                   </td>
@@ -442,11 +422,13 @@ export default function Claims() {
               refetch();
               setSelected(null);
             }}
+            canWrite={canWrite}
+            isAdmin={isAdmin}
           />
         )}
       </AnimatePresence>
 
-      <ClaimForm open={showForm} onClose={() => setShowForm(false)} onCreated={refetch} />
+      {canWrite && <ClaimForm open={showForm} onClose={() => setShowForm(false)} onCreated={refetch} />}
     </div>
   );
 }

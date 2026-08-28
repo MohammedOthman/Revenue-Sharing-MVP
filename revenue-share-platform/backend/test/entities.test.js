@@ -43,6 +43,24 @@ test('keeps the audit entity read-only', () => {
   assert.throws(() => assertEntityType('AuditEvent', { writable: true }), /does not exist/);
 });
 
+test('does not allow a partial update to clear a required field', () => {
+  assert.throws(
+    () => sanitizeRecordData('Partner', { legal_name: ' ' }, { partial: true }),
+    (error) => error.code === 'INVALID_RECORD' && /legal_name/.test(error.message),
+  );
+});
+
+test('rejects unsupported lifecycle values and invalid percentages', () => {
+  assert.throws(
+    () => sanitizeRecordData('Partner', { legal_name: 'Acme', lifecycle_status: 'deleted' }),
+    (error) => error.code === 'INVALID_RECORD',
+  );
+  assert.throws(
+    () => sanitizeRecordData('Agreement', { partner_name: 'Acme', agreement_type: 'referral_agreement', revenue_share_rate: 101 }),
+    (error) => error.code === 'INVALID_RECORD',
+  );
+});
+
 test('server metadata takes precedence in public records', () => {
   const record = publicRecord({
     id: 'server-id',

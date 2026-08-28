@@ -1,9 +1,14 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Decision } from '../api/entities';
 import { useCollection } from '../hooks/useCollection';
 import { Panel, Kicker, StatusTag, Money, Button, humanize } from '../components/ui/kit';
+import { DecisionForm } from '../components/RecordForms';
+import { useAuth } from '../context/AuthContext';
 
 export default function Cadence() {
+  const { user } = useAuth();
+  const canWrite = ['admin', 'operator'].includes(user?.role);
+  const [showForm, setShowForm] = useState(false);
   const { data, loading, error, refetch } = useCollection(Decision, { sort: '-created_date' });
 
   const stats = useMemo(() => {
@@ -29,7 +34,14 @@ export default function Cadence() {
             against what actually happened.
           </p>
         </div>
-        <span className="screen__count">{data.length} total</span>
+        <div className="screen__headright">
+          {canWrite && (
+            <Button variant="primary" size="sm" arrow onClick={() => setShowForm(true)}>
+              Log decision
+            </Button>
+          )}
+          <span className="screen__count">{data.length} total</span>
+        </div>
       </header>
 
       <div className="stagestrip">
@@ -96,6 +108,9 @@ export default function Cadence() {
             </Panel>
           ))}
         </div>
+      )}
+      {canWrite && (
+        <DecisionForm open={showForm} onClose={() => setShowForm(false)} onCreated={refetch} />
       )}
     </div>
   );
