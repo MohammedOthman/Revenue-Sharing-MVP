@@ -54,6 +54,35 @@ function StatusEditor({ record, entity, options, canWrite, onUpdated }) {
   );
 }
 
+function FinanceApproval({ statement, isAdmin, onUpdated }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  if (statement.finance_approved) return <StatusTag status="approved" label="Approved" />;
+  if (!isAdmin) return <StatusTag status="pending" label="Pending" />;
+
+  const approve = async () => {
+    setBusy(true);
+    setError('');
+    try {
+      await PartnerStatement.update(statement._id, { finance_approved: true }, statement.version);
+      onUpdated?.();
+    } catch (caught) {
+      setError(caught?.message || 'Could not approve statement.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="cellstack">
+      <Button variant="quiet" size="sm" disabled={busy} onClick={approve}>
+        {busy ? 'Approving…' : 'Approve'}
+      </Button>
+      {error && <span className="cellsub" role="alert">{error}</span>}
+    </div>
+  );
+}
+
 /* ----------------------------------------------------------------- Programs */
 export function Programs() {
   const { user } = useAuth();
@@ -183,6 +212,7 @@ export function Agreements() {
 export function Statements() {
   const { user } = useAuth();
   const canWrite = ['admin', 'operator'].includes(user?.role);
+  const isAdmin = user?.role === 'admin';
   const [showForm, setShowForm] = useState(false);
   const [reload, setReload] = useState(0);
   const filters = [
@@ -202,9 +232,10 @@ export function Statements() {
     {
       header: 'Finance',
       render: (s) => (
-        <StatusTag
-          status={s.finance_approved ? 'approved' : 'pending'}
-          label={s.finance_approved ? 'Approved' : 'Pending'}
+        <FinanceApproval
+          statement={s}
+          isAdmin={isAdmin}
+          onUpdated={() => setReload((value) => value + 1)}
         />
       ),
     },
@@ -214,7 +245,7 @@ export function Statements() {
         <StatusEditor
           record={s}
           entity={PartnerStatement}
-          options={['draft', 'issued', 'acknowledged', 'finalized']}
+          options={isAdmin ? ['draft', 'issued', 'acknowledged', 'finalized'] : ['draft', 'issued', 'acknowledged']}
           canWrite={canWrite}
           onUpdated={() => setReload((value) => value + 1)}
         />

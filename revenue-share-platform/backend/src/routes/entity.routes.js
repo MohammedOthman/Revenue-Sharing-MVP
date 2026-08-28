@@ -17,6 +17,7 @@ const context = (req) => ({
   organizationId: req.user.organization_id,
   userId: req.user.id,
   actorName: req.user.full_name,
+  role: req.user.role,
   requestId: req.id,
 });
 

@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import pool, { withTransaction } from '../config/database.js';
 import {
   assertEntityType,
+  assertRecordMutationAuthorized,
   publicRecord,
   recordLabel,
   sanitizeRecordData,
@@ -129,6 +130,7 @@ export async function getRecord({ organizationId, type, id }) {
 
 export async function createRecord(context, type, input) {
   const data = sanitizeRecordData(type, input);
+  assertRecordMutationAuthorized(context, type, data);
   return withTransaction(async (client) => {
     const id = randomUUID();
     const result = await client.query(
@@ -152,6 +154,7 @@ export async function updateRecord(
   { allowWorkflowFields = false } = {},
 ) {
   const updates = sanitizeRecordData(type, input, { partial: true, allowWorkflowFields });
+  assertRecordMutationAuthorized(context, type, updates);
   if (Object.keys(updates).length === 0) {
     throw new HttpError(400, 'NO_CHANGES', 'At least one field must be supplied.');
   }
@@ -215,6 +218,7 @@ export async function bulkCreateRecords(context, type, inputs) {
     throw new HttpError(400, 'INVALID_BATCH', 'A batch must contain between 1 and 100 records.');
   }
   const records = inputs.map((input) => sanitizeRecordData(type, input));
+  records.forEach((data) => assertRecordMutationAuthorized(context, type, data));
   return withTransaction(async (client) => {
     const created = [];
     for (const data of records) {

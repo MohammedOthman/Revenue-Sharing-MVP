@@ -139,6 +139,20 @@ export function assertEntityType(type, { writable = false } = {}) {
   return type;
 }
 
+export function assertRecordMutationAuthorized(context, type, data) {
+  if (
+    type === 'PartnerStatement'
+    && context.role !== 'admin'
+    && (data.finance_approved === true || data.status === 'finalized')
+  ) {
+    throw new HttpError(
+      403,
+      'FINANCE_APPROVAL_REQUIRED',
+      'Only an administrator can finance-approve or finalize a statement.',
+    );
+  }
+}
+
 function cleanValue(value, depth = 0) {
   if (depth > 8) {
     throw new HttpError(400, 'INVALID_RECORD', 'Record data is nested too deeply.');

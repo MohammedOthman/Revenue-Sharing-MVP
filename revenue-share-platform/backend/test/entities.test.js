@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   assertEntityType,
+  assertRecordMutationAuthorized,
   publicRecord,
   recordLabel,
   sanitizeRecordData,
@@ -66,6 +67,23 @@ test('removes server-owned metadata and blocks invalid field names', () => {
 test('keeps the audit entity read-only', () => {
   assert.equal(assertEntityType('AuditEvent'), 'AuditEvent');
   assert.throws(() => assertEntityType('AuditEvent', { writable: true }), /does not exist/);
+});
+
+test('reserves statement finance approval and finalization for administrators', () => {
+  assert.throws(
+    () => assertRecordMutationAuthorized({ role: 'operator' }, 'PartnerStatement', { finance_approved: true }),
+    (error) => error.code === 'FINANCE_APPROVAL_REQUIRED',
+  );
+  assert.throws(
+    () => assertRecordMutationAuthorized({ role: 'operator' }, 'PartnerStatement', { status: 'finalized' }),
+    (error) => error.code === 'FINANCE_APPROVAL_REQUIRED',
+  );
+  assert.doesNotThrow(() =>
+    assertRecordMutationAuthorized({ role: 'admin' }, 'PartnerStatement', {
+      finance_approved: true,
+      status: 'finalized',
+    }),
+  );
 });
 
 test('does not allow a partial update to clear a required field', () => {

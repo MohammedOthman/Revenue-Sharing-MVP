@@ -548,7 +548,6 @@ export function StatementForm(props) {
         approved_payout: '',
         paid_payout: '',
         open_disputes: '0',
-        finance_approved: 'false',
         status: 'draft',
       }}
       fields={[
@@ -559,8 +558,7 @@ export function StatementForm(props) {
         { key: 'approved_payout', label: 'Approved payout', type: 'number' },
         { key: 'paid_payout', label: 'Paid payout', type: 'number' },
         { key: 'open_disputes', label: 'Open disputes', type: 'number' },
-        { key: 'finance_approved', label: 'Finance approved', type: 'boolean', options: [{ value: 'false', label: 'Pending' }, { value: 'true', label: 'Approved' }] },
-        { key: 'status', label: 'Status', type: 'select', options: ['draft', 'issued', 'acknowledged', 'finalized'] },
+        { key: 'status', label: 'Status', type: 'select', options: ['draft', 'issued', 'acknowledged'] },
       ]}
     />
   );
