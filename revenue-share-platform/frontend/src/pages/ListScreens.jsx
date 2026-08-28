@@ -16,10 +16,43 @@ import {
   TouchpointForm,
 } from '../components/RecordForms';
 import { useAuth } from '../context/AuthContext';
+import { Select } from '../components/ui/form';
 
 const mono = (v) => <span className="mono tnum">{v ?? 0}</span>;
 const dash = (v) => (v == null || v === '' ? '—' : v);
 const asText = (v) => (v ? humanize(v) : '—');
+
+function StatusEditor({ record, entity, options, canWrite, onUpdated }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  if (!canWrite) return <StatusTag status={record.status} />;
+
+  const change = async (event) => {
+    setBusy(true);
+    setError('');
+    try {
+      await entity.update(record._id, { status: event.target.value }, record.version);
+      onUpdated?.();
+    } catch (caught) {
+      setError(caught?.message || 'Could not update status.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="cellstack">
+      <Select
+        aria-label={`Status for ${record.name || record.partner_name || 'record'}`}
+        options={options}
+        value={record.status || options[0]}
+        disabled={busy}
+        onChange={change}
+      />
+      {error && <span className="cellsub" role="alert">{error}</span>}
+    </div>
+  );
+}
 
 /* ----------------------------------------------------------------- Programs */
 export function Programs() {
@@ -39,7 +72,18 @@ export function Programs() {
     { header: 'Attribution', render: (p) => asText(p.attribution_model) },
     { header: 'Partners', render: (p) => mono(p.active_partners) },
     { header: 'Revenue', render: (p) => <Money amount={p.total_revenue} compact /> },
-    { header: 'Status', render: (p) => <StatusTag status={p.status} /> },
+    {
+      header: 'Status',
+      render: (p) => (
+        <StatusEditor
+          record={p}
+          entity={PartnerProgram}
+          options={['draft', 'active', 'paused']}
+          canWrite={canWrite}
+          onUpdated={() => setReload((value) => value + 1)}
+        />
+      ),
+    },
   ];
   return (
     <>
@@ -74,6 +118,8 @@ export function Programs() {
 export function Agreements() {
   const { user } = useAuth();
   const canWrite = ['admin', 'operator'].includes(user?.role);
+  const [showForm, setShowForm] = useState(false);
+  const [reload, setReload] = useState(0);
   const rate = (a) => {
     const r = a.revenue_share_rate ?? a.commission_rate;
     return r != null ? `${r}%` : '—';
@@ -91,10 +137,19 @@ export function Agreements() {
     { header: 'Protection', render: (a) => (a.protection_window_days ? `${a.protection_window_days}d` : '—') },
     { header: 'Currency', render: (a) => <span className="mono">{a.currency || 'USD'}</span> },
     { header: 'Expiry', render: (a) => <span className="mono">{dash(a.expiry_date)}</span> },
-    { header: 'Status', render: (a) => <StatusTag status={a.status} /> },
+    {
+      header: 'Status',
+      render: (a) => (
+        <StatusEditor
+          record={a}
+          entity={Agreement}
+          options={['draft', 'pending_approval', 'active', 'expired', 'terminated']}
+          canWrite={canWrite}
+          onUpdated={() => setReload((value) => value + 1)}
+        />
+      ),
+    },
   ];
-  const [showForm, setShowForm] = useState(false);
-  const [reload, setReload] = useState(0);
   return (
     <>
       <DataScreen
@@ -153,7 +208,18 @@ export function Statements() {
         />
       ),
     },
-    { header: 'Status', render: (s) => <StatusTag status={s.status} /> },
+    {
+      header: 'Status',
+      render: (s) => (
+        <StatusEditor
+          record={s}
+          entity={PartnerStatement}
+          options={['draft', 'issued', 'acknowledged', 'finalized']}
+          canWrite={canWrite}
+          onUpdated={() => setReload((value) => value + 1)}
+        />
+      ),
+    },
   ];
   return (
     <>
@@ -202,7 +268,18 @@ export function Disputes() {
     { header: 'Contests', render: (d) => asText(d.disputed_object) },
     { header: 'Priority', render: (d) => <StatusTag status={d.priority} label={humanize(d.priority || 'medium')} /> },
     { header: 'SLA due', render: (d) => <span className="mono">{dash(d.sla_due_date)}</span> },
-    { header: 'Status', render: (d) => <StatusTag status={d.status} /> },
+    {
+      header: 'Status',
+      render: (d) => (
+        <StatusEditor
+          record={d}
+          entity={Dispute}
+          options={['open', 'under_review', 'escalated', 'resolved', 'closed']}
+          canWrite={canWrite}
+          onUpdated={() => setReload((value) => value + 1)}
+        />
+      ),
+    },
   ];
   return (
     <>
@@ -251,7 +328,18 @@ export function Attribution() {
     { header: 'Journey', render: (t) => asText(t.journey_stage) },
     { header: 'Category', render: (t) => asText(t.contribution_category) },
     { header: 'Confidence', render: (t) => <StatusTag status={t.matching_confidence} label={humanize(t.matching_confidence || 'medium')} /> },
-    { header: 'Status', render: (t) => <StatusTag status={t.status} /> },
+    {
+      header: 'Status',
+      render: (t) => (
+        <StatusEditor
+          record={t}
+          entity={EcosystemTouchpoint}
+          options={['captured', 'review_needed', 'linked_to_claim', 'strategic_influence']}
+          canWrite={canWrite}
+          onUpdated={() => setReload((value) => value + 1)}
+        />
+      ),
+    },
   ];
   return (
     <>

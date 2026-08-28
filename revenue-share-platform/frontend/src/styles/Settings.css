@@ -26,20 +26,30 @@
   border-bottom: 1px solid var(--edge-soft);
 }
 .settings-users { display: flex; flex-direction: column; }
+.settings-member { border-bottom: 1px solid var(--edge-soft); }
+.settings-member:last-child { border-bottom: 0; }
 .settings-user {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) 140px 100px auto;
+  grid-template-columns: minmax(180px, 1fr) 140px 100px auto auto;
   align-items: center;
   gap: var(--sp-3);
   padding: var(--sp-3) 0;
-  border-bottom: 1px solid var(--edge-soft);
 }
-.settings-user:last-child { border-bottom: 0; }
+.settings-reset {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr)) auto auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 0 var(--sp-4);
+}
+.settings-reset__note { grid-column: 1 / -1; }
 @media (max-width: 960px) {
   .settings-grid { grid-template-columns: 1fr; }
   .settings-user { grid-template-columns: 1fr 130px; }
+  .settings-reset { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
   .settings-add { grid-template-columns: 1fr; }
   .settings-user { grid-template-columns: 1fr; }
+  .settings-reset { grid-template-columns: 1fr; }
 }

@@ -17,6 +17,9 @@ export default function Settings() {
   const [teamError, setTeamError] = useState('');
   const [newUser, setNewUser] = useState({ email: '', fullName: '', password: '', role: 'operator' });
   const [adding, setAdding] = useState(false);
+  const [resetTarget, setResetTarget] = useState(null);
+  const [resetPassword, setResetPassword] = useState({ next: '', confirm: '' });
+  const [resetting, setResetting] = useState(false);
 
   const loadUsers = async () => {
     if (user?.role !== 'admin') return;
@@ -74,6 +77,24 @@ export default function Settings() {
       await loadUsers();
     } catch (error) {
       setTeamError(error.message);
+    }
+  };
+
+  const resetMemberPassword = async (event) => {
+    event.preventDefault();
+    setTeamError('');
+    if (resetPassword.next.length < 14) return setTeamError('Temporary passwords need at least 14 characters.');
+    if (resetPassword.next !== resetPassword.confirm) return setTeamError('The temporary passwords do not match.');
+    setResetting(true);
+    try {
+      await api.patch(`/users/${resetTarget.id}`, { password: resetPassword.next });
+      setResetTarget(null);
+      setResetPassword({ next: '', confirm: '' });
+      await loadUsers();
+    } catch (error) {
+      setTeamError(error.message);
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -139,23 +160,64 @@ export default function Settings() {
 
             <div className="settings-users">
               {users.map((member) => (
-                <div className="settings-user" key={member.id}>
-                  <div className="cellstack">
-                    <span className="cellname">{member.fullName}</span>
-                    <span className="cellsub">{member.email}</span>
+                <div className="settings-member" key={member.id}>
+                  <div className="settings-user">
+                    <div className="cellstack">
+                      <span className="cellname">{member.fullName}</span>
+                      <span className="cellsub">{member.email}</span>
+                    </div>
+                    <Select
+                      aria-label={`Role for ${member.fullName}`}
+                      options={['admin', 'operator', 'viewer']}
+                      value={member.role}
+                      disabled={member.id === user.id}
+                      onChange={(e) => updateUser(member.id, { role: e.target.value })}
+                    />
+                    <StatusTag status={member.status} />
+                    {member.id !== user.id && (
+                      <>
+                        <Button variant="quiet" size="sm" onClick={() => updateUser(member.id, { status: member.status === 'active' ? 'disabled' : 'active' })}>
+                          {member.status === 'active' ? 'Disable' : 'Enable'}
+                        </Button>
+                        <Button variant="quiet" size="sm" onClick={() => {
+                          setResetTarget(member);
+                          setResetPassword({ next: '', confirm: '' });
+                        }}>
+                          Reset password
+                        </Button>
+                      </>
+                    )}
                   </div>
-                  <Select
-                    aria-label={`Role for ${member.fullName}`}
-                    options={['admin', 'operator', 'viewer']}
-                    value={member.role}
-                    disabled={member.id === user.id}
-                    onChange={(e) => updateUser(member.id, { role: e.target.value })}
-                  />
-                  <StatusTag status={member.status} />
-                  {member.id !== user.id && (
-                    <Button variant="quiet" size="sm" onClick={() => updateUser(member.id, { status: member.status === 'active' ? 'disabled' : 'active' })}>
-                      {member.status === 'active' ? 'Disable' : 'Enable'}
-                    </Button>
+                  {resetTarget?.id === member.id && (
+                    <form className="settings-reset" onSubmit={resetMemberPassword}>
+                      <span className="cellsub settings-reset__note">
+                        This signs {member.fullName} out and requires a password change on next sign-in.
+                      </span>
+                      <TextInput
+                        type="password"
+                        autoComplete="new-password"
+                        aria-label={`Temporary password for ${member.fullName}`}
+                        placeholder="Temporary password"
+                        value={resetPassword.next}
+                        onChange={(event) => setResetPassword((current) => ({ ...current, next: event.target.value }))}
+                        required
+                      />
+                      <TextInput
+                        type="password"
+                        autoComplete="new-password"
+                        aria-label={`Confirm temporary password for ${member.fullName}`}
+                        placeholder="Confirm password"
+                        value={resetPassword.confirm}
+                        onChange={(event) => setResetPassword((current) => ({ ...current, confirm: event.target.value }))}
+                        required
+                      />
+                      <Button type="submit" variant="primary" size="sm" disabled={resetting}>
+                        {resetting ? 'Resetting…' : 'Set temporary password'}
+                      </Button>
+                      <Button type="button" variant="quiet" size="sm" onClick={() => setResetTarget(null)}>
+                        Cancel
+                      </Button>
+                    </form>
                   )}
                 </div>
               ))}
