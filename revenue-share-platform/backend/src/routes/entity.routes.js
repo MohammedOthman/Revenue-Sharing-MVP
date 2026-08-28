@@ -1,5 +1,6 @@
 import express from 'express';
 import { asyncHandler } from '../lib/http.js';
+import { parseOptionalRecordVersion, parseRecordId } from '../lib/validation.js';
 import { requireAuth, requirePasswordChanged, requireRole } from '../middleware/auth.js';
 import {
   bulkCreateRecords,
@@ -41,7 +42,7 @@ router.get(
     const record = await getRecord({
       organizationId: req.user.organization_id,
       type: req.params.type,
-      id: req.params.id,
+      id: parseRecordId(req.params.id),
     });
     res.json({ record });
   }),
@@ -72,9 +73,9 @@ router.patch(
     const record = await updateRecord(
       context(req),
       req.params.type,
-      req.params.id,
+      parseRecordId(req.params.id),
       req.body?.data ?? req.body,
-      req.body?.version,
+      parseOptionalRecordVersion(req.body?.version),
     );
     res.json({ record });
   }),
@@ -84,7 +85,7 @@ router.delete(
   '/:type/:id',
   requireRole('admin'),
   asyncHandler(async (req, res) => {
-    await deleteRecord(context(req), req.params.type, req.params.id);
+    await deleteRecord(context(req), req.params.type, parseRecordId(req.params.id));
     res.status(204).end();
   }),
 );

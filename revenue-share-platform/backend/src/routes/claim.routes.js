@@ -1,6 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 import { asyncHandler } from '../lib/http.js';
+import { parseRecordId, recordVersionSchema } from '../lib/validation.js';
 import { requireAuth, requirePasswordChanged, requireRole } from '../middleware/auth.js';
 import {
   decideClaimAttribution,
@@ -19,7 +20,7 @@ const context = (req) => ({
   requestId: req.id,
 });
 
-const version = z.number().int().positive();
+const version = recordVersionSchema;
 
 router.post(
   '/:id/attribution',
@@ -33,7 +34,7 @@ router.post(
         version,
       })
       .parse(req.body);
-    const record = await decideClaimAttribution(context(req), req.params.id, input);
+    const record = await decideClaimAttribution(context(req), parseRecordId(req.params.id), input);
     res.json({ record });
   }),
 );
@@ -43,7 +44,11 @@ router.post(
   requireRole('admin', 'operator'),
   asyncHandler(async (req, res) => {
     const input = z.object({ version }).parse(req.body);
-    const record = await evaluateClaimEligibility(context(req), req.params.id, input.version);
+    const record = await evaluateClaimEligibility(
+      context(req),
+      parseRecordId(req.params.id),
+      input.version,
+    );
     res.json({ record });
   }),
 );
@@ -61,7 +66,7 @@ router.post(
         reference: z.string().trim().max(200).optional(),
       })
       .parse(req.body);
-    const record = await recordClaimRevenue(context(req), req.params.id, input);
+    const record = await recordClaimRevenue(context(req), parseRecordId(req.params.id), input);
     res.json({ record });
   }),
 );
@@ -77,7 +82,7 @@ router.post(
         reference: z.string().trim().max(200).optional(),
       })
       .parse(req.body);
-    const record = await recordClaimPayout(context(req), req.params.id, input);
+    const record = await recordClaimPayout(context(req), parseRecordId(req.params.id), input);
     res.json({ record });
   }),
 );

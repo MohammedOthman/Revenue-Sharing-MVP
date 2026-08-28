@@ -1,6 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 import { asyncHandler } from '../lib/http.js';
+import { parseRecordId } from '../lib/validation.js';
 import { requireAuth, requirePasswordChanged, requireRole } from '../middleware/auth.js';
 import { createUser, listUsers, updateUser } from '../services/user.service.js';
 
@@ -48,7 +49,11 @@ router.post(
 router.patch(
   '/:id',
   asyncHandler(async (req, res) => {
-    const user = await updateUser(context(req), req.params.id, updateSchema.parse(req.body));
+    const user = await updateUser(
+      context(req),
+      parseRecordId(req.params.id),
+      updateSchema.parse(req.body),
+    );
     res.json({ user });
   }),
 );
