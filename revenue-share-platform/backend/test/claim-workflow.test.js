@@ -63,22 +63,40 @@ test('calculates an eligible payout on the attributed basis', () => {
       revenue_status: 'invoiced',
       claim_status: 'accepted',
       estimated_value: 84200,
+      actual_revenue: 84200,
+      payout_rate: 10,
     },
     now,
   );
   assert.equal(result.payout_eligibility_status, 'eligible');
-  assert.equal(result.estimated_payout, 29470);
+  assert.equal(result.estimated_payout, 2947);
   assert.equal(result.claim_status, 'payout_eligible');
 });
 
 test('records normalized revenue evidence', () => {
   const evidence = buildRevenueEvidence(
     { actual_revenue: 0 },
-    { status: 'closed_won', actualRevenue: 84000, reference: 'CRM-1042' },
+    { status: 'closed_won', actualRevenue: 84000, payoutRate: 10, reference: 'CRM-1042' },
     now,
   );
   assert.equal(evidence.revenue_status, 'closed_won');
   assert.equal(evidence.actual_revenue, 84000);
+  assert.equal(evidence.payout_rate, 10);
   assert.equal(evidence.revenue_reference, 'CRM-1042');
   assert.equal(evidence.revenue_event_date, now.toISOString());
+});
+
+test('requires the governing payout rate before eligibility', () => {
+  const result = calculateClaimEligibility(
+    {
+      attribution_status: 'accepted',
+      attribution_percentage: 100,
+      revenue_status: 'closed_won',
+      claim_status: 'accepted',
+      estimated_value: 1000,
+    },
+    now,
+  );
+  assert.equal(result.payout_eligibility_status, 'missing_evidence');
+  assert.deepEqual(result.eligibility_missing_conditions, ['Record the governing agreement payout rate']);
 });

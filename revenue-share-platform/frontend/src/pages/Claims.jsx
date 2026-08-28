@@ -45,6 +45,7 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
   const [decisionPct, setDecisionPct] = useState(c.attribution_percentage ?? '');
   const [revenueStatus, setRevenueStatus] = useState(c.revenue_status || 'pipeline');
   const [actualRevenue, setActualRevenue] = useState(c.actual_revenue ?? '');
+  const [payoutRate, setPayoutRate] = useState(c.payout_rate ?? '');
   const [revenueReference, setRevenueReference] = useState(c.revenue_reference || '');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -109,6 +110,7 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
       await PartnerClaim.recordRevenue(c._id, {
         status: revenueStatus,
         actualRevenue: actualRevenue === '' ? 0 : Number(actualRevenue),
+        payoutRate: payoutRate === '' ? undefined : Number(payoutRate),
         reference: revenueReference,
         version: c.version,
       });
@@ -288,6 +290,7 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
               <DefRow label="Actual revenue">
                 <Money amount={c.actual_revenue} currency={ccy} />
               </DefRow>
+              <DefRow label="Agreement rate">{formatPct(c.payout_rate)}</DefRow>
               <DefRow label="CRM match">{c.crm_match_confidence || 'unmatched'}</DefRow>
               <DefRow label="Preflight">
                 <StatusTag status={c.preflight_status} />
@@ -323,6 +326,16 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
                   onChange={(event) => setRevenueReference(event.target.value)}
                   placeholder="CRM or invoice reference"
                   aria-label="Revenue reference"
+                />
+                <input
+                  className="rv-field"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={payoutRate}
+                  onChange={(event) => setPayoutRate(event.target.value)}
+                  placeholder="Payout rate %"
+                  aria-label="Agreement payout rate"
                 />
                 <Button variant="ghost" size="sm" disabled={busy} onClick={recordRevenue}>
                   Record revenue

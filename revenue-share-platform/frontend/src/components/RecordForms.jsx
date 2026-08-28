@@ -110,6 +110,7 @@ export function ClaimForm({ open, onClose, onCreated }) {
     estimated_value: '',
     currency: 'USD',
     expected_close_date: '',
+    payout_rate: '',
     notes: '',
   };
   const [f, setF] = useState(blank);
@@ -128,6 +129,7 @@ export function ClaimForm({ open, onClose, onCreated }) {
       await PartnerClaim.create({
         ...f,
         estimated_value: Number(f.estimated_value),
+        payout_rate: f.payout_rate === '' ? undefined : Number(f.payout_rate),
         submission_date: today(),
         claim_status: 'submitted',
         preflight_status: 'pending',
@@ -176,6 +178,9 @@ export function ClaimForm({ open, onClose, onCreated }) {
         </FormField>
         <FormField label="Expected close">
           <DateInput value={f.expected_close_date} onChange={s('expected_close_date')} />
+        </FormField>
+        <FormField label="Agreement payout rate %">
+          <NumberInput value={f.payout_rate} onChange={s('payout_rate')} min="0" max="100" />
         </FormField>
         <FormField label="Notes" full>
           <Textarea value={f.notes} onChange={s('notes')} />

@@ -37,14 +37,23 @@ export function calculateClaimEligibility(claim, evaluatedAt = new Date()) {
     status = 'missing_evidence';
     explanation = 'Attribution is accepted, but a closed-won or later revenue event is still required.';
     missing = ['Record a closed-won, invoiced, collected, or recognized revenue event'];
+  } else if (!Number.isFinite(Number(claim.payout_rate)) || Number(claim.payout_rate) <= 0) {
+    status = 'missing_evidence';
+    explanation = 'Revenue is confirmed, but the governing agreement payout rate is missing.';
+    missing = ['Record the governing agreement payout rate'];
   } else {
     status = 'eligible';
+    const revenueBasis = Number(claim.actual_revenue) > 0
+      ? Number(claim.actual_revenue)
+      : Number(claim.estimated_value) || 0;
     estimatedPayout = Math.round(
-      ((Number(claim.estimated_value) || 0) * (Number(claim.attribution_percentage) || 0)) / 100,
+      revenueBasis
+        * (Number(claim.payout_rate) / 100)
+        * ((Number(claim.attribution_percentage) || 0) / 100),
     );
-    explanation = `Attribution is accepted at ${Number(claim.attribution_percentage) || 0}% and revenue is ${String(
-      claim.revenue_status,
-    ).replaceAll('_', ' ')}.`;
+    explanation = `Revenue is ${String(claim.revenue_status).replaceAll('_', ' ')}, the agreement rate is ${Number(
+      claim.payout_rate,
+    )}%, and attribution is accepted at ${Number(claim.attribution_percentage) || 0}%.`;
   }
 
   return {
@@ -60,7 +69,7 @@ export function calculateClaimEligibility(claim, evaluatedAt = new Date()) {
 
 export function buildRevenueEvidence(
   claim,
-  { status, actualRevenue, reference },
+  { status, actualRevenue, payoutRate, reference },
   recordedAt = new Date(),
 ) {
   if (!['pipeline', 'closed_won', 'invoiced', 'collected', 'recognized', 'lost'].includes(status)) {
@@ -70,9 +79,14 @@ export function buildRevenueEvidence(
   if (!Number.isFinite(amount) || amount < 0) {
     throw new HttpError(400, 'INVALID_REVENUE_AMOUNT', 'Actual revenue must be a non-negative number.');
   }
+  const rate = payoutRate === undefined ? claim.payout_rate : Number(payoutRate);
+  if (rate !== undefined && (!Number.isFinite(Number(rate)) || Number(rate) < 0 || Number(rate) > 100)) {
+    throw new HttpError(400, 'INVALID_PAYOUT_RATE', 'Payout rate must be between 0 and 100 percent.');
+  }
   return {
     revenue_status: status,
     actual_revenue: amount,
+    payout_rate: rate,
     revenue_event_date: recordedAt.toISOString(),
     revenue_reference: reference || '',
   };

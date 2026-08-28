@@ -19,6 +19,31 @@ test('accepts and normalizes a valid partner claim', () => {
   assert.equal(record.partner_name, 'Najd Cloud');
   assert.equal(record.estimated_value, 84000);
   assert.deepEqual(record.metadata, { source: 'crm' });
+  assert.equal(record.claim_status, 'submitted');
+  assert.equal(record.payment_status, 'pending');
+});
+
+test('prevents clients from bypassing claim workflow actions', () => {
+  const created = sanitizeRecordData('PartnerClaim', {
+    partner_name: 'Najd Cloud',
+    customer_account: 'Riyad Bank',
+    claim_type: 'referral_claim',
+    estimated_value: 84000,
+    claim_status: 'paid',
+    payment_status: 'paid',
+  });
+  assert.equal(created.claim_status, 'submitted');
+  assert.equal(created.payment_status, 'pending');
+  assert.throws(
+    () => sanitizeRecordData('PartnerClaim', { payment_status: 'paid' }, { partial: true }),
+    (error) => error.code === 'WORKFLOW_ACTION_REQUIRED',
+  );
+  const internal = sanitizeRecordData(
+    'PartnerClaim',
+    { payment_status: 'paid' },
+    { partial: true, allowWorkflowFields: true },
+  );
+  assert.equal(internal.payment_status, 'paid');
 });
 
 test('rejects missing required claim fields', () => {

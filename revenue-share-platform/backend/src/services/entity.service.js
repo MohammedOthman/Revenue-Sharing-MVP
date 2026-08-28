@@ -143,8 +143,15 @@ export async function createRecord(context, type, input) {
   });
 }
 
-export async function updateRecord(context, type, id, input, expectedVersion) {
-  const updates = sanitizeRecordData(type, input, { partial: true });
+export async function updateRecord(
+  context,
+  type,
+  id,
+  input,
+  expectedVersion,
+  { allowWorkflowFields = false } = {},
+) {
+  const updates = sanitizeRecordData(type, input, { partial: true, allowWorkflowFields });
   if (Object.keys(updates).length === 0) {
     throw new HttpError(400, 'NO_CHANGES', 'At least one field must be supplied.');
   }

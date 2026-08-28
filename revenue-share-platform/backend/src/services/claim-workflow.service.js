@@ -22,6 +22,7 @@ export async function decideClaimAttribution(context, id, input) {
     id,
     buildAttributionDecision(claim, input),
     input.version,
+    { allowWorkflowFields: true },
   );
 }
 
@@ -33,6 +34,7 @@ export async function evaluateClaimEligibility(context, id, expectedVersion) {
     id,
     calculateClaimEligibility(claim),
     expectedVersion,
+    { allowWorkflowFields: true },
   );
 }
 
@@ -44,6 +46,7 @@ export async function recordClaimRevenue(context, id, input) {
     id,
     buildRevenueEvidence(claim, input),
     input.version,
+    { allowWorkflowFields: true },
   );
 }
 
@@ -74,5 +77,6 @@ export async function recordClaimPayout(context, id, input) {
       payout_reference: input.reference || '',
     },
     input.version,
+    { allowWorkflowFields: true },
   );
 }

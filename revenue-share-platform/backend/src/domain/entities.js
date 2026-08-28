@@ -104,6 +104,31 @@ const percentageFields = new Set([
   'attribution_recommended_percentage',
   'revenue_share_rate',
   'commission_rate',
+  'payout_rate',
+]);
+const claimWorkflowFields = new Set([
+  'claim_status',
+  'preflight_status',
+  'attribution_status',
+  'attribution_percentage',
+  'attribution_decision_date',
+  'attribution_version',
+  'attribution_rejection_reason',
+  'revenue_status',
+  'actual_revenue',
+  'revenue_event_date',
+  'revenue_reference',
+  'payout_eligibility_status',
+  'payout_eligible',
+  'eligibility_explanation',
+  'eligibility_missing_conditions',
+  'eligibility_evaluated_date',
+  'estimated_payout',
+  'approved_payout',
+  'paid_amount',
+  'payment_status',
+  'payout_recorded_date',
+  'payout_reference',
 ]);
 
 export function assertEntityType(type, { writable = false } = {}) {
@@ -151,7 +176,11 @@ function cleanValue(value, depth = 0) {
   throw new HttpError(400, 'INVALID_RECORD', 'Record data contains an unsupported value.');
 }
 
-export function sanitizeRecordData(type, input, { partial = false } = {}) {
+export function sanitizeRecordData(
+  type,
+  input,
+  { partial = false, allowWorkflowFields = false } = {},
+) {
   assertEntityType(type, { writable: true });
   if (!input || typeof input !== 'object' || Array.isArray(input)) {
     throw new HttpError(400, 'INVALID_RECORD', 'Record data must be a JSON object.');
@@ -165,6 +194,18 @@ export function sanitizeRecordData(type, input, { partial = false } = {}) {
   for (const field of requirements[type] ?? []) {
     if ((!partial || Object.hasOwn(data, field)) && (data[field] === undefined || data[field] === null || data[field] === '')) {
       throw new HttpError(400, 'INVALID_RECORD', `${field} is required.`);
+    }
+  }
+
+  if (type === 'PartnerClaim' && partial && !allowWorkflowFields) {
+    const protectedFields = Object.keys(data).filter((field) => claimWorkflowFields.has(field));
+    if (protectedFields.length > 0) {
+      throw new HttpError(
+        403,
+        'WORKFLOW_ACTION_REQUIRED',
+        'Use the dedicated claim workflow action for this change.',
+        { fields: protectedFields },
+      );
     }
   }
 
@@ -191,6 +232,19 @@ export function sanitizeRecordData(type, input, { partial = false } = {}) {
     if (field.endsWith('_email') && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       throw new HttpError(400, 'INVALID_RECORD', `${field} must be a valid email address.`);
     }
+  }
+
+  if (type === 'PartnerClaim' && !partial && !allowWorkflowFields) {
+    return {
+      ...data,
+      claim_status: 'submitted',
+      preflight_status: 'pending',
+      attribution_status: 'pending',
+      payout_eligibility_status: 'pending',
+      payout_eligible: false,
+      revenue_status: 'pipeline',
+      payment_status: 'pending',
+    };
   }
 
   return data;

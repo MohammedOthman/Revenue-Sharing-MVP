@@ -57,6 +57,7 @@ router.post(
         version,
         status: z.enum(['pipeline', 'closed_won', 'invoiced', 'collected', 'recognized', 'lost']),
         actualRevenue: z.number().nonnegative().optional(),
+        payoutRate: z.number().min(0).max(100).optional(),
         reference: z.string().trim().max(200).optional(),
       })
       .parse(req.body);
