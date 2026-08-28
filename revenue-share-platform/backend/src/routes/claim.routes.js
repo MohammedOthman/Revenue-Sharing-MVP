@@ -6,6 +6,7 @@ import {
   decideClaimAttribution,
   evaluateClaimEligibility,
   recordClaimPayout,
+  recordClaimRevenue,
 } from '../services/claim-workflow.service.js';
 
 const router = express.Router();
@@ -43,6 +44,23 @@ router.post(
   asyncHandler(async (req, res) => {
     const input = z.object({ version }).parse(req.body);
     const record = await evaluateClaimEligibility(context(req), req.params.id, input.version);
+    res.json({ record });
+  }),
+);
+
+router.post(
+  '/:id/revenue',
+  requireRole('admin', 'operator'),
+  asyncHandler(async (req, res) => {
+    const input = z
+      .object({
+        version,
+        status: z.enum(['pipeline', 'closed_won', 'invoiced', 'collected', 'recognized', 'lost']),
+        actualRevenue: z.number().nonnegative().optional(),
+        reference: z.string().trim().max(200).optional(),
+      })
+      .parse(req.body);
+    const record = await recordClaimRevenue(context(req), req.params.id, input);
     res.json({ record });
   }),
 );

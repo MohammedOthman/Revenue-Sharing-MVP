@@ -182,9 +182,14 @@
 
 .decide {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--sp-3);
   margin-top: var(--sp-2);
+}
+.decide > .rv-field:not(.decide__pct) {
+  flex: 1 1 140px;
+  min-width: 0;
 }
 .decide__pct {
   width: 84px;

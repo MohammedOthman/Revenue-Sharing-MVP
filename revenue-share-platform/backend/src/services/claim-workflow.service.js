@@ -1,5 +1,6 @@
 import {
   buildAttributionDecision,
+  buildRevenueEvidence,
   calculateClaimEligibility,
 } from '../domain/claim-workflow.js';
 import { HttpError } from '../lib/http.js';
@@ -32,6 +33,17 @@ export async function evaluateClaimEligibility(context, id, expectedVersion) {
     id,
     calculateClaimEligibility(claim),
     expectedVersion,
+  );
+}
+
+export async function recordClaimRevenue(context, id, input) {
+  const claim = await loadClaim(context, id);
+  return updateRecord(
+    context,
+    'PartnerClaim',
+    id,
+    buildRevenueEvidence(claim, input),
+    input.version,
   );
 }
 

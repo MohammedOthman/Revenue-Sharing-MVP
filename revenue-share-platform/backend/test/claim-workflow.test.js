@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   buildAttributionDecision,
+  buildRevenueEvidence,
   calculateClaimEligibility,
 } from '../src/domain/claim-workflow.js';
 
@@ -68,4 +69,16 @@ test('calculates an eligible payout on the attributed basis', () => {
   assert.equal(result.payout_eligibility_status, 'eligible');
   assert.equal(result.estimated_payout, 29470);
   assert.equal(result.claim_status, 'payout_eligible');
+});
+
+test('records normalized revenue evidence', () => {
+  const evidence = buildRevenueEvidence(
+    { actual_revenue: 0 },
+    { status: 'closed_won', actualRevenue: 84000, reference: 'CRM-1042' },
+    now,
+  );
+  assert.equal(evidence.revenue_status, 'closed_won');
+  assert.equal(evidence.actual_revenue, 84000);
+  assert.equal(evidence.revenue_reference, 'CRM-1042');
+  assert.equal(evidence.revenue_event_date, now.toISOString());
 });

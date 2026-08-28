@@ -45,6 +45,10 @@ export const PartnerClaim = {
     const { data } = await api.post(`/claims/${id}/eligibility`, { version });
     return data.record;
   },
+  recordRevenue: async (id, evidence) => {
+    const { data } = await api.post(`/claims/${id}/revenue`, evidence);
+    return data.record;
+  },
   recordPayout: async (id, payout) => {
     const { data } = await api.post(`/claims/${id}/payout`, payout);
     return data.record;

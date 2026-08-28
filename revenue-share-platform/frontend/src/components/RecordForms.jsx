@@ -133,6 +133,8 @@ export function ClaimForm({ open, onClose, onCreated }) {
         preflight_status: 'pending',
         attribution_status: 'pending',
         payout_eligibility_status: 'pending',
+        revenue_status: 'pipeline',
+        payment_status: 'pending',
       });
       setF(blank);
       onCreated?.();

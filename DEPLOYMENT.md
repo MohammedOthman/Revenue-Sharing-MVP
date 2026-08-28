@@ -28,9 +28,10 @@ The production workflow is deliberately claim-centric:
 1. Capture the partner, program, and governing agreement.
 2. Register a claim and its supporting ecosystem touchpoints.
 3. Accept or reject attribution of record with an explicit percentage.
-4. Evaluate payout readiness on the server against attribution and confirmed
-   revenue evidence.
-5. Draft a partner statement, route exceptions through disputes, and record a
+4. Record the closed-won, invoiced, collected, or recognized revenue evidence.
+5. Evaluate payout readiness on the server against attribution and that
+   confirmed revenue evidence.
+6. Draft a partner statement, route exceptions through disputes, and record a
    payout only after eligibility. Recording a payout is an auditable ledger
    milestone; Reven does not move money.
 

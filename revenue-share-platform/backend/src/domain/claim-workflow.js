@@ -57,3 +57,23 @@ export function calculateClaimEligibility(claim, evaluatedAt = new Date()) {
     claim_status: status === 'eligible' ? 'payout_eligible' : claim.claim_status,
   };
 }
+
+export function buildRevenueEvidence(
+  claim,
+  { status, actualRevenue, reference },
+  recordedAt = new Date(),
+) {
+  if (!['pipeline', 'closed_won', 'invoiced', 'collected', 'recognized', 'lost'].includes(status)) {
+    throw new HttpError(400, 'INVALID_REVENUE_STATUS', 'Revenue status is not supported.');
+  }
+  const amount = actualRevenue === undefined ? Number(claim.actual_revenue) || 0 : Number(actualRevenue);
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw new HttpError(400, 'INVALID_REVENUE_AMOUNT', 'Actual revenue must be a non-negative number.');
+  }
+  return {
+    revenue_status: status,
+    actual_revenue: amount,
+    revenue_event_date: recordedAt.toISOString(),
+    revenue_reference: reference || '',
+  };
+}

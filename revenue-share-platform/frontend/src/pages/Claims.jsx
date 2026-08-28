@@ -43,6 +43,9 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
   const c = claim;
   const ccy = c.currency || 'USD';
   const [decisionPct, setDecisionPct] = useState(c.attribution_percentage ?? '');
+  const [revenueStatus, setRevenueStatus] = useState(c.revenue_status || 'pipeline');
+  const [actualRevenue, setActualRevenue] = useState(c.actual_revenue ?? '');
+  const [revenueReference, setRevenueReference] = useState(c.revenue_reference || '');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
 
@@ -94,6 +97,24 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
       onUpdated?.();
     } catch (e) {
       setErr(e?.message || 'Could not record the payout.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const recordRevenue = async () => {
+    setErr('');
+    setBusy(true);
+    try {
+      await PartnerClaim.recordRevenue(c._id, {
+        status: revenueStatus,
+        actualRevenue: actualRevenue === '' ? 0 : Number(actualRevenue),
+        reference: revenueReference,
+        version: c.version,
+      });
+      onUpdated?.();
+    } catch (e) {
+      setErr(e?.message || 'Could not record the revenue evidence.');
     } finally {
       setBusy(false);
     }
@@ -274,6 +295,39 @@ function ClaimDrawer({ claim, onClose, onUpdated, canWrite, isAdmin }) {
             </div>
             {c.evidence_description && (
               <p className="drawer__note">Evidence: {c.evidence_description}</p>
+            )}
+            {canWrite && (
+              <div className="decide">
+                <select
+                  className="rv-field rv-select"
+                  value={revenueStatus}
+                  onChange={(event) => setRevenueStatus(event.target.value)}
+                  aria-label="Revenue status"
+                >
+                  {['pipeline', 'closed_won', 'invoiced', 'collected', 'recognized', 'lost'].map((status) => (
+                    <option key={status} value={status}>{humanize(status)}</option>
+                  ))}
+                </select>
+                <input
+                  className="rv-field"
+                  type="number"
+                  min="0"
+                  value={actualRevenue}
+                  onChange={(event) => setActualRevenue(event.target.value)}
+                  placeholder="Actual revenue"
+                  aria-label="Actual revenue"
+                />
+                <input
+                  className="rv-field"
+                  value={revenueReference}
+                  onChange={(event) => setRevenueReference(event.target.value)}
+                  placeholder="CRM or invoice reference"
+                  aria-label="Revenue reference"
+                />
+                <Button variant="ghost" size="sm" disabled={busy} onClick={recordRevenue}>
+                  Record revenue
+                </Button>
+              </div>
             )}
           </section>
         </div>
