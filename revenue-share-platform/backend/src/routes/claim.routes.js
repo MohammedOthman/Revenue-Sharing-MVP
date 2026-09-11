@@ -9,6 +9,8 @@ import {
   recordClaimPayout,
   recordClaimRevenue,
 } from '../services/claim-workflow.service.js';
+import { getRecord } from '../services/entity.service.js';
+import { listClaimLedger, listOrganizationLedger } from '../services/ledger.service.js';
 
 const router = express.Router();
 router.use(requireAuth, requirePasswordChanged);
@@ -22,6 +24,34 @@ const context = (req) => ({
 
 const version = recordVersionSchema;
 
+router.get(
+  '/ledger',
+  asyncHandler(async (req, res) => {
+    const journals = await listOrganizationLedger({
+      organizationId: req.user.organization_id,
+      limit: req.query.limit,
+    });
+    res.json({ journals });
+  }),
+);
+
+router.get(
+  '/:id/ledger',
+  asyncHandler(async (req, res) => {
+    const id = parseRecordId(req.params.id);
+    await getRecord({
+      organizationId: req.user.organization_id,
+      type: 'PartnerClaim',
+      id,
+    });
+    const journals = await listClaimLedger({
+      organizationId: req.user.organization_id,
+      claimId: id,
+    });
+    res.json({ journals });
+  }),
+);
+
 router.post(
   '/:id/attribution',
   requireRole('admin', 'operator'),
@@ -34,8 +64,8 @@ router.post(
         version,
       })
       .parse(req.body);
-    const record = await decideClaimAttribution(context(req), parseRecordId(req.params.id), input);
-    res.json({ record });
+    const result = await decideClaimAttribution(context(req), parseRecordId(req.params.id), input);
+    res.json(result);
   }),
 );
 
@@ -44,12 +74,12 @@ router.post(
   requireRole('admin', 'operator'),
   asyncHandler(async (req, res) => {
     const input = z.object({ version }).parse(req.body);
-    const record = await evaluateClaimEligibility(
+    const result = await evaluateClaimEligibility(
       context(req),
       parseRecordId(req.params.id),
       input.version,
     );
-    res.json({ record });
+    res.json(result);
   }),
 );
 
@@ -66,8 +96,8 @@ router.post(
         reference: z.string().trim().max(200).optional(),
       })
       .parse(req.body);
-    const record = await recordClaimRevenue(context(req), parseRecordId(req.params.id), input);
-    res.json({ record });
+    const result = await recordClaimRevenue(context(req), parseRecordId(req.params.id), input);
+    res.json(result);
   }),
 );
 
@@ -82,8 +112,8 @@ router.post(
         reference: z.string().trim().max(200).optional(),
       })
       .parse(req.body);
-    const record = await recordClaimPayout(context(req), parseRecordId(req.params.id), input);
-    res.json({ record });
+    const result = await recordClaimPayout(context(req), parseRecordId(req.params.id), input);
+    res.json(result);
   }),
 );
 

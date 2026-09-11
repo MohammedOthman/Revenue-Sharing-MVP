@@ -53,6 +53,10 @@ export const PartnerClaim = {
     const { data } = await api.post(`/claims/${id}/payout`, payout);
     return data.record;
   },
+  listLedger: async (id) => {
+    const { data } = await api.get(`/claims/${id}/ledger`);
+    return data.journals;
+  },
 };
 export const EcosystemTouchpoint = entity('EcosystemTouchpoint');
 export const PartnerStatement = entity('PartnerStatement');

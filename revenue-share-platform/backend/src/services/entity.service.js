@@ -7,11 +7,13 @@ import {
   recordLabel,
   sanitizeRecordData,
 } from '../domain/entities.js';
+import { LEDGER_EVENTS } from '../domain/ledger.js';
 import { HttpError } from '../lib/http.js';
+import { postClaimJournal } from './ledger.service.js';
 
 const MAX_LIMIT = 500;
 
-async function writeAudit(client, context, action, type, recordId, data, changedFields = []) {
+export async function writeAudit(client, context, action, type, recordId, data, changedFields = []) {
   await client.query(
     `INSERT INTO reven_audit_log
       (id, organization_id, actor_id, actor_name, action, entity_type, record_id,
@@ -128,24 +130,43 @@ export async function getRecord({ organizationId, type, id }) {
   return publicRecord(result.rows[0]);
 }
 
-export async function createRecord(context, type, input) {
-  const data = sanitizeRecordData(type, input);
-  assertRecordMutationAuthorized(context, type, data);
-  return withTransaction(async (client) => {
-    const id = randomUUID();
-    const result = await client.query(
-      `INSERT INTO reven_records
-        (id, organization_id, entity_type, data, created_by, updated_by)
-       VALUES ($1, $2, $3, $4::jsonb, $5, $5)
-       RETURNING id, data, version, created_at, updated_at`,
-      [id, context.organizationId, type, JSON.stringify(data), context.userId],
-    );
-    await writeAudit(client, context, 'create', type, id, data, Object.keys(data));
-    return publicRecord(result.rows[0]);
-  });
+export async function getRecordWithClient(client, { organizationId, type, id }) {
+  assertEntityType(type);
+  const result = await client.query(
+    `SELECT id, data, version, created_at, updated_at
+       FROM reven_records
+      WHERE organization_id = $1 AND entity_type = $2 AND id = $3 AND deleted_at IS NULL`,
+    [organizationId, type, id],
+  );
+  if (!result.rows[0]) throw new HttpError(404, 'RECORD_NOT_FOUND', 'Record not found.');
+  return publicRecord(result.rows[0]);
 }
 
-export async function updateRecord(
+export async function createRecordWithClient(client, context, type, input) {
+  const data = sanitizeRecordData(type, input);
+  assertRecordMutationAuthorized(context, type, data);
+  const id = randomUUID();
+  const result = await client.query(
+    `INSERT INTO reven_records
+      (id, organization_id, entity_type, data, created_by, updated_by)
+     VALUES ($1, $2, $3, $4::jsonb, $5, $5)
+     RETURNING id, data, version, created_at, updated_at`,
+    [id, context.organizationId, type, JSON.stringify(data), context.userId],
+  );
+  await writeAudit(client, context, 'create', type, id, data, Object.keys(data));
+  const record = publicRecord(result.rows[0]);
+  if (type === 'PartnerClaim') {
+    await postClaimJournal(client, context, LEDGER_EVENTS.CLAIM_REGISTERED, record);
+  }
+  return record;
+}
+
+export async function createRecord(context, type, input) {
+  return withTransaction((client) => createRecordWithClient(client, context, type, input));
+}
+
+export async function updateRecordWithClient(
+  client,
   context,
   type,
   id,
@@ -159,47 +180,65 @@ export async function updateRecord(
     throw new HttpError(400, 'NO_CHANGES', 'At least one field must be supplied.');
   }
 
-  return withTransaction(async (client) => {
-    const params = [JSON.stringify(updates), context.userId, context.organizationId, type, id];
-    let versionSql = '';
-    if (expectedVersion !== undefined && expectedVersion !== null) {
-      params.push(expectedVersion);
-      versionSql = ` AND version = $${params.length}`;
-    }
-    const result = await client.query(
-      `UPDATE reven_records
-          SET data = data || $1::jsonb,
-              updated_by = $2,
-              updated_at = NOW(),
-              version = version + 1
-        WHERE organization_id = $3
-          AND entity_type = $4
-          AND id = $5
-          AND deleted_at IS NULL
-          ${versionSql}
-       RETURNING id, data, version, created_at, updated_at`,
-      params,
+  const params = [JSON.stringify(updates), context.userId, context.organizationId, type, id];
+  let versionSql = '';
+  if (expectedVersion !== undefined && expectedVersion !== null) {
+    params.push(expectedVersion);
+    versionSql = ` AND version = $${params.length}`;
+  }
+  const result = await client.query(
+    `UPDATE reven_records
+        SET data = data || $1::jsonb,
+            updated_by = $2,
+            updated_at = NOW(),
+            version = version + 1
+      WHERE organization_id = $3
+        AND entity_type = $4
+        AND id = $5
+        AND deleted_at IS NULL
+        ${versionSql}
+     RETURNING id, data, version, created_at, updated_at`,
+    params,
+  );
+  if (!result.rows[0]) {
+    const exists = await client.query(
+      `SELECT version FROM reven_records
+        WHERE organization_id = $1 AND entity_type = $2 AND id = $3 AND deleted_at IS NULL`,
+      [context.organizationId, type, id],
     );
-    if (!result.rows[0]) {
-      const exists = await client.query(
-        `SELECT version FROM reven_records
-          WHERE organization_id = $1 AND entity_type = $2 AND id = $3 AND deleted_at IS NULL`,
-        [context.organizationId, type, id],
-      );
-      if (exists.rows[0]) {
-        throw new HttpError(409, 'VERSION_CONFLICT', 'This record changed since it was loaded.', {
-          currentVersion: exists.rows[0].version,
-        });
-      }
-      throw new HttpError(404, 'RECORD_NOT_FOUND', 'Record not found.');
+    if (exists.rows[0]) {
+      throw new HttpError(409, 'VERSION_CONFLICT', 'This record changed since it was loaded.', {
+        currentVersion: exists.rows[0].version,
+      });
     }
-    await writeAudit(client, context, 'update', type, id, result.rows[0].data, Object.keys(updates));
-    return publicRecord(result.rows[0]);
-  });
+    throw new HttpError(404, 'RECORD_NOT_FOUND', 'Record not found.');
+  }
+  await writeAudit(client, context, 'update', type, id, result.rows[0].data, Object.keys(updates));
+  return publicRecord(result.rows[0]);
+}
+
+export async function updateRecord(
+  context,
+  type,
+  id,
+  input,
+  expectedVersion,
+  options = {},
+) {
+  return withTransaction((client) =>
+    updateRecordWithClient(client, context, type, id, input, expectedVersion, options),
+  );
 }
 
 export async function deleteRecord(context, type, id) {
   assertEntityType(type, { writable: true });
+  if (type === 'PartnerClaim') {
+    throw new HttpError(
+      409,
+      'CLAIM_IMMUTABLE',
+      'Claims cannot be deleted once they exist on the ledger. Mark them expired or duplicate instead.',
+    );
+  }
   return withTransaction(async (client) => {
     const result = await client.query(
       `UPDATE reven_records
@@ -217,21 +256,10 @@ export async function bulkCreateRecords(context, type, inputs) {
   if (!Array.isArray(inputs) || inputs.length === 0 || inputs.length > 100) {
     throw new HttpError(400, 'INVALID_BATCH', 'A batch must contain between 1 and 100 records.');
   }
-  const records = inputs.map((input) => sanitizeRecordData(type, input));
-  records.forEach((data) => assertRecordMutationAuthorized(context, type, data));
   return withTransaction(async (client) => {
     const created = [];
-    for (const data of records) {
-      const id = randomUUID();
-      const result = await client.query(
-        `INSERT INTO reven_records
-          (id, organization_id, entity_type, data, created_by, updated_by)
-         VALUES ($1, $2, $3, $4::jsonb, $5, $5)
-         RETURNING id, data, version, created_at, updated_at`,
-        [id, context.organizationId, type, JSON.stringify(data), context.userId],
-      );
-      await writeAudit(client, context, 'create', type, id, data, Object.keys(data));
-      created.push(publicRecord(result.rows[0]));
+    for (const input of inputs) {
+      created.push(await createRecordWithClient(client, context, type, input));
     }
     return created;
   });
