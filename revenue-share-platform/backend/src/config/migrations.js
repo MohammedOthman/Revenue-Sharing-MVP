@@ -87,6 +87,67 @@ const migrations = [
         ADD COLUMN IF NOT EXISTS must_change_password BOOLEAN NOT NULL DEFAULT FALSE;
     `,
   },
+  {
+    version: 3,
+    name: 'append_only_claim_ledger',
+    sql: `
+      CREATE TABLE IF NOT EXISTS reven_journals (
+        id UUID PRIMARY KEY,
+        organization_id UUID NOT NULL REFERENCES reven_organizations(id) ON DELETE CASCADE,
+        claim_id UUID NOT NULL,
+        event TEXT NOT NULL CHECK (event IN (
+          'claim_registered',
+          'attribution_decided',
+          'revenue_recorded',
+          'eligibility_evaluated',
+          'payout_recorded'
+        )),
+        idempotency_key TEXT NOT NULL,
+        currency CHAR(3) NOT NULL CHECK (currency ~ '^[A-Z]{3}$'),
+        memo TEXT NOT NULL DEFAULT '',
+        metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+        created_by UUID REFERENCES reven_users(id) ON DELETE SET NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE UNIQUE INDEX IF NOT EXISTS reven_journals_org_idempotency_idx
+        ON reven_journals (organization_id, idempotency_key);
+      CREATE INDEX IF NOT EXISTS reven_journals_org_claim_idx
+        ON reven_journals (organization_id, claim_id, created_at ASC);
+
+      CREATE TABLE IF NOT EXISTS reven_ledger_entries (
+        id UUID PRIMARY KEY,
+        journal_id UUID NOT NULL REFERENCES reven_journals(id) ON DELETE RESTRICT,
+        organization_id UUID NOT NULL REFERENCES reven_organizations(id) ON DELETE CASCADE,
+        claim_id UUID NOT NULL,
+        account TEXT NOT NULL,
+        direction TEXT NOT NULL CHECK (direction IN ('debit', 'credit')),
+        amount_minor BIGINT NOT NULL CHECK (amount_minor >= 0),
+        currency CHAR(3) NOT NULL CHECK (currency ~ '^[A-Z]{3}$'),
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE INDEX IF NOT EXISTS reven_ledger_org_claim_idx
+        ON reven_ledger_entries (organization_id, claim_id, created_at ASC);
+      CREATE INDEX IF NOT EXISTS reven_ledger_journal_idx
+        ON reven_ledger_entries (journal_id);
+
+      CREATE OR REPLACE FUNCTION reven_forbid_ledger_mutation()
+      RETURNS trigger AS $$
+      BEGIN
+        RAISE EXCEPTION 'append-only ledger cannot be mutated';
+      END;
+      $$ LANGUAGE plpgsql;
+
+      DROP TRIGGER IF EXISTS reven_journals_immutable ON reven_journals;
+      CREATE TRIGGER reven_journals_immutable
+        BEFORE UPDATE OR DELETE ON reven_journals
+        FOR EACH ROW EXECUTE PROCEDURE reven_forbid_ledger_mutation();
+
+      DROP TRIGGER IF EXISTS reven_ledger_entries_immutable ON reven_ledger_entries;
+      CREATE TRIGGER reven_ledger_entries_immutable
+        BEFORE UPDATE OR DELETE ON reven_ledger_entries
+        FOR EACH ROW EXECUTE PROCEDURE reven_forbid_ledger_mutation();
+    `,
+  },
 ];
 
 export async function runMigrations() {
