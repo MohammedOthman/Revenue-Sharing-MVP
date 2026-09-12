@@ -718,3 +718,67 @@ export const exportEvidencePack = createServerFn({ method: "GET" })
     };
   });
 
+export const getStatement = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .validator(z.object({ id: z.string() }))
+  .handler(async ({ context, data }) => {
+    const sql = await getSql();
+    const rows = await sql<{
+      id: string;
+      partner_id: string;
+      partner_name: string;
+      period: string;
+      eligible_minor: number;
+      recorded_minor: number;
+      status: string;
+      created_at: string;
+    }>`
+      select s.id, s.partner_id, p.name as partner_name, s.period,
+             s.eligible_minor, s.recorded_minor, s.status, s.created_at
+      from statements s
+      join partners p on p.id = s.partner_id and p.user_id = s.user_id
+      where s.id = ${data.id} and s.user_id = ${context.userId}
+      limit 1
+    `;
+    const statement = rows[0];
+    if (!statement) throw new Error("Statement not found in this tenant.");
+    const lines = await sql<{
+      id: string;
+      account_name: string;
+      status: string;
+      attributed_pct: number | null;
+      revenue_stage: string | null;
+      eligible_amount_minor: number | null;
+      payout_recorded_minor: number | null;
+      currency: string;
+    }>`
+      select id, account_name, status, attributed_pct, revenue_stage,
+             eligible_amount_minor, payout_recorded_minor, currency
+      from claims
+      where user_id = ${context.userId}
+        and partner_id = ${statement.partner_id}
+        and eligibility_status = 'eligible'
+      order by created_at
+    `;
+    const agreement = await sql<{
+      rate_bps: number;
+      payout_trigger: string;
+      protection_days: number;
+    }>`
+      select rate_bps, payout_trigger, protection_days
+      from agreements
+      where user_id = ${context.userId}
+        and partner_id = ${statement.partner_id}
+        and status = 'active'
+      order by created_at desc
+      limit 1
+    `;
+    return {
+      generatedAt: new Date().toISOString(),
+      notice: "This statement records partner obligation. It is not a payment instruction and does not move money.",
+      statement,
+      agreement: agreement[0] ?? null,
+      lines,
+    };
+  });
+

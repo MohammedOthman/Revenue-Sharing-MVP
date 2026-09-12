@@ -1,6 +1,6 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { Activity, BookOpen, FileText, GitBranch, Plug, ScrollText, Users, Workflow } from "lucide-react";
+import { Activity, BookOpen, FileText, GitBranch, Landmark, Plug, ScrollText, Users, Workflow } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -10,6 +10,7 @@ const NAV = [
   { to: "/ledger", label: "Ledger", icon: BookOpen },
   { to: "/recipes", label: "Recipes", icon: GitBranch },
   { to: "/statements", label: "Statements", icon: FileText },
+  { to: "/book", label: "Book", icon: Landmark },
   { to: "/connectors", label: "Connectors", icon: Plug },
   { to: "/audit", label: "Audit", icon: ScrollText },
 ] as const;

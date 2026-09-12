@@ -17,7 +17,7 @@ The product is in [`app/`](./app).
 | [`app/src/lib/reven/ledger.ts`](app/src/lib/reven/ledger.ts) | Balanced double-entry in integer minor units. |
 | [`app/src/lib/reven/queries.ts`](app/src/lib/reven/queries.ts) | Tenant-scoped server functions. |
 | [`app/src/lib/reven/seed.ts`](app/src/lib/reven/seed.ts) | GCC book (Diriyah, Elm, Nearpay, Return·ANB). |
-| [`app/src/routes/_app/`](app/src/routes/_app) | Runtime, claims, partners, ledger, recipes, statements, connectors, audit. |
+| [`app/src/routes/_app/`](app/src/routes/_app) | Runtime, claims, partners, ledger, recipes, statements, book, connectors, audit. |
 | [`app/src/routes/api/v1.actions.ts`](app/src/routes/api/v1.actions.ts) | Tenant Actions API. Human desks return 403. |
 | [`app/src/routes/api/v1.webhook.ts`](app/src/routes/api/v1.webhook.ts) | Evidence only: `register_claim`, `record_revenue_fact`. |
 | [`app/migrations/`](app/migrations) | Schema. Every row is `user_id` scoped. |

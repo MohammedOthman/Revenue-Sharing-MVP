@@ -55,7 +55,7 @@ function ClaimsPage() {
       <PageHeader
         eyebrow="Canonical object"
         title="Claims"
-        description="Status never patches in place. Every change is a verb that appends a journal."
+        description="Every change is a verb that appends a journal. This board is the current projection."
       />
 
       <form

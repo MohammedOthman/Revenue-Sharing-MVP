@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAuditRouteImport } from './routes/_app/audit'
+import { Route as AppBookRouteImport } from './routes/_app/book'
 import { Route as AppClaimsRouteImport } from './routes/_app/claims'
 import { Route as AppConnectorsRouteImport } from './routes/_app/connectors'
 import { Route as AppLedgerRouteImport } from './routes/_app/ledger'
@@ -40,6 +41,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppAuditRoute = AppAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBookRoute = AppBookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => AppRoute,
 } as any)
 const AppClaimsRoute = AppClaimsRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/audit': typeof AppAuditRoute
+  '/book': typeof AppBookRoute
   '/claims': typeof AppClaimsRoute
   '/connectors': typeof AppConnectorsRoute
   '/ledger': typeof AppLedgerRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/audit': typeof AppAuditRoute
+  '/book': typeof AppBookRoute
   '/claims': typeof AppClaimsRoute
   '/connectors': typeof AppConnectorsRoute
   '/ledger': typeof AppLedgerRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/_app/audit': typeof AppAuditRoute
+  '/_app/book': typeof AppBookRoute
   '/_app/claims': typeof AppClaimsRoute
   '/_app/connectors': typeof AppConnectorsRoute
   '/_app/ledger': typeof AppLedgerRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/audit'
+    | '/book'
     | '/claims'
     | '/connectors'
     | '/ledger'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/audit'
+    | '/book'
     | '/claims'
     | '/connectors'
     | '/ledger'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/_app/audit'
+    | '/_app/book'
     | '/_app/claims'
     | '/_app/connectors'
     | '/_app/ledger'
@@ -214,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/audit'
       fullPath: '/audit'
       preLoaderRoute: typeof AppAuditRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/book': {
+      id: '/_app/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof AppBookRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/claims': {
@@ -284,6 +303,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppAuditRoute: typeof AppAuditRoute
+  AppBookRoute: typeof AppBookRoute
   AppClaimsRoute: typeof AppClaimsRoute
   AppConnectorsRoute: typeof AppConnectorsRoute
   AppLedgerRoute: typeof AppLedgerRoute
@@ -295,6 +315,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAuditRoute: AppAuditRoute,
+  AppBookRoute: AppBookRoute,
   AppClaimsRoute: AppClaimsRoute,
   AppConnectorsRoute: AppConnectorsRoute,
   AppLedgerRoute: AppLedgerRoute,

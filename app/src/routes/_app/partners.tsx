@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { createPartner, listClaims, listPartners } from "@/lib/reven/queries";
+import { createPartner, listClaims, listPartners, submitAction } from "@/lib/reven/queries";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/reven/chrome";
@@ -37,6 +37,22 @@ function PartnersPage() {
     onSuccess: async () => {
       toast.success("Partner registered with an active agreement");
       setForm((f) => ({ ...f, name: "" }));
+      await qc.invalidateQueries();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const compose = useMutation({
+    mutationFn: (partnerId: string) =>
+      submitAction({
+        data: {
+          actionType: "compose_statement",
+          idempotencyKey: `ui:compose:${partnerId}:${new Date().toISOString().slice(0, 7)}`,
+          input: { partner_id: partnerId },
+        },
+      }),
+    onSuccess: async (res) => {
+      toast.success(`Statement ${res.status === "replayed" ? "already on file" : "composed"}`);
       await qc.invalidateQueries();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -157,9 +173,18 @@ function PartnersPage() {
                 {selected.partner_type} · {selected.rate_bps != null ? `${selected.rate_bps / 100}% on ${selected.payout_trigger}` : "no agreement"}
               </p>
             </div>
-            <button type="button" className="min-h-11 px-3 text-sm text-muted" onClick={() => setOpen(null)}>
-              Close
-            </button>
+            <div className="flex items-start gap-2">
+              <Button
+                variant="outline"
+                disabled={compose.isPending}
+                onClick={() => compose.mutate(selected.id)}
+              >
+                Compose this period
+              </Button>
+              <button type="button" className="min-h-11 px-3 text-sm text-muted" onClick={() => setOpen(null)}>
+                Close
+              </button>
+            </div>
           </div>
           <ul className="mt-4 divide-y divide-border">
             {(claims.data ?? [])
