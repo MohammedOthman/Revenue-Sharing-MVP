@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { createPartner, listClaims, listPartners, submitAction } from "@/lib/reven/queries";
+import { createPartner, listClaims, listPartners, submitAction, updateAgreement } from "@/lib/reven/queries";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/reven/chrome";
@@ -18,6 +18,11 @@ function PartnersPage() {
   const [form, setForm] = useState({
     name: "",
     partnerType: "referral" as "referral" | "reseller" | "isv" | "strategic",
+    rateBps: "1200",
+    payoutTrigger: "collected" as "closed_won" | "invoiced" | "collected" | "recognized",
+    protectionDays: "90",
+  });
+  const [edit, setEdit] = useState({
     rateBps: "1200",
     payoutTrigger: "collected" as "closed_won" | "invoiced" | "collected" | "recognized",
     protectionDays: "90",
@@ -58,9 +63,38 @@ function PartnersPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const selected = (q.data ?? []).find((p) => p.id === open);
+
+  useEffect(() => {
+    if (!selected) return;
+    setEdit({
+      rateBps: String(selected.rate_bps ?? "1200"),
+      payoutTrigger: (selected.payout_trigger as typeof edit.payoutTrigger) ?? "collected",
+      protectionDays: String(selected.protection_days ?? "90"),
+    });
+  }, [selected?.id, selected?.rate_bps, selected?.payout_trigger, selected?.protection_days]);
+
+  const saveAgreement = useMutation({
+    mutationFn: () => {
+      if (!selected?.agreement_id) throw new Error("No active agreement.");
+      return updateAgreement({
+        data: {
+          agreementId: selected.agreement_id,
+          rateBps: Number(edit.rateBps),
+          payoutTrigger: edit.payoutTrigger,
+          protectionDays: Number(edit.protectionDays),
+        },
+      });
+    },
+    onSuccess: async () => {
+      toast.success("Agreement updated. Next eligibility uses the new rule.");
+      await qc.invalidateQueries();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   if (q.isLoading) return <div className="h-48 animate-pulse rounded-xl bg-chip" />;
   if (q.error) return <p className="text-danger">{(q.error as Error).message}</p>;
-  const selected = (q.data ?? []).find((p) => p.id === open);
 
   return (
     <div className="rise space-y-6">
@@ -184,6 +218,52 @@ function PartnersPage() {
               <button type="button" className="min-h-11 px-3 text-sm text-muted" onClick={() => setOpen(null)}>
                 Close
               </button>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-3 md:grid-cols-4">
+            <label className="text-sm">
+              <span className="mb-1 block text-xs text-muted">Rate bps</span>
+              <input
+                className="field"
+                type="number"
+                min={1}
+                value={edit.rateBps}
+                onChange={(e) => setEdit((f) => ({ ...f, rateBps: e.target.value }))}
+              />
+            </label>
+            <label className="text-sm">
+              <span className="mb-1 block text-xs text-muted">Pays on</span>
+              <select
+                className="field"
+                value={edit.payoutTrigger}
+                onChange={(e) => setEdit((f) => ({ ...f, payoutTrigger: e.target.value as typeof f.payoutTrigger }))}
+              >
+                <option value="closed_won">closed_won</option>
+                <option value="invoiced">invoiced</option>
+                <option value="collected">collected</option>
+                <option value="recognized">recognized</option>
+              </select>
+            </label>
+            <label className="text-sm">
+              <span className="mb-1 block text-xs text-muted">Protection days</span>
+              <input
+                className="field"
+                type="number"
+                min={0}
+                value={edit.protectionDays}
+                onChange={(e) => setEdit((f) => ({ ...f, protectionDays: e.target.value }))}
+              />
+            </label>
+            <div className="flex items-end">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                disabled={!selected.agreement_id || saveAgreement.isPending}
+                onClick={() => saveAgreement.mutate()}
+              >
+                Save agreement
+              </Button>
             </div>
           </div>
           <ul className="mt-4 divide-y divide-border">

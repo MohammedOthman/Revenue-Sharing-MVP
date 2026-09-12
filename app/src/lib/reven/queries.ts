@@ -9,6 +9,7 @@ import {
   mintApiKey,
   nid,
   resumeOutbox,
+  retryFailedOutbox,
   runPeriodClose,
   type ActionType,
   type ClaimRow,
@@ -86,10 +87,11 @@ export const getRuntime = createServerFn({ method: "GET" })
       id: string;
       account_name: string;
       partner_name: string;
+      partner_id: string;
       preflight_reasons: string | null;
       status: string;
     }>`
-      select c.id, c.account_name, p.name as partner_name, c.preflight_reasons, c.status
+      select c.id, c.account_name, p.name as partner_name, c.partner_id, c.preflight_reasons, c.status
       from claims c
       join partners p on p.id = c.partner_id and p.user_id = c.user_id
       where c.user_id = ${userId} and (c.preflight_status = 'failed' or c.status = 'disputed')
@@ -136,9 +138,10 @@ export const getRuntime = createServerFn({ method: "GET" })
       id: string;
       recipe_key: string;
       status: string;
+      last_error: string | null;
       created_at: string;
     }>`
-      select id, recipe_key, status, created_at
+      select id, recipe_key, status, last_error, created_at
       from outbox where user_id = ${userId}
       order by created_at desc
       limit 8
@@ -371,6 +374,30 @@ export const createPartner = createServerFn({ method: "POST" })
     return { partnerId, agreementId };
   });
 
+export const updateAgreement = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(
+    z.object({
+      agreementId: z.string(),
+      rateBps: z.number().int().min(1).max(10000),
+      payoutTrigger: z.enum(["closed_won", "invoiced", "collected", "recognized"]),
+      protectionDays: z.number().int().min(0).max(365),
+    }),
+  )
+  .handler(async ({ context, data }) => {
+    const sql = await getSql();
+    const rows = await sql<{ id: string }>`
+      update agreements
+      set rate_bps = ${data.rateBps},
+          payout_trigger = ${data.payoutTrigger},
+          protection_days = ${data.protectionDays}
+      where id = ${data.agreementId} and user_id = ${context.userId}
+      returning id
+    `;
+    if (!rows[0]) throw new Error("Agreement not found in this tenant.");
+    return { ok: true as const };
+  });
+
 export const submitAction = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator(actionInput)
@@ -479,6 +506,14 @@ export const toggleRecipe = createServerFn({ method: "POST" })
       await resumeOutbox(sql, context.userId);
     }
     return { ok: true as const };
+  });
+
+export const retryOutbox = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const sql = await getSql();
+    await ensureWorkspace(sql, context.userId);
+    return retryFailedOutbox(sql, context.userId);
   });
 
 export const closePeriod = createServerFn({ method: "POST" })

@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { getRuntime, submitAction } from "@/lib/reven/queries";
+import { getRuntime, retryOutbox, submitAction } from "@/lib/reven/queries";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DeskRow, PageHeader, Panel, Segmented, Stat } from "@/components/reven/chrome";
@@ -21,7 +21,7 @@ function RuntimePage() {
 
   const act = useMutation({
     mutationFn: (payload: {
-      actionType: "decide_attribution" | "record_payout_milestone" | "resolve_dispute";
+      actionType: "decide_attribution" | "record_payout_milestone" | "resolve_dispute" | "run_preflight" | "bind_agreement";
       claimId: string;
       decision?: "accept" | "reject";
     }) =>
@@ -34,11 +34,21 @@ function RuntimePage() {
               ? { claim_id: payload.claimId, decision: payload.decision ?? "accept", percentage: payload.decision === "reject" ? 0 : Number(pct) }
               : payload.actionType === "resolve_dispute"
                 ? { claim_id: payload.claimId, note: "Dispute resolved from the desk." }
-                : { claim_id: payload.claimId },
+                : payload.actionType === "bind_agreement"
+                  ? { claim_id: payload.claimId }
+                  : { claim_id: payload.claimId },
         },
       }),
     onSuccess: async (res) => {
       toast.success(res.actionType.replace(/_/g, " "));
+      await qc.invalidateQueries();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const retry = useMutation({
+    mutationFn: () => retryOutbox(),
+    onSuccess: async (res) => {
+      toast.success(`Outbox drained · ${res.pending} pending · ${res.failed} failed`);
       await qc.invalidateQueries();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -147,16 +157,37 @@ function RuntimePage() {
             </Panel>
             <Panel>
               <h2 className="text-sm font-medium">Exception queue</h2>
-              <p className="mt-1 mb-4 text-xs text-muted">Preflight failures and disputes</p>
+              <p className="mt-1 mb-4 text-xs text-muted">Preflight failures and disputes. A verb here, or open the claim.</p>
               <ul className="space-y-3">
                 {data.exceptions.length === 0 && <li className="text-sm text-muted">Nothing stuck.</li>}
                 {data.exceptions.map((row) => (
-                  <li key={row.id} className="flex items-start justify-between gap-3">
+                  <li key={row.id} className="flex flex-col gap-2 border-b border-border/60 py-2 last:border-0 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <p className="truncate text-sm">{row.account_name}</p>
                       <p className="truncate text-xs text-muted">{row.partner_name}</p>
                     </div>
-                    <Badge tone={statusTone(row.status)}>{humanize(row.preflight_reasons || row.status)}</Badge>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge tone={statusTone(row.status)}>{humanize(row.preflight_reasons || row.status)}</Badge>
+                      {row.status === "disputed" ? (
+                        <Button size="sm" variant="outline" disabled={act.isPending} onClick={() => act.mutate({ actionType: "resolve_dispute", claimId: row.id })}>
+                          Resolve
+                        </Button>
+                      ) : (
+                        <>
+                          {(row.preflight_reasons ?? "").includes("agreement_gap") && (
+                            <Button size="sm" variant="outline" disabled={act.isPending} onClick={() => act.mutate({ actionType: "bind_agreement", claimId: row.id })}>
+                              Bind
+                            </Button>
+                          )}
+                          <Button size="sm" variant="outline" disabled={act.isPending} onClick={() => act.mutate({ actionType: "run_preflight", claimId: row.id })}>
+                            Retry
+                          </Button>
+                        </>
+                      )}
+                      <Link to="/claims" search={{ open: row.id }} className="text-xs text-muted hover:text-fg">
+                        Open
+                      </Link>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -181,7 +212,7 @@ function RuntimePage() {
                     meta={`${row.partner_name} · ${formatMoney(row.eligible_amount_minor ?? 0, row.currency)}`}
                   >
                     <Button size="sm" disabled={act.isPending} onClick={() => act.mutate({ actionType: "record_payout_milestone", claimId: row.id })}>
-                      Record payout
+                      Record milestone
                     </Button>
                   </DeskRow>
                 ))}
@@ -277,16 +308,26 @@ function RuntimePage() {
               </div>
             </Panel>
             <Panel className="lg:col-span-2">
-              <h2 className="text-sm font-medium">Outbox</h2>
-              <p className="mt-1 mb-4 text-xs text-muted">Recipe work queued after each verb.</p>
+              <div className="mb-4 flex items-center justify-between gap-2">
+                <div>
+                  <h2 className="text-sm font-medium">Outbox</h2>
+                  <p className="mt-1 text-xs text-muted">Failed rows stay until you retry. Pause holds pending work.</p>
+                </div>
+                <Button size="sm" variant="outline" disabled={retry.isPending} onClick={() => retry.mutate()}>
+                  {retry.isPending ? "Draining…" : "Retry failed"}
+                </Button>
+              </div>
               {data.outbox.length === 0 ? (
                 <p className="text-sm text-muted">Empty.</p>
               ) : (
                 <ul className="space-y-2">
                   {data.outbox.map((row) => (
-                    <li key={row.id} className="flex items-center justify-between gap-3 text-sm">
-                      <span className="font-mono text-xs">{row.recipe_key}</span>
-                      <Badge tone={statusTone(row.status)}>{row.status}</Badge>
+                    <li key={row.id} className="space-y-1">
+                      <div className="flex items-center justify-between gap-3 text-sm">
+                        <span className="font-mono text-xs">{row.recipe_key}</span>
+                        <Badge tone={statusTone(row.status)}>{row.status}</Badge>
+                      </div>
+                      {row.last_error ? <p className="text-[11px] leading-relaxed text-danger">{row.last_error}</p> : null}
                     </li>
                   ))}
                 </ul>

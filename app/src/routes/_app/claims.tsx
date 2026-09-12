@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import {
@@ -16,16 +16,26 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/reven/chrome";
 import { formatMoney, formatWhen, humanize } from "@/lib/utils";
 
-export const Route = createFileRoute("/_app/claims")({ component: ClaimsPage });
+export const Route = createFileRoute("/_app/claims")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    open: typeof search.open === "string" ? search.open : undefined,
+  }),
+  component: ClaimsPage,
+});
 
 function ClaimsPage() {
   const qc = useQueryClient();
+  const { open: openFromSearch } = Route.useSearch();
   const claims = useQuery({ queryKey: ["claims"], queryFn: () => listClaims() });
   const partners = useQuery({ queryKey: ["partners"], queryFn: () => listPartners() });
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<string | null>(openFromSearch ?? null);
   const [form, setForm] = useState({ partner_id: "", account_name: "", pipeline_amount: "120000" });
   const [view, setView] = useState<"list" | "board">("list");
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    if (openFromSearch) setOpen(openFromSearch);
+  }, [openFromSearch]);
 
   const register = useMutation({
     mutationFn: () =>

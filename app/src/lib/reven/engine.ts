@@ -695,6 +695,22 @@ export async function resumeOutbox(sql: Sql, userId: string) {
   await drainOutbox(sql, userId, 0);
 }
 
+export async function retryFailedOutbox(sql: Sql, userId: string) {
+  await sql`
+    update outbox
+    set status = 'pending', last_error = null
+    where user_id = ${userId} and status = 'failed'
+  `;
+  await drainOutbox(sql, userId, 0);
+  const pending = await sql<{ n: number }>`
+    select count(*)::int as n from outbox where user_id = ${userId} and status = 'pending'
+  `;
+  const failed = await sql<{ n: number }>`
+    select count(*)::int as n from outbox where user_id = ${userId} and status = 'failed'
+  `;
+  return { pending: pending[0]?.n ?? 0, failed: failed[0]?.n ?? 0 };
+}
+
 export async function dispatchAction(params: {
   sql: Sql;
   userId: string;
