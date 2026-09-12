@@ -67,7 +67,7 @@ function ConnectorsPage() {
       <PageHeader
         eyebrow="Ingress"
         title="Connectors"
-        description="Webhook ingress may only call register_claim and record_revenue_fact. The Actions API accepts every frozen verb for this tenant."
+        description="Webhooks may only submit evidence. API keys cannot fire attribution, disputes, or payouts. Those desks require a signed operator."
       />
 
       <section className="grid gap-3 md:grid-cols-3">
@@ -152,8 +152,10 @@ function ConnectorsPage() {
         <p className="mt-1 font-mono text-xs text-muted">POST /api/v1/actions</p>
         <p className="mt-3 text-sm leading-relaxed text-muted">
           Bearer tenant key. Body is <span className="font-mono">action</span>,{" "}
-          <span className="font-mono">idempotency_key</span>, <span className="font-mono">input</span>. Attribution,
-          eligibility, and payout remain server-computed. A replay of the same key returns the original run.
+          <span className="font-mono">idempotency_key</span>, <span className="font-mono">input</span>. Keys may
+          register, preflight, bind, post revenue, evaluate, and compose or issue a statement. Attribution, disputes,
+          and payout milestones return 403 — those desks are signed operators only. Eligibility is always
+          server-computed. A replay of the same key returns the original run.
         </p>
       </section>
 

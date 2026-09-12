@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { RECIPE_STEPS } from "@/lib/reven/catalog";
+import { RECIPE_MODE, RECIPE_STEPS } from "@/lib/reven/catalog";
 import { closePeriod, getRecipes, toggleRecipe } from "@/lib/reven/queries";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ function RecipesPage() {
       <PageHeader
         eyebrow="Orchestrate"
         title="Recipes"
-        description="Graphs of frozen verbs. Pause a recipe and the outbox still writes, but it will not fire."
+        description="Follow recipes fire from the outbox. Human desks never auto-run. Pause holds work until you unpause."
         action={
           <div className="flex gap-2">
             <Link to="/statements" className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm">
@@ -50,6 +50,7 @@ function RecipesPage() {
       <div className="grid gap-3 md:grid-cols-2">
         {q.data!.recipes.map((r) => {
           const steps = RECIPE_STEPS[r.recipe_key] ?? [];
+          const mode = RECIPE_MODE[r.recipe_key as keyof typeof RECIPE_MODE] ?? "operator";
           return (
             <article key={r.id} className="rounded-xl border border-border bg-surface p-5">
               <div className="flex items-start justify-between gap-3">
@@ -57,7 +58,12 @@ function RecipesPage() {
                   <p className="font-mono text-[11px] text-muted">{r.recipe_key}</p>
                   <h2 className="text-lg font-medium tracking-tight">{r.name}</h2>
                 </div>
-                <Badge tone={statusTone(r.status)}>{r.status}</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge tone={mode === "human" ? "warn" : mode === "follow" ? "ok" : "default"}>
+                    {mode}
+                  </Badge>
+                  <Badge tone={statusTone(r.status)}>{r.status}</Badge>
+                </div>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-muted">{r.description}</p>
               {steps.length > 0 && (

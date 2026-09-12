@@ -8,6 +8,7 @@ import {
   dispatchAction,
   mintApiKey,
   nid,
+  resumeOutbox,
   runPeriodClose,
   type ActionType,
   type ClaimRow,
@@ -474,6 +475,9 @@ export const toggleRecipe = createServerFn({ method: "POST" })
       update recipes set status = ${data.status}
       where user_id = ${context.userId} and recipe_key = ${data.recipeKey}
     `;
+    if (data.status === "active") {
+      await resumeOutbox(sql, context.userId);
+    }
     return { ok: true as const };
   });
 

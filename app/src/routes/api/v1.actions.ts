@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getSql } from "@/lib/db";
 import {
   ACTION_TYPES,
+  API_ACTIONS,
+  HUMAN_ACTIONS,
   WEBHOOK_ACTIONS,
   dispatchAction,
   lookupApiKey,
@@ -38,6 +40,15 @@ async function postAction({ request }: { request: Request }) {
   if (!ACTION_TYPES.includes(actionType)) {
     return Response.json({ error: "Unknown action." }, { status: 400 });
   }
+  if (!API_ACTIONS.includes(actionType)) {
+    return Response.json(
+      {
+        error:
+          "This verb requires a signed operator. API keys cannot fire attribution, disputes, or payout milestones.",
+      },
+      { status: 403 },
+    );
+  }
 
   try {
     const result = await dispatchAction({
@@ -62,8 +73,11 @@ export const Route = createFileRoute("/api/v1/actions")({
       GET: () =>
         Response.json({
           verbs: ACTION_TYPES,
+          api: API_ACTIONS,
+          human_only: HUMAN_ACTIONS,
           webhook_only: WEBHOOK_ACTIONS,
-          notice: "Webhook ingress is restricted. This endpoint accepts every frozen verb for the tenant.",
+          notice:
+            "API keys cannot fire attribution, disputes, or payout milestones. Webhooks may only submit evidence.",
         }),
     },
   },

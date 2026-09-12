@@ -1,5 +1,8 @@
 # Roadmap & Product Feature Audit — PRM-First Alignment
 
+> **Runtime note (2026-09-12):** The shipped product in `app/` implements Capture, Settle, and Orchestrate **as desks in one OS**. That is the software cut. This audit remains the **venture / GTM** concordance (when you sell Settle). It does not describe the running stack. Stack, verbs, and actor policy: `docs/RUNTIME.md`.
+
+
 **Audit date:** 2026-06-12
 **Scope:** All 16 markdown strategy documents in this repository (~18,300 lines)
 **Audited against the founder's mandate:**

@@ -26,12 +26,12 @@ const RECIPES = [
   {
     key: "exception_drain",
     name: "Exception drain",
-    description: "Failed preflight stays in the queue until agreement or duplicate is resolved.",
+    description: "Failed preflight is retried after an agreement is bound. Pause holds the retry.",
   },
   {
     key: "dispute_sla",
     name: "Dispute SLA",
-    description: "open_dispute freezes payout-recording until a human resolves it.",
+    description: "SLA clock on an open dispute. Does not resolve it. A named human must.",
   },
   {
     key: "payout_milestone",
@@ -41,7 +41,7 @@ const RECIPES = [
   {
     key: "evidence_pack",
     name: "Evidence pack",
-    description: "Export the claim timeline, journals, and actor log for finance.",
+    description: "Operator export of a claim's journals, runs, and ledger. Not a verb.",
   },
 ] as const;
 

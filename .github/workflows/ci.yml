@@ -12,28 +12,19 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: app
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: |
-            revenue-share-platform/backend/package-lock.json
-            revenue-share-platform/frontend/package-lock.json
-      - name: Install backend dependencies
-        run: npm ci --prefix revenue-share-platform/backend
-      - name: Install frontend dependencies
-        run: npm ci --prefix revenue-share-platform/frontend
-      - name: Test backend
-        run: npm test --prefix revenue-share-platform/backend
-      - name: Verify backend syntax
-        run: npm run check --prefix revenue-share-platform/backend
-      - name: Build frontend
-        run: npm run build --prefix revenue-share-platform/frontend
-      - name: Audit production dependencies
-        run: |
-          npm audit --omit=dev --audit-level=high --prefix revenue-share-platform/backend
-          npm audit --omit=dev --audit-level=high --prefix revenue-share-platform/frontend
-      - name: Build production image
-        run: docker build --tag reven:ci .
+          cache-dependency-path: app/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm test

@@ -4,9 +4,9 @@ import {
   buildClaimJournal,
   type LedgerEvent,
 } from "./ledger";
-import { ACTION_TYPES, WEBHOOK_ACTIONS, type ActionType } from "./catalog";
+import { ACTION_TYPES, actorMayRun, type ActionType, type Actor } from "./catalog";
 
-export { ACTION_TYPES, WEBHOOK_ACTIONS, RECIPE_STEPS, type ActionType } from "./catalog";
+export { ACTION_TYPES, WEBHOOK_ACTIONS, RECIPE_STEPS, HUMAN_ACTIONS, API_ACTIONS, actorMayRun, type ActionType, type Actor } from "./catalog";
 
 const TRIGGER_RANK: Record<string, number> = {
   closed_won: 1,
@@ -36,6 +36,8 @@ export type ActionResult = {
 };
 
 export type ClaimRow = {
+  // Projection of journals + action_runs for this tenant. The book is append-only;
+  // this row is the current view the desks read.
   id: string;
   user_id: string;
   partner_id: string;
@@ -277,7 +279,7 @@ async function handlePreflight(sql: Sql, userId: string, input: ActionInput) {
     objectId: claim.id,
     result: { preflight, nextActions: nextActionsFor(next) },
     event: "claim.preflighted",
-    follow: [] as string[],
+    follow: preflight.status === "failed" ? (["exception_drain"] as string[]) : [],
   };
 }
 
@@ -540,7 +542,7 @@ async function handleDispute(sql: Sql, userId: string, input: ActionInput) {
     objectId: claim.id,
     result: { status: "disputed", reason },
     event: "claim.disputed",
-    follow: ["dispute_sla"] as string[],
+    follow: [] as string[],
   };
 }
 
@@ -620,10 +622,14 @@ async function drainOutbox(sql: Sql, userId: string, depth: number) {
     payload_json: string;
     event_id: string;
   }>`
-    select id, recipe_key, payload_json, event_id
-    from outbox
-    where user_id = ${userId} and status = 'pending'
-    order by created_at
+    select o.id, o.recipe_key, o.payload_json, o.event_id
+    from outbox o
+    join recipes r
+      on r.user_id = o.user_id and r.recipe_key = o.recipe_key
+    where o.user_id = ${userId}
+      and o.status = 'pending'
+      and r.status = 'active'
+    order by o.created_at
     limit 20
   `;
   for (const row of rows) {
@@ -633,12 +639,10 @@ async function drainOutbox(sql: Sql, userId: string, depth: number) {
         select status from recipes where user_id = ${userId} and recipe_key = ${row.recipe_key} limit 1
       `;
       if (!rec[0] || rec[0].status !== "active") {
-        await sql`
-          update outbox set status = 'processed', processed_at = now()
-          where id = ${row.id} and user_id = ${userId}
-        `;
+        // Hold the work. Unpausing drains it. Do not discard.
         continue;
       }
+
       if (row.recipe_key === "webhook_capture" && payload.claimId) {
         await dispatchAction({
           sql,
@@ -649,8 +653,7 @@ async function drainOutbox(sql: Sql, userId: string, depth: number) {
           idempotencyKey: `recipe:preflight:${payload.claimId}`,
           depth: depth + 1,
         });
-      }
-      if (row.recipe_key === "eligibility_cascade" && payload.claimId) {
+      } else if (row.recipe_key === "eligibility_cascade" && payload.claimId) {
         await dispatchAction({
           sql,
           userId,
@@ -660,15 +663,18 @@ async function drainOutbox(sql: Sql, userId: string, depth: number) {
           idempotencyKey: `recipe:eligibility:${payload.claimId}:${row.event_id}`,
           depth: depth + 1,
         });
+      } else if (row.recipe_key === "exception_drain" && payload.claimId) {
+        await dispatchAction({
+          sql,
+          userId,
+          actor: "recipe",
+          actionType: "run_preflight",
+          input: { claim_id: payload.claimId },
+          idempotencyKey: `recipe:exception:${payload.claimId}:${row.event_id}`,
+          depth: depth + 1,
+        });
       }
-      if (row.recipe_key === "dispute_sla" && payload.claimId) {
-        await bumpRecipe(sql, userId, row.recipe_key, "succeeded");
-        await sql`
-          update outbox set status = 'processed', processed_at = now(), attempts = attempts + 1
-          where id = ${row.id} and user_id = ${userId}
-        `;
-        continue;
-      }
+
       await bumpRecipe(sql, userId, row.recipe_key, "succeeded");
       await sql`
         update outbox set status = 'processed', processed_at = now(), attempts = attempts + 1
@@ -685,10 +691,14 @@ async function drainOutbox(sql: Sql, userId: string, depth: number) {
   }
 }
 
+export async function resumeOutbox(sql: Sql, userId: string) {
+  await drainOutbox(sql, userId, 0);
+}
+
 export async function dispatchAction(params: {
   sql: Sql;
   userId: string;
-  actor: "user" | "webhook" | "recipe" | "api";
+  actor: Actor;
   actionType: ActionType;
   input: ActionInput;
   idempotencyKey: string;
@@ -699,6 +709,9 @@ export async function dispatchAction(params: {
   const key = params.idempotencyKey.slice(0, 180);
   if (!ACTION_TYPES.includes(actionType)) {
     throw new Error(`Unknown action ${actionType}.`);
+  }
+  if (!actorMayRun(actor, actionType)) {
+    throw new Error(`${actionType} cannot be fired by ${actor}.`);
   }
 
   const prior = await sql<{
