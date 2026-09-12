@@ -1,17 +1,10 @@
 {
   "name": "reven",
-  "version": "1.0.0",
   "private": true,
-  "description": "Reven — Partner Revenue OS",
-  "engines": {
-    "node": ">=20"
-  },
+  "description": "Reven partnership action runtime",
   "scripts": {
-    "build": "npm ci --prefix revenue-share-platform/frontend && npm run build --prefix revenue-share-platform/frontend && npm ci --omit=dev --prefix revenue-share-platform/backend",
-    "start": "npm start --prefix revenue-share-platform/backend",
-    "test": "npm test --prefix revenue-share-platform/backend",
-    "check": "npm run check --prefix revenue-share-platform/backend && npm run check --prefix revenue-share-platform/frontend",
-    "dev:api": "npm run dev --prefix revenue-share-platform/backend",
-    "dev:web": "npm run dev --prefix revenue-share-platform/frontend"
+    "dev": "npm --prefix app run dev",
+    "build": "npm --prefix app run build",
+    "typecheck": "npm --prefix app run typecheck"
   }
 }

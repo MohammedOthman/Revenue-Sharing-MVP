@@ -1,6 +1,0 @@
-/* Reven global entry — order matters: tokens define the variables the rest use. */
-@import "./tokens.css";
-@import "./base.css";
-@import "./ui.css";
-@import "./screen.css";
-@import "./form.css";

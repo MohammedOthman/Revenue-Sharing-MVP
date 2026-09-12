@@ -38,3 +38,7 @@ htmlcov/
 # Temporary files
 *.tmp
 *.temp
+
+app/node_modules
+app/.vercel
+app/.tanstack
