@@ -1,5 +1,7 @@
 # Reven — Deep Product & Architecture Audit
 
+> **Runtime note (2026-09-12):** The Express scaffold graded **D** below was deleted. The shipped product is `app/` (TanStack action runtime). Re-grade against `docs/RUNTIME.md` and `app/src/lib/reven/`. This audit is kept as the 2026-06-22 record.
+
 **Question audited:** *Will our current version get us to the goal — "Reven is an enterprise partnership orchestrator for the complete partnership-management lifecycle and the full value chain of revenue sharing"?*
 
 **Date:** 2026-06-22 · **Method:** internal read of the full PDR/strategy corpus + the shipped `revenue-share-platform/` code, benchmarked against external market research (12 verified, sourced claims). This is an evidence-based go/no-go audit, not a cheerleading doc.

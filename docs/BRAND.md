@@ -16,9 +16,9 @@ recolored, or repositioned.
 
 | File | Use |
 |---|---|
-| [`brand/reven-logo.svg`](brand/reven-logo.svg) | Primary — navy wordmark for light backgrounds |
-| [`brand/reven-logo-light.svg`](brand/reven-logo-light.svg) | Reversed — light wordmark for dark backgrounds |
-| `revenue-share-platform/frontend/src/components/brand/Brandmark.jsx` | In-app React logo (`<Wordmark>` full lockup, `<Brandmark>` compact **R** mark). Letters inherit `currentColor`; the accent squares stay electric blue. |
+| [`brand/reven-logo.svg`](../brand/reven-logo.svg) | Primary — navy wordmark for light backgrounds |
+| [`brand/reven-logo-light.svg`](../brand/reven-logo-light.svg) | Reversed — light wordmark for dark backgrounds |
+| [`app/src/components/reven/chrome.tsx`](../app/src/components/reven/chrome.tsx) | In-app chrome (wordmark + desks). |
 
 > **Provenance note.** These vectors are a **faithful reproduction** of the
 > supplied logo artwork. The original raster the founder shared was not
@@ -36,9 +36,7 @@ recolored, or repositioned.
 | Off-white | `#EAEEF7` | The wordmark on dark; primary text |
 | Brass | `#CBA254` | **Reserved for monetary values only** — a warm counterpoint, never a second brand color |
 
-The full working palette (tonal ramps, status tones, edges) lives in
-[`revenue-share-platform/frontend/src/styles/tokens.css`](revenue-share-platform/frontend/src/styles/tokens.css)
-and is derived from these anchors.
+The in-app working palette lives in [`app/src/styles.css`](../app/src/styles.css) (paper ground, ink, forest accent). That chrome is the live product. The navy / electric-blue tokens above remain the **wordmark** system in `brand/`.
 
 ## Usage
 
